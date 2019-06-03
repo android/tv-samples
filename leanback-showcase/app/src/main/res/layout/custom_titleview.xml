@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.v17.leanback.widget.SearchOrbView
+        android:id="@+id/search_orb"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:transitionGroup="true"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="8dp"
+        android:paddingStart="48dp" />
+
+    <AnalogClock
+            android:id="@+id/clock"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="6dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="24dp" />
+
+    <TextView
+            android:id="@+id/title_tv"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/clock" />
+
+</merge>

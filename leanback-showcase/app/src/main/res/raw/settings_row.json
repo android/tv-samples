@@ -1,0 +1,11 @@
+{
+  "title": "Publish and Setting",
+  "shadow": false,
+  "cards": [
+    {
+      "type": "ICON",
+      "title": "Settings",
+      "localImageResource": "ic_settings_settings"
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+* Three Different Approaches on Dependency Injection
+
+
+
+** Traditional Way
+   Traditionally, to do the dependency injection in android, we usually end up with the boilerplate code like
+   #+BEGIN_SRC java
+    public class FrombulationActivity extends Activity {
+    @Inject Frombulator frombulator;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // DO THIS FIRST. Otherwise frombulator might be null!
+        ((SomeApplicationBaseType) getContext().getApplicationContext())
+            .getApplicationComponent()
+            .newActivityComponentBuilder()
+            .activity(this)
+            .build()
+            .inject(this);
+        // ... now you can write the exciting code
+    }
+    }
+
+   #+END_SRC
+
+   The key is to use sub-component to narrow down the scope from application to specific activity/ fragment. (This is why if the module or provision from the app component/ module is marked with @Singleton but the subcomponent [no matter for fragment or activity] it should be marked as some smaller scope like @PerFragment, or @PerActivity).
+
+
+   According to dagger's restriction. For the module dependent by component, they should have the same scope, and the sub component must have smaller scope than their parent component. This is also the reason to have subcomponent to actually perform the dependency injection operation.
+
+
+   And there are several things we should pay attention to when we use subcomponent
+
+
+   1. The sub-component must declare the builder interface inside of it(The builder is the entrance for the sub-component, and can be used to represent the sub graph in the dependency injection graph, so even when we are using the newly added the android injector [we will talk about this in details in the following part], we still have to define the builder explicitly), the interface should also contains a build method which return type is the sub-component itself. Then dagger can create the dependency injection graph based on those information and generate the injector class accordingly.
+
+   2. The benefits of using the sub-component is the sub components can use all the provision method provided by the parent component, and inject to the target through the main component. (Dagger it self won't generate the dagger_subcomponent for the subcomponents, it should be provided through some methods defined in the parent component).
+
+      We use this method for the dependency injection on ~LiveDataDetailFragment.java~
+
+   3. But the drawback for it is also obvious. Those boiler plate code will confuse the people who read the code and copy/ paste same code among different files will make program error prone.
+
+
+** Dagger 2.10
+
+   So in Dagger 2.10. There is a new injector (~AndroidInjector~) can be used to simplify this process.
+
+   To use this new infrastructure (~AndroidInjector~), several things need to be done.
+
+   1. The sub-component should be extended from Android Injector.
+
+   2. The sub-component's builder should be extended from AndroidInjector.Builder<targetClass>. So it can be converted to AndroidInjector.Factory and contributes to the injector factories' map.
+
+      Several things need to be pay attention to:
+
+      - Use generic parameter to specify the target for dependency injection.
+
+      - The subcomponent should contain the AndroidInjector.Builder to represent the small depdenecy graph for this specific target. But to automate the whole dependency injection process, it should finally be contributed to a collection of AndroidInjector.Factory. [Notice that the AndroidInjector.Builder is actually derived from the AndroidInjector.Factory, we can simply get the AndroidInjector.Factory through a @Binds method by using the AndroidInjector.Builder as a parameter, it will be further explained in the following part]
+
+   3. The sub-component (android injector) should be installed to the module depended on the parent components (e.g. Activities sub-components [the android injector represent this specific activity] should be installed to app's component through the modules required by the app's component)
+
+      To be more specific, it can be divided into several steps:
+
+      - Declare a subcomponent injector to represent a specific activity also down scale the scope from application to a specific activity.
+
+      - Install this subcomponent to a module used by the app componet to set up the relationship between parent component a subcomponent.
+
+   4. Also sub-component's builder (AndroidInjector.Builder) should be provided into a map based multi binding to a module required by the parent component in AndroidInjector.Factory format through @Binds annotation.
+
+      /As we have talked before, the key to enable the automatic dependency injection is give all the information to android injector. But our android injector builder only use the generic parameter to specify a very specific target. To group those information together, the method we would use is through multibinding. So we will put all those information into a target - dependency map/
+
+      After those procedures, all the following graph - creation/ inject will be performed by dagger automatically. (It will be explained in the following part with the newly added @ContributesAndroidInjector annotation).
+
+   5. In Summary
+      For the App - Activity injection process, both of them should take some responsibility to get the instrumentation done.
+
+      On the activity Side: it should defined the specific subcomponent/ injector which will actually carry all the required material and inject to itself
+
+      On the Application Side:
+      - It should create the relationship between it's component and subcomponent (have a module with @module(subcomponents = ActivityComponent.class))
+      - It should have a module which is =@Bind=  based module so it can define a =@Bind= method to /cast the Builder to its parent class factory/
+        Usually the two modules stated before can be combined into one module as long as they are =@Binds= based or =@Provides= based
+
+      In our sample app, we have use this Dependency Injection method to inject the =LiveDataFragment=
+
+
+** Dagger 2.11
+
+   Finally in Dagger 2.11. The previous process can be simplified further more. Using the =@ContributesAndroidInjector= annotation, dagger will generate the sub-component we wrote above for android - ui components. In this sample app, we use this approach to inject live data fragment.
+
+
+   The processing sequence is:
+
+   1. There is a regular component (like =AppComponent.java=) which will be injected to SampleApplication.java.
+
+   2. The application class itself will implement HasActivityInjector interface. And override the following method
+
+   #+BEGIN_SRC java
+    @Inject
+    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return dispatchingAndroidInjector;
+    }
+
+   #+END_SRC
+   App Component's declare looks like
+   #+BEGIN_SRC java
+package android.support.v17.leanback.supportleanbackshowcase.app.room.di.androidinject;
+
+import android.app.Application;
+import android.support.v17.leanback.supportleanbackshowcase.app.room.controller.app.SampleApplication;
+
+import javax.inject.Singleton;
+
+import dagger.BindsInstance;
+import dagger.Component;
+import dagger.android.AndroidInjectionModule;
+
+@Singleton
+@Component(modules = {
+    AndroidInjectionModule.class,
+    AppModule.class,
+    ActivityBuildersModule.class,
+})
+public interface AppComponent {
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        Builder application(Application application);
+
+        AppComponent build();
+    }
+
+    void inject(SampleApplication sampleApplication);
+}
+
+@Module
+public abstract class ActivityBuildersModule {
+
+    @PerActivity
+    @ContributesAndroidInjector(modules
+            = {SearchActivityModule.class,
+            SearchFragmentInjectorInstallmentFactoryBindingModule.class})
+    abstract SearchActivity contributeToAndriodInjectorForSearchActivity();
+
+    @Binds
+    @IntoMap
+    @ActivityKey(LiveDataRowsActivity.class)
+    abstract AndroidInjector.Factory<? extends Activity> bindActivityInjectorFactory(LiveDataOverviewActivitySubcomponent.Builder builder);
+}
+
+   #+END_SRC
+
+   It will return the =AndroidInjector<Activity>= which is provided by this =ActivityBuildersModule='s =@ContributesAndroidInjector= annotated field.
+   So in activity class (In this sample app, it should be =SearchActivity=), the injector can be injected using =AndroidInjection.inject(this)=
+
+   There are several things need to be clarified and pay attention to:
+
+   1. How did it work:
+
+      - AndroidInjection.inject() gets a =DispatchingAndroidInjector<Activity>= from the Application and passes your activity to inject(Activity).
+
+      - Then the =DispatchingAndroidInjector= will look up the =AndroidInjector.Factory= for your activity’s class (which is Your =ActivitySubcomponent.Builder=).
+
+   2. Where to inject the activity using the =AndroidInjection.inject()=
+
+      For Activity, the injection should be finished before the super.onCreate(). The reason is the injection for fragment may happen in super.onCreate(). In order to make sure the dependency injection for the fragment is successful, the Activity must already be injected.
+
+      Similarly, the preferable place to inject fragment should be before the function call of super.onAttach()
+
+   3. How to hook the dependency injection for fragment.
+
+      The relationship between activity and fragment is basically the same as the relationship between the activity and application. So the processing logic is:
+
+      - Activity should implement the =HasFragmentInjector= and declare a field
+
+      - Activity should implement the HasFragmentInjector and declare a field
+
+      #+BEGIN_SRC java
+
+        @Inject
+        DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
+        // This injector should be returned by this overrided function
+
+        @Override
+        public AndroidInjector<Fragment> fragmentInjector() {
+            return dispatchingAndroidInjector;
+        }
+      #+END_SRC
+
+      - Declare a fragmetn builder module dependency. Inside of that module, use the similar annotation approach to achieve the two things simulatenously
+        - The annotation is inside of that module, and the annotation is represented a subcomponent, so it will set up the relationship automatically
+
+        - worked with Dispatch Android Injector, we don't have to declare that =@Binds= method explicitly
+   4. More details
+
+      To understand why the previous annotation can provide all the information we need, we can begin to think about without the help of annotation, what actually we need to get this automatic dependency injection done.
+
+      - A module to install sub component
+
+      - A module which can return the =AndroidInejctor.Factory= for fragment
+
+      Then the generated code explained everything
+
+      As we have said before, to get this dependency injection pipeline work, the application level/ activity level (similary activity level/ fragment level) all should make contribution on the dependency graph.
+
+      Previously, take application - actiivty model as an example, the application actually have to provide two modules. The first one is to declare the relationship, the second one is to declare the @Binds method (=again usually they can be combined together=)
+
+      Now, with the help of annotaion, the architecture is actually much clear now. Application still have to make some contribution, but it only have to provide a single builder module
+
+      #+BEGIN_SRC  java
+        @Module
+        public abstract class ActivityBuildersModule {
+
+            @PerActivity
+            @ContributesAndroidInjector(modules
+                    = {SearchActivityModule.class,
+                    SearchFragmentInjectorInstallmentFactoryBindingModule.class})
+            abstract SearchActivity contributeToAndriodInjectorForSearchActivity();
+        }
+        // SearchFragmentInjectorInstallmentFactoryBindingModule is essentially the fragmentBuilderModule.java
+
+      #+END_SRC
+      #+BEGIN_QUOTE
+      PS:
+      The search activity module is to use the property that when we inject this injector to the target, the target will be added to the dependency graph automatically, so we can use it directly to get =@BindInstance= effect, it loos like
+
+      #+BEGIN_SRC java
+        package android.support.v17.leanback.supportleanbackshowcase.app.room.di.androidinject;
+
+
+        import android.app.Activity;
+        import android.support.v17.leanback.app.SearchFragment;
+        import android.support.v17.leanback.supportleanbackshowcase.R;
+        import android.support.v17.leanback.supportleanbackshowcase.app.room.controller.search.SearchActivity;
+        import android.support.v17.leanback.supportleanbackshowcase.app.room.di.scope.PerActivity;
+        import android.support.v17.leanback.widget.SpeechRecognitionCallback;
+        import dagger.Module;
+        import dagger.Provides;
+
+        @Module
+        public class SearchActivityModule {
+
+            // the SearchActivityComponent is extended from AndroidInjector, when it is injected to
+            // SearchActivity, the activity will be added to the graph automatically without using
+            // @BindInstance like what we have done in processing the traditional sub component
+            @Provides
+            @PerActivity
+            Activity provideSearchActivityModule(SearchActivity searchActivity) {
+                return searchActivity;
+            }
+
+        }
+
+      #+END_SRC
+
+      #+END_QUOTE
+
+      *Then it will generate the subcomponent just inside the module (which is not a suggested way to write component, since the purpose of component is for re-using) and auto-generate the @Binds provision method.*
+
+      The generated code looks like:
+
+      #+BEGIN_SRC java
+        package android.support.v17.leanback.supportleanbackshowcase.app.room.di.androidinject;
+
+        import android.app.Activity;
+        import android.support.v17.leanback.supportleanbackshowcase.app.room.controller.search.SearchActivity;
+        import android.support.v17.leanback.supportleanbackshowcase.app.room.di.scope.PerActivity;
+        import dagger.Binds;
+        import dagger.Module;
+        import dagger.Subcomponent;
+        import dagger.android.ActivityKey;
+        import dagger.android.AndroidInjector;
+        import dagger.multibindings.IntoMap;
+
+        @Module(
+        subcomponents =
+            ActivityBuildersModule_ContributeToAndriodInjectorForSearchActivity.SearchActivitySubcomponent
+                .class
+        )
+        public abstract class ActivityBuildersModule_ContributeToAndriodInjectorForSearchActivity {
+        private ActivityBuildersModule_ContributeToAndriodInjectorForSearchActivity() {}
+        
+        // generate the binds method for us
+        @Binds
+        @IntoMap
+        @ActivityKey(SearchActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bindAndroidInjectorFactory(
+            SearchActivitySubcomponent.Builder builder); // factory is actually the father class of builder. We call the module as activity bulider module/ 
+        // fragment builder module is because for subcomponent it can usually be represented using builder interface
+
+
+        // generate the subcomponent for us
+        @Subcomponent(
+            modules = {
+            SearchActivityModule.class,
+            SearchFragmentInjectorInstallmentFactoryBindingModule.class
+            }
+        )
+        @PerActivity
+        public interface SearchActivitySubcomponent extends AndroidInjector<SearchActivity> {
+            @Subcomponent.Builder
+            abstract class Builder extends AndroidInjector.Builder<SearchActivity> {}
+        }
+        }
+
+
+      #+END_SRC
+
+   As we have stated before, in this sample application, we have demonstrate the usage of all these three approaches. Since there is no silver bullet (the newly added annotation cannot solve all the problems), sometime to work around the restriction we have to write the boiler plate.

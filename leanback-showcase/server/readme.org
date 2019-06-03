@@ -1,0 +1,36 @@
+* Set up Android TV Server
+
+Firstly, please download google clodu sdk from:
+https://cloud.google.com/sdk/
+
+And follow the following instruction to setup your sdk environement
+https://cloud.google.com/sdk/downloads
+
+enther the ~server~ folder. the following command will start the server in your local machine
+#+BEGIN_SRC shell
+$YOUR_PATH_TO_GOOGLE_CLOUD_SDK/google-cloud-sdk/bin/dev_appserver.py ./
+#+END_SRC
+
+There are several url reserved for testing purpose. You can send accordingly http request (best on the method type is get or post) to that url.
+
+The following command is using ~httpie~ as the command line http client to test this web application: https://github.com/jakubroztocil/httpie
+
+#+BEGIN_SRC shell
+http get localhost:8080/create
+http get localhost:8080/clear
+http post localhost:8000/duplicate_test_add cat=="Google+"
+http post localhost:8000/duplicate_test_remove cat=="Google+"
+http get localhost:8080/is_database_created
+http get localhost:8080/find_largest_movie_id
+#+END_SRC
+
+Database's content can be visualized at https://localhost:8000. From DataStore Viewer option.
+
+Before deploying this web application to cloud compute machine, you have to create a project at google cloud console firstly. Then use ~--project~ to specify the project ID.
+
+For more information about how to deploy the web application, please refer to:
+https://cloud.google.com/appengine/docs/standard/python/getting-started/deploying-the-application
+
+
+
+
