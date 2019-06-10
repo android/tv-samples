@@ -103,11 +103,11 @@ We love contributions! :smile: Please follow the steps in the [CONTRIBUTING guid
 
 ## License
 
-Licensed under the Apache 2.0 license. See the [LICENSE file][license] for details.
+See the [LICENSE file][license] for details.
 
 [store-apps]: https://play.google.com/store/apps/collection/promotion_3000e26_androidtv_apps_all
 [studio]: https://developer.android.com/tools/studio/index.html
 [getting-started]: https://developer.android.com/training/tv/start/start.html
 [bugs]: https://github.com/googlesamples/androidtv-Leanback/issues/new
-[contributing]: CONTRIBUTING.md
-[license]: LICENSE
+[contributing]: ../CONTRIBUTING.md
+[license]: ../LICENSE
