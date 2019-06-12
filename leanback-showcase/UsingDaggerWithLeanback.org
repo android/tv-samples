@@ -108,10 +108,10 @@
    #+END_SRC
    App Component's declare looks like
    #+BEGIN_SRC java
-package android.support.v17.leanback.supportleanbackshowcase.app.room.di.androidinject;
+package androidx.leanback.supportleanbackshowcase.app.room.di.androidinject;
 
 import android.app.Application;
-import android.support.v17.leanback.supportleanbackshowcase.app.room.controller.app.SampleApplication;
+import androidx.leanback.supportleanbackshowcase.app.room.controller.app.SampleApplication;
 
 import javax.inject.Singleton;
 
@@ -230,15 +230,15 @@ public abstract class ActivityBuildersModule {
       The search activity module is to use the property that when we inject this injector to the target, the target will be added to the dependency graph automatically, so we can use it directly to get =@BindInstance= effect, it loos like
 
       #+BEGIN_SRC java
-        package android.support.v17.leanback.supportleanbackshowcase.app.room.di.androidinject;
+        package androidx.leanback.supportleanbackshowcase.app.room.di.androidinject;
 
 
         import android.app.Activity;
-        import android.support.v17.leanback.app.SearchFragment;
-        import android.support.v17.leanback.supportleanbackshowcase.R;
-        import android.support.v17.leanback.supportleanbackshowcase.app.room.controller.search.SearchActivity;
-        import android.support.v17.leanback.supportleanbackshowcase.app.room.di.scope.PerActivity;
-        import android.support.v17.leanback.widget.SpeechRecognitionCallback;
+        import androidx.leanback.app.SearchFragment;
+        import androidx.leanback.supportleanbackshowcase.R;
+        import androidx.leanback.supportleanbackshowcase.app.room.controller.search.SearchActivity;
+        import androidx.leanback.supportleanbackshowcase.app.room.di.scope.PerActivity;
+        import androidx.leanback.widget.SpeechRecognitionCallback;
         import dagger.Module;
         import dagger.Provides;
 
@@ -265,11 +265,11 @@ public abstract class ActivityBuildersModule {
       The generated code looks like:
 
       #+BEGIN_SRC java
-        package android.support.v17.leanback.supportleanbackshowcase.app.room.di.androidinject;
+        package androidx.leanback.supportleanbackshowcase.app.room.di.androidinject;
 
         import android.app.Activity;
-        import android.support.v17.leanback.supportleanbackshowcase.app.room.controller.search.SearchActivity;
-        import android.support.v17.leanback.supportleanbackshowcase.app.room.di.scope.PerActivity;
+        import androidx.leanback.supportleanbackshowcase.app.room.controller.search.SearchActivity;
+        import androidx.leanback.supportleanbackshowcase.app.room.di.scope.PerActivity;
         import dagger.Binds;
         import dagger.Module;
         import dagger.Subcomponent;

@@ -21,7 +21,7 @@
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_livedata_fragment"
-        android:name="android.support.v17.leanback.supportleanbackshowcase.app.room.controller.overview.LiveDataFragment"
+        android:name="androidx.leanback.leanbackshowcase.app.room.controller.overview.LiveDataFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".app.room.controller.overview.LiveDataRowsActivity"

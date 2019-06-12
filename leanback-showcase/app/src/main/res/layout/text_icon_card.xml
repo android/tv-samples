@@ -34,7 +34,7 @@
         android:paddingTop="12dp"
         lb:layout_viewType="main"/>
 
-    <android.support.v17.leanback.widget.NonOverlappingRelativeLayout
+    <androidx.leanback.widget.NonOverlappingRelativeLayout
         android:layout_width="256dp"
         android:layout_height="36dp"
         android:background="@color/default_card_footer_background_color"
@@ -75,5 +75,5 @@
             android:adjustViewBounds="true"
             android:src="@drawable/stars_white"/>
 
-    </android.support.v17.leanback.widget.NonOverlappingRelativeLayout>
+    </androidx.leanback.widget.NonOverlappingRelativeLayout>
 </merge>
