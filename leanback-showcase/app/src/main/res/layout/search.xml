@@ -18,7 +18,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/search_fragment"
-        android:name="android.support.v17.leanback.supportleanbackshowcase.app.room.controller.search.SearchFragment"
+        android:name="androidx.leanback.leanbackshowcase.app.room.controller.search.SearchFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

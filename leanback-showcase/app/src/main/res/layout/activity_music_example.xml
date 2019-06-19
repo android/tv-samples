@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/musicFragment"
-        android:name="android.support.v17.leanback.supportleanbackshowcase.app.media.MusicConsumptionExampleFragment"
+        android:name="androidx.leanback.leanbackshowcase.app.media.MusicConsumptionExampleFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></fragment>
 </RelativeLayout>

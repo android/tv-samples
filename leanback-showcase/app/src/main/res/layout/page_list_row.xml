@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/page_list_fragment"
-        android:name="android.support.v17.leanback.supportleanbackshowcase.app.page.PageAndListRowFragment"
+        android:name="androidx.leanback.leanbackshowcase.app.page.PageAndListRowFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

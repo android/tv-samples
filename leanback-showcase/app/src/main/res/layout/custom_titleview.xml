@@ -3,7 +3,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <android.support.v17.leanback.widget.SearchOrbView
+    <androidx.leanback.widget.SearchOrbView
         android:id="@+id/search_orb"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"

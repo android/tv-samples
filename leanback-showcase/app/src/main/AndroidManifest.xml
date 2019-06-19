@@ -1,5 +1,5 @@
 <manifest
-    package="android.support.v17.leanback.supportleanbackshowcase"
+    package="androidx.leanback.leanbackshowcase"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -107,7 +107,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
                     android:scheme="rowsnewapi"
-                    android:host="android.support.v17.leanback.supportleanbackshowcase"
+                    android:host="androidx.leanback.supportleanbackshowcase"
                     android:path="/startapp" />
             </intent-filter>
         </activity>
@@ -119,7 +119,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
                     android:scheme="rowsnewapi"
-                    android:host="android.support.v17.leanback.supportleanbackshowcase"
+                    android:host="androidx.leanback.supportleanbackshowcase"
                     android:pathPrefix="/playvideo"
                     />
             </intent-filter>
