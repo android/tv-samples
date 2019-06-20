@@ -1,0 +1,22 @@
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android TV]
+categories:   [Getting Started, Media, UI]
+languages:    [Kotlin]
+solutions:    [Mobile]
+
+github:       android/tv/classics
+
+level:        INTERMEDIATE
+
+icon: screenshots/icon-web.png
+
+apiRefs:
+    - androidx.media.MediaBrowserServiceCompat
+    - android:com.google.android.exoplayer2.SimpleExoPlayer
+
+license: apache2-android
