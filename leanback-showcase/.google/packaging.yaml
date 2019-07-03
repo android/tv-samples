@@ -34,10 +34,12 @@ languages:    [Java]
 solutions:    [TV]
 github:       android/tv
 level:        INTERMEDIATE
-icon: androidtv-Leanback/app/src/main/res/drawable/app_icon_quantum.png
+icon: androidtv-Leanback/app/src/main/res/drawable/app_icon_your_company.png
 
 apiRefs:
     - androidx.leanback:leanback
-    - androidx.recyclerview:recyclerview
+    - androidx.leanback:leanback-preference
+    - com.google.android.exoplayer:exoplayer
+    - androidx.tvprovider:tvprovider
 
 license: apache2
