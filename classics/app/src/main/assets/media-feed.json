@@ -138,17 +138,6 @@
           "art": "https://android-tv-classics.firebaseapp.com/content/patchwork_girl_oz/poster_art_patchwork_girl_oz.jpg"
         },
         {
-          "id": "birth_of_a_nation",
-          "year": 1915,
-          "ratings": null,
-          "duration": 11700,
-          "title": "The Birth of a Nation",
-          "director": "D.W. Griffith",
-          "description": "The Stoneman family finds its friendship with the Camerons affected by the Civil War, both fighting in opposite armies. The development of the war in their lives plays through to Lincoln's assassination and the birth of the Ku Klux Klan.",
-          "url": "https://android-tv-classics.firebaseapp.com/content/birth_of_a_nation/media_birth_of_a_nation.mp4",
-          "art": "https://android-tv-classics.firebaseapp.com/content/birth_of_a_nation/poster_art_birth_of_a_nation.jpg"
-        },
-        {
           "id": "intolerance",
           "year": 1916,
           "ratings": null,
