@@ -32,10 +32,10 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 data class TvMediaBackground(
-        /* User-provided identifier */
+        /** User-provided identifier */
         @PrimaryKey val id: String,
 
-        /* URI for the image */
+        /** URI for the image */
         val uri: Uri
 ) : Parcelable
 

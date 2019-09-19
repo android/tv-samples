@@ -72,7 +72,7 @@ class MediaBrowserFragment : BrowseSupportFragment() {
     /** Job used to synchronize our media database */
     private lateinit var synchronizeJob: Job
 
-    /* List row used exclusively to display "credits" and no media content */
+    /** List row used exclusively to display "credits" and no media content */
     private lateinit var creditsRow: ListRow
 
     /** Used to efficiently add items to our array adapter for display */

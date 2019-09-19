@@ -33,16 +33,16 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class TvMediaCollection(
 
-        /* User-provided identifier for this collection */
+        /** User-provided identifier for this collection */
         @PrimaryKey val id: String,
 
-        /* Title displayed to user */
+        /** Title displayed to user */
         val title: String,
 
-        /* Description of this collection */
+        /** Description of this collection */
         val description: String,
 
-        /* URI for the album / poster art corresponding to this collection */
+        /** URI for the album / poster art corresponding to this collection */
         val artUri: Uri? = null
 
 ) : Parcelable

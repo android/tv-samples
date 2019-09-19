@@ -41,61 +41,61 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 data class TvMediaMetadata(
-        /* User-provided identifier for this piece of content */
+        /** User-provided identifier for this piece of content */
         @PrimaryKey val id: String,
 
         /** Each metadata item can only be part of one collection */
         var collectionId: String,
 
-        /* Title displayed to user */
+        /** Title displayed to user */
         var title: String,
 
         /** Store a searchable version of the title as a property] */
         val searchableTitle: String = searchableText(title),
 
-        /* URI for the content to be played */
+        /** URI for the content to be played */
         var contentUri: Uri,
 
-        /* Author of the metadata content */
+        /** Author of the metadata content */
         var author: String? = null,
 
-        /* Year in which the metadata content was released */
+        /** Year in which the metadata content was released */
         var year: Int? = null,
 
-        /* Duration in seconds of the metadata content */
+        /** Duration in seconds of the metadata content */
         var playbackDurationMillis: Long? = null,
 
-        /* Current playback position for this piece of content */
+        /** Current playback position for this piece of content */
         var playbackPositionMillis: Long? = null,
 
-        /* Content ratings (e.g. G, PG, R) */
+        /** Content ratings (e.g. G, PG, R) */
         var ratings: List<String>? = null,
 
-        /* Content genres, from TvContractCompat.Programs.Genres */
+        /** Content genres, from TvContractCompat.Programs.Genres */
         var genres: List<String>? = null,
 
-        /* Short description of the content shown to users */
+        /** Short description of the content shown to users */
         var description: String? = null,
 
-        /* Track or episode number for this piece of metadata */
+        /** Track or episode number for this piece of metadata */
         var trackNumber: Int? = null,
 
-        /* URI pointing to the album or poster art */
+        /** URI pointing to the album or poster art */
         var artUri: Uri? = null,
 
-        /*
+        /**
          * Aspect ratio for the art, must be one of the constants under
          * [TvContractCompat.PreviewPrograms]. Defaults to movie poster.
          */
         var artAspectRatio: Int = TvContractCompat.PreviewPrograms.ASPECT_RATIO_MOVIE_POSTER,
 
-        /* Flag indicating if it's hidden from home screen channel */
+        /** Flag indicating if it's hidden from home screen channel */
         var hidden: Boolean = false,
 
-        /* Flag indicating if it's added to watch next channel */
+        /** Flag indicating if it's added to watch next channel */
         var watchNext: Boolean = false,
 
-        /* The type of program. Defaults to movie, must be one of PreviewProgramColumns.TYPE_... */
+        /** The type of program. Defaults to movie, must be one of PreviewProgramColumns.TYPE_... */
         var programType: Int = TvContractCompat.PreviewProgramColumns.TYPE_MOVIE
 
 ) : Parcelable {
@@ -106,7 +106,7 @@ data class TvMediaMetadata(
      */
     private fun isStateless() = playbackDurationMillis == null && !hidden && !watchNext
 
-    /* Compares only fields not related to the state */
+    /** Compares only fields not related to the state */
     override fun equals(other: Any?): Boolean = if (isStateless()) {
         super.equals(other)
     } else {
@@ -193,8 +193,6 @@ interface TvMediaMetadataDAO {
             "year as ${SearchManager.SUGGEST_COLUMN_PRODUCTION_YEAR}, " +
             "playbackDurationMillis as ${SearchManager.SUGGEST_COLUMN_DURATION} " +
             "FROM tvmediametadata WHERE :title LIKE '%' || searchableTitle || '%'")
-//            "FROM tvmediametadata WHERE '%' || :title || '%' LIKE  searchableTitle")
-//            "FROM tvmediametadata WHERE :title LIKE searchableTitle")
     fun contentProviderQuery(title: String): Cursor?
 
     @Query("SELECT * FROM tvmediametadata")
