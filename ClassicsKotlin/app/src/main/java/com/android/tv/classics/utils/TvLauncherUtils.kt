@@ -34,11 +34,6 @@ import com.android.tv.classics.models.TvMediaMetadata
 import androidx.tvprovider.media.tv.WatchNextProgram
 import com.android.tv.classics.R
 import com.android.tv.classics.models.TvMediaCollection
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /** Collection of static methods used to handle Android TV Home Screen Launcher operations */
 @RequiresApi(26)
@@ -54,19 +49,6 @@ class TvLauncherUtils private constructor() {
                 .appendPath(resources.getResourceTypeName(id))
                 .appendPath(resources.getResourceEntryName(id))
                 .build()
-
-        /** Helper function used to load a resource as a drawable using Glide */
-        suspend fun loadDrawable(context: Context, res: Any, size: Size? = null): Drawable =
-                suspendCoroutine { continuation ->
-            Glide.with(context)
-                    .asDrawable().centerCrop().apply { size?.let { override(it.width, it.height) }}
-                    .load(res).into(object : CustomTarget<Drawable>(){
-                        override fun onLoadCleared(placeholder: Drawable?) = Unit
-                        override fun onResourceReady(
-                                resource: Drawable, transition: Transition<in Drawable>?) =
-                                continuation.resume(resource)
-                    })
-        }
 
         /**
          * Parse an aspect ratio constant into the equivalent rational number. For example,

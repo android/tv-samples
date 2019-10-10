@@ -19,6 +19,7 @@ package com.android.tv.classics
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
@@ -44,6 +45,23 @@ class MainActivity : FragmentActivity() {
 
         val activity = this
         val db = TvMediaDatabase.getInstance(this)
+
+        // Enable a number of debugging utilities when the app is running a DEBUG build
+        if (BuildConfig.DEBUG) {
+
+            // TODO(owahltinez): https://github.com/googlecodelabs/kotlin-coroutines/issues/23
+            Dispatchers.Main
+
+            // Set strict mode for thread and VM
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+        }
 
         // Navigates to other fragments based on Intent's action
         // [MainActivity] is the main entry point for all intent filters

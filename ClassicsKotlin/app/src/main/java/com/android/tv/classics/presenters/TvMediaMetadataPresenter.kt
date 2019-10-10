@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
+import coil.api.load
 import com.android.tv.classics.models.TvMediaMetadata
 import com.android.tv.classics.utils.TvLauncherUtils
-import com.bumptech.glide.Glide
 
 /** Default height in DP used for card presenters, larger than this results in rows overflowing */
 const val DEFAULT_CARD_HEIGHT: Int = 400
@@ -39,6 +39,6 @@ class TvMediaMetadataPresenter(private val cardHeight: Int = DEFAULT_CARD_HEIGHT
 
         card.titleText = metadata.title
         card.setMainImageDimensions(cardWidth, cardHeight)
-        Glide.with(card).load(metadata.artUri).into(card.mainImageView)
+        card.mainImageView.load(metadata.artUri)
     }
 }

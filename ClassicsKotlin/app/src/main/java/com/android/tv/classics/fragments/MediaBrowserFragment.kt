@@ -34,17 +34,22 @@ import com.android.tv.classics.R
 import androidx.lifecycle.lifecycleScope
 import com.android.tv.classics.models.TvMediaDatabase
 import com.android.tv.classics.models.TvMediaMetadata
-import com.android.tv.classics.utils.TvLauncherUtils
 import com.android.tv.classics.workers.TvMediaSynchronizer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.animation.ValueAnimator
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.util.Size
+import android.media.ThumbnailUtils
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import androidx.leanback.widget.DiffCallback
 import androidx.palette.graphics.Palette
+import coil.Coil
+import coil.api.get
+import coil.api.getAny
+import coil.bitmappool.BitmapPool
+import coil.transform.Transformation
 import com.android.tv.classics.presenters.TvMediaMetadataPresenter
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -109,7 +114,7 @@ class MediaBrowserFragment : BrowseSupportFragment() {
             // Launch the background tint update task in a coroutine
             lifecycleScope.launch(Dispatchers.IO) {
                 metadata.artUri?.let { artUri ->
-                    TvLauncherUtils.loadDrawable(requireContext(), artUri).toBitmap()
+                    Coil.get(artUri) { allowHardware(false) }.toBitmap()
                 }?.let {  artBitmap ->
                     Palette.Builder(artBitmap).generate {
 
@@ -156,8 +161,7 @@ class MediaBrowserFragment : BrowseSupportFragment() {
         // Pick a random background for our fragment
         backgroundDrawable = lifecycleScope.async(Dispatchers.IO) {
             val backgroundUrl = database.backgrounds().findAll().shuffled().firstOrNull()?.uri
-            TvLauncherUtils.loadDrawable(
-                    requireContext(), backgroundUrl ?: R.mipmap.bg_browse_fallback)
+            Coil.getAny(backgroundUrl ?: R.mipmap.bg_browse_fallback)
         }
     }
 
@@ -170,8 +174,14 @@ class MediaBrowserFragment : BrowseSupportFragment() {
         view.post { lifecycleScope.launch(Dispatchers.IO) {
 
             // With the view inflated, we know the final size of our background
-            val sizedBackground = TvLauncherUtils.loadDrawable(
-                    view.context, backgroundDrawable.await(), Size(view.width, view.height))
+            val sizedBackground = Coil.get(backgroundDrawable.await()) {
+                transformations(object : Transformation {
+                    override fun key(): String = "CenterCropTransform"
+                    override suspend fun transform(pool: BitmapPool, input: Bitmap): Bitmap {
+                        return ThumbnailUtils.extractThumbnail(input, view.width, view.height)
+                    }
+                })
+            }
 
             // Set background in main thread
             withContext(Dispatchers.Main) {

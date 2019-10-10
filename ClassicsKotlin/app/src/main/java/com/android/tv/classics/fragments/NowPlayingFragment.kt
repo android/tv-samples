@@ -34,6 +34,8 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import coil.Coil
+import coil.api.get
 import com.android.tv.classics.R
 import com.android.tv.classics.utils.TvLauncherUtils
 import com.android.tv.classics.models.TvMediaDatabase
@@ -75,6 +77,7 @@ class NowPlayingFragment : VideoSupportFragment() {
 
         private val actionRewind = PlaybackControlsRow.RewindAction(context)
         private val actionFastForward = PlaybackControlsRow.FastForwardAction(context)
+        private val actionClosedCaptions = PlaybackControlsRow.ClosedCaptioningAction(context)
 
         fun skipForward(millis: Long = SKIP_PLAYBACK_MILLIS) =
                 // Ensures we don't advance past the content duration (if set)
@@ -94,6 +97,7 @@ class NowPlayingFragment : VideoSupportFragment() {
             // created by default by the glue
             adapter.add(actionRewind)
             adapter.add(actionFastForward)
+            adapter.add(actionClosedCaptions)
         }
 
         override fun onActionClicked(action: Action) = when(action) {
@@ -107,9 +111,9 @@ class NowPlayingFragment : VideoSupportFragment() {
             // Displays basic metadata in the player
             title = metadata.title
             subtitle = metadata.author
-            lifecycleScope.launch { metadata.artUri?.let { resource ->
-                art = TvLauncherUtils.loadDrawable(requireContext(), resource)
-            } }
+            lifecycleScope.launch(Dispatchers.IO) {
+                metadata.artUri?.let { art = Coil.get(it) }
+            }
 
             // Prepares metadata playback
             val dataSourceFactory = DefaultDataSourceFactory(
@@ -177,6 +181,15 @@ class NowPlayingFragment : VideoSupportFragment() {
         mediaSession = MediaSessionCompat(requireContext(), getString(R.string.app_name))
         mediaSessionConnector = MediaSessionConnector(mediaSession)
 
+        // Listen to media session events. This is necessary for things like closed captions which
+        // can be triggered by things outside of our app, for example via Google Assistant
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
+            override fun onSetCaptioningEnabled(enabled: Boolean) {
+                super.onSetCaptioningEnabled(enabled)
+                // TODO(owahltinez): handle captions
+            }
+        })
+
         // Links our video player with this Leanback video playback fragment
         val playerAdapter = LeanbackPlayerAdapter(
                 requireContext(), player, PLAYER_UPDATE_INTERVAL_MILLIS)
@@ -230,8 +243,8 @@ class NowPlayingFragment : VideoSupportFragment() {
             // Early exit: if the controls overlay is visible, don't intercept any keys
             if (playerGlue.host.isControlsOverlayVisible) return@setOnKeyInterceptListener false
 
-            // TODO: This workaround is necessary for navigation library to work with Leanback's
-            //  [PlaybackSupportFragment]
+            // TODO(owahltinez): This workaround is necessary for navigation library to work with
+            //  Leanback's [PlaybackSupportFragment]
             if (!playerGlue.host.isControlsOverlayVisible &&
                     keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
                 Log.d(TAG, "Intercepting BACK key for fragment navigation")
