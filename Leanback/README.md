@@ -86,7 +86,6 @@ Need more information about getting started with Android TV? Check the [official
 
 If you need additional help, our community might be able to help.
 
-- Android TV Google+ Community: [https://g.co/androidtvdev](https://g.co/androidtvdev)
 - Stack Overflow: [http://stackoverflow.com/questions/tagged/android-tv](http://stackoverflow.com/questions/tagged/android-tv)
 
 ## Dependencies
