@@ -17,8 +17,15 @@ Pre-requisites
 Getting Started
 ---------------
 
-This sample uses the Gradle build system. To build this project, use the
-"gradlew build" command or use "Import Project" in Android Studio.
+```sh
+git clone https://github.com/android/tv-samples.git
+```
+
+- Open the ClassicsKotlin project in [Android Studio][studio].
+- Compile and deploy to your Android TV device (such as a Nexus Player).
+
+Need more information about getting started with Android TV? Check the [official docs][getting-started].
+
 
 Support
 -------
@@ -41,3 +48,6 @@ by the following services, and mirrored in Firebase:
 - [The Internet Archive](https://archive.org)
 - [Wikimedia Commons](https://commons.wikimedia.org)
 - [IMDb](https://imdb.com)
+
+[studio]: https://developer.android.com/tools/studio/index.html
+[getting-started]: https://developer.android.com/training/tv/start/start.html

@@ -32,7 +32,7 @@ If you use Android Studio as recommended, the following dependencies will **auto
 - Clone this repo:
 
 ```sh
-git clone https://github.com/googlesamples/leanback-showcase.git
+git clone https://github.com/android/tv-samples.git
 ```
 
 - In the local.properties file add the location to your Android SDK (You need to install Android SDK 'N').
@@ -50,7 +50,6 @@ Need more information about getting started with Android TV? Check the [official
 
 If you need additional help, our community might be able to help.
 
-- Android TV Google+ Community: [https://g.co/androidtvdev](https://g.co/androidtvdev)
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android-tv
 
 ## Contributing
