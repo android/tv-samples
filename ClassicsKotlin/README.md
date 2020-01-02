@@ -22,9 +22,9 @@ git clone https://github.com/android/tv-samples.git
 ```
 
 - Open the ClassicsKotlin project in [Android Studio][studio].
-- Compile and deploy to your Android TV device (such as a Nexus Player).
+- Compile and deploy to your Android TV device (such as an ADT-2 or ADT-3).
 
-Need more information about getting started with Android TV? Check the [official docs][getting-started].
+Need more information about getting started with Android TV? Check the [official getting started guide][getting-started].
 
 
 Support

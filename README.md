@@ -5,7 +5,7 @@ This repository contains a set of individual Android Studio projects to help you
 
 - ClassicsKotlin: A modern Android TV app using Kotlin to show classic videos
 - Leanback: A Java app that demonstrates a basic Android TV app
-- Leanback a Java app that demonstrates many different parts of the Leanback SDK and how to customize them
+- Leanback Showcase: A Java app that demonstrates many different parts of the Leanback SDK and how to customize them
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ git clone https://github.com/android/tv-samples.git
 
 - Open the specific project(s) you're interested in within [Android Studio][studio]
 
-Need more information about getting started with Android TV? Check the [official docs][getting-started].
+Need more information about getting started with Android TV? Check the [official getting started guide][getting-started].
 
 ## Additional Resouroces
 
