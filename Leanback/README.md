@@ -12,7 +12,7 @@ git clone https://github.com/android/tv-samples.git
 ```
 
 - Open the Leanback project within tv-samples in [Android Studio][studio].
-- Compile and deploy to your Android TV device (such as an ADT-2 or ADT-3).
+- Compile and deploy to your Android TV emulator or device (such as an ADT-2 or ADT-3).
 
 Need more information about getting started with Android TV? Check the [official getting started guide][getting-started].
 

@@ -1,7 +1,7 @@
 Android TV Samples Repository
 =============================
 
-This repository contains a set of individual Android Studio projects to help you get started writing Android TV apps.
+This repository contains a set of individual Android TV projects to help you get started writing Android TV apps.
 
 - ClassicsKotlin: A modern Android TV app using Kotlin to show classic videos
 - Leanback: A Java app that demonstrates a basic Android TV app

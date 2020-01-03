@@ -37,7 +37,7 @@ git clone https://github.com/android/tv-samples.git
 
 - In the local.properties file add the location to your Android SDK (You need to install Android SDK 'N').
 - Open the project in [Android Studio][studio].
-- Compile and deploy to your Android TV device (such as an ADT-2 or ADT-3).
+- Compile and deploy to your Android TV emulator or device (such as an ADT-2 or ADT-3).
 
 
 ## Screenshots
