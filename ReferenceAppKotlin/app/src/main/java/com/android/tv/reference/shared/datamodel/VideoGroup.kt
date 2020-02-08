@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package com.android.tv.reference
-
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+package com.android.tv.reference.shared.datamodel
 
 /**
- * FragmentActivity that displays the various fragments
+ * A group of content that has a String category and a List of Video objects
  */
-class MainActivity : FragmentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+class VideoGroup(val category: String, val videoList: List<Video>) {
 }

@@ -15,12 +15,13 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- White can be too strong on some TVs, so a near-white color is preferred -->
-    <color name="near_white">#EEEEEE</color>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
 
-    <!-- Warm dark gray for backgrounds -->
-    <color name="gray_dark">#212121</color>
+    <gradient
+        android:startColor="@color/gray_dark"
+        android:endColor="@color/black"
+        android:type="radial"
+        android:gradientRadius="50%p"/>
 
-    <color name="black">#000000</color>
-</resources>
+</shape>

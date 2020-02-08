@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.android.tv.reference
+package com.android.tv.reference.playback
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import androidx.leanback.app.VideoSupportFragment
+import com.android.tv.reference.shared.datamodel.Video
 
 /**
- * FragmentActivity that displays the various fragments
+ * Fragment that plays video content with ExoPlayer
  */
-class MainActivity : FragmentActivity() {
+class PlaybackFragment : VideoSupportFragment() {
+
+    private lateinit var video: Video
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        video = PlaybackFragmentArgs.fromBundle(requireArguments()).video
     }
 }

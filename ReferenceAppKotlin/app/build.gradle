@@ -18,6 +18,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+// Safe args allows the passing of data in bundles with type safety
+// See more at https://developer.android.com/guide/navigation/navigation-pass-data
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 android {
     compileSdkVersion 29
 
@@ -56,11 +60,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // AndroidX libraries
-    def nav_version = "2.2.0"
+    def nav_version = "2.2.1"
     def leanback_version = "1.1.0-alpha03"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
-    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "androidx.core:core-ktx:1.2.0"
     implementation "androidx.leanback:leanback:$leanback_version"
     implementation "androidx.leanback:leanback-preference:$leanback_version"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"

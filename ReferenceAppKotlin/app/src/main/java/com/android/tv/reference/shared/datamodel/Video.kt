@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.android.tv.reference
+package com.android.tv.reference.shared.datamodel
 
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
- * FragmentActivity that displays the various fragments
+ * Represents a video that can be played in the app
  */
-class MainActivity : FragmentActivity() {
+@Parcelize
+class Video(val name: String, val videoUri: String, val thumbnailUri: String, val backgroundImageUri: String) :
+    Parcelable {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun toString(): String {
+        return "Video(name='$name')";
     }
 }
