@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2020 Google LLC
   ~
@@ -14,11 +15,22 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">ATV Reference App</string>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Preference -->
-    <string name="info">Info</string>
-    <string name="privacy_policy">Privacy policy</string>
-    <string name="open_source_notices">Open source notices</string>
-</resources>
+    <PreferenceCategory
+        app:key="info"
+        app:title="@string/info">
+
+        <Preference
+            app:key="privacy_policy"
+            app:title="@string/privacy_policy"
+            />
+
+        <Preference
+            app:key="open_source_notices"
+            app:title="@string/open_source_notices"
+            />
+
+    </PreferenceCategory>
+</PreferenceScreen>

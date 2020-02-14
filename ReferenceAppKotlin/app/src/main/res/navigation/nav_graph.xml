@@ -34,5 +34,12 @@
         <action
             android:id="@+id/action_browseFragment_to_playbackFragment"
             app:destination="@id/playbackFragment" />
+        <action
+            android:id="@+id/action_browseFragment_to_preferencesContainerFragment"
+            app:destination="@id/preferencesContainerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/preferencesContainerFragment"
+        android:name="com.android.tv.reference.preferences.PreferencesContainerFragment"
+        android:label="PreferencesContainerFragment" />
 </navigation>
