@@ -33,6 +33,7 @@ import androidx.room.Update
 import androidx.tvprovider.media.tv.BasePreviewProgram
 import androidx.tvprovider.media.tv.TvContractCompat
 import kotlinx.android.parcel.Parcelize
+import java.util.Locale
 
 /**
  * Data class representing a piece of content metadata (title, content URI, state-related fields
@@ -172,7 +173,7 @@ data class TvMediaMetadata(
     companion object {
         /** Convenience function used to maximize search matches by ignoring punctuation symbols */
         fun searchableText(text: String) =
-                text.replace(Regex("[^A-Za-z0-9 ]"), "")
+                text.replace(Regex("[^A-Za-z0-9 ]"), "").toLowerCase(Locale.getDefault())
     }
 }
 

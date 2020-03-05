@@ -19,8 +19,9 @@ package com.android.tv.classics.fragments
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.ResultReceiver
+import android.support.v4.media.RatingCompat
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.navigation.fragment.navArgs
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -34,19 +35,21 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import coil.Coil
 import coil.api.get
 import com.android.tv.classics.R
-import com.android.tv.classics.utils.TvLauncherUtils
 import com.android.tv.classics.models.TvMediaDatabase
 import com.android.tv.classics.models.TvMediaMetadata
-import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
+import com.android.tv.classics.utils.TvLauncherUtils
+import com.google.android.exoplayer2.ControlDispatcher
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -65,6 +68,9 @@ class NowPlayingFragment : VideoSupportFragment() {
 
     /** Allows interaction with transport controls, volume keys, media buttons  */
     private lateinit var mediaSession: MediaSessionCompat
+
+    /** Glue layer between the player and our UI */
+    private lateinit var playerGlue: MediaPlayerGlue
 
     /**
      * Connects a [MediaSessionCompat] to a [Player] so transport controls are handled automatically
@@ -100,7 +106,7 @@ class NowPlayingFragment : VideoSupportFragment() {
             adapter.add(actionClosedCaptions)
         }
 
-        override fun onActionClicked(action: Action) = when(action) {
+        override fun onActionClicked(action: Action) = when (action) {
             actionRewind -> skipBackward()
             actionFastForward -> skipForward()
             else -> super.onActionClicked(action)
@@ -149,7 +155,7 @@ class NowPlayingFragment : VideoSupportFragment() {
                     database.metadata().update(metadata.apply { watchNext = false })
                 }
 
-            // If playback is not done, update the state in watch next row with latest time
+                // If playback is not done, update the state in watch next row with latest time
             } else {
                 val programUri = TvLauncherUtils.upsertWatchNext(requireContext(), metadata)
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -183,10 +189,34 @@ class NowPlayingFragment : VideoSupportFragment() {
 
         // Listen to media session events. This is necessary for things like closed captions which
         // can be triggered by things outside of our app, for example via Google Assistant
-        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
-            override fun onSetCaptioningEnabled(enabled: Boolean) {
-                super.onSetCaptioningEnabled(enabled)
+        mediaSessionConnector.setCaptionCallback(object : MediaSessionConnector.CaptionCallback {
+            override fun onCommand(player: Player, controlDispatcher: ControlDispatcher, command: String, extras: Bundle?, cb: ResultReceiver?): Boolean {
+                return false
+            }
+
+            override fun hasCaptions(player: Player): Boolean {
                 // TODO(owahltinez): handle captions
+                return true
+            }
+
+            override fun onSetCaptioningEnabled(player: Player, enabled: Boolean) {
+                // TODO(owahltinez): handle captions
+                Log.d(TAG, "onSetCaptioningEnabled() enabled=$enabled")
+            }
+        })
+        mediaSessionConnector.setRatingCallback(object : MediaSessionConnector.RatingCallback {
+            override fun onCommand(player: Player, controlDispatcher: ControlDispatcher, command: String, extras: Bundle?, cb: ResultReceiver?): Boolean {
+                return false
+            }
+
+            override fun onSetRating(player: Player, rating: RatingCompat) {
+                // TODO(plammer): handle ratings
+                Log.d(TAG, "onSetRating() rating=$rating")
+            }
+
+            override fun onSetRating(player: Player, rating: RatingCompat, extras: Bundle) {
+                // TODO(plammer): handle ratings
+                Log.d(TAG, "onSetRating() rating=$rating")
             }
         })
 
@@ -195,7 +225,7 @@ class NowPlayingFragment : VideoSupportFragment() {
                 requireContext(), player, PLAYER_UPDATE_INTERVAL_MILLIS)
 
         // Enables pass-through of transport controls to our player instance
-        val playerGlue = MediaPlayerGlue(requireContext(), playerAdapter).apply {
+        playerGlue = MediaPlayerGlue(requireContext(), playerAdapter).apply {
             host = VideoSupportFragmentGlueHost(this@NowPlayingFragment)
 
             // Adds playback state listeners
@@ -221,7 +251,8 @@ class NowPlayingFragment : VideoSupportFragment() {
                     val navController = Navigation.findNavController(
                             requireActivity(), R.id.fragment_container)
                     navController.currentDestination?.id?.let {
-                        navController.popBackStack(it, true) }
+                        navController.popBackStack(it, true)
+                    }
                 }
             })
 
@@ -300,6 +331,7 @@ class NowPlayingFragment : VideoSupportFragment() {
     override fun onPause() {
         super.onPause()
 
+        playerGlue.pause()
         mediaSession.isActive = false
         mediaSessionConnector.setPlayer(null)
 
