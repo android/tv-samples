@@ -19,14 +19,17 @@ package com.android.tv.classics.providers
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
+import android.database.DatabaseUtils
 import android.net.Uri
 import android.util.Log
 import com.android.tv.classics.models.TvMediaDatabase
 import com.android.tv.classics.models.TvMediaMetadata
-import java.lang.Exception
 
 /** Expose metadata to the system's global search and Google Assistant */
 class TvMediaProvider : ContentProvider() {
+    companion object {
+        private val TAG = TvMediaProvider::class.java.simpleName
+    }
 
     // Initialize database upon first query when context will be available
     private val database: TvMediaDatabase by lazy {
@@ -44,11 +47,13 @@ class TvMediaProvider : ContentProvider() {
             sortOrder: String?
     ): Cursor? = if (uri.pathSegments.firstOrNull() == "search") {
         // We only consider a query as valid if it's in the form of <authority>/search/<query>
-        Log.d(TAG, "Handling query for $uri ${selectionArgs?.firstOrNull()}")
-        selectionArgs?.firstOrNull()?.let { selector ->
+        val result = selectionArgs?.firstOrNull()?.let { selector ->
             // Perform light processing of the query selector as we send the request to the database
             database.metadata().contentProviderQuery(TvMediaMetadata.searchableText(selector))
         }
+        val stringResult = DatabaseUtils.dumpCursorToString(result)
+        Log.d(TAG, "Handling query for $uri; \"${selectionArgs?.firstOrNull()}\" --> count=${result?.count}; result=$stringResult")
+        result
     } else {
         throw IllegalArgumentException("Invalid URI: $uri")
     }
@@ -69,7 +74,4 @@ class TvMediaProvider : ContentProvider() {
     /** We do not implement resolution of MIME type given a URI */
     override fun getType(uri: Uri): String? = null
 
-    companion object {
-        private val TAG = TvMediaProvider::class.java.simpleName
-    }
 }
