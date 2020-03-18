@@ -18,6 +18,7 @@ package com.android.tv.reference
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.fragment.NavHostFragment
 
 /**
  * FragmentActivity that displays the various fragments
@@ -27,5 +28,19 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Set the correct starting destination for the NavController
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        @Suppress("ConstantConditionIf")
+        if (BuildConfig.FIREBASE_ENABLED) {
+            // TODO Go to Firebase welcome/login screen
+            navGraph.startDestination = R.id.browseFragment
+        } else {
+            // Firebase is not enabled, notify the user before starting
+            navGraph.startDestination = R.id.noFirebaseFragment
+        }
+        navController.graph = navGraph
     }
 }

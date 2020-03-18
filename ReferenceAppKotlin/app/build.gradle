@@ -37,6 +37,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // When true, the app will display features that require Firebase to be configured
+        // such as the ability to create a user account. When false, those features are hidden,
+        // there is no user account, and watch progress is stored locally.
+        buildConfigField("boolean", "FIREBASE_ENABLED", "false")
     }
 
     buildTypes {
