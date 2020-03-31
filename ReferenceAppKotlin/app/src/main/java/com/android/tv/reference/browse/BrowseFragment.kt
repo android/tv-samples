@@ -80,8 +80,7 @@ class BrowseFragment : BrowseSupportFragment(), Target {
 
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
         viewModel.browseContent.observe(this, Observer {
-            // TODO create and set the adapter here
-            //adapter = BrowseAdapter(it)
+            adapter = BrowseAdapter(it)
         })
 
         setOnItemViewClickedListener { _, item, _, _ ->
