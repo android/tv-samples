@@ -10,8 +10,8 @@ import com.squareup.picasso.Picasso
 class CardPresenter : Presenter() {
 
     override fun onCreateViewHolder(parent: ViewGroup?): ViewHolder {
-        val mContext = parent!!.context
-        val cardView = ImageCardView(mContext)
+        val context = parent!!.context
+        val cardView = ImageCardView(context)
         cardView.isFocusable = true
         cardView.isFocusableInTouchMode = true
 

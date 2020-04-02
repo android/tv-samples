@@ -4,13 +4,12 @@ import androidx.leanback.widget.*
 import com.android.tv.reference.presenter.CardPresenter
 import com.android.tv.reference.shared.datamodel.VideoGroup
 
-class BrowseAdapter(videoGroup: List<VideoGroup>) : ArrayObjectAdapter() {
+class BrowseAdapter(videoGroup: List<VideoGroup>) : ArrayObjectAdapter(ListRowPresenter()) {
 
     init {
-        this.presenterSelector = ArrayObjectAdapter(ListRowPresenter()).presenterSelector
-
+        val cardPresenter = CardPresenter()
         videoGroup.forEach {
-            val listRowAdapter = ArrayObjectAdapter(CardPresenter())
+            val listRowAdapter = ArrayObjectAdapter(cardPresenter)
             listRowAdapter.addAll(0, it.videoList)
             val headerItem = HeaderItem(it.category)
             add(ListRow(headerItem, listRowAdapter))
