@@ -17,13 +17,18 @@
 package com.android.tv.reference.shared.datamodel
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
  * Represents a video that can be played in the app
  */
 @Parcelize
-class Video(val name: String, val videoUri: String, val thumbnailUri: String, val backgroundImageUri: String) :
+class Video(val name: String,
+            val videoUri: String,
+            val thumbnailUri: String,
+            @SerializedName("backgroundUri") val backgroundImageUri: String,
+            val category: String) :
     Parcelable {
 
     override fun toString(): String {

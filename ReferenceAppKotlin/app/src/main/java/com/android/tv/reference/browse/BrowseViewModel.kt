@@ -45,7 +45,8 @@ class BrowseViewModel : ViewModel() {
                     name = "Video $videoCount",
                     videoUri = "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
                     thumbnailUri = "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-                    backgroundImageUri = "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg"
+                    backgroundImageUri = "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
+                    category = "Category $i"
                 ))
                 videoCount++
             }
