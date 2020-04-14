@@ -31,6 +31,14 @@
         android:name="android.software.leanback"
         android:required="true" />
 
+    <!--suppress AndroidDomInspection -->
+    <instrumentation>
+        <!--suppress AndroidElementNotAllowed -->
+        <meta-data
+            android:name="notPackage"
+            android:value="net.bytebuddy" />
+    </instrumentation>
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -40,6 +48,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- You don't need to include android:required="false" if your app's
+        minSdkVersion is 28 or higher. -->
+        <uses-library android:name="android.test.runner"
+            android:required="false" />
+
+
 
         <activity android:name=".MainActivity">
 

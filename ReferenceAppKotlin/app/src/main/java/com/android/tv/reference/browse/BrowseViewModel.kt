@@ -16,44 +16,27 @@
 
 package com.android.tv.reference.browse
 
-import android.text.method.BaseKeyListener
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.android.tv.reference.shared.datamodel.Video
+import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.datamodel.VideoGroup
 
-class BrowseViewModel : ViewModel() {
-
+class BrowseViewModel(application: Application) : AndroidViewModel(application) {
+    private var videoRepository = VideoRepositoryFactory.getVideoRepository(application)
     var browseContent = MutableLiveData<List<VideoGroup>>()
 
     init {
-        browseContent.value = temp__getFakeContentList()
+        browseContent.value = getVideoGroupList()
     }
 
-    /**
-     * Temporary method for getting some fake content to work with
-     */
-    private fun temp__getFakeContentList() : List<VideoGroup> {
-        val videoGroups = ArrayList<VideoGroup>();
-        // TODO include several example URIs
-        var videoCount = 0
-
-        for (i in 1..3) {
-            val videos = ArrayList<Video>()
-            for (j in 0..5) {
-                videos.add(Video(
-                    name = "Video $videoCount",
-                    videoUri = "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-                    thumbnailUri = "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-                    backgroundImageUri = "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-                    category = "Category $i"
-                ))
-                videoCount++
-            }
-            videoGroups.add(VideoGroup("Category $i", videos))
+    fun getVideoGroupList(): List<VideoGroup> {
+        val videosByCategory = videoRepository.getAllVideos().groupBy { it.category }
+        val videoGroupList = mutableListOf<VideoGroup>()
+        videosByCategory.forEach {(k, v) ->
+            videoGroupList.add(VideoGroup(k, v))
         }
 
-        return videoGroups
+        return videoGroupList
     }
-
 }
