@@ -30,4 +30,8 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="menu_more">More…</string>
+
+    <!-- Channel strings -->
+    <string name="default_home_screen_channel_name">Example Channel</string>
+    <string name="default_home_screen_channel_description">An example of a default home screen channel</string>
 </resources>

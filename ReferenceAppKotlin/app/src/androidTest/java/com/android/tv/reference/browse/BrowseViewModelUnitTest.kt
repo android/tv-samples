@@ -2,13 +2,11 @@ package com.android.tv.reference.browse
 
 import android.app.Application
 import android.content.res.Resources
-import android.test.mock.MockContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.android.tv.reference.MainActivity
 import com.android.tv.reference.R
-import com.android.tv.reference.repository.FileVideoRepository
 import com.android.tv.reference.repository.VideoRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

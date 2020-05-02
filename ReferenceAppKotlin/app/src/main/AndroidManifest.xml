@@ -21,6 +21,9 @@
     <!-- Access internet-based media -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- For writing to home screen channels -->
+    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+
     <!-- Touch screen is not required -->
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -47,6 +50,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+            <!-- IntentFilter for handling deep links from the ATV home screen or Assistant -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="atv-reference-app.firebaseapp.com" />
+                <data android:scheme="https" />
+                <data android:pathPattern=".*" />
             </intent-filter>
 
         </activity>

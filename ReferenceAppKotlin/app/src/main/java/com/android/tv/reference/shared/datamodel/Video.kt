@@ -25,11 +25,21 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 class Video(val name: String,
-            val videoUri: String,
-            val thumbnailUri: String,
-            @SerializedName("backgroundUri") val backgroundImageUri: String,
-            val category: String) :
-    Parcelable {
+    val description: String,
+    val videoUri: String,
+    val thumbnailUri: String,
+    @SerializedName("backgroundUri") val backgroundImageUri: String,
+    val category: String
+) : Parcelable {
+
+    // TODO remove method and include ID in the constructor
+    public fun getId(): String {
+        return videoUri
+    }
+    // TODO remove method and include the deep link in the constructor
+    public fun getDeepLink(): String {
+        return videoUri
+    }
 
     override fun toString(): String {
         return "Video(name='$name')";
