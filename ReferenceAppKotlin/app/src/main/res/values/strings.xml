@@ -26,4 +26,8 @@
     <string name="no_firebase_title">Firebase not configured</string>
     <string name="no_firebase_body">Firebase has not been configured for this app. That means no account-specific features are enabled and watch progress is stored locally. To enable Firebase features, refer to the readme file.</string>
     <string name="continue_text">Continue</string>
+    <string name="email">E-mail address</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="menu_more">More…</string>
 </resources>

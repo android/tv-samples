@@ -78,14 +78,23 @@ class BrowseFragment : BrowseSupportFragment(), Target {
             setThemeDrawableResourceId(BACKGROUND_RESOURCE_ID)
         }
 
+        val menuMore = BrowseCustomMenu(getString(R.string.menu_more), mapOf(
+            // temporary - sign in will be triggered automatically in the future
+            BrowseCustomMenu.MenuItem(getString(R.string.sign_in)) to {
+                findNavController().navigate(R.id.action_global_signInFragment)
+            }
+        ))
+
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
         viewModel.browseContent.observe(this, Observer {
-            adapter = BrowseAdapter(it)
+            adapter = BrowseAdapter(it, listOf(menuMore))
         })
 
         setOnItemViewClickedListener { _, item, _, _ ->
-            if (item is Video) {
-                findNavController().navigate(BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(item))
+            when (item) {
+                is Video ->
+                    findNavController().navigate(BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(item))
+                is BrowseCustomMenu.MenuItem -> menuMore.navigate(item)
             }
         }
 

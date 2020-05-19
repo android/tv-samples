@@ -14,15 +14,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
 
-    <dimen name="text_body">24sp</dimen>
-    <dimen name="text_title">64sp</dimen>
-
-    <dimen name="overscan_horizontal">48dp</dimen>
-    <dimen name="overscan_vertical">27dp</dimen>
-
-    <dimen name="menu_item_width">100dp</dimen>
-    <dimen name="menu_item_height">100dp</dimen>
-
-</resources>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/menu_item_width"
+    android:layout_height="@dimen/menu_item_height"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:background="@color/gray_dark"
+    android:textColor="@color/near_white" />
