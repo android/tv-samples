@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_browseFragment_to_preferencesContainerFragment"
             app:destination="@id/preferencesContainerFragment" />
+        <action
+            android:id="@+id/action_browseFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/preferencesContainerFragment"
@@ -60,8 +63,13 @@
         android:id="@+id/signInFragment"
         android:name="com.android.tv.reference.auth.SignInFragment"
         android:label="SignInFragment">
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.android.tv.reference.auth.ProfileFragment"
+        android:label="ProfileFragment">
         <action
-            android:id="@+id/action_signInFragment_to_browseFragment"
-            app:destination="@id/browseFragment" />
+            android:id="@+id/action_profileFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
 </navigation>

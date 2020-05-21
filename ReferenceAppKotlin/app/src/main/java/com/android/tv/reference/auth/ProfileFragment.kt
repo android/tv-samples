@@ -20,18 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
-import com.android.tv.reference.databinding.FragmentSignInBinding
+import com.android.tv.reference.databinding.FragmentProfileBinding
 
 /**
- * Fragment that allows the user to sign in using an email and password.
+ * Placeholder fragment that has a different behavior depending on whether the user is signed in.
  */
-class SignInFragment : Fragment() {
+class ProfileFragment : Fragment() {
+    private lateinit var binding: FragmentProfileBinding
     private val viewModel: UserInfoViewModel by activityViewModels {
         UserInfoViewModelFactory(
             requireContext()
@@ -43,26 +43,16 @@ class SignInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentSignInBinding.inflate(inflater, container, false)
-        viewModel.userInfo.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                findNavController().popBackStack()
-            }
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding.signInButton.setOnClickListener(View.OnClickListener {
+            findNavController().navigate(UserManager.signInFragmentId)
         })
-        viewModel.signInError.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let { errorCode ->
-                val error = when (errorCode) {
-                    UserInfoViewModel.SIGN_IN_ERROR_INVALID_PASSWORD -> getString(R.string.invalid_credentials)
-                    else -> getString(R.string.unknown_error)
-                }
-                binding.signInError.text = getString(R.string.sign_in_error, error)
-            }
-        })
-        binding.signInButton.setOnClickListener {
-            val username = binding.usernameEdit.text.toString()
-            val password = binding.passwordEdit.text.toString()
-            viewModel.signInWithPassword(username, password)
+        binding.signOutButton.setOnClickListener {
+            viewModel.signOut()
         }
+        viewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            binding.displayName.text = it?.displayName ?: getString(R.string.not_signed_in)
+        })
         return binding.root
     }
 }

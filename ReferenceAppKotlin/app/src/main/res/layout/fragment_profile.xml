@@ -22,25 +22,10 @@
     android:paddingHorizontal="@dimen/overscan_horizontal"
     android:paddingVertical="@dimen/overscan_vertical">
 
-    <EditText
-        android:id="@+id/username_edit"
+    <TextView
+        android:id="@+id/display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="username"
-        android:hint="@string/email"
-        android:importantForAutofill="yes"
-        android:inputType="textEmailAddress"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp" />
-
-    <EditText
-        android:id="@+id/password_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="password"
-        android:hint="@string/password"
-        android:importantForAutofill="yes"
-        android:inputType="textPassword"
         android:paddingStart="8dp"
         android:paddingEnd="8dp" />
 
@@ -51,9 +36,11 @@
         android:layout_gravity="end"
         android:text="@string/sign_in" />
 
-    <TextView
-        android:id="@+id/sign_in_error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/sign_out_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/sign_out" />
 
 </LinearLayout>

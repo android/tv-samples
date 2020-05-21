@@ -14,14 +14,26 @@
  * limitations under the License.
  */
 
-package com.android.tv.reference.auth;
+package com.android.tv.reference.shared.event
 
-class IdentityProvider {
-    fun validateCredentials(username: String, password: String): Boolean {
-        // placeholder
-        if (username == "user@gmail.com") {
-            return true
+open class SingleUseEvent<out T>(private val content: T) {
+    var hasBeenHandled = false
+        private set
+
+    /**
+     * Returns the content and prevents its use again.
+     */
+    fun getContentIfNotHandled(): T? {
+        return if (hasBeenHandled) {
+            null
+        } else {
+            hasBeenHandled = true
+            content
         }
-        return false
     }
+
+    /**
+     * Returns the content, even if it's already been handled.
+     */
+    fun peekContent(): T = content
 }

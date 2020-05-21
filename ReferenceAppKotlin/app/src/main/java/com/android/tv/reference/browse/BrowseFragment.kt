@@ -82,6 +82,9 @@ class BrowseFragment : BrowseSupportFragment(), Target {
             // temporary - sign in will be triggered automatically in the future
             BrowseCustomMenu.MenuItem(getString(R.string.sign_in)) to {
                 findNavController().navigate(R.id.action_global_signInFragment)
+            },
+            BrowseCustomMenu.MenuItem(getString(R.string.profile)) to {
+                findNavController().navigate(BrowseFragmentDirections.actionBrowseFragmentToProfileFragment())
             }
         ))
 
