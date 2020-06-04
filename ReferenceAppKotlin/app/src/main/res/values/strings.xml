@@ -38,7 +38,10 @@
     <string name="not_signed_in">Not signed in</string>
     <string name="profile">Profile</string>
     <string name="sign_in_error">Error signing in: %1$s</string>
+    <string name="empty_username_or_password">Both username and password must be provided</string>
     <string name="invalid_credentials">Invalid credentials</string>
+    <string name="onetap_error">One Tap returned an error</string>
+    <string name="server_error">Server error</string>
     <string name="unknown_error">Unknown error</string>
 
     <!-- Channel strings -->

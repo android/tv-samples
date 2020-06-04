@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
@@ -32,11 +31,7 @@ import com.android.tv.reference.databinding.FragmentProfileBinding
  */
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
-    private val viewModel: UserInfoViewModel by activityViewModels {
-        UserInfoViewModelFactory(
-            requireContext()
-        )
-    }
+    private val userManager by lazy { UserManager.getInstance(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,9 +43,9 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(UserManager.signInFragmentId)
         })
         binding.signOutButton.setOnClickListener {
-            viewModel.signOut()
+            userManager.signOut()
         }
-        viewModel.userInfo.observe(viewLifecycleOwner, Observer {
+        userManager.userInfo.observe(viewLifecycleOwner, Observer {
             binding.displayName.text = it?.displayName ?: getString(R.string.not_signed_in)
         })
         return binding.root

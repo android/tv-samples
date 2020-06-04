@@ -21,10 +21,20 @@ package com.android.tv.reference.auth
  * The verification is expected to be server-side.
  */
 interface AuthClient {
-    fun validateToken(token: String): UserInfo?
-    fun authWithPassword(username: String, password: String): UserInfo?
-    fun authWithGoogleIdToken(idToken: String): UserInfo?
-    fun invalidateToken(token: String)
+    fun validateToken(token: String): AuthClientResult<UserInfo>
+    fun authWithPassword(username: String, password: String): AuthClientResult<UserInfo>
+    fun authWithGoogleIdToken(idToken: String): AuthClientResult<UserInfo>
+    fun invalidateToken(token: String): AuthClientResult<Unit>
+}
+
+sealed class AuthClientResult<out T> {
+    data class Success<out T>(val value: T) : AuthClientResult<T>()
+    data class Failure(val error: AuthClientError) : AuthClientResult<Nothing>()
+}
+
+sealed class AuthClientError {
+    object AuthenticationError : AuthClientError()
+    data class ServerError(val errorText: String): AuthClientError()
 }
 
 /**
@@ -35,23 +45,23 @@ class MockAuthClient : AuthClient {
     private val mockUser = UserInfo("myUserToken", "A. N. Other")
     private val mockUserEmail = "user@gmail.com"
 
-    override fun validateToken(token: String): UserInfo? {
+    override fun validateToken(token: String): AuthClientResult<UserInfo> {
         if (token == mockUser.token) {
-            return mockUser
+            return AuthClientResult.Success(mockUser)
         }
-        return null
+        return AuthClientResult.Failure(AuthClientError.AuthenticationError)
     }
 
-    override fun authWithPassword(username: String, password: String): UserInfo? {
+    override fun authWithPassword(username: String, password: String): AuthClientResult<UserInfo> {
         if (username == mockUserEmail) {
-            return mockUser
+            return AuthClientResult.Success(mockUser)
         }
-        return null
+        return AuthClientResult.Failure(AuthClientError.AuthenticationError)
     }
 
-    override fun authWithGoogleIdToken(idToken: String): UserInfo? {
+    override fun authWithGoogleIdToken(idToken: String): AuthClientResult<UserInfo> {
         TODO("Not yet implemented")
     }
 
-    override fun invalidateToken(token: String) {}
+    override fun invalidateToken(token: String): AuthClientResult<Unit> = AuthClientResult.Success(Unit)
 }

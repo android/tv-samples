@@ -16,6 +16,8 @@
 
 package com.android.tv.reference.auth
 
+import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.tv.reference.R
 import com.google.android.gms.auth.api.identity.SignInCredential
@@ -28,7 +30,8 @@ class UserManager(
     private val server: AuthClient,
     private val storage: UserInfoStorage
 ) {
-    val userInfoLiveData = MutableLiveData<UserInfo?>(storage.readUserInfo())
+    private val userInfoLiveData = MutableLiveData(storage.readUserInfo())
+    val userInfo: LiveData<UserInfo?> = userInfoLiveData
 
     init {
         validateToken()
@@ -36,31 +39,64 @@ class UserManager(
 
     fun signOut() {
         userInfoLiveData.value?.let {
+            // TODO: log server error
             server.invalidateToken(it.token)
-            updateUserInfo(null)
+            clearUserInfo()
         }
     }
 
-    fun authWithPassword(username: String, password: String): Boolean {
-        val userInfo = server.authWithPassword(username, password) ?: return false
-        updateUserInfo(userInfo)
-        return true
+    fun authWithPassword(username: String, password: String): AuthResult {
+        return when (val result = server.authWithPassword(username, password)) {
+            is AuthClientResult.Success -> {
+                updateUserInfo(result.value)
+                AuthResult.Success
+            }
+            is AuthClientResult.Failure -> AuthResult.Failure(result.error)
+        }
     }
 
-    fun authWithGoogle(credential: SignInCredential): Boolean {
+    fun authWithGoogle(credential: SignInCredential): AuthResult {
         TODO("Not yet implemented")
     }
 
     private fun validateToken() {
-        userInfoLiveData.value?.let { updateUserInfo(server.validateToken(it.token)) }
+        userInfoLiveData.value?.let {
+            val result = server.validateToken(it.token)
+            if (result is AuthClientResult.Success) {
+                updateUserInfo(result.value)
+            } else {
+                clearUserInfo()
+            }
+        }
     }
 
-    private fun updateUserInfo(userInfo: UserInfo?) {
+    private fun updateUserInfo(userInfo: UserInfo) {
         userInfoLiveData.postValue(userInfo)
-        userInfo?.let { storage.writeUserInfo(it) } ?: storage.clearUserInfo()
+        storage.writeUserInfo(userInfo)
+    }
+
+    private fun clearUserInfo() {
+        userInfoLiveData.postValue(null)
+        storage.clearUserInfo()
+    }
+
+    sealed class AuthResult {
+        object Success: AuthResult()
+        data class Failure(val error: AuthClientError) : AuthResult()
     }
 
     companion object {
         const val signInFragmentId = R.id.action_global_signInFragment
+
+        @Volatile
+        private var INSTANCE: UserManager? = null
+
+        fun getInstance(context: Context): UserManager =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: createDefault(context).also { INSTANCE = it }
+            }
+
+        private fun createDefault(context: Context) =
+            UserManager(MockAuthClient(), DefaultUserInfoStorage(context))
     }
 }
