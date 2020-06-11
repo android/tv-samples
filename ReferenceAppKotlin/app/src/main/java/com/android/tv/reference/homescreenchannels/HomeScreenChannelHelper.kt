@@ -59,7 +59,7 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
     fun getVideosForDefaultChannel(application: Application, excludedIds: Set<String>, countToAdd: Int): List<Video> {
         val videoRepository = VideoRepositoryFactory.getVideoRepository(application)
         return videoRepository.getAllVideos()
-            .filterNot { excludedIds.contains(it.getId()) } // Exclude videos already in the channel
+            .filterNot { excludedIds.contains(it.id) } // Exclude videos already in the channel
             .take(countToAdd) // Take only as many as needed to fill the channel
     }
 
@@ -74,8 +74,8 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
                 .setTitle(it.name)
                 .setDescription(it.description)
                 .setPosterArtUri(Uri.parse(it.thumbnailUri))
-                .setIntentUri(Uri.parse(it.getDeepLink()))
-                .setInternalProviderId(it.getId())
+                .setIntentUri(Uri.parse(it.uri))
+                .setInternalProviderId(it.id)
                 .build()
 
             previewChannelHelper.publishPreviewProgram(program)

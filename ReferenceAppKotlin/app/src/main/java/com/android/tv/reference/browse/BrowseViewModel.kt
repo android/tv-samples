@@ -19,21 +19,22 @@ package com.android.tv.reference.browse
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.datamodel.VideoGroup
 
 class BrowseViewModel(application: Application) : AndroidViewModel(application) {
-    private var videoRepository = VideoRepositoryFactory.getVideoRepository(application)
-    var browseContent = MutableLiveData<List<VideoGroup>>()
+    private val videoRepository = VideoRepositoryFactory.getVideoRepository(application)
+    val browseContent = MutableLiveData<List<VideoGroup>>()
 
     init {
-        browseContent.value = getVideoGroupList()
+        browseContent.value = getVideoGroupList(videoRepository)
     }
 
-    fun getVideoGroupList(): List<VideoGroup> {
-        val videosByCategory = videoRepository.getAllVideos().groupBy { it.category }
+    fun getVideoGroupList(repository: VideoRepository): List<VideoGroup> {
+        val videosByCategory = repository.getAllVideos().groupBy { it.category }
         val videoGroupList = mutableListOf<VideoGroup>()
-        videosByCategory.forEach {(k, v) ->
+        videosByCategory.forEach { (k, v) ->
             videoGroupList.add(VideoGroup(k, v))
         }
 

@@ -1,65 +1,104 @@
 package com.android.tv.reference.shared.parser
 
 import com.android.tv.reference.parser.VideoParser
-import org.junit.Assert.*
+import com.android.tv.reference.shared.datamodel.VideoType
+import com.squareup.moshi.JsonDataException
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
-import java.lang.IllegalArgumentException
 
 class VideoParserUnitTest {
 
-    private val correctVideoListJson =
-        """{"content":[{"name":"Video 1","videoUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4","thumbnailUri":"https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg","backgroundUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","category":"Category 1"},{"name":"Video 2","videoUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4","thumbnailUri":"https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg","backgroundUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","category":"Category 2"},{"name":"Video 3","videoUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4","thumbnailUri":"https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg","backgroundUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","category":"Category 3"}],"metadata":{"last_updated":"2020-04-06T17:15:59"}}"""
-
-    private val malFormedVideoListJson =
-        """{"content":[{"name":"Video 1","videoUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4","thumbnailUri":"https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg","backgroundUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","category":"Category 1"},{"name":"Video 2","videoUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4","thumbnailUri":"https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg","backgroundUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","category":"Category 2"},{"name":"Video 3","videoUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4","thumbnailUri":"https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg","backgroundUri":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","category":"Category 3"}] "metadata":{"last_updated":"2020-04-06T17:15:59"}}"""
-
     @Test
     fun loadVideosFromJson_isCorrect() {
-        val videoList =
-            VideoParser.loadVideosFromJson(
-                correctVideoListJson
-            )
+        val videoList = VideoParser.loadVideosFromJson(VALID_JSON)
         assertNotNull(videoList)
         assertEquals(3, videoList.size)
-        for(index in 1..videoList.size) {
-            val video = videoList[index-1]
-            assertEquals("Video $index", video.name)
-            assertEquals("Category $index", video.category)
+        videoList.forEachIndexed { index, video ->
+            val type = CONTENT_TYPES[index]
+            assertEquals("${type}_id", video.id)
+            assertEquals("$type name", video.name)
+            assertEquals("Description for $type", video.description)
 
-            assertEquals("https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            video.videoUri)
+            val uriBase = "https://atv-reference-app.firebaseapp.com/content/$type"
+            assertEquals(uriBase, video.uri)
+            assertEquals("$uriBase/video.mp4", video.videoUri)
+            assertEquals("$uriBase/thumbnail.jpg", video.thumbnailUri)
+            assertEquals("$uriBase/background.jpg", video.backgroundImageUri)
 
-            assertEquals("https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            video.thumbnailUri)
-
-            assertEquals("https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            video.backgroundImageUri)
+            assertEquals("${type}s", video.category)
+            val expectedEnum = when (type) {
+                "clip" -> VideoType.CLIP
+                "episode" -> VideoType.EPISODE
+                "movie" -> VideoType.MOVIE
+                else -> throw RuntimeException("Invalid type: $type")
+            }
+            assertEquals(expectedEnum, video.videoType)
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test(expected = JsonDataException::class)
     fun loadVideosFromJson_inputMalformed() {
-        val videoList =
-            VideoParser.loadVideosFromJson(
-                malFormedVideoListJson
-            )
+        val videoList = VideoParser.loadVideosFromJson(MALFORMED_JSON)
     }
 
     @Test
     fun findVideoFromJson_videoFound() {
-        val video = VideoParser.findVideoFromJson(correctVideoListJson, "Video 1")
+        val video = VideoParser.findVideoFromJson(VALID_JSON, "movie_id")
         assertNotNull(video)
     }
 
     @Test
     fun findVideoFromJson_videoNotFound() {
-        val video = VideoParser.findVideoFromJson(correctVideoListJson, "Video 999")
+        val video = VideoParser.findVideoFromJson(VALID_JSON, "Video 999")
         assertNull(video)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test(expected = JsonDataException::class)
     fun findVideoFromJson_inputMalformed() {
-        val video = VideoParser.findVideoFromJson(malFormedVideoListJson, "Video 1")
+        val video = VideoParser.findVideoFromJson(MALFORMED_JSON, "Video 1")
     }
 
+    companion object {
+        private val CONTENT_TYPES = arrayOf("clip", "episode", "movie")
+        private const val VALID_JSON = """{
+"content": [
+    {
+        "id": "clip_id",
+        "name": "clip name",
+        "description": "Description for clip",
+        "uri": "https://atv-reference-app.firebaseapp.com/content/clip",
+        "videoUri": "https://atv-reference-app.firebaseapp.com/content/clip/video.mp4",
+        "thumbnailUri": "https://atv-reference-app.firebaseapp.com/content/clip/thumbnail.jpg",
+        "backgroundUri": "https://atv-reference-app.firebaseapp.com/content/clip/background.jpg",
+        "category": "clips",
+        "videoType": "clip"
+    },
+    {
+        "id": "episode_id",
+        "name": "episode name",
+        "description": "Description for episode",
+        "uri": "https://atv-reference-app.firebaseapp.com/content/episode",
+        "videoUri": "https://atv-reference-app.firebaseapp.com/content/episode/video.mp4",
+        "thumbnailUri": "https://atv-reference-app.firebaseapp.com/content/episode/thumbnail.jpg",
+        "backgroundUri": "https://atv-reference-app.firebaseapp.com/content/episode/background.jpg",
+        "category": "episodes",
+        "videoType": "episode"
+    },
+    {
+        "id": "movie_id",
+        "name": "movie name",
+        "description": "Description for movie",
+        "uri": "https://atv-reference-app.firebaseapp.com/content/movie",
+        "videoUri": "https://atv-reference-app.firebaseapp.com/content/movie/video.mp4",
+        "thumbnailUri": "https://atv-reference-app.firebaseapp.com/content/movie/thumbnail.jpg",
+        "backgroundUri": "https://atv-reference-app.firebaseapp.com/content/movie/background.jpg",
+        "category": "movies",
+        "videoType": "movie"
+    }
+]
+}"""
+        private val MALFORMED_JSON = VALID_JSON.substring(10)
+    }
 }

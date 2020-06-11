@@ -23,6 +23,7 @@ import androidx.tvprovider.media.tv.PreviewChannel
 import androidx.tvprovider.media.tv.PreviewChannelHelper
 import androidx.tvprovider.media.tv.PreviewProgram
 import com.android.tv.reference.shared.datamodel.Video
+import com.android.tv.reference.shared.datamodel.VideoType
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -49,14 +50,19 @@ class HomeScreenChannelHelperTest {
     @Test
     fun addProgramsToChannel() {
         // Prepare the test data
-        val videos = listOf(Video(
-            name = TEST_VIDEO_NAME,
-            description = TEST_VIDEO_DESCRIPTION,
-            videoUri = TEST_VIDEO_URI,
-            thumbnailUri = "",
-            backgroundImageUri = "",
-            category = ""
-        ))
+        val videos = listOf(
+            Video(
+                id = TEST_VIDEO_ID,
+                name = TEST_VIDEO_NAME,
+                description = TEST_VIDEO_DESCRIPTION,
+                uri = TEST_VIDEO_URI,
+                videoUri = TEST_VIDEO_PLACEHOLDER_URI,
+                thumbnailUri = TEST_VIDEO_PLACEHOLDER_URI,
+                backgroundImageUri = TEST_VIDEO_PLACEHOLDER_URI,
+                category = "",
+                videoType = VideoType.MOVIE
+            )
+        )
         val testChannelId = 123L
 
         // Call the method
@@ -70,7 +76,8 @@ class HomeScreenChannelHelperTest {
         val program = captor.value
         Assert.assertEquals(TEST_VIDEO_NAME, program.title)
         Assert.assertEquals(TEST_VIDEO_DESCRIPTION, program.description)
-        Assert.assertEquals(TEST_VIDEO_URI, program.intentUri.toString()) // Update to compare deep link URI once added to Video
+        Assert.assertEquals(TEST_VIDEO_URI, program.intentUri.toString())
+        Assert.assertEquals(TEST_VIDEO_ID, program.internalProviderId)
         Assert.assertEquals(testChannelId, program.channelId)
     }
 
@@ -128,17 +135,24 @@ class HomeScreenChannelHelperTest {
             currentCursorPosition++
             currentCursorPosition < testIds.size
         }
-        Mockito.`when`(cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_INTERNAL_PROVIDER_ID)).thenReturn(idColumnIndex)
-        Mockito.`when`(cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_BROWSABLE)).thenReturn(browsableColumnIndex)
+        Mockito.`when`(cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_INTERNAL_PROVIDER_ID))
+            .thenReturn(idColumnIndex)
+        Mockito.`when`(cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_BROWSABLE))
+            .thenReturn(browsableColumnIndex)
         Mockito.`when`(cursorMock.getString(idColumnIndex)).then { testIds[currentCursorPosition] }
-        Mockito.`when`(cursorMock.getInt(browsableColumnIndex)).then { testBrowsableInts[currentCursorPosition] }
+        Mockito.`when`(cursorMock.getInt(browsableColumnIndex))
+            .then { testBrowsableInts[currentCursorPosition] }
 
         // Calculate the expected results
         var expectedBrowsableCount = 0
         testBrowsableInts.forEach { expectedBrowsableCount += it }
         val expectedSetOfBrowsableIds = HashSet<String>()
         val expectedSetOfNonBrowsableIds = HashSet<String>()
-        testIds.zip(testBrowsableInts) { id, browsable -> if (browsable == 0) expectedSetOfNonBrowsableIds.add(id) else expectedSetOfBrowsableIds.add(id) }
+        testIds.zip(testBrowsableInts) { id, browsable ->
+            if (browsable == 0) expectedSetOfNonBrowsableIds.add(
+                id
+            ) else expectedSetOfBrowsableIds.add(id)
+        }
 
         // Trigger the method
         val programIdsInChannel = channelHelper.getProgramIdsFromCursor(cursorMock)
@@ -146,7 +160,10 @@ class HomeScreenChannelHelperTest {
         // Verify the output count and IDs match
         Assert.assertEquals(expectedBrowsableCount, programIdsInChannel.getBrowsableProgramCount())
         Assert.assertEquals(expectedSetOfBrowsableIds, programIdsInChannel.getBrowsableProgramIds())
-        Assert.assertEquals(expectedSetOfNonBrowsableIds, programIdsInChannel.getNonBrowsableProgramIds())
+        Assert.assertEquals(
+            expectedSetOfNonBrowsableIds,
+            programIdsInChannel.getNonBrowsableProgramIds()
+        )
     }
 
     @Test
@@ -177,5 +194,6 @@ class HomeScreenChannelHelperTest {
         private const val TEST_VIDEO_NAME = "Test Video"
         private const val TEST_VIDEO_DESCRIPTION = "In a world where test videos...."
         private const val TEST_VIDEO_URI = "https://atv-reference-app.firebaseapp.com/content/$TEST_VIDEO_ID"
+        private const val TEST_VIDEO_PLACEHOLDER_URI = "https://example.com/uri"
     }
 }

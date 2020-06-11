@@ -1,112 +1,282 @@
 {
     "content": [
         {
-            "name": "Video 1",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 1"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-jquery-and-closest",
+            "name": "jQuery and Closest",
+            "description": "Surma talks about the origins of jQuery and how it influenced the web platform today.",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-jquery-and-closest",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-jquery-and-closest.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-jquery-and-closest-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-jquery-and-closest-background.jpg",
+            "category": "Supercharged Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 2",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 1"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-map-and-filter",
+            "name": "Map and Filter",
+            "description": "In this mini series, Surma introduces you to the various functional methods that JavaScript Arrays have to offer. In this episode: map & filter!",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-map-and-filter",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-map-and-filter.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-map-and-filter-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-map-and-filter-background.jpg",
+            "category": "Supercharged Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 3",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 1"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-some-and-every",
+            "name": "Some and Every",
+            "description": "In this mini series, Surma introduces you to the various functional methods that JavaScript Arrays have to offer. In this episode: some & every!",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-some-and-every",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-some-and-every.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-some-and-every-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-some-and-every-background.jpg",
+            "category": "Supercharged Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 4",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 1"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-reduce",
+            "name": "Reduce",
+            "description": "In this mini series, Surma introduces you to the various functional methods that JavaScript Arrays have to offer. In this episode: The infamous and feared reduce()!",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-reduce",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-reduce.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-reduce-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-reduce-background.jpg",
+            "category": "Supercharged Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 5",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 1"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-flatmap",
+            "name": "FlatMap",
+            "description": "In this mini series, Surma introduces you to the various functional methods that JavaScript Arrays have to offer. In this episode: flatMap!",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-supercharged/supercharged-flatmap",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-flatmap.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-flatmap-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-supercharged/supercharged-flatmap-background.jpg",
+            "category": "Supercharged Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 1",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 2"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-misc/crome-dev-summit-promo",
+            "name": "Chrome Dev Summit Promo",
+            "description": "Promotional video for the Chrome Dev Summit",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-misc/crome-dev-summit-promo",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/crome-dev-summit-promo.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/crome-dev-summit-promo-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/crome-dev-summit-promo-background.jpg",
+            "category": "Misc Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 2",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 2"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-misc/state-of-the-web",
+            "name": "State of the Web",
+            "description": "Introducing The State of the Web podcasts",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-misc/state-of-the-web",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/state-of-the-web.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/state-of-the-web-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/state-of-the-web-background.jpg",
+            "category": "Misc Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 3",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 2"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-misc/google-search-news",
+            "name": "Google Search News",
+            "description": "John Mueller presents Google Search News",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-misc/google-search-news",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/google-search-news.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/google-search-news-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/google-search-news-background.jpg",
+            "category": "Misc Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 4",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 2"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-misc/agw-common-questions",
+            "name": "Common Questions",
+            "description": "In this holiday special of Ask Google Webmasters, John Mueller goes over some of the most common SEO questions",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-misc/agw-common-questions",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-common-questions.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-common-questions-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-common-questions-background.jpg",
+            "category": "Misc Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 5",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 2"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-misc/agw-search-console",
+            "name": "Search Console",
+            "description": "John is joined again by Martin Splitt, Webmaster Trends Analyst at Google, as they discuss questions around rendering and URL inspection in Google Search Console",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-misc/agw-search-console",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-search-console.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-search-console-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-search-console-background.jpg",
+            "category": "Misc Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 1",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 3"
+            "id": "https://atv-reference-app.firebaseapp.com/clips-misc/agw-images",
+            "name": "Images",
+            "description": "In this episode of Ask Google Webmasters, John Mueller goes over handy tips on how to optimize your images for Google Search.",
+            "uri": "https://atv-reference-app.firebaseapp.com/clips-misc/agw-images",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-images.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-images-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/clips-misc/agw-images-background.jpg",
+            "category": "Misc Clips",
+            "videoType": "clip"
         },
         {
-            "name": "Video 2",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 3"
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-android/kovo-r8-d8-and-enums",
+            "name": "D8, R8, and Enums",
+            "description": "In this episode, we go over Kotlin enums and when statements, the overhead that they can incur, and how to use the Android R8 compiler to reduce that overhead.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-android/kovo-r8-d8-and-enums",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-r8-d8-and-enums.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-r8-d8-and-enums-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-r8-d8-and-enums-background.jpg",
+            "category": "Android Episodes",
+            "videoType": "episode"
         },
         {
-            "name": "Video 3",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 3"
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-android/kovo-sealed-classes",
+            "name": "Sealed Classes",
+            "description": "Learn what sealed classes are, how to use them and how to leverage their auto-complete power in the IDE. Then, take a look under the hood at how sealed classes are implemented in the decompiled java code.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-android/kovo-sealed-classes",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-sealed-classes.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-sealed-classes-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-sealed-classes-background.jpg",
+            "category": "Android Episodes",
+            "videoType": "episode"
         },
         {
-            "name": "Video 4",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 3"
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-android/kovo-sequences-and-collections",
+            "name": "Collections and Sequences",
+            "description": "Kotlin Standard Library offers two ways of working with containers: eagerly - with collections, and lazily - with sequences. Stay tuned to find out what\u2019s the difference between the two, which one you should use and when, and what are the performance implications of each of them.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-android/kovo-sequences-and-collections",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-sequences-and-collections.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-sequences-and-collections-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/kovo-sequences-and-collections-background.jpg",
+            "category": "Android Episodes",
+            "videoType": "episode"
         },
         {
-            "name": "Video 5",
-            "videoUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4",
-            "thumbnailUri": "https://android-tv-classics.firebaseapp.com/content/jazzed_honeymoon/poster_art_jazzed_honeymoon.jpg",
-            "backgroundUri": "https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg",
-            "category": "Category 3"
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-android/whats-new-in-android-studio-3.6",
+            "name": "What's New in Android Studio 3.6",
+            "description": "Find out what's new in Android Studio 3.6",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-android/whats-new-in-android-studio-3.6",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/whats-new-in-android-studio-3.6.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/whats-new-in-android-studio-3.6-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-android/whats-new-in-android-studio-3.6-background.jpg",
+            "category": "Android Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-amp-status-report",
+            "name": "AMP Console Report",
+            "description": "In this episode of Search Console Training, Daniel Waisberg goes over how to use Google Search Console to improve your AMP implementation. Find out more about AMP, why you should use it, how using it can benefit you in Google Search, and how to detect (and fix) issues with AMP in your website through Search Console.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-amp-status-report",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-amp-status-report.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-amp-status-report-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-amp-status-report-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-index-coverage-status",
+            "name": "Index Coverage Status",
+            "description": "In this episode of Search Console Training, Daniel Waisberg shows how to find out which of your pages have been crawled and indexed by Google, and any problems found during the process.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-index-coverage-status",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-index-coverage-status.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-index-coverage-status-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-index-coverage-status-background.png",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-removals-in-search-console",
+            "name": "Removals in Search Console",
+            "description": "In this episode of Search Console Training, Daniel Waisberg goes over how to use the Removals report in Search Console to request your content to be temporarily hidden in Google Search results. He also discusses how to permanently remove pages from Search and review requests made by other users to remove outdated or inappropriate content on your site.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-removals-in-search-console",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-removals-in-search-console.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-removals-in-search-console-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-removals-in-search-console-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-security-issues-report",
+            "name": "Security Issues Report",
+            "description": "In this episode of Search Console Training, Daniel Waisberg and Aurora Morales go over the Security issues report in Search Console. Find out how to get alerts about malicious reports on your site and what to do to fix your security issues.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-security-issues-report",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-security-issues-report.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-security-issues-report-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-security-issues-report-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-security-issues-explained",
+            "name": "Security Issues Explained",
+            "description": "In this episode of Search Console Training, Daniel Waisberg and Aurora Morales go deeper into hacking and social engineering (and other types of security issues). Stay tuned to learn more about the different types of hacks and ways hackers can take control of your site.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/sct-security-issues-explained",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-security-issues-explained.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-security-issues-explained-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/sct-security-issues-explained-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/agw-speed",
+            "name": "Speed",
+            "description": "In this special episode of Ask Google Webmasters, John is joined by Martin Splitt, Webmasters Trend Analyst at Google, as they discuss questions around site speed and SEO.",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/agw-speed",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/agw-speed.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/agw-speed-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/agw-speed-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/amp-accelerate-your-web-development",
+            "name": "Accelerate Your Web Development",
+            "description": "Highlights from AMP Conf 2019",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/amp-accelerate-your-web-development",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-accelerate-your-web-development.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-accelerate-your-web-development-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-next-generation-of-content-experiences-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/amp-next-generation-of-content-experiences",
+            "name": "Next Generation of Content Experiences",
+            "description": "More highlights from AMP Conf 2019",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/amp-next-generation-of-content-experiences",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-next-generation-of-content-experiences.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-next-generation-of-content-experiences-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-next-generation-of-content-experiences-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/episodes-web/amp-maximizing-roi",
+            "name": "Maximizing ROI",
+            "description": "Even more highlights from AMP Conf 2019",
+            "uri": "https://atv-reference-app.firebaseapp.com/episodes-web/amp-maximizing-roi",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-maximizing-roi.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-maximizing-roi-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/episodes-web/amp-maximizing-roi-background.jpg",
+            "category": "Web Episodes",
+            "videoType": "episode"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-seo-mythbusting-101",
+            "name": "SEO Mythbusting 101",
+            "description": "n this first - introductory - episode of SEO Mythbusting, Martin Splitt (WebMaster Trends Analyst, Google) and his guest Juan Herrera (Angular GDE, Wed Developer at Parkside) discuss the very basics of SEO.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-seo-mythbusting-101",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
         }
     ],
     "metadata": {
-        "last_updated": "2020-04-13T12:30:43"
+        "last_updated": "2020-06-10T18:31:28"
     }
 }

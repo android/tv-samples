@@ -110,6 +110,10 @@ dependencies {
     def playservices_version = "18.0.0"
     implementation "com.google.android.gms:play-services-auth:$playservices_version"
 
+    // Moshi for JSON parsing
+    implementation("com.squareup.moshi:moshi-kotlin:1.9.2")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.9.2")
+
     // Testing libraries
     testImplementation 'junit:junit:4.12'
     testImplementation "androidx.room:room-testing:$room_version"
@@ -124,6 +128,4 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'android.arch.core:core-testing:1.1.1'
 
-    // Gson library
-    implementation 'com.google.code.gson:gson:2.8.6'
 }

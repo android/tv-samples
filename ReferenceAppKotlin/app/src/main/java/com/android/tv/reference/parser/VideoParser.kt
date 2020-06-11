@@ -1,28 +1,23 @@
 package com.android.tv.reference.parser
 
+import com.android.tv.reference.shared.datamodel.ApiResponse
 import com.android.tv.reference.shared.datamodel.Video
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import org.json.JSONException
-import org.json.JSONObject
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 
 object VideoParser {
+
     fun loadVideosFromJson(jsonString: String): List<Video> {
-        try {
-            val contentJson = JSONObject(jsonString)
-            return Gson().fromJson(
-                contentJson.getJSONArray("content").toString(),
-                object : TypeToken<List<Video>>() {}.type
-            )
-        } catch (e: JSONException) {
-            throw IllegalArgumentException("Invalid JSON")
-        }
+        val moshi = Moshi.Builder().build()
+        val type = Types.newParameterizedType(ApiResponse::class.java, Video::class.java)
+        val adapter = moshi.adapter<ApiResponse<Video>>(type)
+        return adapter.fromJson(jsonString)!!.content
     }
 
     fun findVideoFromJson(jsonString: String, videoId: String): Video? {
         val videosList = loadVideosFromJson(jsonString)
         for (video in videosList) {
-            if (video.name == videoId) {
+            if (video.id == videoId) {
                 return video
             }
         }

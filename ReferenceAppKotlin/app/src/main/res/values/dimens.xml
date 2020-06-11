@@ -25,4 +25,7 @@
     <dimen name="menu_item_width">100dp</dimen>
     <dimen name="menu_item_height">100dp</dimen>
 
+    <dimen name="image_card_width">192dp</dimen>
+    <dimen name="image_card_height">108dp</dimen>
+
 </resources>

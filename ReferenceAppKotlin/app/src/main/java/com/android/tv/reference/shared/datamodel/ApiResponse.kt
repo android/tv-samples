@@ -16,40 +16,13 @@
 
 package com.android.tv.reference.shared.datamodel
 
-import android.os.Parcelable
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.android.parcel.Parcelize
 
 /**
- * Represents a video that can be played in the app
+ * Represents a simplified API response
+ *
+ * The content is always a List of some kind of object and the response can also include
+ * an arbitrary Map of Strings. Errors are not represented.
  */
-@Parcelize
 @JsonClass(generateAdapter = true)
-class Video(
-    val id: String,
-    val name: String,
-    val description: String,
-    val uri: String,
-    val videoUri: String,
-    val thumbnailUri: String,
-    @Json(name = "backgroundUri") val backgroundImageUri: String,
-    val category: String,
-    val videoType: VideoType
-) : Parcelable {
-
-    override fun toString(): String {
-        return "Video(name='$name')"
-    }
-}
-
-enum class VideoType {
-    @Json(name = "clip")
-    CLIP,
-
-    @Json(name = "episode")
-    EPISODE,
-
-    @Json(name = "movie")
-    MOVIE
-}
+class ApiResponse<T>(val content: List<T>, val metadata: Map<String, String>?)
