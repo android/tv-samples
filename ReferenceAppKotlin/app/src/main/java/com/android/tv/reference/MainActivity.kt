@@ -16,31 +16,97 @@
 
 package com.android.tv.reference
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import com.android.tv.reference.browse.BrowseFragmentDirections
+import com.android.tv.reference.deeplink.DeepLinkResult
+import com.android.tv.reference.deeplink.DeepLinkViewModel
+import com.android.tv.reference.deeplink.DeepLinkViewModelFactory
 
 /**
  * FragmentActivity that displays the various fragments
  */
 class MainActivity : FragmentActivity() {
 
+    private lateinit var viewModel: DeepLinkViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
-        // Set the correct starting destination for the NavController
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+
+        loadDeepLinkOrStartingPage(intent.data, navController, navGraph)
+    }
+
+    /**
+     * Checks if the app was started with a deep link, loading it if it was
+     *
+     * If not (or the deep link is invalid), it triggers the normal starting process
+     */
+    private fun loadDeepLinkOrStartingPage(
+        uri: Uri?,
+        navController: NavController,
+        navGraph: NavGraph
+    ) {
+        if (uri == null) {
+            loadStartingPage(navController, navGraph)
+            return
+        }
+
+        viewModel = ViewModelProvider(this, DeepLinkViewModelFactory(application, uri)).get(DeepLinkViewModel::class.java)
+        viewModel.deepLinkResult.observe(this, Observer {
+            val result = it.getContentIfNotHandled()
+            if (result is DeepLinkResult.Success) {
+                val video = result.video
+                Log.d(TAG, "Loaded '${video.name}' for deep link '$uri'")
+
+                // Set the default graph and go to playback for the loaded Video
+                navController.graph = navGraph
+                navController.navigate(BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(video))
+            } else if (result is DeepLinkResult.Error){
+                // Here you might show an error to the user or automatically trigger a search
+                // for content that might match the deep link; since this is just a demo app,
+                // the error is logged and then the app starts normally
+                Log.w(TAG, "Failed to load deep link $uri, starting app normally")
+                loadStartingPage(navController, navGraph)
+            }
+        })
+    }
+
+    /**
+     * Chooses whether to show the browse screen or the "no Firebase" notice
+     */
+    private fun loadStartingPage(
+        navController: NavController,
+        navGraph: NavGraph
+    ) {
+
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FIREBASE_ENABLED) {
-            // TODO Go to Firebase welcome/login screen
+            Log.d(TAG, "Firebase is enabled, loading browse")
             navGraph.startDestination = R.id.browseFragment
         } else {
-            // Firebase is not enabled, notify the user before starting
+            Log.d(TAG, "Firebase is not enabled; showing notice")
             navGraph.startDestination = R.id.noFirebaseFragment
         }
+
+        // Set the graph to trigger loading the start destination
         navController.graph = navGraph
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }

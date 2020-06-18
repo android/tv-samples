@@ -1,7 +1,6 @@
 package com.android.tv.reference.repository
 
 import android.app.Application
-import android.content.res.Resources
 import com.android.tv.reference.R
 import com.android.tv.reference.parser.VideoParser
 import com.android.tv.reference.shared.datamodel.Video
@@ -10,11 +9,10 @@ import com.android.tv.reference.shared.datamodel.Video
  * VideoRepository implementation to read video data from a file saved on /res/raw
  */
 class FileVideoRepository(override val application: Application) : VideoRepository {
-    private var allVideos: List<Video>
-
-    init {
-        var jsonString = readJsonFromFile()
-        allVideos = VideoParser.loadVideosFromJson(jsonString)
+    // Underscore name to allow lazy loading since "getAllVideos" matches the getter name otherwise
+    private val _allVideos: List<Video> by lazy {
+        val jsonString = readJsonFromFile()
+        VideoParser.loadVideosFromJson(jsonString)
     }
 
     private fun readJsonFromFile(): String {
@@ -25,6 +23,11 @@ class FileVideoRepository(override val application: Application) : VideoReposito
     }
 
     override fun getAllVideos(): List<Video> {
-        return allVideos
+        return _allVideos
+    }
+
+    override fun getVideoById(id: String): Video? {
+        val jsonString = readJsonFromFile()
+        return VideoParser.findVideoFromJson(jsonString, id)
     }
 }

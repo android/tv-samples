@@ -57,7 +57,9 @@
         android:label="NoFirebaseFragment">
         <action
             android:id="@+id/action_noFirebaseFragment_to_browseFragment"
-            app:destination="@id/browseFragment" />
+            app:destination="@id/browseFragment"
+            app:popUpTo="@id/noFirebaseFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
