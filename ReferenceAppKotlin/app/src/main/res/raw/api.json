@@ -274,9 +274,86 @@
             "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-background.jpg",
             "category": "Tech Movies",
             "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-googlebot",
+            "name": "Googlebot",
+            "description": "In the second episode of SEO Mythbusting, Martin Splitt (WebMaster Trends Analyst, Google) and his guest Suz Hinton (Cloud Developer Advocate, Microsoft) discuss the many intricacies of Googlebot.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-googlebot",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-googlebot.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-googlebot-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-googlebot-background.png",
+            "category": "Tech Movies",
+            "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-future-of-the-web",
+            "name": "Future of the Web",
+            "description": "In this final episode of SEO Mythbusting, Martin Splitt (WebMaster Trends Analyst, Google) and his guest Dion Almaer (Director, Web Dev Ecosystem, Google) discuss what technical SEO might look like as the web keeps evolving.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-future-of-the-web",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-future-of-the-web.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-future-of-the-web-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-future-of-the-web-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/act-easy-android-accessibility",
+            "name": "Easy Android Accessibility",
+            "description": "You've made a great app, so you should make sure *all* of your users can use it! In this talk, you'll learn how users of different accessibility services interact with your app, and find out about common accessibility issues and their solutions. Lyla Fujiwara and Shailen Tuli will dive into the basics of accessibility and demo Talk Back, Switch Access, Accessibility Scanner, Play launch reports and the Espresso ATF integration.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/act-easy-android-accessibility",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/act-easy-android-accessibility.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/act-easy-android-accessibility-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/act-easy-android-accessibility-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/dvd-ux-research-and-usability-testing",
+            "name": "UX Research and Usability Testing",
+            "description": "In this episode, Jenny Gove explains the importance of research and usability testing and discusses various methods and approaches such as conducting a pilot study, identifying target users, and setting up tasks.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/dvd-ux-research-and-usability-testing",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/dvd-ux-research-and-usability-testing.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/dvd-ux-research-and-usability-testing-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/dvd-ux-research-and-usability-testing-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/dvd-using-autocomplete-for-optimal-form-ux",
+            "name": "Using Autocomplete for Optimal Form UX",
+            "description": "Sometimes, forms or website input fields seem to be thrown together without much thought out towards the UX or the issues that may arise for the user. Auto-complete and other form features can really improve UX and help to address certain struggles that users might be having.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/dvd-using-autocomplete-for-optimal-form-ux",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/dvd-using-autocomplete-for-optimal-form-ux.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/dvd-using-autocomplete-for-optimal-form-ux-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/dvd-using-autocomplete-for-optimal-form-ux-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/http-is-postmessage-slow",
+            "name": "Is postMessage slow?",
+            "description": "Jake and Surma look at workers and the performance of their messaging primitive postMessage().",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/http-is-postmessage-slow",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/http-is-postmessage-slow.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/http-is-postmessage-slow-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/http-is-postmessage-slow-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
+        },
+        {
+            "id": "https://atv-reference-app.firebaseapp.com/movies-tech/http-push-notifications",
+            "name": "Push Notifications",
+            "description": "Jake and Surma look at Web Push Notifications and the underlying APIs, as they are building the website for Chrome Dev Summit 2019.",
+            "uri": "https://atv-reference-app.firebaseapp.com/movies-tech/http-push-notifications",
+            "videoUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/http-push-notifications.mp4",
+            "thumbnailUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/http-push-notifications-thumbnail.png",
+            "backgroundUri": "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/http-push-notifications-background.jpg",
+            "category": "Tech Movies",
+            "videoType": "movie"
         }
     ],
     "metadata": {
-        "last_updated": "2020-06-10T18:31:28"
+        "last_updated": "2020-06-23T16:34:17"
     }
 }
