@@ -106,7 +106,9 @@
     <string name="download_video">Download Video</string>
     <string name="remove_video">Remove Video</string>
 
-
+    <!--Notification Channel-->
+    <string name="now_playing_channel_description">Shows what music is currently playing</string>
+    <string name="now_playing_channel_name">Now Playing</string>
 
 
 </resources>

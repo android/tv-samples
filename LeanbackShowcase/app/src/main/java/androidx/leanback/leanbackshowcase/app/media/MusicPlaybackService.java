@@ -14,7 +14,8 @@
  */
 package androidx.leanback.leanbackshowcase.app.media;
 
-import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -25,16 +26,20 @@ import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import androidx.annotation.Nullable;
-import androidx.leanback.leanbackshowcase.R;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.leanback.leanbackshowcase.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,7 +56,8 @@ public class MusicPlaybackService extends Service {
     // The ID used for for the notification. This is purely for making the service run as a
     // foreground service
     final int NOTIFICATION_ID = 1;
-    Notification.Builder mNotificationBuilder = null;
+    final String NOW_PLAYING_CHANNEL = "androidx.leanback.leanbackshowcase.app.media.NOW_PLAYING";
+    NotificationCompat.Builder mNotificationBuilder = null;
 
     public static final int MEDIA_ACTION_NO_REPEAT = 0;
     public static final int MEDIA_ACTION_REPEAT_ONE = 1;
@@ -72,6 +78,7 @@ public class MusicPlaybackService extends Service {
     private boolean mInitialized = false; // true when the MediaPlayer is prepared/initialized
 
     private static final int FOCUS_CHANGE = 2;
+    private NotificationManager mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
 
     private Handler mMediaPlayerHandler = new Handler() {
@@ -491,8 +498,13 @@ public class MusicPlaybackService extends Service {
                 notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        if (shouldCreateNowPlayingChannel()) {
+            createNowPlayingChannel();
+        }
+
+
         // Build the notification object.
-        mNotificationBuilder = new Notification.Builder(getApplicationContext())
+        mNotificationBuilder = new NotificationCompat.Builder(getApplicationContext(), NOW_PLAYING_CHANNEL)
                 .setSmallIcon(R.drawable.ic_favorite_border_white_24dp)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis())
@@ -502,6 +514,22 @@ public class MusicPlaybackService extends Service {
                 .setOngoing(true);
 
         startForeground(NOTIFICATION_ID, mNotificationBuilder.build());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNowPlayingChannel() {
+        NotificationChannel channel = new NotificationChannel(NOW_PLAYING_CHANNEL, getString(R.string.now_playing_channel_name), NotificationManager.IMPORTANCE_LOW);
+        channel.setDescription(getString(R.string.now_playing_channel_description));
+        mNotificationManager.createNotificationChannel(channel);
+    }
+
+    private Boolean shouldCreateNowPlayingChannel() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !notificationChannelExists();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Boolean notificationChannelExists() {
+        return mNotificationManager.getNotificationChannel(NOW_PLAYING_CHANNEL) != null;
     }
 
     @Override
