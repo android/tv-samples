@@ -498,7 +498,7 @@ public class MusicPlaybackService extends Service {
                 notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(shouldCreateNowPlayingChannel()) {
+        if (shouldCreateNowPlayingChannel()) {
             createNowPlayingChannel();
         }
 
