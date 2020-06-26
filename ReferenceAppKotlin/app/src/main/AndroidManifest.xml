@@ -64,6 +64,15 @@
             </intent-filter>
 
         </activity>
+
+        <!-- BroadcastReceiver for setting up the home screen channel -->
+        <receiver android:name=".homescreenchannels.HomeScreenChannelReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.tv.action.INITIALIZE_PROGRAMS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

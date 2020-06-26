@@ -57,10 +57,10 @@ class HomeScreenChannelHelperTest {
                 description = TEST_VIDEO_DESCRIPTION,
                 uri = TEST_VIDEO_URI,
                 videoUri = TEST_VIDEO_PLACEHOLDER_URI,
-                thumbnailUri = TEST_VIDEO_PLACEHOLDER_URI,
+                thumbnailUri = TEST_VIDEO_THUMBNAIL_URI,
                 backgroundImageUri = TEST_VIDEO_PLACEHOLDER_URI,
                 category = "",
-                videoType = VideoType.MOVIE
+                videoType = VideoType.EPISODE
             )
         )
         val testChannelId = 123L
@@ -74,10 +74,11 @@ class HomeScreenChannelHelperTest {
 
         // Verify the correct metadata was set
         val program = captor.value
+        Assert.assertEquals(TEST_VIDEO_ID, program.internalProviderId)
         Assert.assertEquals(TEST_VIDEO_NAME, program.title)
         Assert.assertEquals(TEST_VIDEO_DESCRIPTION, program.description)
         Assert.assertEquals(TEST_VIDEO_URI, program.intentUri.toString())
-        Assert.assertEquals(TEST_VIDEO_ID, program.internalProviderId)
+        Assert.assertEquals(TvContract.PreviewPrograms.TYPE_TV_EPISODE, program.type)
         Assert.assertEquals(testChannelId, program.channelId)
     }
 
@@ -195,5 +196,6 @@ class HomeScreenChannelHelperTest {
         private const val TEST_VIDEO_DESCRIPTION = "In a world where test videos...."
         private const val TEST_VIDEO_URI = "https://atv-reference-app.firebaseapp.com/content/$TEST_VIDEO_ID"
         private const val TEST_VIDEO_PLACEHOLDER_URI = "https://example.com/uri"
+        private const val TEST_VIDEO_THUMBNAIL_URI = "https://example.com/thumbnail"
     }
 }

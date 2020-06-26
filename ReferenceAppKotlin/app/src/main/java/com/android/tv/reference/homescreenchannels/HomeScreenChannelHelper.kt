@@ -22,6 +22,8 @@ import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.media.tv.TvContract
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import androidx.tvprovider.media.tv.PreviewChannel
 import androidx.tvprovider.media.tv.PreviewChannelHelper
@@ -30,10 +32,12 @@ import androidx.tvprovider.media.tv.TvContractCompat
 import com.android.tv.reference.R
 import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.datamodel.Video
+import com.android.tv.reference.shared.datamodel.VideoType
 
 /**
  * Helper class that simplifies interactions with the ATV home screen
  */
+@RequiresApi(Build.VERSION_CODES.O)
 class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHelper) {
 
     companion object {
@@ -55,10 +59,20 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
         return previewChannelHelper.publishDefaultChannel(defaultChannel)
     }
 
-    // Returns videos to include in the default channel
+    /**
+     * Returns videos to include in the default channel
+     *
+     * This simply shuffles the full list of videos and returns any that aren't in the channel
+     * already. [excludedIds] is a list of video IDs should shouldn't be added (e.g., those that
+     * are already in it) and [countToAdd] controls the maximum amount to be returned.
+     *
+     * For your app, you'll likely want something more specific like the most popular content or
+     * newest releases, but it's entirely up to you what makes the most sense to put in your channel.
+     */
     fun getVideosForDefaultChannel(application: Application, excludedIds: Set<String>, countToAdd: Int): List<Video> {
         val videoRepository = VideoRepositoryFactory.getVideoRepository(application)
         return videoRepository.getAllVideos()
+            .shuffled() // Mix the videos to avoid getting all of one type
             .filterNot { excludedIds.contains(it.id) } // Exclude videos already in the channel
             .take(countToAdd) // Take only as many as needed to fill the channel
     }
@@ -70,10 +84,11 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
         videos.forEach {
             val program = PreviewProgram.Builder()
                 .setChannelId(channelId)
-                .setType(TvContractCompat.PreviewPrograms.TYPE_MOVIE) // TODO set correct type and update unit test
+                .setType(getProgramType(it))
                 .setTitle(it.name)
                 .setDescription(it.description)
                 .setPosterArtUri(Uri.parse(it.thumbnailUri))
+                .setPosterArtAspectRatio(TvContractCompat.PreviewPrograms.ASPECT_RATIO_16_9)
                 .setIntentUri(Uri.parse(it.uri))
                 .setInternalProviderId(it.id)
                 .build()
@@ -123,5 +138,14 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
         }
 
         return programIdsInChannel
+    }
+
+    // Returns the PreviewPrograms.TYPE_X for the Video's VideoType
+    private fun getProgramType(video: Video): Int {
+        return when (video.videoType) {
+            VideoType.MOVIE -> TvContract.PreviewPrograms.TYPE_MOVIE
+            VideoType.EPISODE -> TvContract.PreviewPrograms.TYPE_TV_EPISODE
+            VideoType.CLIP -> TvContract.PreviewPrograms.TYPE_CLIP
+        }
     }
 }

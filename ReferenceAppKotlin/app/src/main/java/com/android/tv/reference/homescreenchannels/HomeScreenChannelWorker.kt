@@ -18,6 +18,7 @@ package com.android.tv.reference.homescreenchannels
 
 import android.app.Application
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.tvprovider.media.tv.PreviewChannelHelper
 import androidx.work.Worker
@@ -40,6 +41,16 @@ class HomeScreenChannelWorker(private val context: Context, params: WorkerParame
 
     override fun doWork(): Result {
         Log.v(TAG, "HomeScreenChannelWorker started")
+
+        // The INITIALIZE_PROGRAMS broadcast will not be sent on older versions of Android TV,
+        // but you can also check the Android OS version to avoid doing the work on versions of
+        // Android TV that don't have home screen channels in case you manually trigger the Worker.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Log.d(TAG, "Home screen channels are not supported before Android O; skipping work")
+            // Return success because this doesn't need to be triggered again
+            return Result.success()
+        }
+
         val previewChannelHelper = PreviewChannelHelper(context)
         val channelHelper = HomeScreenChannelHelper(previewChannelHelper)
 
