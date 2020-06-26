@@ -27,14 +27,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.android.tv.reference.R
-import com.android.tv.reference.databinding.FragmentSignInBinding
 import com.android.tv.reference.auth.SignInViewModel.SignInStatus
+import com.android.tv.reference.databinding.FragmentSignInBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SavePasswordRequest
-import com.google.android.gms.auth.api.identity.SignInPassword
+//import com.google.android.gms.auth.api.identity.SavePasswordRequest
+//import com.google.android.gms.auth.api.identity.SignInPassword
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
@@ -52,7 +51,7 @@ class SignInFragment : Fragment() {
     }
 
     private val signInClient by lazy { Identity.getSignInClient(requireContext()) }
-    private val credentialSavingClient by lazy { Identity.getCredentialSavingClient(requireContext()) }
+    //private val credentialSavingClient by lazy { Identity.getCredentialSavingClient(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -121,16 +120,19 @@ class SignInFragment : Fragment() {
       Initiates Google's password saving flow.
     */
     private fun startSavePasswordWithGoogle(email: String, password: String) {
-        if (isPlayServicesAvailable()) {
+        if (isPlayServicesUnavailable()) {
             viewModel.finishSavePassword()
             return
         }
+        viewModel.finishSavePassword()
+        /*
         val request = SavePasswordRequest.builder()
             .setSignInPassword(SignInPassword(email, password))
             .build()
         credentialSavingClient.savePassword(request)
             .addOnSuccessListener { launchSavePasswordUi(it.pendingIntent) }
             .addOnFailureListener { viewModel.finishSavePassword() }
+         */
     }
 
     /*
@@ -144,6 +146,6 @@ class SignInFragment : Fragment() {
         ) { viewModel.finishSavePassword() }.launch(request)
     }
 
-    private fun isPlayServicesAvailable() = GoogleApiAvailability.getInstance()
+    private fun isPlayServicesUnavailable() = GoogleApiAvailability.getInstance()
         .isGooglePlayServicesAvailable(requireContext()) != ConnectionResult.SUCCESS
 }
