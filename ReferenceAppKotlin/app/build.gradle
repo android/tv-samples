@@ -103,7 +103,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Exoplayer for playback
-    def exoplayer_version = "2.11.2"
+    def exoplayer_version = "2.11.3"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
     implementation "com.google.android.exoplayer:extension-leanback:$exoplayer_version"
     implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"

@@ -18,18 +18,24 @@ package com.android.tv.reference.playback
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.media.session.MediaSessionCompat
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.watchprogress.WatchProgress
+import com.google.android.exoplayer2.DefaultControlDispatcher
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -50,22 +56,27 @@ class PlaybackFragment : VideoSupportFragment() {
         scheduleWatchProgressUpdate()
     }
 
-    private lateinit var exoplayer: ExoPlayer
+    private var exoplayer: ExoPlayer? = null
     private lateinit var viewModel: PlaybackViewModel
+    private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var mediaSessionConnector: MediaSessionConnector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Get the video data
+        // Get the video data.
         video = PlaybackFragmentArgs.fromBundle(requireArguments()).video
 
-        // Create the handler for posting watch progress updates
+        // Create the handler for posting watch progress updates.
         handler = Handler()
 
-        // Create a WatchProgress object to update as the user watches the video
-        watchProgress = WatchProgress(video.videoUri, 0)
+        // Create a WatchProgress object to update as the user watches the video.
+        watchProgress = WatchProgress(video.videoUri, WATCH_PROGRESS_NOT_LOADED)
 
-        // Load the ViewModel for this specific video
+        // Create the MediaSession that will be used throughout the lifecycle of this Fragment.
+        createMediaSession()
+
+        // Load the ViewModel for this specific video.
         viewModel = ViewModelProvider(
             this,
             PlaybackViewModelFactory(requireActivity().application, video.videoUri)
@@ -74,11 +85,12 @@ class PlaybackFragment : VideoSupportFragment() {
             this,
             object : Observer<WatchProgress> {
                 override fun onChanged(newWatchProgress: WatchProgress?) {
-                    // Stop listening now that the starting point is known
+                    // Stop listening now that the starting point is known.
                     viewModel.watchProgress.removeObserver(this)
 
                     if (newWatchProgress == null) {
                         Timber.v("No existing WatchProgress, start from the beginning")
+                        watchProgress.startPosition = 0
                     } else {
                         Timber.v(
                             "WatchProgress start position loaded: ${newWatchProgress.startPosition}"
@@ -89,30 +101,31 @@ class PlaybackFragment : VideoSupportFragment() {
                 }
             }
         )
-
-        // Prepare the player and related pieces
-        preparePlayer()
-        prepareGlue()
-        prepareMediaSession()
     }
 
     private fun saveUpdatedWatchProgress() {
-        watchProgress.startPosition = exoplayer.currentPosition
+        watchProgress.startPosition = exoplayer?.currentPosition ?: return
         Timber.v("Saving updated WatchProgress position: ${watchProgress.startPosition}")
         viewModel.update(watchProgress)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStart() {
+        super.onStart()
+        initializePlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
         cancelWatchProgressUpdates()
+        destroyPlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        exoplayer.release()
+        mediaSession.release()
     }
 
-    private fun preparePlayer() {
+    private fun initializePlayer() {
         val dataSourceFactory = DefaultDataSourceFactory(
             requireContext(),
             Util.getUserAgent(requireContext(), getString(R.string.app_name))
@@ -120,42 +133,66 @@ class PlaybackFragment : VideoSupportFragment() {
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(Uri.parse(video.videoUri))
         exoplayer = SimpleExoPlayer.Builder(requireContext()).build().apply {
-            prepare(mediaSource, false, true)
+            prepare(
+                /* mediaSource= */ mediaSource,
+                /* resetPosition= */ false,
+                /* resetState= */ true
+            )
+            addListener(PlayerEventListener())
+            prepareGlue(this)
+            mediaSessionConnector.setPlayer(this)
+            mediaSession.isActive = true
+            startPlaybackFromWatchProgress()
         }
-        exoplayer.addListener(object : Player.EventListener {
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                if (isPlaying) {
-                    scheduleWatchProgressUpdate()
-                } else {
-                    cancelWatchProgressUpdates()
-                    saveUpdatedWatchProgress()
-                }
-            }
-
-            override fun onSeekProcessed() {
-                saveUpdatedWatchProgress()
-            }
-        })
     }
 
-    private fun prepareGlue() {
+    private fun destroyPlayer() {
+        mediaSession.isActive = false
+        mediaSessionConnector.setPlayer(null)
+        exoplayer?.release()
+        exoplayer = null
+    }
+
+    private fun prepareGlue(localExoplayer: ExoPlayer) {
         PlaybackTransportControlGlue(
             requireContext(),
-            LeanbackPlayerAdapter(requireContext(), exoplayer, PLAYER_UPDATE_INTERVAL_MILLIS)
+            LeanbackPlayerAdapter(requireContext(), localExoplayer, PLAYER_UPDATE_INTERVAL_MILLIS)
         ).apply {
             host = VideoSupportFragmentGlueHost(this@PlaybackFragment)
             title = video.name
         }
     }
 
-    private fun prepareMediaSession() {
-        // TODO
+    private fun createMediaSession() {
+        mediaSession = MediaSessionCompat(requireContext(), MEDIA_SESSION_TAG)
+
+        mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
+            setQueueNavigator(SingleVideoQueueNavigator(video, mediaSession))
+            setControlDispatcher(object : DefaultControlDispatcher() {
+                override fun dispatchStop(player: Player, reset: Boolean): Boolean {
+                    // Treat stop commands as pause, this keeps ExoPlayer, MediaSession, etc.
+                    // in memory to allow for quickly resuming. This also maintains the playback
+                    // position so that the user will resume from the current position when backing
+                    // out and returning to this video
+                    Timber.v("Playback stopped at ${player.currentPosition}")
+                    // This both prevents playback from starting automatically and pauses it if
+                    // it's already playing
+                    player.playWhenReady = false
+                    return true
+                }
+            })
+        }
     }
 
     private fun startPlaybackFromWatchProgress() {
+        if (watchProgress.startPosition == WATCH_PROGRESS_NOT_LOADED) {
+            return
+        }
         Timber.v("Starting playback from ${watchProgress.startPosition}")
-        exoplayer.seekTo(watchProgress.startPosition)
-        exoplayer.playWhenReady = true
+        exoplayer?.apply {
+            seekTo(watchProgress.startPosition)
+            playWhenReady = true
+        }
     }
 
     private fun scheduleWatchProgressUpdate() {
@@ -166,6 +203,54 @@ class PlaybackFragment : VideoSupportFragment() {
     private fun cancelWatchProgressUpdates() {
         Timber.v("Canceling watch progress updates")
         handler.removeCallbacks(updateWatchProgressRunnable)
+
+        // Store the last progress update
+        saveUpdatedWatchProgress()
+    }
+
+    private fun hasContentFinishedPlaying(): Boolean {
+        val playerState = exoplayer?.playbackState ?: 0
+        return playerState == Player.STATE_ENDED
+    }
+
+    inner class PlayerEventListener : Player.EventListener {
+
+        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+            if (reason == Player.TIMELINE_CHANGE_REASON_DYNAMIC) {
+                // When the timeline loads, start from the beginning if the content was
+                // previously finished.
+                if (watchProgress.startPosition >= exoplayer!!.duration) {
+                    Timber.v("Starting content from the beginning")
+                    exoplayer?.seekTo(/* positionMs= */ 0)
+                }
+            }
+        }
+
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            if (isPlaying) {
+                scheduleWatchProgressUpdate()
+            } else {
+                cancelWatchProgressUpdates()
+
+                // To get to playback, the user always goes through browse first. Deep links
+                // for directly playing a video also go to browse before playback. If
+                // playback finishes the entire video, the PlaybackFragment is popped off
+                // the back stack and the user returns to browse.
+                if (hasContentFinishedPlaying()) {
+                    Timber.v("Finished playing content")
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
+        override fun onSeekProcessed() {
+            saveUpdatedWatchProgress()
+        }
+
+        override fun onPlayerError(error: ExoPlaybackException) {
+            // TODO(b/158233485): Display an error dialog with retry/stop options
+            Timber.w(error, "Playback error")
+        }
     }
 
     companion object {
@@ -174,5 +259,11 @@ class PlaybackFragment : VideoSupportFragment() {
 
         // How often to save watch progress to the database
         private const val WATCH_PROGRESS_SAVE_INTERVAL_MILLIS = 10 * 1000L
+
+        // Value used to indicate that watch progress has not finished loading
+        private const val WATCH_PROGRESS_NOT_LOADED = -1L
+
+        // A short name to identify the media session when debugging.
+        private const val MEDIA_SESSION_TAG = "ReferenceAppKotlin"
     }
 }
