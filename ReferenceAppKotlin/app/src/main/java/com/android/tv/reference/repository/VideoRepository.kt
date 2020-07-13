@@ -31,7 +31,12 @@ interface VideoRepository {
     fun getAllVideos(): List<Video>
 
     /**
-     * Returns a Video for the passed [id] or null if there is no matching Video
+     * Returns a Video for the passed [id] or null if there is no matching video.
      */
     fun getVideoById(id: String): Video?
+
+    /**
+     * Returns a Video for the passed [uri] or null if there is no matching video.
+     */
+    fun getVideoByVideoUri(uri: String): Video?
 }

@@ -45,4 +45,9 @@ class FileVideoRepository(override val application: Application) : VideoReposito
         val jsonString = readJsonFromFile()
         return VideoParser.findVideoFromJson(jsonString, id)
     }
+
+    override fun getVideoByVideoUri(uri: String): Video? {
+        return getAllVideos()
+            .firstOrNull { it.videoUri == uri }
+    }
 }

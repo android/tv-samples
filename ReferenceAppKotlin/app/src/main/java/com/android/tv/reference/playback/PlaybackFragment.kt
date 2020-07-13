@@ -25,7 +25,12 @@ import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.android.tv.reference.R
+import com.android.tv.reference.playnext.PlayNextHelper
+import com.android.tv.reference.playnext.PlayNextWorker
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.watchprogress.WatchProgress
 import com.google.android.exoplayer2.DefaultControlDispatcher
@@ -112,6 +117,14 @@ class PlaybackFragment : VideoSupportFragment() {
     override fun onStart() {
         super.onStart()
         initializePlayer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // TODO(mayurikhin@) :  Find valid data points to debate both cases when to notify Play Next
+        // (Either Player callback states or lifecycle Pause events)
+        notifyPlayNext(PlayNextHelper.PLAY_STATE_PAUSED)
+        Timber.v("Playback Paused. Add last known position ${watchProgress.startPosition}")
     }
 
     override fun onStop() {
@@ -243,6 +256,13 @@ class PlaybackFragment : VideoSupportFragment() {
             }
         }
 
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            super.onPlayerStateChanged(playWhenReady, playbackState)
+            if (playbackState == Player.STATE_ENDED) {
+                notifyPlayNext(PlayNextHelper.PLAY_STATE_ENDED)
+            }
+        }
+
         override fun onSeekProcessed() {
             saveUpdatedWatchProgress()
         }
@@ -251,6 +271,36 @@ class PlaybackFragment : VideoSupportFragment() {
             // TODO(b/158233485): Display an error dialog with retry/stop options
             Timber.w(error, "Playback error")
         }
+    }
+
+    /**
+     * Notifies the video state and relevant metadata for adding/removing to Play Next Channel.
+     * Used for adding un-finished/next content & removing finished content from Play Next.
+     */
+    private fun notifyPlayNext(state: String) {
+        Timber.v("Notify to play next from playback. State is $state")
+
+        // If the exoplayer is invalid, throw a warning that video cant be added to Play next.
+        if (exoplayer == null) {
+            Timber.w("Warning : ExoPlayer is null. Cannot add to Play Next")
+            return
+        }
+
+        // Set relevant data about playback state and video.
+        val watchData = Data.Builder().apply {
+            putString(PlayNextHelper.VIDEO_ID, watchProgress.videoId)
+            putLong(PlayNextHelper.CURRENT_POSITION, watchProgress.startPosition)
+            putLong(PlayNextHelper.DURATION, exoplayer!!.duration)
+            putString(PlayNextHelper.PLAYER_STATE, state)
+        }
+
+        // Run on a background thread to process playback states and do relevant operations for
+        // Play Next.
+        WorkManager.getInstance(requireContext()).enqueue(
+            OneTimeWorkRequest.Builder(PlayNextWorker::class.java)
+                .setInputData(watchData.build())
+                .build()
+        )
     }
 
     companion object {
