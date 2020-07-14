@@ -16,6 +16,7 @@
 package com.android.tv.reference.auth
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.android.tv.reference.shared.util.Result
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -45,11 +46,11 @@ class UserManagerUnitTest {
     fun setupTests() {
         MockitoAnnotations.initMocks(this)
         Mockito.`when`(authClient.authWithPassword("valid@gmail.com", "foo"))
-            .thenReturn(AuthClientResult.Success(validUser))
+            .thenReturn(Result.Success(validUser))
         Mockito.`when`(authClient.authWithPassword("invalid@gmail.com", "bar"))
-            .thenReturn(AuthClientResult.Failure(AuthClientError.AuthenticationError))
+            .thenReturn(Result.Error(AuthClientError.AuthenticationError))
         Mockito.`when`(authClient.validateToken("validToken"))
-            .thenReturn(AuthClientResult.Success(validUser))
+            .thenReturn(Result.Success(validUser))
     }
 
     @Test

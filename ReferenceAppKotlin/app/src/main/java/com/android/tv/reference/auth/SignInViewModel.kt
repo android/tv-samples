@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.android.tv.reference.shared.util.Result
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -42,9 +43,9 @@ class SignInViewModel(private val userManager: UserManager) :
 
     private fun authWithPassword(username: String, password: String): SignInStatus =
         when (val result = userManager.authWithPassword(username, password)) {
-            is UserManager.AuthResult.Success -> SignInStatus.ShouldSavePassword(username, password)
-            is UserManager.AuthResult.Failure -> {
-                when (result.error) {
+            is Result.Success -> SignInStatus.ShouldSavePassword(username, password)
+            is Result.Error -> {
+                when (result.exception) {
                     is AuthClientError.AuthenticationError -> SignInStatus.Error.InvalidPassword
                     else -> SignInStatus.Error.ServerError
                 }

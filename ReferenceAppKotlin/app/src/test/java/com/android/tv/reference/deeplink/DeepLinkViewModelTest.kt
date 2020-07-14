@@ -20,8 +20,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import com.google.common.truth.Truth.assertThat
+import com.android.tv.reference.shared.util.Result
 import com.squareup.moshi.JsonDataException
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,29 +60,27 @@ class DeepLinkViewModelTest {
         )
         doReturn(video).`when`(mockVideoRepository).getVideoById(testDeepLinkString)
 
-        val expectedResult = DeepLinkResult.Success(video)
+        val expectedResult = Result.Success(video)
         val result = DeepLinkViewModel.getDeepLinkVideo(testDeepLinkUri, mockVideoRepository)
 
-        assertThat(result).isEqualTo(expectedResult)
+        Assert.assertEquals(expectedResult, result)
     }
 
     @Test
     fun getDeepLinkResult_nullResultReturnsError() {
         doReturn(null).`when`(mockVideoRepository).getVideoById(testDeepLinkString)
 
-        val expectedResult = DeepLinkResult.Error
         val result = DeepLinkViewModel.getDeepLinkVideo(testDeepLinkUri, mockVideoRepository)
 
-        assertThat(result).isEqualTo(expectedResult)
+        Assert.assertTrue(result is Result.Error)
     }
 
     @Test
     fun getDeepLinkResult_jsonDataExceptionReturnsError() {
         doThrow(JsonDataException()).`when`(mockVideoRepository).getVideoById(testDeepLinkString)
 
-        val expectedResult = DeepLinkResult.Error
         val result = DeepLinkViewModel.getDeepLinkVideo(testDeepLinkUri, mockVideoRepository)
 
-        assertThat(result).isEqualTo(expectedResult)
+        Assert.assertTrue(result is Result.Error)
     }
 }

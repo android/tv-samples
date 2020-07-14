@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.deeplink
-
-import com.android.tv.reference.shared.datamodel.Video
+package com.android.tv.reference.shared.util
 
 /**
- * When checking a deep link, there are two possibilities: success or error. On success, the app
- * needs to receive the Video object to continue. The app doesn't handle different types of errors
- * differently, so it simply needs to know an error occurred.
+ * A generic type that represents a function outcome with two possibilities: success or error.
  */
-sealed class DeepLinkResult {
-    data class Success(val video: Video) : DeepLinkResult()
-    object Error : DeepLinkResult()
+sealed class Result<out R> {
+    data class Success<out T>(val data: T) : Result<T>()
+    data class Error(val exception: Exception) : Result<Nothing>()
 }

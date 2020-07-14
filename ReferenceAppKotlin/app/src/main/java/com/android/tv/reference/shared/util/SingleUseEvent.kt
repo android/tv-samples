@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.shared.event
+package com.android.tv.reference.shared.util
 
 open class SingleUseEvent<out T>(private val content: T) {
     var hasBeenHandled = false

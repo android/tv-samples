@@ -15,25 +15,22 @@
  */
 package com.android.tv.reference.auth
 
+import com.android.tv.reference.shared.util.Result
+
 /**
  * The authority that verifies the user's identity based on an existing token or credentials.
  * The verification is expected to be server-side.
  */
 interface AuthClient {
-    fun validateToken(token: String): AuthClientResult<UserInfo>
-    fun authWithPassword(username: String, password: String): AuthClientResult<UserInfo>
-    fun authWithGoogleIdToken(idToken: String): AuthClientResult<UserInfo>
-    fun invalidateToken(token: String): AuthClientResult<Unit>
+    fun validateToken(token: String): Result<UserInfo>
+    fun authWithPassword(username: String, password: String): Result<UserInfo>
+    fun authWithGoogleIdToken(idToken: String): Result<UserInfo>
+    fun invalidateToken(token: String): Result<Unit>
 }
 
-sealed class AuthClientResult<out T> {
-    data class Success<out T>(val value: T) : AuthClientResult<T>()
-    data class Failure(val error: AuthClientError) : AuthClientResult<Nothing>()
-}
-
-sealed class AuthClientError {
-    object AuthenticationError : AuthClientError()
-    data class ServerError(val errorText: String) : AuthClientError()
+sealed class AuthClientError(message: String) : Exception(message) {
+    object AuthenticationError : AuthClientError("Error authenticating user")
+    data class ServerError(val errorText: String) : AuthClientError("Server error: $errorText")
 }
 
 /**
@@ -44,24 +41,23 @@ class MockAuthClient : AuthClient {
     private val mockUser = UserInfo("myUserToken", "A. N. Other")
     private val mockUserEmail = "user@gmail.com"
 
-    override fun validateToken(token: String): AuthClientResult<UserInfo> {
+    override fun validateToken(token: String): Result<UserInfo> {
         if (token == mockUser.token) {
-            return AuthClientResult.Success(mockUser)
+            return Result.Success(mockUser)
         }
-        return AuthClientResult.Failure(AuthClientError.AuthenticationError)
+        return Result.Error(AuthClientError.AuthenticationError)
     }
 
-    override fun authWithPassword(username: String, password: String): AuthClientResult<UserInfo> {
+    override fun authWithPassword(username: String, password: String): Result<UserInfo> {
         if (username == mockUserEmail) {
-            return AuthClientResult.Success(mockUser)
+            return Result.Success(mockUser)
         }
-        return AuthClientResult.Failure(AuthClientError.AuthenticationError)
+        return Result.Error(AuthClientError.AuthenticationError)
     }
 
-    override fun authWithGoogleIdToken(idToken: String): AuthClientResult<UserInfo> {
+    override fun authWithGoogleIdToken(idToken: String): Result<UserInfo> {
         TODO("Not yet implemented")
     }
 
-    override fun invalidateToken(token: String): AuthClientResult<Unit> =
-        AuthClientResult.Success(Unit)
+    override fun invalidateToken(token: String): Result<Unit> = Result.Success(Unit)
 }

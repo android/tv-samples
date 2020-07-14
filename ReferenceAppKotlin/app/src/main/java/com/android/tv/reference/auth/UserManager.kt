@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.tv.reference.R
+import com.android.tv.reference.shared.util.Result
 import com.google.android.gms.auth.api.identity.SignInCredential
 
 /**
@@ -46,25 +47,25 @@ class UserManager(
         }
     }
 
-    fun authWithPassword(username: String, password: String): AuthResult {
+    fun authWithPassword(username: String, password: String): Result<Unit> {
         return when (val result = server.authWithPassword(username, password)) {
-            is AuthClientResult.Success -> {
-                updateUserInfo(result.value)
-                AuthResult.Success
+            is Result.Success -> {
+                updateUserInfo(result.data)
+                Result.Success(Unit)
             }
-            is AuthClientResult.Failure -> AuthResult.Failure(result.error)
+            is Result.Error -> result
         }
     }
 
-    fun authWithGoogle(credential: SignInCredential): AuthResult {
+    fun authWithGoogle(credential: SignInCredential): Result<Unit> {
         TODO("Not yet implemented")
     }
 
     private fun validateToken() {
         userInfoLiveData.value?.let {
             val result = server.validateToken(it.token)
-            if (result is AuthClientResult.Success) {
-                updateUserInfo(result.value)
+            if (result is Result.Success) {
+                updateUserInfo(result.data)
             } else {
                 clearUserInfo()
             }
@@ -79,11 +80,6 @@ class UserManager(
     private fun clearUserInfo() {
         userInfoLiveData.postValue(null)
         storage.clearUserInfo()
-    }
-
-    sealed class AuthResult {
-        object Success : AuthResult()
-        data class Failure(val error: AuthClientError) : AuthResult()
     }
 
     companion object {

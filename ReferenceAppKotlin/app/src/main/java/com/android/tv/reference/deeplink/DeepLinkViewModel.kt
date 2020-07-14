@@ -22,8 +22,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.repository.VideoRepositoryFactory
-import com.android.tv.reference.shared.event.SingleUseEvent
-import com.squareup.moshi.JsonDataException
+import com.android.tv.reference.shared.datamodel.Video
+import com.android.tv.reference.shared.util.Result
+import com.android.tv.reference.shared.util.SingleUseEvent
 import timber.log.Timber
 
 /**
@@ -34,22 +35,24 @@ import timber.log.Timber
  */
 class DeepLinkViewModel(application: Application, deepLinkUri: Uri) : ViewModel() {
     private val videoRepository = VideoRepositoryFactory.getVideoRepository(application)
-    val deepLinkResult = MutableLiveData<SingleUseEvent<DeepLinkResult>>()
+    val deepLinkResult = MutableLiveData<SingleUseEvent<Result<Video>>>()
 
     init {
         deepLinkResult.value = SingleUseEvent(getDeepLinkVideo(deepLinkUri, videoRepository))
     }
 
     companion object {
-        fun getDeepLinkVideo(deepLinkUri: Uri, videoRepository: VideoRepository): DeepLinkResult {
+        private const val TAG = "DeepLinkViewModel"
+
+        fun getDeepLinkVideo(deepLinkUri: Uri, videoRepository: VideoRepository): Result<Video> {
             try {
-                videoRepository.getVideoById((deepLinkUri.toString()))?.let {
-                    return DeepLinkResult.Success(it)
-                }
-            } catch (e: JsonDataException) {
+                return videoRepository.getVideoById((deepLinkUri.toString()))
+                    ?.let { Result.Success(it) }
+                    ?: Result.Error(Exception("Invalid video ID in deep link"))
+            } catch (e: Exception) {
                 Timber.w(e, "Failed to load deep link for $deepLinkUri")
+                return Result.Error(e)
             }
-            return DeepLinkResult.Error
         }
     }
 }

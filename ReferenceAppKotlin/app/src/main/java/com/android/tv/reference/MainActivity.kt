@@ -24,9 +24,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import com.android.tv.reference.browse.BrowseFragmentDirections
-import com.android.tv.reference.deeplink.DeepLinkResult
 import com.android.tv.reference.deeplink.DeepLinkViewModel
 import com.android.tv.reference.deeplink.DeepLinkViewModelFactory
+import com.android.tv.reference.shared.util.Result
 import timber.log.Timber
 
 /**
@@ -64,27 +64,32 @@ class MainActivity : FragmentActivity() {
             return
         }
 
-        viewModel = ViewModelProvider(this, DeepLinkViewModelFactory(application, uri))
-            .get(DeepLinkViewModel::class.java)
+        viewModel = ViewModelProvider(this, DeepLinkViewModelFactory(application, uri)).get(
+            DeepLinkViewModel::class.java
+        )
         viewModel.deepLinkResult.observe(
             this,
             Observer {
-                val result = it.getContentIfNotHandled()
-                if (result is DeepLinkResult.Success) {
-                    val video = result.video
-                    Timber.d("Loaded '${video.name}' for deep link '$uri'")
+                when (val result = it.getContentIfNotHandled()) {
+                    is Result.Success -> {
+                        val video = result.data
+                        Timber.d("Loaded '${video.name}' for deep link '$uri'")
 
-                    // Set the default graph and go to playback for the loaded Video
-                    navController.graph = navGraph
-                    navController.navigate(
-                        BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(video)
-                    )
-                } else if (result is DeepLinkResult.Error) {
-                    // Here you might show an error to the user or automatically trigger a search
-                    // for content that might match the deep link; since this is just a demo app,
-                    // the error is logged and then the app starts normally
-                    Timber.w("Failed to load deep link $uri, starting app normally")
-                    loadStartingPage(navController, navGraph)
+                        // Set the default graph and go to playback for the loaded Video
+                        navController.graph = navGraph
+                        navController.navigate(
+                            BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(
+                                video
+                            )
+                        )
+                    }
+                    is Result.Error -> {
+                        // Here you might show an error to the user or automatically trigger a search
+                        // for content that might match the deep link; since this is just a demo app,
+                        // the error is logged and then the app starts normally
+                        Timber.w("Failed to load deep link $uri, ignoring", result.exception)
+                        loadStartingPage(navController, navGraph)
+                    }
                 }
             }
         )
