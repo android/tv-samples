@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.homescreenchannels
 
 import android.app.Application
@@ -42,12 +41,16 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
 
     companion object {
         private const val DEFAULT_CHANNEL_ID = "DEFAULT_CHANNEL_ID"
-        private const val DEFAULT_CHANNEL_LINK = "https://atv-reference-app.firebaseapp.com/channels/default"
+        private const val DEFAULT_CHANNEL_LINK =
+            "https://atv-reference-app.firebaseapp.com/channels/default"
     }
 
     // Creates a new default home screen channel and returns its ID
     fun createHomeScreenDefaultChannel(context: Context): Long {
-        val logo = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_channel_placeholder) // TODO change to the correct image
+        val logo = BitmapFactory.decodeResource(
+            context.resources,
+            R.mipmap.ic_channel_placeholder
+        ) // TODO change to the correct image
         val defaultChannel = PreviewChannel.Builder()
             .setDisplayName(context.getString(R.string.default_home_screen_channel_name))
             .setDescription(context.getString(R.string.default_home_screen_channel_description))
@@ -69,7 +72,11 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
      * For your app, you'll likely want something more specific like the most popular content or
      * newest releases, but it's entirely up to you what makes the most sense to put in your channel.
      */
-    fun getVideosForDefaultChannel(application: Application, excludedIds: Set<String>, countToAdd: Int): List<Video> {
+    fun getVideosForDefaultChannel(
+        application: Application,
+        excludedIds: Set<String>,
+        countToAdd: Int
+    ): List<Video> {
         val videoRepository = VideoRepositoryFactory.getVideoRepository(application)
         return videoRepository.getAllVideos()
             .shuffled() // Mix the videos to avoid getting all of one type
@@ -115,7 +122,13 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
      * Returns a [ProgramIdsInChannel] for the passed [channelId]
      */
     fun getProgramIdsInChannel(context: Context, channelId: Long): ProgramIdsInChannel {
-        context.contentResolver.query(TvContractCompat.buildPreviewProgramsUriForChannel(channelId), null, null, null, null)?.use {
+        context.contentResolver.query(
+            TvContractCompat.buildPreviewProgramsUriForChannel(channelId),
+            null,
+            null,
+            null,
+            null
+        )?.use {
             return getProgramIdsFromCursor(it)
         }
         return ProgramIdsInChannel()
@@ -129,12 +142,17 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
     @VisibleForTesting
     fun getProgramIdsFromCursor(cursor: Cursor): ProgramIdsInChannel {
         val programIdsInChannel = ProgramIdsInChannel()
-        val idColumnIndex = cursor.getColumnIndex(TvContract.PreviewPrograms.COLUMN_INTERNAL_PROVIDER_ID)
-        val browsableColumnIndex = cursor.getColumnIndex(TvContract.PreviewPrograms.COLUMN_BROWSABLE)
+        val idColumnIndex =
+            cursor.getColumnIndex(TvContract.PreviewPrograms.COLUMN_INTERNAL_PROVIDER_ID)
+        val browsableColumnIndex =
+            cursor.getColumnIndex(TvContract.PreviewPrograms.COLUMN_BROWSABLE)
 
         while (cursor.moveToNext()) {
             // Add to the ID list
-            programIdsInChannel.addProgramId(cursor.getString(idColumnIndex), cursor.getInt(browsableColumnIndex) == 1)
+            programIdsInChannel.addProgramId(
+                cursor.getString(idColumnIndex),
+                cursor.getInt(browsableColumnIndex) == 1
+            )
         }
 
         return programIdsInChannel

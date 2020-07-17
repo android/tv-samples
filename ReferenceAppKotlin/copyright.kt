@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright $YEAR Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.shared.datamodel
-
-/**
- * A group of content that has a String category and a List of Video objects
- */
-class VideoGroup(val category: String, val videoList: List<Video>)

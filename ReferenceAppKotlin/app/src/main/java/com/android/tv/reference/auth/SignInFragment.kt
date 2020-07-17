@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.auth
 
 import android.app.PendingIntent
@@ -32,8 +31,8 @@ import com.android.tv.reference.auth.SignInViewModel.SignInStatus
 import com.android.tv.reference.databinding.FragmentSignInBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
-//import com.google.android.gms.auth.api.identity.SavePasswordRequest
-//import com.google.android.gms.auth.api.identity.SignInPassword
+// import com.google.android.gms.auth.api.identity.SavePasswordRequest
+// import com.google.android.gms.auth.api.identity.SignInPassword
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
@@ -51,7 +50,7 @@ class SignInFragment : Fragment() {
     }
 
     private val signInClient by lazy { Identity.getSignInClient(requireContext()) }
-    //private val credentialSavingClient by lazy { Identity.getCredentialSavingClient(requireContext()) }
+    // private val credentialSavingClient by lazy { Identity.getCredentialSavingClient(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,26 +58,32 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSignInBinding.inflate(inflater, container, false)
-        viewModel.signInStatus.observe(viewLifecycleOwner, Observer { status ->
-            when (status) {
-                is SignInStatus.Success -> findNavController().popBackStack()
-                is SignInStatus.ShouldSavePassword -> startSavePasswordWithGoogle(
-                    status.username,
-                    status.password
-                )
-                is SignInStatus.Error -> {
-                    val errorText = when (status) {
-                        is SignInStatus.Error.InputError -> getString(R.string.empty_username_or_password)
-                        is SignInStatus.Error.InvalidPassword -> getString(R.string.invalid_credentials)
-                        is SignInStatus.Error.ServerError -> getString(R.string.server_error)
-                        is SignInStatus.Error.OneTapInvalid -> getString(R.string.invalid_credentials)
-                        is SignInStatus.Error.OneTapError -> getString(R.string.onetap_error)
-                        else -> getString(R.string.unknown_error)
+        viewModel.signInStatus.observe(
+            viewLifecycleOwner,
+            Observer { status ->
+                when (status) {
+                    is SignInStatus.Success -> findNavController().popBackStack()
+                    is SignInStatus.ShouldSavePassword -> startSavePasswordWithGoogle(
+                        status.username,
+                        status.password
+                    )
+                    is SignInStatus.Error -> {
+                        val errorText = when (status) {
+                            is SignInStatus.Error.InputError ->
+                                getString(R.string.empty_username_or_password)
+                            is SignInStatus.Error.InvalidPassword ->
+                                getString(R.string.invalid_credentials)
+                            is SignInStatus.Error.ServerError -> getString(R.string.server_error)
+                            is SignInStatus.Error.OneTapInvalid ->
+                                getString(R.string.invalid_credentials)
+                            is SignInStatus.Error.OneTapError -> getString(R.string.onetap_error)
+                            else -> getString(R.string.unknown_error)
+                        }
+                        binding.signInError.text = getString(R.string.sign_in_error, errorText)
                     }
-                    binding.signInError.text = getString(R.string.sign_in_error, errorText)
                 }
             }
-        })
+        )
         binding.signInButton.setOnClickListener {
             val username = binding.usernameEdit.text.toString()
             val password = binding.passwordEdit.text.toString()

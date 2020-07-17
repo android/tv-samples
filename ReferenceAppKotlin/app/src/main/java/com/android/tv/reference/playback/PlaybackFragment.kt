@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.playback
 
 import android.net.Uri
@@ -67,21 +66,30 @@ class PlaybackFragment : VideoSupportFragment() {
         watchProgress = WatchProgress(video.videoUri, 0)
 
         // Load the ViewModel for this specific video
-        viewModel = ViewModelProvider(this, PlaybackViewModelFactory(requireActivity().application, video.videoUri)).get(PlaybackViewModel::class.java)
-        viewModel.watchProgress.observe(this, object: Observer<WatchProgress> {
-            override fun onChanged(newWatchProgress: WatchProgress?) {
-                // Stop listening now that the starting point is known
-                viewModel.watchProgress.removeObserver(this)
+        viewModel = ViewModelProvider(
+            this,
+            PlaybackViewModelFactory(requireActivity().application, video.videoUri)
+        ).get(PlaybackViewModel::class.java)
+        viewModel.watchProgress.observe(
+            this,
+            object : Observer<WatchProgress> {
+                override fun onChanged(newWatchProgress: WatchProgress?) {
+                    // Stop listening now that the starting point is known
+                    viewModel.watchProgress.removeObserver(this)
 
-                if (newWatchProgress == null) {
-                    Log.v(TAG, "No existing WatchProgress, start from the beginning")
-                } else {
-                    Log.v(TAG, "WatchProgress start position loaded: " + newWatchProgress.startPosition)
-                    watchProgress.startPosition = newWatchProgress.startPosition
+                    if (newWatchProgress == null) {
+                        Log.v(TAG, "No existing WatchProgress, start from the beginning")
+                    } else {
+                        Log.v(
+                            TAG,
+                            "WatchProgress start position loaded: " + newWatchProgress.startPosition
+                        )
+                        watchProgress.startPosition = newWatchProgress.startPosition
+                    }
+                    startPlaybackFromWatchProgress()
                 }
-                startPlaybackFromWatchProgress()
             }
-        })
+        )
 
         // Prepare the player and related pieces
         preparePlayer()
@@ -106,11 +114,14 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private fun preparePlayer() {
-        val dataSourceFactory = DefaultDataSourceFactory(requireContext(), Util.getUserAgent(requireContext(), getString(
-            R.string.app_name)))
-        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(video.videoUri))
+        val dataSourceFactory = DefaultDataSourceFactory(
+            requireContext(),
+            Util.getUserAgent(requireContext(), getString(R.string.app_name))
+        )
+        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(Uri.parse(video.videoUri))
         exoplayer = SimpleExoPlayer.Builder(requireContext()).build().apply {
-            prepare(mediaSource, false ,true)
+            prepare(mediaSource, false, true)
         }
         exoplayer.addListener(object : Player.EventListener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -129,7 +140,10 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private fun prepareGlue() {
-        PlaybackTransportControlGlue(requireContext(), LeanbackPlayerAdapter(requireContext(), exoplayer, PLAYER_UPDATE_INTERVAL_MILLIS)).apply {
+        PlaybackTransportControlGlue(
+            requireContext(),
+            LeanbackPlayerAdapter(requireContext(), exoplayer, PLAYER_UPDATE_INTERVAL_MILLIS)
+        ).apply {
             host = VideoSupportFragmentGlueHost(this@PlaybackFragment)
             title = video.name
         }

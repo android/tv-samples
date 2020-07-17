@@ -64,8 +64,7 @@
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.android.tv.reference.auth.SignInFragment"
-        android:label="SignInFragment">
-    </fragment>
+        android:label="SignInFragment"></fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.android.tv.reference.auth.ProfileFragment"

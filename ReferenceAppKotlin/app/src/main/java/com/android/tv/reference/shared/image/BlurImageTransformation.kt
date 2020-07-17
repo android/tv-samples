@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.shared.image
 
 import android.content.Context
@@ -29,7 +28,10 @@ import com.squareup.picasso.Transformation
  * you don't know whether the image will have enough contrast with text on top, you should also
  * overlay it with a color to ensure sufficient contrast.
  */
-class BlurImageTransformation(context: Context, @FloatRange(from=1.0, to=25.0) val radius: Float = 25f) :
+class BlurImageTransformation(
+    context: Context,
+    @FloatRange(from = 1.0, to = 25.0) val radius: Float = 25f
+) :
     Transformation {
 
     private val imageBlurManager = ImageBlurManager(context)

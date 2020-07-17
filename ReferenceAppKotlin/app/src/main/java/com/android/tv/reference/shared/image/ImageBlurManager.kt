@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.shared.image
 
 import android.content.Context
@@ -50,13 +49,17 @@ class ImageBlurManager(context: Context) {
      * The passed Bitmap is NOT recycled by this method.
      */
     @WorkerThread
-    public fun blur(inputBitmap: Bitmap, @FloatRange(from=1.0, to=25.0) radius: Float = 25f) : Bitmap {
+    fun blur(
+        inputBitmap: Bitmap,
+        @FloatRange(from = 1.0, to = 25.0) radius: Float = 25f
+    ): Bitmap {
         val inputAllocation = Allocation.createFromBitmap(renderScript, inputBitmap)
         val outputAllocation = Allocation.createTyped(renderScript, inputAllocation.type)
         blurScript.setInput(inputAllocation)
         blurScript.setRadius(radius)
         blurScript.forEach(outputAllocation)
-        val outputBitmap = Bitmap.createBitmap(inputBitmap.width, inputBitmap.height, inputBitmap.config)
+        val outputBitmap =
+            Bitmap.createBitmap(inputBitmap.width, inputBitmap.height, inputBitmap.config)
         outputAllocation.copyTo(outputBitmap)
         inputAllocation.destroy()
         outputAllocation.destroy()

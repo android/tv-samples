@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.shared.image
 
 import android.graphics.Bitmap
@@ -35,12 +34,20 @@ import com.squareup.picasso.Transformation
  * already soft (e.g., a gradient, an image that was blurred on the server, etc.), this
  * transformation is enough to ensure readable text.
  */
-class OverlayImageTransformation(private val targetColor: Int = Color.BLACK, private val adjustmentAmount: Float = 0.7f) : Transformation {
+class OverlayImageTransformation(
+    private val targetColor: Int = Color.BLACK,
+    private val adjustmentAmount: Float = 0.7f
+) : Transformation {
 
     // Color to paint on top of the image
     private val overlayColor: Int by lazy {
         val overlayAlpha = (adjustmentAmount * 255).toInt()
-        Color.argb(overlayAlpha, Color.red(targetColor), Color.green(targetColor), Color.blue(targetColor))
+        Color.argb(
+            overlayAlpha,
+            Color.red(targetColor),
+            Color.green(targetColor),
+            Color.blue(targetColor)
+        )
     }
 
     // Key for Picasso to identify this transformation

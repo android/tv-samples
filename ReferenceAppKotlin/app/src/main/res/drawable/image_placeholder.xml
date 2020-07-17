@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2020 Google LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +21,6 @@
         android:startColor="@color/gray_dark"
         android:endColor="@color/black"
         android:type="radial"
-        android:gradientRadius="50%p"/>
+        android:gradientRadius="50%p" />
 
 </shape>

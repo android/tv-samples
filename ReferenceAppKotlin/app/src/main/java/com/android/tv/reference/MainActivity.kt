@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference
 
 import android.net.Uri
@@ -65,24 +64,30 @@ class MainActivity : FragmentActivity() {
             return
         }
 
-        viewModel = ViewModelProvider(this, DeepLinkViewModelFactory(application, uri)).get(DeepLinkViewModel::class.java)
-        viewModel.deepLinkResult.observe(this, Observer {
-            val result = it.getContentIfNotHandled()
-            if (result is DeepLinkResult.Success) {
-                val video = result.video
-                Log.d(TAG, "Loaded '${video.name}' for deep link '$uri'")
+        viewModel = ViewModelProvider(this, DeepLinkViewModelFactory(application, uri))
+            .get(DeepLinkViewModel::class.java)
+        viewModel.deepLinkResult.observe(
+            this,
+            Observer {
+                val result = it.getContentIfNotHandled()
+                if (result is DeepLinkResult.Success) {
+                    val video = result.video
+                    Log.d(TAG, "Loaded '${video.name}' for deep link '$uri'")
 
-                // Set the default graph and go to playback for the loaded Video
-                navController.graph = navGraph
-                navController.navigate(BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(video))
-            } else if (result is DeepLinkResult.Error){
-                // Here you might show an error to the user or automatically trigger a search
-                // for content that might match the deep link; since this is just a demo app,
-                // the error is logged and then the app starts normally
-                Log.w(TAG, "Failed to load deep link $uri, starting app normally")
-                loadStartingPage(navController, navGraph)
+                    // Set the default graph and go to playback for the loaded Video
+                    navController.graph = navGraph
+                    navController.navigate(
+                        BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(video)
+                    )
+                } else if (result is DeepLinkResult.Error) {
+                    // Here you might show an error to the user or automatically trigger a search
+                    // for content that might match the deep link; since this is just a demo app,
+                    // the error is logged and then the app starts normally
+                    Log.w(TAG, "Failed to load deep link $uri, starting app normally")
+                    loadStartingPage(navController, navGraph)
+                }
             }
-        })
+        )
     }
 
     /**

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.browse
 
 import android.graphics.Bitmap
@@ -78,25 +77,34 @@ class BrowseFragment : BrowseSupportFragment(), Target {
             setThemeDrawableResourceId(BACKGROUND_RESOURCE_ID)
         }
 
-        val menuMore = BrowseCustomMenu(getString(R.string.menu_more), mapOf(
-            // temporary - sign in will be triggered automatically in the future
-            BrowseCustomMenu.MenuItem(getString(R.string.sign_in)) to {
-                findNavController().navigate(R.id.action_global_signInFragment)
-            },
-            BrowseCustomMenu.MenuItem(getString(R.string.profile)) to {
-                findNavController().navigate(BrowseFragmentDirections.actionBrowseFragmentToProfileFragment())
-            }
-        ))
+        val menuMore = BrowseCustomMenu(
+            getString(R.string.menu_more),
+            mapOf(
+                // temporary - sign in will be triggered automatically in the future
+                BrowseCustomMenu.MenuItem(getString(R.string.sign_in)) to {
+                    findNavController().navigate(R.id.action_global_signInFragment)
+                },
+                BrowseCustomMenu.MenuItem(getString(R.string.profile)) to {
+                    findNavController()
+                        .navigate(BrowseFragmentDirections.actionBrowseFragmentToProfileFragment())
+                }
+            )
+        )
 
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
-        viewModel.browseContent.observe(this, Observer {
-            adapter = BrowseAdapter(it, listOf(menuMore))
-        })
+        viewModel.browseContent.observe(
+            this,
+            Observer {
+                adapter = BrowseAdapter(it, listOf(menuMore))
+            }
+        )
 
         setOnItemViewClickedListener { _, item, _, _ ->
             when (item) {
                 is Video ->
-                    findNavController().navigate(BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(item))
+                    findNavController().navigate(
+                        BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(item)
+                    )
                 is BrowseCustomMenu.MenuItem -> menuMore.navigate(item)
             }
         }
@@ -138,14 +146,13 @@ class BrowseFragment : BrowseSupportFragment(), Target {
             return
         }
 
-        Picasso.get().
-            load(backgroundUri).
-            centerCrop().
-            resize(displayMetrics.widthPixels, displayMetrics.heightPixels).
-            onlyScaleDown().
-            transform(overlayImageTransformation).
-            transform(blurImageTransformation).
-            into(this)
+        Picasso.get()
+            .load(backgroundUri)
+            .centerCrop()
+            .resize(displayMetrics.widthPixels, displayMetrics.heightPixels)
+            .onlyScaleDown()
+            .transform(overlayImageTransformation).transform(blurImageTransformation)
+            .into(this)
     }
 
     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
@@ -170,6 +177,4 @@ class BrowseFragment : BrowseSupportFragment(), Target {
         backgroundUri = ""
         backgroundManager.setThemeDrawableResourceId(BACKGROUND_RESOURCE_ID)
     }
-
-
 }

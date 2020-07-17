@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.homescreenchannels
 
 import android.database.Cursor
@@ -136,7 +135,9 @@ class HomeScreenChannelHelperTest {
             currentCursorPosition++
             currentCursorPosition < testIds.size
         }
-        Mockito.`when`(cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_INTERNAL_PROVIDER_ID))
+        Mockito.`when`(
+            cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_INTERNAL_PROVIDER_ID)
+        )
             .thenReturn(idColumnIndex)
         Mockito.`when`(cursorMock.getColumnIndex(TvContract.PreviewPrograms.COLUMN_BROWSABLE))
             .thenReturn(browsableColumnIndex)
@@ -194,7 +195,8 @@ class HomeScreenChannelHelperTest {
         private const val TEST_VIDEO_ID = "TESTID123"
         private const val TEST_VIDEO_NAME = "Test Video"
         private const val TEST_VIDEO_DESCRIPTION = "In a world where test videos...."
-        private const val TEST_VIDEO_URI = "https://atv-reference-app.firebaseapp.com/content/$TEST_VIDEO_ID"
+        private const val TEST_VIDEO_URI =
+            "https://atv-reference-app.firebaseapp.com/content/$TEST_VIDEO_ID"
         private const val TEST_VIDEO_PLACEHOLDER_URI = "https://example.com/uri"
         private const val TEST_VIDEO_THUMBNAIL_URI = "https://example.com/thumbnail"
     }

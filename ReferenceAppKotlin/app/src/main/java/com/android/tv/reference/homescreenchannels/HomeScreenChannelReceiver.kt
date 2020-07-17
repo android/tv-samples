@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.tv.reference.homescreenchannels
 
 import android.content.BroadcastReceiver
@@ -40,6 +39,7 @@ class HomeScreenChannelReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         // If your receiver handles more than one action, check intent.action for INITIALIZE_PROGRAMS
         // Since this receiver has a single purpose, it can just trigger the Worker
-        WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.Builder(HomeScreenChannelWorker::class.java).build())
+        WorkManager.getInstance(context)
+            .enqueue(OneTimeWorkRequest.Builder(HomeScreenChannelWorker::class.java).build())
     }
 }
