@@ -20,8 +20,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
+import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.JsonDataException
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -62,7 +62,7 @@ class DeepLinkViewModelTest {
         val expectedResult = DeepLinkResult.Success(video)
         val result = DeepLinkViewModel.getDeepLinkVideo(testDeepLinkUri, mockVideoRepository)
 
-        assertEquals(expectedResult, result)
+        assertThat(result).isEqualTo(expectedResult)
     }
 
     @Test
@@ -72,7 +72,7 @@ class DeepLinkViewModelTest {
         val expectedResult = DeepLinkResult.Error
         val result = DeepLinkViewModel.getDeepLinkVideo(testDeepLinkUri, mockVideoRepository)
 
-        assertEquals(expectedResult, result)
+        assertThat(result).isEqualTo(expectedResult)
     }
 
     @Test
@@ -82,6 +82,6 @@ class DeepLinkViewModelTest {
         val expectedResult = DeepLinkResult.Error
         val result = DeepLinkViewModel.getDeepLinkVideo(testDeepLinkUri, mockVideoRepository)
 
-        assertEquals(expectedResult, result)
+        assertThat(result).isEqualTo(expectedResult)
     }
 }

@@ -21,9 +21,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.tvprovider.media.tv.PreviewChannel
 import androidx.tvprovider.media.tv.PreviewChannelHelper
 import androidx.tvprovider.media.tv.PreviewProgram
+import androidx.tvprovider.media.tv.TvContractCompat
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import org.junit.Assert
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -73,12 +74,12 @@ class HomeScreenChannelHelperTest {
 
         // Verify the correct metadata was set
         val program = captor.value
-        Assert.assertEquals(TEST_VIDEO_ID, program.internalProviderId)
-        Assert.assertEquals(TEST_VIDEO_NAME, program.title)
-        Assert.assertEquals(TEST_VIDEO_DESCRIPTION, program.description)
-        Assert.assertEquals(TEST_VIDEO_URI, program.intentUri.toString())
-        Assert.assertEquals(TvContract.PreviewPrograms.TYPE_TV_EPISODE, program.type)
-        Assert.assertEquals(testChannelId, program.channelId)
+        assertThat(program.internalProviderId).isEqualTo(TEST_VIDEO_ID)
+        assertThat(program.title).isEqualTo(TEST_VIDEO_NAME)
+        assertThat(program.description).isEqualTo(TEST_VIDEO_DESCRIPTION)
+        assertThat(program.intentUri.toString()).isEqualTo(TEST_VIDEO_URI)
+        assertThat(program.type).isEqualTo(TvContractCompat.PreviewPrograms.TYPE_TV_EPISODE)
+        assertThat(program.channelId).isEqualTo(testChannelId)
     }
 
     @Test
@@ -98,7 +99,7 @@ class HomeScreenChannelHelperTest {
 
         // Get the preview channel and verify it matches
         val returnedChannel = channelHelper.getChannelByInternalProviderId(rightId)
-        Assert.assertEquals(correctPreviewChannel, returnedChannel)
+        assertThat(returnedChannel).isEqualTo(correctPreviewChannel)
     }
 
     @Test
@@ -115,7 +116,7 @@ class HomeScreenChannelHelperTest {
 
         // Verify we correct get no preview channel back since none match the ID
         val returnedChannel = channelHelper.getChannelByInternalProviderId("an id not in the list")
-        Assert.assertNull(returnedChannel)
+        assertThat(returnedChannel).isNull()
     }
 
     @Test
@@ -160,12 +161,10 @@ class HomeScreenChannelHelperTest {
         val programIdsInChannel = channelHelper.getProgramIdsFromCursor(cursorMock)
 
         // Verify the output count and IDs match
-        Assert.assertEquals(expectedBrowsableCount, programIdsInChannel.getBrowsableProgramCount())
-        Assert.assertEquals(expectedSetOfBrowsableIds, programIdsInChannel.getBrowsableProgramIds())
-        Assert.assertEquals(
-            expectedSetOfNonBrowsableIds,
-            programIdsInChannel.getNonBrowsableProgramIds()
-        )
+        assertThat(programIdsInChannel.getBrowsableProgramIds())
+            .containsExactlyElementsIn(expectedSetOfBrowsableIds)
+        assertThat(programIdsInChannel.getNonBrowsableProgramIds())
+            .containsExactlyElementsIn(expectedSetOfNonBrowsableIds)
     }
 
     @Test
@@ -180,9 +179,8 @@ class HomeScreenChannelHelperTest {
         val programIdsInChannel = channelHelper.getProgramIdsFromCursor(cursorMock)
 
         // Verify the output is an empty ProgramIdsInChannel
-        Assert.assertEquals(0, programIdsInChannel.getBrowsableProgramCount())
-        Assert.assertTrue(programIdsInChannel.getBrowsableProgramIds().isEmpty())
-        Assert.assertTrue(programIdsInChannel.getNonBrowsableProgramIds().isEmpty())
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).isEmpty()
+        assertThat(programIdsInChannel.getNonBrowsableProgramIds()).isEmpty()
     }
 
     private fun createMockPreviewChannel(internalProviderId: String): PreviewChannel {

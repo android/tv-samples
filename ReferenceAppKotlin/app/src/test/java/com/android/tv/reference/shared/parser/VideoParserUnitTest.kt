@@ -17,10 +17,8 @@ package com.android.tv.reference.shared.parser
 
 import com.android.tv.reference.parser.VideoParser
 import com.android.tv.reference.shared.datamodel.VideoType
+import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.JsonDataException
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Test
 
 class VideoParserUnitTest {
@@ -28,46 +26,45 @@ class VideoParserUnitTest {
     @Test
     fun loadVideosFromJson_isCorrect() {
         val videoList = VideoParser.loadVideosFromJson(VALID_JSON)
-        assertNotNull(videoList)
-        assertEquals(3, videoList.size)
+        assertThat(videoList).hasSize(3)
         videoList.forEachIndexed { index, video ->
             val type = CONTENT_TYPES[index]
-            assertEquals("${type}_id", video.id)
-            assertEquals("$type name", video.name)
-            assertEquals("Description for $type", video.description)
+            assertThat(video.id).isEqualTo("${type}_id")
+            assertThat(video.name).isEqualTo("$type name")
+            assertThat(video.description).isEqualTo("Description for $type")
 
             val uriBase = "https://atv-reference-app.firebaseapp.com/content/$type"
-            assertEquals(uriBase, video.uri)
-            assertEquals("$uriBase/video.mp4", video.videoUri)
-            assertEquals("$uriBase/thumbnail.jpg", video.thumbnailUri)
-            assertEquals("$uriBase/background.jpg", video.backgroundImageUri)
+            assertThat(video.uri).isEqualTo(uriBase)
+            assertThat(video.videoUri).isEqualTo("$uriBase/video.mp4")
+            assertThat(video.thumbnailUri).isEqualTo("$uriBase/thumbnail.jpg")
+            assertThat(video.backgroundImageUri).isEqualTo("$uriBase/background.jpg")
 
-            assertEquals("${type}s", video.category)
+            assertThat(video.category).isEqualTo("${type}s")
             val expectedEnum = when (type) {
                 "clip" -> VideoType.CLIP
                 "episode" -> VideoType.EPISODE
                 "movie" -> VideoType.MOVIE
                 else -> throw RuntimeException("Invalid type: $type")
             }
-            assertEquals(expectedEnum, video.videoType)
+            assertThat(video.videoType).isEqualTo(expectedEnum)
         }
     }
 
     @Test(expected = JsonDataException::class)
     fun loadVideosFromJson_inputMalformed() {
-        val videoList = VideoParser.loadVideosFromJson(MALFORMED_JSON)
+        val video = VideoParser.loadVideosFromJson(MALFORMED_JSON)
     }
 
     @Test
     fun findVideoFromJson_videoFound() {
         val video = VideoParser.findVideoFromJson(VALID_JSON, "movie_id")
-        assertNotNull(video)
+        assertThat(video).isNotNull()
     }
 
     @Test
     fun findVideoFromJson_videoNotFound() {
         val video = VideoParser.findVideoFromJson(VALID_JSON, "Video 999")
-        assertNull(video)
+        assertThat(video).isNull()
     }
 
     @Test(expected = JsonDataException::class)

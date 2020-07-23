@@ -22,10 +22,9 @@ import androidx.lifecycle.Observer
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -76,8 +75,8 @@ class WatchProgressTest {
             watchProgressDao.getWatchProgressByVideoId(watchProgress2.videoId).blockForValue()
 
         // Verify the data matches what was supposed to be inserted
-        assertEquals(watchProgress1, watchProgressRead1)
-        assertEquals(watchProgress2, watchProgressRead2)
+        assertThat(watchProgressRead1).isEqualTo(watchProgress1)
+        assertThat(watchProgressRead2).isEqualTo(watchProgress2)
     }
 
     @Test
@@ -93,7 +92,7 @@ class WatchProgressTest {
         // Verify the update was stored
         val watchProgressRead =
             watchProgressDao.getWatchProgressByVideoId(watchProgress.videoId).blockForValue()
-        assertEquals(watchProgress, watchProgressRead)
+        assertThat(watchProgressRead).isEqualTo(watchProgress)
     }
 
     @Test
@@ -108,7 +107,7 @@ class WatchProgressTest {
         // Verify the inserted entry is no longer present
         val watchProgressRead =
             watchProgressDao.getWatchProgressByVideoId(watchProgress.videoId).value
-        assertNull(watchProgressRead)
+        assertThat(watchProgressRead).isNull()
     }
 }
 

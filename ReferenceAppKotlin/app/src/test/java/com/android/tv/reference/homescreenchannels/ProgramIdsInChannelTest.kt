@@ -15,7 +15,7 @@
  */
 package com.android.tv.reference.homescreenchannels
 
-import org.junit.Assert
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 
@@ -31,27 +31,27 @@ class ProgramIdsInChannelTest {
     @Test
     fun getBrowsableProgramCount() {
         // A new object should have no content
-        Assert.assertEquals(0, programIdsInChannel.getBrowsableProgramCount())
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).isEmpty()
 
         // Add two browsable IDs
-        programIdsInChannel.addProgramId("123", true)
-        programIdsInChannel.addProgramId("456", true)
-        Assert.assertEquals(2, programIdsInChannel.getBrowsableProgramCount())
+        programIdsInChannel.addProgramId(programId = "123", isBrowsable = true)
+        programIdsInChannel.addProgramId(programId = "456", isBrowsable = true)
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).hasSize(2)
 
         // Re-add an existing ID and verify the count is the same
-        programIdsInChannel.addProgramId("123", true)
-        Assert.assertEquals(2, programIdsInChannel.getBrowsableProgramCount())
+        programIdsInChannel.addProgramId(programId = "123", isBrowsable = true)
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).hasSize(2)
 
         // Add non-browsable IDs and verify the count doesn't change
-        programIdsInChannel.addProgramId("789", false)
-        programIdsInChannel.addProgramId("abc", false)
-        Assert.assertEquals(2, programIdsInChannel.getBrowsableProgramCount())
+        programIdsInChannel.addProgramId(programId = "789", isBrowsable = false)
+        programIdsInChannel.addProgramId(programId = "abc", isBrowsable = false)
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).hasSize(2)
     }
 
     @Test
     fun getBrowsableProgramIds() {
         // A new object should have no content
-        Assert.assertTrue(programIdsInChannel.getBrowsableProgramIds().isEmpty())
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).isEmpty()
 
         // Create a Set of browsable IDs
         val browsableIds = HashSet<String>().apply {
@@ -61,20 +61,21 @@ class ProgramIdsInChannelTest {
 
         // Add them
         browsableIds.forEach {
-            programIdsInChannel.addProgramId(it, true)
+            programIdsInChannel.addProgramId(programId = it, isBrowsable = true)
         }
 
         // The Set of browsable content should now match
-        Assert.assertEquals(browsableIds, programIdsInChannel.getBrowsableProgramIds())
+        assertThat(programIdsInChannel.getBrowsableProgramIds())
+            .containsExactlyElementsIn(browsableIds)
 
         // There shouldn't be any non-browsable content
-        Assert.assertTrue(programIdsInChannel.getNonBrowsableProgramIds().isEmpty())
+        assertThat(programIdsInChannel.getNonBrowsableProgramIds()).isEmpty()
     }
 
     @Test
     fun getNonBrowsableProgramIds() {
         // A new object should have no content
-        Assert.assertTrue(programIdsInChannel.getNonBrowsableProgramIds().isEmpty())
+        assertThat(programIdsInChannel.getNonBrowsableProgramIds()).isEmpty()
 
         // Create a Set of browsable IDs
         val nonBrowsableIds = HashSet<String>().apply {
@@ -88,9 +89,10 @@ class ProgramIdsInChannelTest {
         }
 
         // The Set of non-browsable content should now match
-        Assert.assertEquals(nonBrowsableIds, programIdsInChannel.getNonBrowsableProgramIds())
+        assertThat(programIdsInChannel.getNonBrowsableProgramIds())
+            .containsExactlyElementsIn(nonBrowsableIds)
 
         // There shouldn't be any browsable content
-        Assert.assertTrue(programIdsInChannel.getBrowsableProgramIds().isEmpty())
+        assertThat(programIdsInChannel.getBrowsableProgramIds()).isEmpty()
     }
 }

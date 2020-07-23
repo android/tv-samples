@@ -21,9 +21,7 @@ import androidx.test.filters.LargeTest
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNotNull
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,16 +49,17 @@ class BrowseViewModelUnitTest {
     fun getVideoGroupList_isCorrect() {
         val viewModel = BrowseViewModel(ApplicationProvider.getApplicationContext())
         val videoGroups = viewModel.getVideoGroupList(mockVideoRepository)
-        assertNotNull(videoGroups)
-        assertEquals(2, videoGroups.size)
+        assertThat(videoGroups).hasSize(2)
 
         // Categories are different
-        assertNotEquals(videoGroups[0].category, videoGroups[1].category)
+        assertThat(videoGroups.map { it.category })
+            .containsExactly("category_a", "category_b").inOrder()
 
         // Each Video in a VideoGroup should belong to the same category
         videoGroups.forEach { videoGroup ->
             val testCategory = videoGroup.category
-            videoGroup.videoList.forEach { assertEquals(testCategory, it.category) }
+            val videoCategories = videoGroup.videoList.map { it.category }.distinct()
+            assertThat(videoCategories).containsExactly(testCategory)
         }
     }
 

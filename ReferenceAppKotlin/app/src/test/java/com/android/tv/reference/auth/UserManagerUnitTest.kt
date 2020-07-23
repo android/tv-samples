@@ -16,7 +16,7 @@
 package com.android.tv.reference.auth
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import org.junit.Assert
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,13 +56,13 @@ class UserManagerUnitTest {
     fun authWithPassword_signsInWithValidPasswordAndSignsOut() {
         val userManager = UserManager(authClient, spyIdentityStorage)
         userManager.authWithPassword("valid@gmail.com", "foo")
-        Assert.assertTrue(userManager.isSignedIn())
-        Assert.assertNotNull(userManager.userInfo.value)
-        Assert.assertEquals("validToken", userManager.userInfo.value!!.token)
+        assertThat(userManager.isSignedIn()).isTrue()
+        assertThat(userManager.userInfo.value).isNotNull()
+        assertThat(userManager.userInfo.value!!.token).isEqualTo("validToken")
         Mockito.verify(spyIdentityStorage).writeUserInfo(validUser)
         userManager.signOut()
-        Assert.assertFalse(userManager.isSignedIn())
-        Assert.assertNull(userManager.userInfo.value)
+        assertThat(userManager.isSignedIn()).isFalse()
+        assertThat(userManager.userInfo.value).isNull()
         Mockito.verify(spyIdentityStorage).clearUserInfo()
     }
 
@@ -70,16 +70,16 @@ class UserManagerUnitTest {
     fun authWithPassword_failsWithInvalidPassword() {
         val userManager = UserManager(authClient, mockIdentityStorage)
         userManager.authWithPassword("invalid@gmail.com", "bar")
-        Assert.assertFalse(userManager.isSignedIn())
-        Assert.assertNull(userManager.userInfo.value)
+        assertThat(userManager.isSignedIn()).isFalse()
+        assertThat(userManager.userInfo.value).isNull()
     }
 
     @Test
     fun constructor_readsFromStorage() {
         Mockito.`when`(mockIdentityStorage.readUserInfo()).thenReturn(validUser)
         val userManager = UserManager(authClient, mockIdentityStorage)
-        Assert.assertTrue(userManager.isSignedIn())
-        Assert.assertNotNull(userManager.userInfo.value)
-        Assert.assertEquals("validToken", userManager.userInfo.value!!.token)
+        assertThat(userManager.isSignedIn()).isTrue()
+        assertThat(userManager.userInfo.value).isNotNull()
+        assertThat(userManager.userInfo.value!!.token).isEqualTo("validToken")
     }
 }
