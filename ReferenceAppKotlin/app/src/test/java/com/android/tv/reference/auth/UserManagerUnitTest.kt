@@ -56,12 +56,12 @@ class UserManagerUnitTest {
     fun authWithPassword_signsInWithValidPasswordAndSignsOut() {
         val userManager = UserManager(authClient, spyIdentityStorage)
         userManager.authWithPassword("valid@gmail.com", "foo")
-        Assert.assertTrue(userManager.isSignedIn)
+        Assert.assertTrue(userManager.isSignedIn())
         Assert.assertNotNull(userManager.userInfo.value)
         Assert.assertEquals("validToken", userManager.userInfo.value!!.token)
         Mockito.verify(spyIdentityStorage).writeUserInfo(validUser)
         userManager.signOut()
-        Assert.assertFalse(userManager.isSignedIn)
+        Assert.assertFalse(userManager.isSignedIn())
         Assert.assertNull(userManager.userInfo.value)
         Mockito.verify(spyIdentityStorage).clearUserInfo()
     }
@@ -70,7 +70,7 @@ class UserManagerUnitTest {
     fun authWithPassword_failsWithInvalidPassword() {
         val userManager = UserManager(authClient, mockIdentityStorage)
         userManager.authWithPassword("invalid@gmail.com", "bar")
-        Assert.assertFalse(userManager.isSignedIn)
+        Assert.assertFalse(userManager.isSignedIn())
         Assert.assertNull(userManager.userInfo.value)
     }
 
@@ -78,7 +78,7 @@ class UserManagerUnitTest {
     fun constructor_readsFromStorage() {
         Mockito.`when`(mockIdentityStorage.readUserInfo()).thenReturn(validUser)
         val userManager = UserManager(authClient, mockIdentityStorage)
-        Assert.assertTrue(userManager.isSignedIn)
+        Assert.assertTrue(userManager.isSignedIn())
         Assert.assertNotNull(userManager.userInfo.value)
         Assert.assertEquals("validToken", userManager.userInfo.value!!.token)
     }

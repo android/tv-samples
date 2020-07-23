@@ -36,6 +36,8 @@ class UserManager(
         validateToken()
     }
 
+    fun isSignedIn() = userInfoLiveData.value != null
+
     fun signOut() {
         userInfoLiveData.value?.let {
             // TODO: log server error
