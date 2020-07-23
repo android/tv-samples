@@ -117,7 +117,7 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.9.2")
 
     // Testing libraries
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation 'android.arch.core:core-testing:1.1.1'
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation 'androidx.test:core:1.2.0'
