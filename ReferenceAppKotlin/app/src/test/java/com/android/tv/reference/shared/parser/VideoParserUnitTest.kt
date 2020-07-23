@@ -19,6 +19,7 @@ import com.android.tv.reference.parser.VideoParser
 import com.android.tv.reference.shared.datamodel.VideoType
 import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.JsonDataException
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class VideoParserUnitTest {
@@ -50,9 +51,11 @@ class VideoParserUnitTest {
         }
     }
 
-    @Test(expected = JsonDataException::class)
+    @Test
     fun loadVideosFromJson_inputMalformed() {
-        val video = VideoParser.loadVideosFromJson(MALFORMED_JSON)
+        assertThrows(JsonDataException::class.java) {
+            VideoParser.loadVideosFromJson(MALFORMED_JSON)
+        }
     }
 
     @Test
@@ -67,9 +70,11 @@ class VideoParserUnitTest {
         assertThat(video).isNull()
     }
 
-    @Test(expected = JsonDataException::class)
+    @Test
     fun findVideoFromJson_inputMalformed() {
-        val video = VideoParser.findVideoFromJson(MALFORMED_JSON, "Video 1")
+        assertThrows(JsonDataException::class.java) {
+            VideoParser.findVideoFromJson(MALFORMED_JSON, "Video 1")
+        }
     }
 
     companion object {
