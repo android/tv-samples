@@ -18,7 +18,6 @@ package com.android.tv.reference.playback
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
@@ -34,6 +33,7 @@ import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import timber.log.Timber
 
 /**
  * Fragment that plays video content with ExoPlayer
@@ -78,11 +78,10 @@ class PlaybackFragment : VideoSupportFragment() {
                     viewModel.watchProgress.removeObserver(this)
 
                     if (newWatchProgress == null) {
-                        Log.v(TAG, "No existing WatchProgress, start from the beginning")
+                        Timber.v("No existing WatchProgress, start from the beginning")
                     } else {
-                        Log.v(
-                            TAG,
-                            "WatchProgress start position loaded: " + newWatchProgress.startPosition
+                        Timber.v(
+                            "WatchProgress start position loaded: ${newWatchProgress.startPosition}"
                         )
                         watchProgress.startPosition = newWatchProgress.startPosition
                     }
@@ -99,7 +98,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private fun saveUpdatedWatchProgress() {
         watchProgress.startPosition = exoplayer.currentPosition
-        Log.v(TAG, "Saving updated WatchProgress position: ${watchProgress.startPosition}")
+        Timber.v("Saving updated WatchProgress position: ${watchProgress.startPosition}")
         viewModel.update(watchProgress)
     }
 
@@ -154,27 +153,24 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private fun startPlaybackFromWatchProgress() {
-        Log.v(TAG, "Starting playback from ${watchProgress.startPosition}")
+        Timber.v("Starting playback from ${watchProgress.startPosition}")
         exoplayer.seekTo(watchProgress.startPosition)
         exoplayer.playWhenReady = true
     }
 
     private fun scheduleWatchProgressUpdate() {
-        Log.v(TAG, "Scheduling watch progress updates")
+        Timber.v("Scheduling watch progress updates")
         handler.postDelayed(updateWatchProgressRunnable, WATCH_PROGRESS_SAVE_INTERVAL_MILLIS)
     }
 
     private fun cancelWatchProgressUpdates() {
-        Log.v(TAG, "Canceling watch progress updates")
+        Timber.v("Canceling watch progress updates")
         handler.removeCallbacks(updateWatchProgressRunnable)
     }
 
     companion object {
         // How often to update the player UI
         private const val PLAYER_UPDATE_INTERVAL_MILLIS = 50
-
-        // Logging tag
-        private const val TAG = "PlaybackFragment"
 
         // How often to save watch progress to the database
         private const val WATCH_PROGRESS_SAVE_INTERVAL_MILLIS = 10 * 1000L

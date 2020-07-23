@@ -20,7 +20,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.lifecycle.Observer
@@ -32,6 +31,7 @@ import com.android.tv.reference.shared.image.BlurImageTransformation
 import com.android.tv.reference.shared.image.OverlayImageTransformation
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import timber.log.Timber
 
 /**
  * Fragment displaying the main content browsing UI
@@ -42,7 +42,6 @@ import com.squareup.picasso.Target
 class BrowseFragment : BrowseSupportFragment(), Target {
 
     companion object {
-        private const val TAG = "BrowseFragment"
         private const val BACKGROUND_UPDATE_DELAY_MILLIS = 500L
         private const val BACKGROUND_RESOURCE_ID = R.drawable.image_placeholder
     }
@@ -160,13 +159,13 @@ class BrowseFragment : BrowseSupportFragment(), Target {
     }
 
     override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-        Log.w(TAG, "Failed to load background", e)
+        Timber.w(e, "Failed to load background")
         showDefaultBackground()
     }
 
     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
         if (bitmap == null) {
-            Log.w(TAG, "Background loaded but was null")
+            Timber.w("Background loaded but was null")
             showDefaultBackground()
         } else {
             backgroundManager.setBitmap(bitmap)

@@ -17,7 +17,6 @@ package com.android.tv.reference.deeplink
 
 import android.app.Application
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +24,7 @@ import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.event.SingleUseEvent
 import com.squareup.moshi.JsonDataException
+import timber.log.Timber
 
 /**
  * A ViewModel attached at the Activity level when the app is given a deep link.
@@ -41,15 +41,13 @@ class DeepLinkViewModel(application: Application, deepLinkUri: Uri) : ViewModel(
     }
 
     companion object {
-        private const val TAG = "DeepLinkViewModel"
-
         fun getDeepLinkVideo(deepLinkUri: Uri, videoRepository: VideoRepository): DeepLinkResult {
             try {
                 videoRepository.getVideoById((deepLinkUri.toString()))?.let {
                     return DeepLinkResult.Success(it)
                 }
             } catch (e: JsonDataException) {
-                Log.w(TAG, "Failed to load deep link for $deepLinkUri", e)
+                Timber.w(e, "Failed to load deep link for $deepLinkUri")
             }
             return DeepLinkResult.Error
         }

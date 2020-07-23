@@ -116,6 +116,9 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.9.2")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.9.2")
 
+    // Logging
+    implementation("com.jakewharton.timber:timber:4.7.1")
+
     // Testing libraries
     testImplementation 'junit:junit:4.13'
     testImplementation 'android.arch.core:core-testing:1.1.1'

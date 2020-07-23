@@ -17,7 +17,6 @@ package com.android.tv.reference
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +27,7 @@ import com.android.tv.reference.browse.BrowseFragmentDirections
 import com.android.tv.reference.deeplink.DeepLinkResult
 import com.android.tv.reference.deeplink.DeepLinkViewModel
 import com.android.tv.reference.deeplink.DeepLinkViewModelFactory
+import timber.log.Timber
 
 /**
  * FragmentActivity that displays the various fragments
@@ -72,7 +72,7 @@ class MainActivity : FragmentActivity() {
                 val result = it.getContentIfNotHandled()
                 if (result is DeepLinkResult.Success) {
                     val video = result.video
-                    Log.d(TAG, "Loaded '${video.name}' for deep link '$uri'")
+                    Timber.d("Loaded '${video.name}' for deep link '$uri'")
 
                     // Set the default graph and go to playback for the loaded Video
                     navController.graph = navGraph
@@ -83,7 +83,7 @@ class MainActivity : FragmentActivity() {
                     // Here you might show an error to the user or automatically trigger a search
                     // for content that might match the deep link; since this is just a demo app,
                     // the error is logged and then the app starts normally
-                    Log.w(TAG, "Failed to load deep link $uri, starting app normally")
+                    Timber.w("Failed to load deep link $uri, starting app normally")
                     loadStartingPage(navController, navGraph)
                 }
             }
@@ -100,18 +100,14 @@ class MainActivity : FragmentActivity() {
 
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FIREBASE_ENABLED) {
-            Log.d(TAG, "Firebase is enabled, loading browse")
+            Timber.d("Firebase is enabled, loading browse")
             navGraph.startDestination = R.id.browseFragment
         } else {
-            Log.d(TAG, "Firebase is not enabled; showing notice")
+            Timber.d("Firebase is not enabled; showing notice")
             navGraph.startDestination = R.id.noFirebaseFragment
         }
 
         // Set the graph to trigger loading the start destination
         navController.graph = navGraph
-    }
-
-    companion object {
-        private const val TAG = "MainActivity"
     }
 }
