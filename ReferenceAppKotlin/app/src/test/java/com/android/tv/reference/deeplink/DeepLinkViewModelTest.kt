@@ -16,6 +16,7 @@
 package com.android.tv.reference.deeplink
 
 import android.net.Uri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
@@ -23,14 +24,16 @@ import com.squareup.moshi.JsonDataException
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.doThrow
 import org.mockito.MockitoAnnotations
 
+@RunWith(AndroidJUnit4::class)
 class DeepLinkViewModelTest {
     private val testDeepLinkString = "https://example.com/video"
-    private val testDeepLinkUri = Uri.parse(testDeepLinkString)
+    private lateinit var testDeepLinkUri: Uri
 
     @Mock
     private lateinit var mockVideoRepository: VideoRepository
@@ -38,6 +41,7 @@ class DeepLinkViewModelTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        testDeepLinkUri = Uri.parse(testDeepLinkString)
     }
 
     @Test

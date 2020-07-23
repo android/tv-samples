@@ -50,7 +50,9 @@ class WatchProgressTest {
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         watchProgressDatabase =
-            Room.inMemoryDatabaseBuilder(context, WatchProgressDatabase::class.java).build()
+            Room.inMemoryDatabaseBuilder(context, WatchProgressDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
         watchProgressDao = watchProgressDatabase.watchProgressDao()
     }
 
