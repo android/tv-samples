@@ -16,6 +16,7 @@
 package com.android.tv.reference
 
 import android.app.Application
+import android.os.StrictMode
 import timber.log.Timber
 
 /**
@@ -26,9 +27,24 @@ class TvReferenceApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        if (BuildConfig.DEBUG) {
+            enableStrictMode()
+        }
+
         // TODO(b/162013888): Plant a timber tree for non-debug builds.
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+    }
+
+    private fun enableStrictMode() {
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build()
+        )
     }
 }
