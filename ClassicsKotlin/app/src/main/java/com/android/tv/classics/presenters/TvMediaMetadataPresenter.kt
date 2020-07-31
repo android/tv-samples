@@ -38,6 +38,7 @@ class TvMediaMetadataPresenter(private val cardHeight: Int = DEFAULT_CARD_HEIGHT
         }
 
         card.titleText = metadata.title
+        card.contentDescription = metadata.title
         card.setMainImageDimensions(cardWidth, cardHeight)
         card.mainImageView.load(metadata.artUri)
     }
