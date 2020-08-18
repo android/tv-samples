@@ -21,9 +21,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
 import com.android.tv.reference.databinding.FragmentProfileBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Placeholder fragment that has a different behavior depending on whether the user is signed in.
@@ -44,7 +47,9 @@ class ProfileFragment : Fragment() {
             }
         )
         binding.signOutButton.setOnClickListener {
-            userManager.signOut()
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                userManager.signOut()
+            }
         }
         userManager.userInfo.observe(
             viewLifecycleOwner,

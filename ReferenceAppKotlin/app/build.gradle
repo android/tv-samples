@@ -122,6 +122,10 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.9.2")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.9.2")
 
+    // Retrofit for HTTP requests
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+
     // Logging
     implementation("com.jakewharton.timber:timber:4.7.1")
 

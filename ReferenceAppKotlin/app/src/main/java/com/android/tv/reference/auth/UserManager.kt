@@ -33,13 +33,9 @@ class UserManager(
     private val userInfoLiveData = MutableLiveData(storage.readUserInfo())
     val userInfo: LiveData<UserInfo?> = userInfoLiveData
 
-    init {
-        validateToken()
-    }
-
     fun isSignedIn() = userInfoLiveData.value != null
 
-    fun signOut() {
+    suspend fun signOut() {
         userInfoLiveData.value?.let {
             // TODO: log server error
             server.invalidateToken(it.token)
@@ -47,7 +43,7 @@ class UserManager(
         }
     }
 
-    fun authWithPassword(username: String, password: String): Result<Unit> {
+    suspend fun authWithPassword(username: String, password: String): Result<Unit> {
         return when (val result = server.authWithPassword(username, password)) {
             is Result.Success -> {
                 updateUserInfo(result.data)
@@ -61,7 +57,7 @@ class UserManager(
         TODO("Not yet implemented")
     }
 
-    private fun validateToken() {
+    suspend fun validateToken() {
         userInfoLiveData.value?.let {
             val result = server.validateToken(it.token)
             if (result is Result.Success) {

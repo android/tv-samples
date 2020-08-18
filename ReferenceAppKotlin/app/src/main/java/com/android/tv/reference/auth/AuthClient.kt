@@ -22,15 +22,15 @@ import com.android.tv.reference.shared.util.Result
  * The verification is expected to be server-side.
  */
 interface AuthClient {
-    fun validateToken(token: String): Result<UserInfo>
-    fun authWithPassword(username: String, password: String): Result<UserInfo>
-    fun authWithGoogleIdToken(idToken: String): Result<UserInfo>
-    fun invalidateToken(token: String): Result<Unit>
+    suspend fun validateToken(token: String): Result<UserInfo>
+    suspend fun authWithPassword(username: String, password: String): Result<UserInfo>
+    suspend fun authWithGoogleIdToken(idToken: String): Result<UserInfo>
+    suspend fun invalidateToken(token: String): Result<Unit>
 }
 
 sealed class AuthClientError(message: String) : Exception(message) {
     object AuthenticationError : AuthClientError("Error authenticating user")
-    data class ServerError(val errorText: String) : AuthClientError("Server error: $errorText")
+    data class ServerError(val errorCause: Exception) : AuthClientError("Server error: ${errorCause.message}")
 }
 
 /**
@@ -41,23 +41,23 @@ class MockAuthClient : AuthClient {
     private val mockUser = UserInfo("myUserToken", "A. N. Other")
     private val mockUserEmail = "user@gmail.com"
 
-    override fun validateToken(token: String): Result<UserInfo> {
+    override suspend fun validateToken(token: String): Result<UserInfo> {
         if (token == mockUser.token) {
             return Result.Success(mockUser)
         }
         return Result.Error(AuthClientError.AuthenticationError)
     }
 
-    override fun authWithPassword(username: String, password: String): Result<UserInfo> {
+    override suspend fun authWithPassword(username: String, password: String): Result<UserInfo> {
         if (username == mockUserEmail) {
             return Result.Success(mockUser)
         }
         return Result.Error(AuthClientError.AuthenticationError)
     }
 
-    override fun authWithGoogleIdToken(idToken: String): Result<UserInfo> {
+    override suspend fun authWithGoogleIdToken(idToken: String): Result<UserInfo> {
         TODO("Not yet implemented")
     }
 
-    override fun invalidateToken(token: String): Result<Unit> = Result.Success(Unit)
+    override suspend fun invalidateToken(token: String): Result<Unit> = Result.Success(Unit)
 }

@@ -15,14 +15,13 @@
  */
 package com.android.tv.reference.auth
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.android.tv.reference.shared.util.Result
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SignInViewModel(private val userManager: UserManager) :
     ViewModel() {
@@ -32,16 +31,19 @@ class SignInViewModel(private val userManager: UserManager) :
     fun signInWithPassword(username: String, password: String) {
         if (username.isEmpty() || password.isEmpty()) {
             signInStatusMutable.value = SignInStatus.Error.InputError
-            return
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                signInStatusMutable.value = authWithPassword(username, password)
+            }
         }
-        signInStatusMutable.value = authWithPassword(username, password)
     }
 
-    fun signInWithOneTap(credential: SignInCredential) {
-        signInStatusMutable.value = authWithOneTapCredential(credential)
-    }
+    fun signInWithOneTap(credential: SignInCredential) =
+        viewModelScope.launch(Dispatchers.IO) {
+            signInStatusMutable.value = authWithOneTapCredential(credential)
+        }
 
-    private fun authWithPassword(username: String, password: String): SignInStatus =
+    private suspend fun authWithPassword(username: String, password: String): SignInStatus =
         when (val result = userManager.authWithPassword(username, password)) {
             is Result.Success -> SignInStatus.ShouldSavePassword(username, password)
             is Result.Error -> {
@@ -56,7 +58,7 @@ class SignInViewModel(private val userManager: UserManager) :
         TODO("Not yet implemented")
     }
 
-    private fun authWithOneTapCredential(credential: SignInCredential) =
+    private suspend fun authWithOneTapCredential(credential: SignInCredential) =
         when {
             credential.googleIdToken != null -> authWithGoogleIdToken(credential)
             credential.password != null -> authWithPassword(credential.id, credential.password!!)

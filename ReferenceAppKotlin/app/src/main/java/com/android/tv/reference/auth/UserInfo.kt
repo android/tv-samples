@@ -15,4 +15,14 @@
  */
 package com.android.tv.reference.auth
 
-data class UserInfo(val token: String, val displayName: String)
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class UserInfo(
+    @field: Json(name = "token")
+    val token: String,
+
+    @field: Json(name = "displayName")
+    val displayName: String
+)
