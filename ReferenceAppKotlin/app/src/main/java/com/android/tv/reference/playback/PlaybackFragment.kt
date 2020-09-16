@@ -29,6 +29,7 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.android.tv.reference.R
+import com.android.tv.reference.castconnect.CastHelper
 import com.android.tv.reference.playnext.PlayNextHelper
 import com.android.tv.reference.playnext.PlayNextWorker
 import com.android.tv.reference.shared.datamodel.Video
@@ -44,6 +45,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.cast.tv.CastReceiverContext
 import timber.log.Timber
 
 /**
@@ -135,7 +137,11 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        //Releasing the mediaSession due to inactive playback and setting token for cast to null.
         mediaSession.release()
+        CastHelper.setMediaSessionTokenForCast(/* mediaSession =*/ null,
+                                               CastReceiverContext.getInstance().mediaManager)
     }
 
     private fun initializePlayer() {
@@ -195,6 +201,9 @@ class PlaybackFragment : VideoSupportFragment() {
                 }
             })
         }
+
+        CastHelper.setMediaSessionTokenForCast(mediaSession,
+                                               CastReceiverContext.getInstance().mediaManager)
     }
 
     private fun startPlaybackFromWatchProgress() {

@@ -17,6 +17,11 @@ package com.android.tv.reference
 
 import android.app.Application
 import android.os.StrictMode
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.android.gms.cast.tv.CastReceiverContext
 import timber.log.Timber
 
 /**
@@ -35,6 +40,16 @@ class TvReferenceApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
+        /**
+         * This initialises an instance of the CastReceiverContext object which is needed to
+         * interact with Cast while in the TV app. This object allows for passing media signals
+         * and the data load and so needs to exist while the app is in the foreground so that all
+         * cast commands can be picked up by the TV App.
+         */
+        CastReceiverContext.initInstance((this))
+        ProcessLifecycleOwner.get().lifecycle.
+            addObserver(AppLifecycleObserver(ProcessLifecycleOwner.get().lifecycle))
     }
 
     private fun enableStrictMode() {
@@ -46,5 +61,22 @@ class TvReferenceApplication : Application() {
                 .penaltyLog()
                 .build()
         )
+    }
+
+    /**
+     * TVs only have at most one app in the foreground so we can use onResume/onPause.
+     * For other form factors, this registration may vary.
+     */
+    class AppLifecycleObserver(val lifecycle : Lifecycle) : LifecycleObserver {
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        fun onResume() {
+            CastReceiverContext.getInstance().start()
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        fun onPause() {
+            CastReceiverContext.getInstance().stop()
+        }
     }
 }

@@ -64,6 +64,13 @@
                 <data android:pathPattern=".*" />
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="com.google.android.gms.cast.tv.action.LAUNCH" />
+                <action android:name="com.google.android.gms.cast.tv.action.LOAD"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
 
         <!-- BroadcastReceiver for setting up the home screen channel -->
@@ -75,6 +82,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
+        <!--
+         ~ Options provider class for Cast Connect when CastReceiverContext
+         ~ is initialised. More information can be found at -
+         ~ https://developers.google.com/cast/docs/android_tv_receiver/core_features#specify_receiver_options_provider
+        -->
+        <meta-data
+            android:name="com.google.android.gms.cast.tv.RECEIVER_OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="com.android.tv.reference.castconnect.CastReceiverOptionsProvider" />
 
     </application>
 

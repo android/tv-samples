@@ -15,6 +15,7 @@
  */
 package com.android.tv.reference
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
@@ -24,8 +25,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import com.android.tv.reference.browse.BrowseFragmentDirections
+import com.android.tv.reference.castconnect.CastHelper
 import com.android.tv.reference.deeplink.DeepLinkViewModel
 import com.android.tv.reference.deeplink.DeepLinkViewModelFactory
+import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.util.Result
 import timber.log.Timber
 
@@ -34,7 +37,10 @@ import timber.log.Timber
  */
 class MainActivity : FragmentActivity() {
 
+    private lateinit var navGraph: NavGraph
+    private lateinit var navController: NavController
     private lateinit var viewModel: DeepLinkViewModel
+    private lateinit var castHelper : CastHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +49,17 @@ class MainActivity : FragmentActivity() {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        navController = navHostFragment.navController
+        navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
 
-        loadDeepLinkOrStartingPage(intent.data, navController, navGraph)
+        castHelper = CastHelper({ videoToCast ->
+            loadPlaybackFragment(videoToCast)
+        }, application)
+        if(castHelper.validateAndProcessCastIntent(intent)){
+            return
+        }
+
+        loadDeepLinkOrStartingPage(intent.data)
     }
 
     /**
@@ -55,12 +68,10 @@ class MainActivity : FragmentActivity() {
      * If not (or the deep link is invalid), it triggers the normal starting process
      */
     private fun loadDeepLinkOrStartingPage(
-        uri: Uri?,
-        navController: NavController,
-        navGraph: NavGraph
+        uri: Uri?
     ) {
         if (uri == null) {
-            loadStartingPage(navController, navGraph)
+            loadStartingPage()
             return
         }
 
@@ -75,20 +86,14 @@ class MainActivity : FragmentActivity() {
                         val video = result.data
                         Timber.d("Loaded '${video.name}' for deep link '$uri'")
 
-                        // Set the default graph and go to playback for the loaded Video
-                        navController.graph = navGraph
-                        navController.navigate(
-                            BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(
-                                video
-                            )
-                        )
+                        loadPlaybackFragment(video)
                     }
                     is Result.Error -> {
                         // Here you might show an error to the user or automatically trigger a search
                         // for content that might match the deep link; since this is just a demo app,
                         // the error is logged and then the app starts normally
                         Timber.w("Failed to load deep link $uri, ignoring", result.exception)
-                        loadStartingPage(navController, navGraph)
+                        loadStartingPage()
                     }
                 }
             }
@@ -98,10 +103,7 @@ class MainActivity : FragmentActivity() {
     /**
      * Chooses whether to show the browse screen or the "no Firebase" notice
      */
-    private fun loadStartingPage(
-        navController: NavController,
-        navGraph: NavGraph
-    ) {
+    private fun loadStartingPage() {
 
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FIREBASE_ENABLED) {
@@ -114,5 +116,31 @@ class MainActivity : FragmentActivity() {
 
         // Set the graph to trigger loading the start destination
         navController.graph = navGraph
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+
+        if (intent == null) {
+            return
+        }
+
+        // Return early if intent is a valid Cast intent and is processed by the Cast SDK.
+        if(castHelper.validateAndProcessCastIntent(intent)){
+            return
+        }
+
+        // Include logic to process other types of intents here, if any.
+    }
+
+    private fun loadPlaybackFragment(video: Video) {
+        // Set the default graph and go to playback for the loaded Video
+        navController.graph = navGraph
+        navController.navigate(
+            BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(
+                video
+            )
+        )
     }
 }
