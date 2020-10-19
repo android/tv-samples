@@ -20,16 +20,9 @@ package com.android.tv.reference.browse
  */
 class BrowseCustomMenu(
     val title: String,
-    private val nav: Map<MenuItem, () -> Unit>
+    val menuItems: List<MenuItem>
 ) {
-    data class MenuItem(private val title: String) {
+    data class MenuItem(private val title: String, val handler: () -> Unit) {
         override fun toString(): String = title
-    }
-
-    val menuItems = nav.keys
-
-    fun navigate(item: MenuItem) {
-        val itemHandler = checkNotNull(nav[item]) { "No navigate handler found for menu item" }
-        itemHandler()
     }
 }

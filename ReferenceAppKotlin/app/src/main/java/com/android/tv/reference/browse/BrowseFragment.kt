@@ -76,27 +76,36 @@ class BrowseFragment : BrowseSupportFragment(), Target {
             setThemeDrawableResourceId(BACKGROUND_RESOURCE_ID)
         }
 
-        val menuMore = BrowseCustomMenu(
-            getString(R.string.menu_more),
-            mapOf(
-                // temporary - sign in will be triggered automatically in the future
-                BrowseCustomMenu.MenuItem(getString(R.string.sign_in)) to {
-                    findNavController().navigate(R.id.action_global_signInFragment)
-                },
-                BrowseCustomMenu.MenuItem(getString(R.string.profile)) to {
-                    findNavController()
-                        .navigate(BrowseFragmentDirections.actionBrowseFragmentToProfileFragment())
-                }
-            )
-        )
+        val signInMenuItem = BrowseCustomMenu.MenuItem(getString(R.string.sign_in)) {
+            findNavController().navigate(R.id.action_global_signInFragment)
+        }
+        val signOutMenuItem = BrowseCustomMenu.MenuItem(getString(R.string.sign_out)) {
+            viewModel.signOut()
+        }
 
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
-        viewModel.browseContent.observe(
-            this,
-            Observer {
-                adapter = BrowseAdapter(it, listOf(menuMore))
-            }
-        )
+        viewModel.browseContent.observe(this, Observer {
+            adapter = BrowseAdapter(it, viewModel.customMenuItems.value ?: listOf())
+        })
+        viewModel.customMenuItems.observe(this, Observer {
+            adapter = BrowseAdapter(viewModel.browseContent.value ?: listOf(), it)
+        })
+        viewModel.isSignedIn.observe(this, Observer {
+            viewModel.customMenuItems.postValue(
+                listOf(
+                    BrowseCustomMenu(
+                        getString(R.string.menu_identity),
+                        listOf(
+                            if (it) {
+                                signOutMenuItem
+                            } else {
+                                signInMenuItem
+                            }
+                        )
+                    )
+                )
+            )
+        })
 
         setOnItemViewClickedListener { _, item, _, _ ->
             when (item) {
@@ -104,7 +113,7 @@ class BrowseFragment : BrowseSupportFragment(), Target {
                     findNavController().navigate(
                         BrowseFragmentDirections.actionBrowseFragmentToPlaybackFragment(item)
                     )
-                is BrowseCustomMenu.MenuItem -> menuMore.navigate(item)
+                is BrowseCustomMenu.MenuItem -> item.handler()
             }
         }
 

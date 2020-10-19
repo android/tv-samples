@@ -18,13 +18,21 @@ package com.android.tv.reference.browse
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
+import com.android.tv.reference.auth.UserManager
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.datamodel.VideoGroup
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class BrowseViewModel(application: Application) : AndroidViewModel(application) {
     private val videoRepository = VideoRepositoryFactory.getVideoRepository(application)
+    private val userManager = UserManager.getInstance(application.applicationContext)
     val browseContent = MutableLiveData<List<VideoGroup>>()
+    val customMenuItems = MutableLiveData<List<BrowseCustomMenu>>(listOf())
+    val isSignedIn = Transformations.map(userManager.userInfo) { it != null }
 
     init {
         browseContent.value = getVideoGroupList(videoRepository)
@@ -38,5 +46,9 @@ class BrowseViewModel(application: Application) : AndroidViewModel(application) 
         }
 
         return videoGroupList
+    }
+
+    fun signOut() = viewModelScope.launch(Dispatchers.IO) {
+        userManager.signOut()
     }
 }

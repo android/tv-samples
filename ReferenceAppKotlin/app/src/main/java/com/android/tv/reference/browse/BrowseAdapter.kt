@@ -16,6 +16,7 @@
 package com.android.tv.reference.browse
 
 import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.DividerRow
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
@@ -27,6 +28,7 @@ class BrowseAdapter(videoGroup: List<VideoGroup>, customMenus: List<BrowseCustom
     ArrayObjectAdapter(ListRowPresenter()) {
     init {
         addVideoGroups(videoGroup)
+        add(DividerRow())
         addCustomMenus(customMenus)
     }
 

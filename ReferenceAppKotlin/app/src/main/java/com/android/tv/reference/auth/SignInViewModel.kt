@@ -33,14 +33,14 @@ class SignInViewModel(private val userManager: UserManager) :
             signInStatusMutable.value = SignInStatus.Error.InputError
         } else {
             viewModelScope.launch(Dispatchers.IO) {
-                signInStatusMutable.value = authWithPassword(username, password)
+                signInStatusMutable.postValue(authWithPassword(username, password))
             }
         }
     }
 
     fun signInWithOneTap(credential: SignInCredential) =
         viewModelScope.launch(Dispatchers.IO) {
-            signInStatusMutable.value = authWithOneTapCredential(credential)
+            signInStatusMutable.postValue(authWithOneTapCredential(credential))
         }
 
     private suspend fun authWithPassword(username: String, password: String): SignInStatus =

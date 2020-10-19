@@ -28,7 +28,7 @@
     <string name="continue_text">Continue</string>
 
     <!-- Menus -->
-    <string name="menu_more">More…</string>
+    <string name="menu_identity">Identity</string>
 
     <!-- Authentication and identity -->
     <string name="email">E-mail address</string>
@@ -36,7 +36,6 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_out">Sign out</string>
     <string name="not_signed_in">Not signed in</string>
-    <string name="profile">Profile</string>
     <string name="sign_in_error">Error signing in: %1$s</string>
     <string name="empty_username_or_password">Both username and password must be provided</string>
     <string name="invalid_credentials">Invalid credentials</string>

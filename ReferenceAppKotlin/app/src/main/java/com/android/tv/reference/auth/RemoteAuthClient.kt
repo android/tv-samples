@@ -36,29 +36,20 @@ class RemoteAuthClient : AuthClient {
         .create(IdentityService::class.java)
 
     override suspend fun validateToken(token: String) =
-        try {
-            Result.Success(service.validateToken(token))
-        } catch (exception: Exception) {
-            Result.Error(AuthClientError.ServerError(exception))
-        }
+        wrapResult { service.validateToken(token) }
 
     override suspend fun authWithPassword(username: String, password: String) =
-        try {
-            Result.Success(service.authWithPassword(username, password))
-        } catch (exception: Exception) {
-            Result.Error(AuthClientError.ServerError(exception))
-        }
+        wrapResult { service.authWithPassword(username, password) }
 
     override suspend fun authWithGoogleIdToken(idToken: String) =
-        try {
-            Result.Success(service.authWithGoogleIdToken(idToken))
-        } catch (exception: Exception) {
-            Result.Error(AuthClientError.ServerError(exception))
-        }
+        wrapResult { service.authWithGoogleIdToken(idToken) }
 
     override suspend fun invalidateToken(token: String) =
+        wrapResult { service.invalidateToken(token) }
+
+    private suspend fun <T> wrapResult(f: suspend () -> T): Result<T> =
         try {
-            Result.Success(service.invalidateToken(token))
+            Result.Success(f())
         } catch (exception: Exception) {
             Result.Error(AuthClientError.ServerError(exception))
         }
