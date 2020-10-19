@@ -50,6 +50,8 @@ dataFeed_json_key = "dataFeedElement"
 partOfSeries_json_key = "partOfSeries"
 partOfSeason_json_key = "partOfSeason"
 tvSeriesUri_csv_key = "TVSeriesUri"
+tvSeasonUri_csv_key = "TVSeasonUri"
+seasonNumber_csv_key = "seasonNumber"
 category_csv_key = "category"
 csv_type_to_media_action_type = {"clip" : "Clip", "episode": "TVEpisode", "movie": "Movie"}
 
@@ -160,8 +162,8 @@ def create_tv_series_list(tv_series_tuple_list):
 def create_partOfSeason_object(csv_content):
   partOfSeason = {}
   partOfSeason[type_json_key] = "TVSeason"
-  partOfSeason[id_json_key] = csv_content[tvSeriesUri_csv_key]+"?season1"
-  partOfSeason["seasonNumber"] = 1
+  partOfSeason[id_json_key] = csv_content[tvSeasonUri_csv_key]
+  partOfSeason["seasonNumber"] = csv_content[seasonNumber_csv_key]
   return partOfSeason
 
 def create_partOfSeries_object(csv_content):

@@ -7,7 +7,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-csv_columns_to_json_keys = {"id": "id", "name": "name", "description": "description", "uri": "uri", "video": "videoUri", "thumbnail": "thumbnailUri", "background": "backgroundUri", "category": "category", "type": "videoType"}
+csv_columns_to_json_keys = {"id": "id", "name": "name", "description": "description", "uri": "uri", "video": "videoUri", "thumbnail": "thumbnailUri", "background": "backgroundUri",
+                            "category": "category", "duration": "duration", "TVSeriesUri": "seriesUri", "episodeNumber": "episodeNumber","type": "videoType",
+                            "seasonNumber": "seasonNumber", "TVSeasonUri": "seasonUri"}
 api_json_content_key = "content"
 api_json_metadata_key = "metadata"
 metadata_last_updated_key = "last_updated"

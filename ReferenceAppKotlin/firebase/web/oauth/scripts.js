@@ -26,7 +26,7 @@ const uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: function(authResult) {
       console.log(authResult);
-      const redirectUrl = 'https://us-central1-atv-reference.cloudfunctions.net/auth_callback';
+      const redirectUrl = 'https://us-central1-atv-reference-app.cloudfunctions.net/auth_callback';
       const params = (new URL(window.location.href)).searchParams;
       window.location.href = redirectUrl + "?client_id=" + params.get("client_id") +
           "&state=" + params.get("state") + "&scope=" + params.get("scope") +
@@ -37,7 +37,7 @@ const uiConfig = {
       console.error("Authentication failed");
     }
   },
-  // signInSuccessUrl: 'https://us-central1-atv-reference.cloudfunctions.net/auth_callback',
+  // signInSuccessUrl: 'https://us-central1-atv-reference-app.cloudfunctions.net/auth_callback',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
