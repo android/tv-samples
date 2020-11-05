@@ -18,6 +18,7 @@ package com.android.tv.reference.auth
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.tv.reference.shared.util.Result
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,23 +46,23 @@ class UserManagerUnitTest {
     @Before
     fun setupTests() {
         MockitoAnnotations.initMocks(this)
-        Mockito.`when`(authClient.authWithPassword("valid@gmail.com", "foo"))
+        Mockito.`when`(runBlocking { authClient.authWithPassword("valid@gmail.com", "foo") })
             .thenReturn(Result.Success(validUser))
-        Mockito.`when`(authClient.authWithPassword("invalid@gmail.com", "bar"))
+        Mockito.`when`(runBlocking { authClient.authWithPassword("invalid@gmail.com", "bar") })
             .thenReturn(Result.Error(AuthClientError.AuthenticationError))
-        Mockito.`when`(authClient.validateToken("validToken"))
+        Mockito.`when`(runBlocking { authClient.validateToken("validToken") })
             .thenReturn(Result.Success(validUser))
     }
 
     @Test
     fun authWithPassword_signsInWithValidPasswordAndSignsOut() {
         val userManager = UserManager(authClient, spyIdentityStorage)
-        userManager.authWithPassword("valid@gmail.com", "foo")
+        runBlocking { userManager.authWithPassword("valid@gmail.com", "foo") }
         assertThat(userManager.isSignedIn()).isTrue()
         assertThat(userManager.userInfo.value).isNotNull()
         assertThat(userManager.userInfo.value!!.token).isEqualTo("validToken")
         Mockito.verify(spyIdentityStorage).writeUserInfo(validUser)
-        userManager.signOut()
+        runBlocking { userManager.signOut() }
         assertThat(userManager.isSignedIn()).isFalse()
         assertThat(userManager.userInfo.value).isNull()
         Mockito.verify(spyIdentityStorage).clearUserInfo()
@@ -70,7 +71,7 @@ class UserManagerUnitTest {
     @Test
     fun authWithPassword_failsWithInvalidPassword() {
         val userManager = UserManager(authClient, mockIdentityStorage)
-        userManager.authWithPassword("invalid@gmail.com", "bar")
+        runBlocking { userManager.authWithPassword("invalid@gmail.com", "bar") }
         assertThat(userManager.isSignedIn()).isFalse()
         assertThat(userManager.userInfo.value).isNull()
     }
