@@ -1,6 +1,8 @@
 Android TV Samples Repository
 =============================
 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fandroid%2Ftv-samples&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=PAGE+VIEWS&edge_flat=false)](https://hits.seeyoufarm.com)
+
 This repository contains a set of individual Android TV projects to help you get started writing Android TV apps.
 
 - ClassicsKotlin: A modern Android TV app using Kotlin to show classic videos
