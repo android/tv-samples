@@ -48,15 +48,18 @@ class DeepLinkViewModelTest {
     @Test
     fun getDeepLinkResult_validResultReturnsSuccess() {
         val video = Video(
-            "an_id",
-            "name",
-            "description",
-            "https://example.com/valid",
-            "https://example.com/valid",
-            "https://example.com/valid",
-            "https://example.com/valid",
-            "category",
-            VideoType.MOVIE
+            id = "an_id",
+            name = "name",
+            description = "description",
+            uri = "https://example.com/valid",
+            videoUri = "https://example.com/valid",
+            thumbnailUri = "https://example.com/valid",
+            backgroundImageUri = "https://example.com/valid",
+            category = "category",
+            videoType = VideoType.MOVIE,
+            duration = "PT00H10M",
+            seriesUri = "https://example.com/valid",
+            seasonUri = "https://example.com/valid"
         )
         doReturn(video).`when`(mockVideoRepository).getVideoById(testDeepLinkString)
 

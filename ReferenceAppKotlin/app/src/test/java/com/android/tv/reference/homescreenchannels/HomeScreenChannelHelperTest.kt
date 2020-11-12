@@ -60,7 +60,12 @@ class HomeScreenChannelHelperTest {
                 thumbnailUri = TEST_VIDEO_THUMBNAIL_URI,
                 backgroundImageUri = TEST_VIDEO_PLACEHOLDER_URI,
                 category = "",
-                videoType = VideoType.EPISODE
+                videoType = VideoType.EPISODE,
+                duration = TEST_VIDEO_DURATION,
+                seriesUri = TEST_VIDEO_SERIES_URI,
+                seasonUri = TEST_VIDEO_SEASON_URI,
+                seasonNumber = TEST_VIDEO_SEASON_NUMBER,
+                episodeNumber = TEST_VIDEO_EPISODE_NUMBER
             )
         )
         val testChannelId = 123L
@@ -197,5 +202,10 @@ class HomeScreenChannelHelperTest {
             "https://atv-reference-app.firebaseapp.com/content/$TEST_VIDEO_ID"
         private const val TEST_VIDEO_PLACEHOLDER_URI = "https://example.com/uri"
         private const val TEST_VIDEO_THUMBNAIL_URI = "https://example.com/thumbnail"
+        private const val TEST_VIDEO_SERIES_URI = "https://example.com/series"
+        private const val TEST_VIDEO_SEASON_URI = "https://example.com/season"
+        private const val TEST_VIDEO_SEASON_NUMBER = "1"
+        private const val TEST_VIDEO_EPISODE_NUMBER = "1"
+        private const val TEST_VIDEO_DURATION = "PT00H08M"
     }
 }

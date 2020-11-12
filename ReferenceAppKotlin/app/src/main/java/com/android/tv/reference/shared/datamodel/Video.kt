@@ -37,11 +37,14 @@ class Video(
     val videoType: VideoType,
     // The duration is specified in the ISO 8601 format as 'PT00H00M'. For more information on the
     // format, refer - https://en.wikipedia.org/wiki/ISO_8601.
-    val duration: String,
-    val seriesUri: String,
-    val seasonUri: String,
-    val episodeNumber: String,
-    val seasonNumber: String
+    val duration: String = "PT00H00M",
+    // The series, season and episode information is picked from the JSON feed that stores the
+    // catalog. For consistency and proper formatting of the JSON, the fields for series, season and
+    // episode data have been defined as empty strings for content types that are not TV Episodes.
+    val seriesUri: String = "",
+    val seasonUri: String = "",
+    val episodeNumber: String = "",
+    val seasonNumber: String = ""
 ) : Parcelable {
 
     override fun toString(): String {

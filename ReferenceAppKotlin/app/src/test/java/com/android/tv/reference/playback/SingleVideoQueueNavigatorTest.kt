@@ -36,7 +36,12 @@ class SingleVideoQueueNavigatorTest {
             thumbnailUri = TEST_VIDEO_PLACEHOLDER_URI,
             backgroundImageUri = TEST_VIDEO_PLACEHOLDER_URI,
             category = "Category",
-            videoType = VideoType.EPISODE
+            videoType = VideoType.EPISODE,
+            duration = "PT00H10M",
+            seriesUri = "Amazing Video Series",
+            seasonUri = "Amazing Video Season",
+            seasonNumber = "1",
+            episodeNumber = "1"
         )
         val mediaSession = Mockito.mock(MediaSessionCompat::class.java)
         val simpleQueueNavigator = SingleVideoQueueNavigator(video, mediaSession)

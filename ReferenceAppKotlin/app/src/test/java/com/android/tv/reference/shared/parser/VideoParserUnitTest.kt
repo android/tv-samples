@@ -91,7 +91,12 @@ class VideoParserUnitTest {
         "thumbnailUri": "https://atv-reference-app.firebaseapp.com/content/clip/thumbnail.jpg",
         "backgroundUri": "https://atv-reference-app.firebaseapp.com/content/clip/background.jpg",
         "category": "clips",
-        "videoType": "clip"
+        "videoType": "clip",
+        "seriesUri": "https://atv-reference-app.firebaseapp.com/content/clip/series",
+        "seasonUri": "",
+        "seasonNumber": "",
+        "episodeNumber": "",
+        "duration": "PT00H00M"
     },
     {
         "id": "episode_id",
@@ -102,7 +107,12 @@ class VideoParserUnitTest {
         "thumbnailUri": "https://atv-reference-app.firebaseapp.com/content/episode/thumbnail.jpg",
         "backgroundUri": "https://atv-reference-app.firebaseapp.com/content/episode/background.jpg",
         "category": "episodes",
-        "videoType": "episode"
+        "videoType": "episode",
+        "seriesUri": "https://atv-reference-app.firebaseapp.com/content/episode/series",
+        "seasonUri": "https://atv-reference-app.firebaseapp.com/content/episode/season",
+        "seasonNumber": "1",
+        "episodeNumber": "1",
+        "duration": "PT00H00M"
     },
     {
         "id": "movie_id",
@@ -113,7 +123,12 @@ class VideoParserUnitTest {
         "thumbnailUri": "https://atv-reference-app.firebaseapp.com/content/movie/thumbnail.jpg",
         "backgroundUri": "https://atv-reference-app.firebaseapp.com/content/movie/background.jpg",
         "category": "movies",
-        "videoType": "movie"
+        "videoType": "movie",
+        "seriesUri": "https://atv-reference-app.firebaseapp.com/content/movie/series",
+        "seasonUri": "",
+        "seasonNumber": "",
+        "episodeNumber": "",
+        "duration": "PT00H00M"
     }
 ]
 }"""

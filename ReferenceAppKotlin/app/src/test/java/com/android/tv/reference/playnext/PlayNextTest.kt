@@ -283,6 +283,7 @@ class PlayNextTest {
             // Add approximate duration and playback position.
             var TEST_VIDEO_DURATION_MILLIS = Duration.ofMinutes(40).toMillis().toInt()
             var TEST_VIDEO_PLAYBACK_POSITION_MILLIS = Duration.ofMinutes(17).toMillis().toInt()
+            var TEST_VIDEO_DURATION = "PT00H10M"
 
             var video_movie = Video(
                 id = TEST_VIDEO_ID,
@@ -293,7 +294,8 @@ class PlayNextTest {
                 thumbnailUri = TEST_VIDEO_THUMBNAIL_URI,
                 backgroundImageUri = TEST_VIDEO_PLACEHOLDER_URI,
                 category = "",
-                videoType = MOVIE
+                videoType = MOVIE,
+                duration = TEST_VIDEO_DURATION
             )
         }
     }

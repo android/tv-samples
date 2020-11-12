@@ -66,37 +66,46 @@ class BrowseViewModelUnitTest {
     private fun createTestVideos(): List<Video> {
         return listOf(
             Video(
-                "category_a_video_0",
-                "name",
-                "description",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "category_a",
-                VideoType.CLIP
+                id = "category_a_video_0",
+                name = "name",
+                description = "description",
+                uri = "https://example.com/valid",
+                videoUri = "https://example.com/valid",
+                thumbnailUri = "https://example.com/valid",
+                backgroundImageUri = "https://example.com/valid",
+                category = "category_a",
+                videoType = VideoType.CLIP,
+                duration = "PT00H01M",
+                seriesUri = "https://example.com/valid",
+                seasonUri = "https://example.com/valid"
             ),
             Video(
-                "category_b_video_0",
-                "name",
-                "description",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "category_b",
-                VideoType.CLIP
+                id = "category_b_video_0",
+                name = "name",
+                description = "description",
+                uri = "https://example.com/valid",
+                videoUri = "https://example.com/valid",
+                thumbnailUri = "https://example.com/valid",
+                backgroundImageUri = "https://example.com/valid",
+                category = "category_b",
+                videoType = VideoType.CLIP,
+                duration = "PT00H01M",
+                seriesUri = "https://example.com/valid",
+                seasonUri = "https://example.com/valid"
             ),
             Video(
-                "category_a_video_1",
-                "name",
-                "description",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "https://example.com/valid",
-                "category_a",
-                VideoType.CLIP
+                id = "category_a_video_1",
+                name = "name",
+                description = "description",
+                uri = "https://example.com/valid",
+                videoUri = "https://example.com/valid",
+                thumbnailUri = "https://example.com/valid",
+                backgroundImageUri = "https://example.com/valid",
+                category = "category_a",
+                videoType = VideoType.CLIP,
+                duration = "PT00H01M",
+                seriesUri = "https://example.com/valid",
+                seasonUri = "https://example.com/valid"
             )
         )
     }
