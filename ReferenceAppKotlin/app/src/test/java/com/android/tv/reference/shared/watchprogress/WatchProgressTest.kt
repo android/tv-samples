@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.tv.reference.lifecycle.ext.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -70,9 +71,9 @@ class WatchProgressTest {
 
         // Read the WatchProgress data back out of the database
         val watchProgressRead1 =
-            watchProgressDao.getWatchProgressByVideoId(watchProgress1.videoId).blockForValue()
+            watchProgressDao.getWatchProgressByVideoId(watchProgress1.videoId).getOrAwaitValue()
         val watchProgressRead2 =
-            watchProgressDao.getWatchProgressByVideoId(watchProgress2.videoId).blockForValue()
+            watchProgressDao.getWatchProgressByVideoId(watchProgress2.videoId).getOrAwaitValue()
 
         // Verify the data matches what was supposed to be inserted
         assertThat(watchProgressRead1).isEqualTo(watchProgress1)
@@ -91,7 +92,7 @@ class WatchProgressTest {
 
         // Verify the update was stored
         val watchProgressRead =
-            watchProgressDao.getWatchProgressByVideoId(watchProgress.videoId).blockForValue()
+            watchProgressDao.getWatchProgressByVideoId(watchProgress.videoId).getOrAwaitValue()
         assertThat(watchProgressRead).isEqualTo(watchProgress)
     }
 
@@ -109,25 +110,4 @@ class WatchProgressTest {
             watchProgressDao.getWatchProgressByVideoId(watchProgress.videoId).value
         assertThat(watchProgressRead).isNull()
     }
-}
-
-// Extension function to easily observe the LiveData value
-private fun <T> LiveData<T>.blockForValue(): T? {
-    var result: T? = null
-    val latch = CountDownLatch(1)
-    val observer = object : Observer<T> {
-        override fun onChanged(value: T?) {
-            result = value
-            removeObserver(this)
-            latch.countDown()
-        }
-    }
-    observeForever(observer)
-
-    if (!latch.await(1, TimeUnit.SECONDS)) {
-        removeObserver(observer)
-        throw TimeoutException("LiveData value not set")
-    }
-
-    return result
 }
