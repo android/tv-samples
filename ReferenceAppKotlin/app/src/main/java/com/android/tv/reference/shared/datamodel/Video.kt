@@ -19,6 +19,8 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import timber.log.Timber
+import java.time.Duration
 
 /**
  * Represents a video that can be played in the app
@@ -49,6 +51,40 @@ class Video(
 
     override fun toString(): String {
         return "Video(name='$name')"
+    }
+
+    /**
+     * Helper method to convert the ISO-8601 formatted duration into a representation that supports
+     * operations, for example, calculating the time remaining in a [Video] based on a given
+     * position.
+     */
+    fun duration(): Duration {
+        return Duration.parse(duration)
+    }
+
+    /**
+     * The user has "finished" a video if the end credits start OR an approximation based on the
+     * content length. We do not have metadata that contains the timestamp for when credits appear
+     * in a video so we are using an approximation.
+     */
+    fun isAfterEndCreditsPosition(positionMillis: Long): Boolean {
+        val durationMillis = duration().toMillis() * VIDEO_COMPLETED_DURATION_MAX_PERCENTAGE
+        Timber.v(
+            "Has video Ended? duration: %s, durationMillis: %s, positionMillis: %s",
+            duration,
+            durationMillis,
+            positionMillis
+        )
+        return positionMillis >= durationMillis
+        // TODO(mayurkhin@) add metadata to check completion with video credits
+    }
+
+    companion object {
+        /**
+         * Threshold constant used to calculate if a Video's credits have started. Using 95% to
+         * simulate the start position for when credits would appear in a video.
+         */
+        private const val VIDEO_COMPLETED_DURATION_MAX_PERCENTAGE = 0.95
     }
 }
 

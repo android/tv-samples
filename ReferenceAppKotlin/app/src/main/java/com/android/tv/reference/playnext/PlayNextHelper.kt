@@ -36,8 +36,7 @@ import java.util.concurrent.TimeUnit
  */
 object PlayNextHelper {
 
-    // Values to approximate if video has started or finished.
-    private const val PLAY_NEXT_CONTINUE_MAX_PERCENTAGE = 0.95
+    // Values to approximate if video has started.
     private const val PLAY_NEXT_STARTED_MIN_PERCENTAGE = 0.03
     private const val PLAY_NEXT_STARTED_MIN_MINUTES = 2L
 
@@ -82,16 +81,6 @@ object PlayNextHelper {
             // Use the contentId to recognize same content across different channels.
             .setContentId(video.id)
         return builder
-    }
-
-    /**
-     * The user has "finished" a video if the end credits start OR  an approximation based
-     * on the content length.
-     */
-    internal fun hasVideoCompleted(duration: Int, currentPosition: Int): Boolean {
-        Timber.v("Find if Video Ended : duration: $duration, watchPosition: $currentPosition")
-        return currentPosition >= (duration * PLAY_NEXT_CONTINUE_MAX_PERCENTAGE)
-        // TODO(mayurkhin@) add metadata to check completion with video credits
     }
 
     /**

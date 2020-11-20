@@ -58,6 +58,8 @@ android {
     }
 
     compileOptions {
+        // Desuraging enables using Java 8 APIs like java.time in a backwards compatible manner.
+        coreLibraryDesugaringEnabled true
         // Exoplayer requires targeting Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -71,6 +73,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     // AndroidX libraries
     def nav_version = "2.3.1"

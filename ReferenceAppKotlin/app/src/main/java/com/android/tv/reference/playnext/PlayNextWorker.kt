@@ -104,9 +104,8 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
 
         when {
             // If movie has finished, remove from Play Next Channel.
-            state.equals(PlayNextHelper.PLAY_STATE_ENDED) or PlayNextHelper.hasVideoCompleted(
-                duration, watchPosition
-            ) -> {
+            state.equals(PlayNextHelper.PLAY_STATE_ENDED) or
+                video.isAfterEndCreditsPosition(watchPosition.toLong()) -> {
                 PlayNextHelper.removeVideoFromPlayNext(context, video)
             }
 
