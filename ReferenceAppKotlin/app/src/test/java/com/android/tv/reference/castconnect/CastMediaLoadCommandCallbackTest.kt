@@ -5,16 +5,14 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 package com.android.tv.reference.castconnect
 
 import androidx.test.core.app.ApplicationProvider
@@ -37,66 +35,68 @@ import org.mockito.MockitoAnnotations
  * retrieving appropriate application-specific video object.
  */
 @RunWith(AndroidJUnit4::class)
-class CastMediaLoadCommandCallbackTest{
+class CastMediaLoadCommandCallbackTest {
 
-  @Mock
-  private lateinit var mockVideoRepository: VideoRepository
+    @Mock
+    private lateinit var mockVideoRepository: VideoRepository
 
-  @Before
-  fun setUp() {
-    MockitoAnnotations.initMocks(this)
-  }
+    @Before
+    fun setUp() {
+        MockitoAnnotations.initMocks(this)
+    }
 
-  @Test
-  fun convertLoadRequestToVideo_returnsValidVideo() {
-    val video = Video(
-      id = "an_id",
-      name = "name",
-      description = "description",
-      uri = "https://example.com/valid",
-      videoUri = "https://example.com/valid",
-      thumbnailUri = "https://example.com/valid",
-      backgroundImageUri = "https://example.com/valid",
-      category = "category",
-      videoType = VideoType.MOVIE,
-      duration = "PT00H10M",
-      seriesUri = "https://example.com/valid",
-      seasonUri = "https://example.com/valid"
-    )
+    @Test
+    fun convertLoadRequestToVideo_returnsValidVideo() {
+        val video = Video(
+            id = "an_id",
+            name = "name",
+            description = "description",
+            uri = "https://example.com/valid",
+            videoUri = "https://example.com/valid",
+            thumbnailUri = "https://example.com/valid",
+            backgroundImageUri = "https://example.com/valid",
+            category = "category",
+            videoType = VideoType.MOVIE,
+            duration = "PT00H10M",
+            seriesUri = "https://example.com/valid",
+            seasonUri = "https://example.com/valid"
+        )
 
-    val castMediaLoadCommandCallbackTest = CastMediaLoadCommandCallback(
-      { _, _ -> }, ApplicationProvider.getApplicationContext())
+        val castMediaLoadCommandCallbackTest = CastMediaLoadCommandCallback(
+            { _, _ -> }, ApplicationProvider.getApplicationContext()
+        )
 
-    val mediaToLoad = MediaInfo.Builder("https://example.com/watch/some-id").build()
-    val mediaLoadRequestDataTest =  MediaLoadRequestData.Builder()
-      .setMediaInfo(mediaToLoad)
-      .build()
+        val mediaToLoad = MediaInfo.Builder("https://example.com/watch/some-id").build()
+        val mediaLoadRequestDataTest = MediaLoadRequestData.Builder()
+            .setMediaInfo(mediaToLoad)
+            .build()
 
-    Mockito.doReturn(video).`when`(mockVideoRepository)
-                           .getVideoById(mediaLoadRequestDataTest.mediaInfo.contentId)
+        Mockito.doReturn(video).`when`(mockVideoRepository)
+            .getVideoById(mediaLoadRequestDataTest.mediaInfo.contentId)
 
-    val result = castMediaLoadCommandCallbackTest
-      .convertLoadRequestToVideo(mediaLoadRequestDataTest, mockVideoRepository)
+        val result = castMediaLoadCommandCallbackTest
+            .convertLoadRequestToVideo(mediaLoadRequestDataTest, mockVideoRepository)
 
-    assertThat(result).isEqualTo(video)
-  }
+        assertThat(result).isEqualTo(video)
+    }
 
-  @Test
-  fun convertLoadRequestToVideo_returnsNullInvalidVideo() {
-    val castMediaLoadCommandCallbackTest = CastMediaLoadCommandCallback(
-      { _, _ -> }, ApplicationProvider.getApplicationContext())
+    @Test
+    fun convertLoadRequestToVideo_returnsNullInvalidVideo() {
+        val castMediaLoadCommandCallbackTest = CastMediaLoadCommandCallback(
+            { _, _ -> }, ApplicationProvider.getApplicationContext()
+        )
 
-    val mediaToLoad = MediaInfo.Builder("https://example.com/watch/some-id").build()
-    val mediaLoadRequestDataTest =  MediaLoadRequestData.Builder()
-      .setMediaInfo(mediaToLoad)
-      .build()
+        val mediaToLoad = MediaInfo.Builder("https://example.com/watch/some-id").build()
+        val mediaLoadRequestDataTest = MediaLoadRequestData.Builder()
+            .setMediaInfo(mediaToLoad)
+            .build()
 
-    Mockito.doReturn(null).`when`(mockVideoRepository)
-      .getVideoById(mediaLoadRequestDataTest.mediaInfo.contentId)
+        Mockito.doReturn(null).`when`(mockVideoRepository)
+            .getVideoById(mediaLoadRequestDataTest.mediaInfo.contentId)
 
-    val result = castMediaLoadCommandCallbackTest
-      .convertLoadRequestToVideo(mediaLoadRequestDataTest, mockVideoRepository)
+        val result = castMediaLoadCommandCallbackTest
+            .convertLoadRequestToVideo(mediaLoadRequestDataTest, mockVideoRepository)
 
-    assertThat(result).isNull()
-  }
+        assertThat(result).isNull()
+    }
 }

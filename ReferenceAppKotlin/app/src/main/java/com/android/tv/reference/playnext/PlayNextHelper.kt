@@ -1,12 +1,11 @@
 /*
  * Copyright 2020 Google LLC
  *
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,6 +46,7 @@ object PlayNextHelper {
     internal const val CURRENT_POSITION = "CURRENT_POSITION"
     internal const val DURATION = "DURATION"
     internal const val PLAYER_STATE = "PLAYER_STATE"
+
     // TODO(mayurkhin@) add sealed class/enum if more states are required
     // as a part of a performance/tech debt optimization
     internal const val PLAY_STATE_PAUSED = "STATE_PAUSED"
@@ -90,11 +90,8 @@ object PlayNextHelper {
      */
     internal fun hasVideoCompleted(duration: Int, currentPosition: Int): Boolean {
         Timber.v("Find if Video Ended : duration: $duration, watchPosition: $currentPosition")
-        return (
-            (currentPosition >= duration) or // quick check
-            (currentPosition >= (duration * PLAY_NEXT_CONTINUE_MAX_PERCENTAGE))
-            )
-        //TODO(mayurkhin@) add metadata to check completion with video credits
+        return currentPosition >= (duration * PLAY_NEXT_CONTINUE_MAX_PERCENTAGE)
+        // TODO(mayurkhin@) add metadata to check completion with video credits
     }
 
     /**
@@ -107,12 +104,12 @@ object PlayNextHelper {
 
         // Return true if either X minutes or Y % have passed
         // Following formatting spans over multiple lines to accommodate max 100 limit
-        return (
-            (currentPosition <= duration) and // quick check
-            // Check if either X minutes or Y% has passed
-            ((currentPosition >= (duration * PLAY_NEXT_STARTED_MIN_PERCENTAGE)) or
-            (currentPosition >= TimeUnit.MINUTES.toMillis(PLAY_NEXT_STARTED_MIN_MINUTES)))
-            )
+        val playNextMinStartedMillis = TimeUnit.MINUTES.toMillis(PLAY_NEXT_STARTED_MIN_MINUTES)
+        // Check if either X minutes or Y% has passed
+        val hasVideoStarted =
+            (currentPosition >= (duration * PLAY_NEXT_STARTED_MIN_PERCENTAGE)) or
+                (currentPosition >= playNextMinStartedMillis)
+        return ((currentPosition <= duration) and hasVideoStarted)
     }
 
     /**
@@ -248,7 +245,7 @@ object PlayNextHelper {
      * Return null if not found.
      */
     @SuppressLint("RestrictedApi")
-    //Suppress RestrictedApi due to https://issuetracker.google.com/138150076
+    // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
     @Synchronized
     private fun getWatchNextProgramByVideoId(id: String, context: Context): WatchNextProgram? {
         return findFirstWatchNextProgram(context) { cursor ->
@@ -261,26 +258,26 @@ object PlayNextHelper {
      * Returns the first instance available.
      */
     @SuppressLint("RestrictedApi")
-    //Suppress RestrictedApi due to https://issuetracker.google.com/138150076
+    // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
     internal fun findFirstWatchNextProgram(context: Context, predicate: (Cursor) -> Boolean):
-            WatchNextProgram? {
+        WatchNextProgram? {
 
-        val cursor = context.contentResolver.query(
-            TvContractCompat.WatchNextPrograms.CONTENT_URI,
-            WatchNextProgram.PROJECTION,
-            /* selection = */ null,
-            /* selectionArgs = */ null,
-            /* sortOrder= */ null
-        )
-        cursor?.use {
-            if (it.moveToFirst()) {
-                do {
-                    if (predicate(cursor)) {
-                        return fromCursor(cursor)
-                    }
-                } while (it.moveToNext())
+            val cursor = context.contentResolver.query(
+                TvContractCompat.WatchNextPrograms.CONTENT_URI,
+                WatchNextProgram.PROJECTION,
+                /* selection = */ null,
+                /* selectionArgs = */ null,
+                /* sortOrder= */ null
+            )
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    do {
+                        if (predicate(cursor)) {
+                            return fromCursor(cursor)
+                        }
+                    } while (it.moveToNext())
+                }
             }
+            return null
         }
-        return null
-    }
 }

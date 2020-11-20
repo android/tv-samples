@@ -84,28 +84,37 @@ class BrowseFragment : BrowseSupportFragment(), Target {
         }
 
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
-        viewModel.browseContent.observe(this, Observer {
-            adapter = BrowseAdapter(it, viewModel.customMenuItems.value ?: listOf())
-        })
-        viewModel.customMenuItems.observe(this, Observer {
-            adapter = BrowseAdapter(viewModel.browseContent.value ?: listOf(), it)
-        })
-        viewModel.isSignedIn.observe(this, Observer {
-            viewModel.customMenuItems.postValue(
-                listOf(
-                    BrowseCustomMenu(
-                        getString(R.string.menu_identity),
-                        listOf(
-                            if (it) {
-                                signOutMenuItem
-                            } else {
-                                signInMenuItem
-                            }
+        viewModel.browseContent.observe(
+            this,
+            Observer {
+                adapter = BrowseAdapter(it, viewModel.customMenuItems.value ?: listOf())
+            }
+        )
+        viewModel.customMenuItems.observe(
+            this,
+            Observer {
+                adapter = BrowseAdapter(viewModel.browseContent.value ?: listOf(), it)
+            }
+        )
+        viewModel.isSignedIn.observe(
+            this,
+            Observer {
+                viewModel.customMenuItems.postValue(
+                    listOf(
+                        BrowseCustomMenu(
+                            getString(R.string.menu_identity),
+                            listOf(
+                                if (it) {
+                                    signOutMenuItem
+                                } else {
+                                    signInMenuItem
+                                }
+                            )
                         )
                     )
                 )
-            )
-        })
+            }
+        )
 
         setOnItemViewClickedListener { _, item, _, _ ->
             when (item) {

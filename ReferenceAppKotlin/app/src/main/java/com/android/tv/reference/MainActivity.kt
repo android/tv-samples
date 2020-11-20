@@ -40,7 +40,7 @@ class MainActivity : FragmentActivity() {
     private lateinit var navGraph: NavGraph
     private lateinit var navController: NavController
     private lateinit var viewModel: DeepLinkViewModel
-    private lateinit var castHelper : CastHelper
+    private lateinit var castHelper: CastHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +52,13 @@ class MainActivity : FragmentActivity() {
         navController = navHostFragment.navController
         navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
 
-        castHelper = CastHelper({ videoToCast ->
-            loadPlaybackFragment(videoToCast)
-        }, application)
-        if(castHelper.validateAndProcessCastIntent(intent)){
+        castHelper = CastHelper(
+            { videoToCast ->
+                loadPlaybackFragment(videoToCast)
+            },
+            application
+        )
+        if (castHelper.validateAndProcessCastIntent(intent)) {
             return
         }
 
@@ -127,7 +130,7 @@ class MainActivity : FragmentActivity() {
         }
 
         // Return early if intent is a valid Cast intent and is processed by the Cast SDK.
-        if(castHelper.validateAndProcessCastIntent(intent)){
+        if (castHelper.validateAndProcessCastIntent(intent)) {
             return
         }
 

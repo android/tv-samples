@@ -138,10 +138,12 @@ class PlaybackFragment : VideoSupportFragment() {
     override fun onDestroy() {
         super.onDestroy()
 
-        //Releasing the mediaSession due to inactive playback and setting token for cast to null.
+        // Releasing the mediaSession due to inactive playback and setting token for cast to null.
         mediaSession.release()
-        CastHelper.setMediaSessionTokenForCast(/* mediaSession =*/ null,
-                                               CastReceiverContext.getInstance().mediaManager)
+        CastHelper.setMediaSessionTokenForCast(
+            /* mediaSession =*/ null,
+            CastReceiverContext.getInstance().mediaManager
+        )
     }
 
     private fun initializePlayer() {
@@ -202,8 +204,10 @@ class PlaybackFragment : VideoSupportFragment() {
             })
         }
 
-        CastHelper.setMediaSessionTokenForCast(mediaSession,
-                                               CastReceiverContext.getInstance().mediaManager)
+        CastHelper.setMediaSessionTokenForCast(
+            mediaSession,
+            CastReceiverContext.getInstance().mediaManager
+        )
     }
 
     private fun startPlaybackFromWatchProgress() {

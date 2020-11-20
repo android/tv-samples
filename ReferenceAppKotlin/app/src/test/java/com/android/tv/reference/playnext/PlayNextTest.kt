@@ -46,6 +46,7 @@ import java.time.Duration
 class PlayNextTest {
 
     private lateinit var fakeInMemoryTvProvider: FakeInMemoryTvProvider
+
     companion object {
         private const val DELETE_FAILED = -1
     }
@@ -60,10 +61,10 @@ class PlayNextTest {
         )
     }
 
-    @Test
     /**
      * Test adding unfinished video to Play Next
      */
+    @Test
     fun insertVideoToPlayNext() {
 
         // Actual : Call the method.
@@ -84,10 +85,10 @@ class PlayNextTest {
         assertThat(program?.title).isEqualTo(TEST_VIDEO_NAME)
     }
 
-    @Test
     /**
      * Remove finished video from Play next channel.
      */
+    @Test
     fun removeVideoFromPlayNext() {
 
         PlayNextHelper.insertOrUpdateVideoToPlayNext(
@@ -109,11 +110,11 @@ class PlayNextTest {
         assertThat(deletedId).isNotEqualTo(DELETE_FAILED)
     }
 
-    @Test
     /**
      * Update video metadata in Play next channel.
      * Example: Update playback time.
      */
+    @Test
     fun updateVideoInPlayNext() {
 
         // Actual : Call the method.
@@ -126,8 +127,7 @@ class PlayNextTest {
         // Update the video data. eg: update playback position by 2 minutes.
         // This value will be picked while inserting the video back.
         val updatedVideoPlaybackPosition =
-                TEST_VIDEO_PLAYBACK_POSITION_MILLIS +
-                Duration.ofMinutes(2).toMillis().toInt()
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS + Duration.ofMinutes(2).toMillis().toInt()
 
         // Call the updated method.
         PlayNextHelper.insertOrUpdateVideoToPlayNext(
@@ -149,9 +149,10 @@ class PlayNextTest {
     }
 
     /**
-     * This acts like a fake provider mirroring the TvContentProvider
-     * (since we set the same authority).
-     * For RoboElectric tests, by default fake provider will be used wherever the code refers to
+     * This acts like a fake provider mirroring the TvContentProvider (since we set the same
+     * authority).
+     *
+     * For Roboelectric tests, by default fake provider will be used wherever the code refers to
      * TvContentProvider. This creates a new instance every time and clears out when done,
      * hence acts like in-memory.
      */
@@ -167,11 +168,12 @@ class PlayNextTest {
 
         // For testing purpose, mimic a mutable list rather than an actual db.
         private val valuesInMemory = mutableListOf<WatchNextProgram>()
-        //Persist rowId to auto increment id for every insert
+
+        // Persist rowId to auto increment id for every insert.
         private var rowId = 0L
 
         override fun insert(uri: Uri, values: ContentValues?): Uri? {
-            //insert a new row
+            // Insert a new row.
             rowId++
 
             val program = WatchNextProgram.Builder()
@@ -269,13 +271,17 @@ class PlayNextTest {
             // values taken from api.json from resources.
             const val TEST_VIDEO_ID =
                 "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-seo-mythbusting-101"
-            var TEST_VIDEO_NAME = "SEO Mythbusting 101"
+            const val TEST_VIDEO_NAME = "SEO Mythbusting 101"
+            /*  ktlint-disable max-line-length */
             private const val TEST_VIDEO_DESCRIPTION =
                 "In this first - introductory - episode of SEO Mythbusting, Martin Splitt (WebMaster Trends Analyst, Google) and his guest Juan Herrera (Angular GDE, Wed Developer at Parkside) discuss the very basics of SEO."
+            /*  ktlint-disable max-line-length */
             private const val TEST_VIDEO_URI =
                 "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
+            /*  ktlint-disable max-line-length */
             private const val TEST_VIDEO_PLACEHOLDER_URI =
                 "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
+            /*  ktlint-disable max-line-length */
             private const val TEST_VIDEO_THUMBNAIL_URI =
                 "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-thumbnail.png"
 

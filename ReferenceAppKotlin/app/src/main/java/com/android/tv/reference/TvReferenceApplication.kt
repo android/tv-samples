@@ -48,8 +48,8 @@ class TvReferenceApplication : Application() {
          * cast commands can be picked up by the TV App.
          */
         CastReceiverContext.initInstance((this))
-        ProcessLifecycleOwner.get().lifecycle.
-            addObserver(AppLifecycleObserver(ProcessLifecycleOwner.get().lifecycle))
+        ProcessLifecycleOwner.get().lifecycle
+            .addObserver(AppLifecycleObserver(ProcessLifecycleOwner.get().lifecycle))
     }
 
     private fun enableStrictMode() {
@@ -67,7 +67,7 @@ class TvReferenceApplication : Application() {
      * TVs only have at most one app in the foreground so we can use onResume/onPause.
      * For other form factors, this registration may vary.
      */
-    class AppLifecycleObserver(val lifecycle : Lifecycle) : LifecycleObserver {
+    class AppLifecycleObserver(val lifecycle: Lifecycle) : LifecycleObserver {
 
         @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
         fun onResume() {

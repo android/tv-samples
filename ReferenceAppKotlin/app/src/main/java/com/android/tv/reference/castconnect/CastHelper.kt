@@ -5,16 +5,14 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 package com.android.tv.reference.castconnect
 
 import android.app.Application
@@ -29,48 +27,55 @@ import com.google.android.gms.cast.tv.media.MediaManager
  */
 class CastHelper(val loadVideo: (Video) -> Unit, private val application: Application) {
 
-  private val castReceiverContext = CastReceiverContext.getInstance()
+    private val castReceiverContext = CastReceiverContext.getInstance()
 
-  /**
-   * Check if the intent is recognized by the Cast SDK. If so, process the intent and return
-   * true, otherwise return false.
-   */
-  fun validateAndProcessCastIntent(intent: Intent): Boolean {
-    val mediaManager: MediaManager = castReceiverContext.mediaManager
+    /**
+     * Check if the intent is recognized by the Cast SDK. If so, process the intent and return
+     * true, otherwise return false.
+     */
+    fun validateAndProcessCastIntent(intent: Intent): Boolean {
+        val mediaManager: MediaManager = castReceiverContext.mediaManager
 
-    mediaManager.setMediaLoadCommandCallback(
-      CastMediaLoadCommandCallback ({ videoToCast, mediaLoadRequestData ->
+        mediaManager.setMediaLoadCommandCallback(
+            CastMediaLoadCommandCallback(
+                { videoToCast, mediaLoadRequestData ->
 
-        // Callback passed to MediaLoadCommandCallback to load the video for playback after
-        // Cast intent is processed.
-        loadVideo(videoToCast)
+                    // Callback passed to MediaLoadCommandCallback to load the video for playback
+                    // after Cast intent is processed.
+                    loadVideo(videoToCast)
 
-        // Update media metadata and state
-        mediaManager.setDataFromLoad(mediaLoadRequestData)
-        mediaManager.broadcastMediaStatus()
-      }, application))
+                    // Update media metadata and state
+                    mediaManager.setDataFromLoad(mediaLoadRequestData)
+                    mediaManager.broadcastMediaStatus()
+                },
+                application
+            )
+        )
 
-    // Pass the intent to the Cast SDK through MediaManager object of CastReceiverContext.
-    if (mediaManager.onNewIntent(intent)) {
-      // The Cast SDK recognizes the intent and calls the MediaLoadCommandCallback, so return true.
-      return true
+        // Pass the intent to the Cast SDK through MediaManager object of CastReceiverContext.
+        if (mediaManager.onNewIntent(intent)) {
+            // The Cast SDK recognizes the intent and calls the MediaLoadCommandCallback, so return
+            // true.
+            return true
+        }
+
+        // Clears all overrides in the modifier, additional status not included in cast.
+        mediaManager.mediaStatusModifier.clear()
+
+        // The intent was not recognized by the Cast SDK, so return false.
+        return false
     }
 
-    // Clears all overrides in the modifier, additional status not included in cast.
-    mediaManager.mediaStatusModifier.clear()
-
-    // The intent was not recognized by the Cast SDK, so return false.
-    return false
-  }
-
-  companion object {
-    fun setMediaSessionTokenForCast(mediaSession: MediaSessionCompat?,
-                                    mediaManager: MediaManager) {
-      if (mediaSession != null) {
-        mediaManager.setSessionCompatToken(mediaSession.sessionToken)
-      } else {
-        mediaManager.setSessionCompatToken(null)
-      }
+    companion object {
+        fun setMediaSessionTokenForCast(
+            mediaSession: MediaSessionCompat?,
+            mediaManager: MediaManager
+        ) {
+            if (mediaSession != null) {
+                mediaManager.setSessionCompatToken(mediaSession.sessionToken)
+            } else {
+                mediaManager.setSessionCompatToken(null)
+            }
+        }
     }
-  }
 }

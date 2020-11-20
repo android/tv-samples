@@ -60,7 +60,8 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
         }
         // Check for invalid player state.
         if (!state.equals(PlayNextHelper.PLAY_STATE_PAUSED) and
-            !state.equals(PlayNextHelper.PLAY_STATE_ENDED)) {
+            !state.equals(PlayNextHelper.PLAY_STATE_ENDED)
+        ) {
             Timber.e("Error.Invalid entry for Play Next. Player state: $state")
             return Result.failure()
         }
@@ -120,7 +121,9 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
             }
             else -> {
                 Timber.w(
-            "Video not started yet. Can't add to PlayNext.watchPosition: $watchPosition ,duration: $duration"
+                    "Video not started yet. Can't add to PlayNext.watchPosition: %s, duration: %s",
+                    watchPosition,
+                    duration
                 )
             }
         }

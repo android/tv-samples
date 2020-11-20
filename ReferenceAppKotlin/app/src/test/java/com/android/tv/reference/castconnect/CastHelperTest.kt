@@ -5,16 +5,14 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 package com.android.tv.reference.castconnect
 
 import android.content.Intent
@@ -35,57 +33,61 @@ import org.mockito.MockitoAnnotations
  * Test cases to process intent for Cast and setting MediaSession token for Cast.
  */
 @RunWith(AndroidJUnit4::class)
-class CastHelperTest{
+class CastHelperTest {
 
-  @Mock
-  private lateinit var mockMediaSession: MediaSessionCompat
+    @Mock
+    private lateinit var mockMediaSession: MediaSessionCompat
 
-  @Before
-  fun setUp() {
-    MockitoAnnotations.initMocks(this)
-  }
+    @Before
+    fun setUp() {
+        MockitoAnnotations.initMocks(this)
+    }
 
-  @Test
-  fun processCastIntent_invalidIntent() {
-    val invalidIntent = Intent()
+    @Test
+    fun processCastIntent_invalidIntent() {
+        val invalidIntent = Intent()
 
-    // Set boolean variable isCallbackInvoked to indicate that the callback has not been invoked yet
-    var isCallbackInvoked = false
+        // Set boolean variable isCallbackInvoked to indicate that the callback has not been
+        // invoked yet
+        var isCallbackInvoked = false
 
-    val castHelperTest = CastHelper({
-         // Set boolean to true to detect that callback was invoked by the MediaLoadCommandCallback
-         isCallbackInvoked = true
-         }, ApplicationProvider.getApplicationContext())
+        val castHelperTest = CastHelper(
+            {
+                // Set boolean to true to detect that callback was invoked by the
+                // MediaLoadCommandCallback
+                isCallbackInvoked = true
+            },
+            ApplicationProvider.getApplicationContext()
+        )
 
-    // Pass an invalid intent to be processed by the Cast SDK
-    val result = castHelperTest.validateAndProcessCastIntent(invalidIntent)
+        // Pass an invalid intent to be processed by the Cast SDK
+        val result = castHelperTest.validateAndProcessCastIntent(invalidIntent)
 
-    // Assert that intent was not recognized by the cast SDK
-    assertThat(result).isFalse()
+        // Assert that intent was not recognized by the cast SDK
+        assertThat(result).isFalse()
 
-    /**
-     * Assert that the callback was not invoked to play the video since the
-     * MediaLoadCommandCallback was not triggered, as the intent was not recognized by Cast SDK.
-     */
-    assertThat(isCallbackInvoked).isFalse()
-  }
+        /**
+         * Assert that the callback was not invoked to play the video since the
+         * MediaLoadCommandCallback was not triggered, as the intent was not recognized by Cast SDK.
+         */
+        assertThat(isCallbackInvoked).isFalse()
+    }
 
-  @Test
-  fun setMediaSessionTokenForCast_createMediaSession() {
-    // There is no getter for CastReceiverContext because of which we need to use spy
-    val mediaManagerSpy = Mockito.spy(CastReceiverContext.getInstance().mediaManager)
+    @Test
+    fun setMediaSessionTokenForCast_createMediaSession() {
+        // There is no getter for CastReceiverContext because of which we need to use spy
+        val mediaManagerSpy = Mockito.spy(CastReceiverContext.getInstance().mediaManager)
 
-    CastHelper.setMediaSessionTokenForCast(mockMediaSession, mediaManagerSpy)
-    verify(mediaManagerSpy).setSessionCompatToken(mockMediaSession.sessionToken)
-  }
+        CastHelper.setMediaSessionTokenForCast(mockMediaSession, mediaManagerSpy)
+        verify(mediaManagerSpy).setSessionCompatToken(mockMediaSession.sessionToken)
+    }
 
-  @Test
-  fun setMediaSessionTokenForCast_removeMediaSession() {
-    // There is no getter for CastReceiverContext because of which we need to use spy
-    val mediaManagerSpy = Mockito.spy(CastReceiverContext.getInstance().mediaManager)
+    @Test
+    fun setMediaSessionTokenForCast_removeMediaSession() {
+        // There is no getter for CastReceiverContext because of which we need to use spy
+        val mediaManagerSpy = Mockito.spy(CastReceiverContext.getInstance().mediaManager)
 
-    CastHelper.setMediaSessionTokenForCast(null, mediaManagerSpy)
-    verify(mediaManagerSpy).setSessionCompatToken(null)
-  }
+        CastHelper.setMediaSessionTokenForCast(null, mediaManagerSpy)
+        verify(mediaManagerSpy).setSessionCompatToken(null)
+    }
 }
-

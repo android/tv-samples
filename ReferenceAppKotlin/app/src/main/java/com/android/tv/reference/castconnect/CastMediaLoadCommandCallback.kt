@@ -5,16 +5,14 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 package com.android.tv.reference.castconnect
 
 import android.app.Application
@@ -42,53 +40,58 @@ import timber.log.Timber
  * with the right fields, this receiver part would remain the same. What varies is the actual data
  * values in the MediaInfo fields.
  */
-class CastMediaLoadCommandCallback(var onLoaded : (Video, MediaLoadRequestData) -> Unit,
-                                   private val application : Application) :
-  MediaLoadCommandCallback() {
+class CastMediaLoadCommandCallback(
+    var onLoaded: (Video, MediaLoadRequestData) -> Unit,
+    private val application: Application
+) :
+    MediaLoadCommandCallback() {
 
-  override fun onLoad(
-    senderId: String?,
-    mediaLoadRequestData: MediaLoadRequestData?
-  ): Task<MediaLoadRequestData> {
-    return if (mediaLoadRequestData == null) {
-      // Throw MediaException to indicate load failure.
-      Tasks.forException(
-        MediaException(
-          MediaError.Builder()
-            .setDetailedErrorCode(MediaError.DetailedErrorCode.LOAD_FAILED)
-            .setReason(MediaError.ERROR_REASON_INVALID_REQUEST)
-            .build()
-        )
-      )
-    } else {
-      Tasks.call {
-        var videoToPlay = convertLoadRequestToVideo(
-                      mediaLoadRequestData, VideoRepositoryFactory.getVideoRepository(application))
-        if (videoToPlay != null) {
-          onLoaded(videoToPlay, mediaLoadRequestData)
+    override fun onLoad(
+        senderId: String?,
+        mediaLoadRequestData: MediaLoadRequestData?
+    ): Task<MediaLoadRequestData> {
+        return if (mediaLoadRequestData == null) {
+            // Throw MediaException to indicate load failure.
+            Tasks.forException(
+                MediaException(
+                    MediaError.Builder()
+                        .setDetailedErrorCode(MediaError.DetailedErrorCode.LOAD_FAILED)
+                        .setReason(MediaError.ERROR_REASON_INVALID_REQUEST)
+                        .build()
+                )
+            )
         } else {
-          Timber.w("Failed to convert cast load request to application-specific video")
+            Tasks.call {
+                var videoToPlay = convertLoadRequestToVideo(
+                    mediaLoadRequestData, VideoRepositoryFactory.getVideoRepository(application)
+                )
+                if (videoToPlay != null) {
+                    onLoaded(videoToPlay, mediaLoadRequestData)
+                } else {
+                    Timber.w("Failed to convert cast load request to application-specific video")
+                }
+
+                mediaLoadRequestData
+            }
         }
-
-        mediaLoadRequestData
-      }
     }
-  }
 
-  /**
-   * Retrieve the appropriate application-specific content or media object from the MediaInfo object
-   * that is passed from the sender application. The format of fields populated in the MediaInfo
-   * object follow a defined contract that is decided between the sender and the receiver, and is
-   * specific to each application so as to be able to identify the appropriate content at the
-   * receiver's end. The contentId parameter is an application-specific unique identifier for the
-   * content that is used here. Several other parameters of MediaInfo class can also be used to
-   * provide information such as contentUrl, duration, metadata, tracks and breaks. For more details
-   * on the available parameters, refer to the following link -
-   * https://developers.google.com/cast/docs/reference/chrome/chrome.cast.media.MediaInfo
-   */
-   fun convertLoadRequestToVideo(mediaLoadRequestData: MediaLoadRequestData,
-                                        videoRepository: VideoRepository): Video? {
-    val mediaInfo: MediaInfo = mediaLoadRequestData.mediaInfo ?: return null
-    return videoRepository.getVideoById(mediaInfo.contentId)
-  }
+    /**
+     * Retrieve the appropriate application-specific content or media object from the MediaInfo
+     * object that is passed from the sender application. The format of fields populated in the
+     * MediaInfo object follow a defined contract that is decided between the sender and the
+     * receiver, and is specific to each application so as to be able to identify the appropriate
+     * content at the receiver's end. The contentId parameter is an application-specific unique
+     * identifier for the content that is used here. Several other parameters of MediaInfo class can
+     * also be used to provide information such as contentUrl, duration, metadata, tracks and
+     * breaks. For more details on the available parameters, refer to the following link -
+     * https://developers.google.com/cast/docs/reference/chrome/chrome.cast.media.MediaInfo
+     */
+    fun convertLoadRequestToVideo(
+        mediaLoadRequestData: MediaLoadRequestData,
+        videoRepository: VideoRepository
+    ): Video? {
+        val mediaInfo: MediaInfo = mediaLoadRequestData.mediaInfo ?: return null
+        return videoRepository.getVideoById(mediaInfo.contentId)
+    }
 }

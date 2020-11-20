@@ -30,7 +30,9 @@ interface AuthClient {
 
 sealed class AuthClientError(message: String) : Exception(message) {
     object AuthenticationError : AuthClientError("Error authenticating user")
-    data class ServerError(val errorCause: Exception) : AuthClientError("Server error: ${errorCause.message}")
+    data class ServerError(
+        val errorCause: Exception
+    ) : AuthClientError("Server error: ${errorCause.message}")
 }
 
 /**
