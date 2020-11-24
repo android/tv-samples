@@ -23,7 +23,6 @@ import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackGlue
-import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.work.Data
@@ -48,6 +47,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.cast.tv.CastReceiverContext
 import timber.log.Timber
+import java.time.Duration
 
 /**
  * Fragment that plays video content with ExoPlayer
@@ -91,15 +91,6 @@ class PlaybackFragment : VideoSupportFragment() {
         viewModel.registerStateListeners(owner = this)
         viewModel.playbackState.observe(/* owner= */ this, uiPlaybackStateListener)
         viewModel.onStateChange(VideoPlaybackState.Load(video))
-    }
-
-    private fun saveUpdatedWatchProgress() {
-        if (exoplayer == null) {
-            Timber.w("Warning : ExoPlayer is null. Cannot update watch progress")
-            return
-        }
-        Timber.v("Saving updated WatchProgress position: ${exoplayer!!.contentPosition}")
-        viewModel.update(WatchProgress(video.id, startPosition = exoplayer!!.currentPosition))
     }
 
     override fun onStart() {
@@ -164,9 +155,14 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private fun prepareGlue(localExoplayer: ExoPlayer) {
-        PlaybackTransportControlGlue(
+        ProgressTransportControlGlue(
             requireContext(),
-            LeanbackPlayerAdapter(requireContext(), localExoplayer, PLAYER_UPDATE_INTERVAL_MILLIS)
+            LeanbackPlayerAdapter(
+                requireContext(),
+                localExoplayer,
+                PLAYER_UPDATE_INTERVAL_MILLIS.toInt()
+            ),
+            onProgressUpdate
         ).apply {
             host = VideoSupportFragmentGlueHost(this@PlaybackFragment)
             title = video.name
@@ -212,8 +208,14 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
+    private val onProgressUpdate: () -> Unit = {
+        scheduleWatchProgressUpdate()
+    }
+
     private fun scheduleWatchProgressUpdate() {
         Timber.v("Scheduling watch progress updates")
+        // Remove any pending callbacks to reduce the number of updates during playback.
+        handler.removeCallbacks(updateWatchProgressRunnable)
         handler.postDelayed(updateWatchProgressRunnable, WATCH_PROGRESS_SAVE_INTERVAL_MILLIS)
     }
 
@@ -225,12 +227,16 @@ class PlaybackFragment : VideoSupportFragment() {
         saveUpdatedWatchProgress()
     }
 
-    inner class PlayerEventListener : Player.EventListener {
-
-        override fun onSeekProcessed() {
-            saveUpdatedWatchProgress()
+    private fun saveUpdatedWatchProgress() {
+        if (exoplayer == null) {
+            Timber.w("Warning : ExoPlayer is null. Cannot update watch progress")
+            return
         }
+        Timber.v("Saving updated WatchProgress position: ${exoplayer!!.contentPosition}")
+        viewModel.update(WatchProgress(video.id, startPosition = exoplayer!!.currentPosition))
+    }
 
+    inner class PlayerEventListener : Player.EventListener {
         override fun onPlayerError(error: ExoPlaybackException) {
             // TODO(b/158233485): Display an error dialog with retry/stop options
             Timber.w(error, "Playback error")
@@ -292,11 +298,11 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     companion object {
-        // How often to update the player UI
-        private const val PLAYER_UPDATE_INTERVAL_MILLIS = 50
+        // How often to update the player UI.
+        private val PLAYER_UPDATE_INTERVAL_MILLIS = Duration.ofMillis(50).toMillis()
 
-        // How often to save watch progress to the database
-        private const val WATCH_PROGRESS_SAVE_INTERVAL_MILLIS = 10 * 1000L
+        // How often to save watch progress to the database.
+        private val WATCH_PROGRESS_SAVE_INTERVAL_MILLIS = Duration.ofSeconds(10).toMillis()
 
         // A short name to identify the media session when debugging.
         private const val MEDIA_SESSION_TAG = "ReferenceAppKotlin"
