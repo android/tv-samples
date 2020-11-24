@@ -22,6 +22,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
+import androidx.leanback.media.PlaybackGlue
 import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -169,6 +170,11 @@ class PlaybackFragment : VideoSupportFragment() {
         ).apply {
             host = VideoSupportFragmentGlueHost(this@PlaybackFragment)
             title = video.name
+            // Using the glue's callback allows the fragment to be player agnostic as the callback
+            // abstracts a lot of details from the the player into a simple API. Note that similar
+            // methods are available in exoplayer's EventListener and should not be used otherwise
+            // the fragment receives duplicate events.
+            addPlayerCallback(PlaybackGlueCallback())
         }
     }
 
@@ -219,36 +225,7 @@ class PlaybackFragment : VideoSupportFragment() {
         saveUpdatedWatchProgress()
     }
 
-    private fun hasContentFinishedPlaying(): Boolean {
-        val playerState = exoplayer?.playbackState ?: 0
-        return playerState == Player.STATE_ENDED
-    }
-
     inner class PlayerEventListener : Player.EventListener {
-
-        override fun onIsPlayingChanged(isPlaying: Boolean) {
-            if (isPlaying) {
-                scheduleWatchProgressUpdate()
-            } else {
-                cancelWatchProgressUpdates()
-
-                // To get to playback, the user always goes through browse first. Deep links
-                // for directly playing a video also go to browse before playback. If
-                // playback finishes the entire video, the PlaybackFragment is popped off
-                // the back stack and the user returns to browse.
-                if (hasContentFinishedPlaying()) {
-                    Timber.v("Finished playing content")
-                    findNavController().popBackStack()
-                }
-            }
-        }
-
-        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            super.onPlayerStateChanged(playWhenReady, playbackState)
-            if (playbackState == Player.STATE_ENDED) {
-                notifyPlayNext(PlayNextHelper.PLAY_STATE_ENDED)
-            }
-        }
 
         override fun onSeekProcessed() {
             saveUpdatedWatchProgress()
@@ -257,6 +234,30 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onPlayerError(error: ExoPlaybackException) {
             // TODO(b/158233485): Display an error dialog with retry/stop options
             Timber.w(error, "Playback error")
+        }
+    }
+
+    inner class PlaybackGlueCallback : PlaybackGlue.PlayerCallback() {
+
+        override fun onPlayCompleted(glue: PlaybackGlue) {
+            super.onPlayCompleted(glue)
+            Timber.v("Finished playing content")
+            notifyPlayNext(PlayNextHelper.PLAY_STATE_ENDED)
+            // To get to playback, the user always goes through browse first. Deep links
+            // for directly playing a video also go to browse before playback. If
+            // playback finishes the entire video, the PlaybackFragment is popped off
+            // the back stack and the user returns to browse.
+            findNavController().popBackStack()
+        }
+
+        override fun onPlayStateChanged(glue: PlaybackGlue) {
+            super.onPlayStateChanged(glue)
+            Timber.v("Is playing: %b", glue.isPlaying)
+            if (glue.isPlaying) {
+                scheduleWatchProgressUpdate()
+            } else {
+                cancelWatchProgressUpdates()
+            }
         }
     }
 
