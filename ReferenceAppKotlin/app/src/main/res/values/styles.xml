@@ -27,4 +27,12 @@
         <item name="android:textColor">@color/near_white</item>
     </style>
 
+    <style name="CardViewStyle" parent="Widget.Leanback.ImageCardViewStyle">
+        <item name="lbImageCardViewType">Title|Content</item>
+    </style>
+
+    <style name="CardViewInfoAreaStyle" parent="Widget.Leanback.ImageCardView.InfoAreaStyle">
+        <item name="android:background">@color/gray_dark</item>
+    </style>
+
 </resources>

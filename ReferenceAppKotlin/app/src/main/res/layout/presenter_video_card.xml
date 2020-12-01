@@ -15,7 +15,8 @@
   -->
 
 <androidx.leanback.widget.ImageCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/VideoCardViewTheme"
     android:layout_width="@dimen/image_card_width"
-    android:layout_height="@dimen/image_card_height"
+    android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true" />

@@ -15,18 +15,30 @@
  */
 package com.android.tv.reference.presenter
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.android.tv.reference.R
 import com.android.tv.reference.databinding.PresenterCardBinding
 import com.android.tv.reference.shared.datamodel.Video
+import com.android.tv.reference.shared.datamodel.VideoType
 import com.squareup.picasso.Picasso
 
-class CardPresenter : Presenter() {
+/**
+ * Presents a [Video] as an [ImageCardView] with descriptive text based on the Video's type.
+ */
+class VideoCardPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val context = parent.context
         val binding = PresenterCardBinding.inflate(LayoutInflater.from(context), parent, false)
+
+        // Set the image size ahead of time since loading can take a while.
+        val resources = context.resources
+        binding.root.setMainImageDimensions(
+                resources.getDimensionPixelSize(R.dimen.image_card_width),
+                resources.getDimensionPixelSize(R.dimen.image_card_height))
+
         return ViewHolder(binding.root)
     }
 
@@ -35,14 +47,30 @@ class CardPresenter : Presenter() {
         val video = item as Video
         val binding = PresenterCardBinding.bind(viewHolder.view)
         binding.root.titleText = video.name
+        binding.root.contentText = getContentText(binding.root.resources, video)
 
         Picasso.get().load(video.thumbnailUri).placeholder(R.drawable.image_placeholder)
-            .error(R.drawable.image_placeholder).into(binding.root.mainImageView)
+                .error(R.drawable.image_placeholder).into(binding.root.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
         val binding = PresenterCardBinding.bind(viewHolder.view)
-        binding.root.badgeImage = null
         binding.root.mainImage = null
+    }
+
+    /**
+     * Returns a string to display as the "content" for an [ImageCardView].
+     *
+     * Since Play Next behavior differs for episodes, movies, and clips, this string makes it
+     * more clear which [VideoType] each [Video] is. For example, clips are never included in
+     * Play Next.
+     */
+    private fun getContentText(resources: Resources, video: Video): String {
+        return when (video.videoType) {
+            VideoType.EPISODE -> resources.getString(R.string.content_type_season_episode,
+                    video.seasonNumber, video.episodeNumber)
+            VideoType.MOVIE -> resources.getString(R.string.content_type_movie)
+            VideoType.CLIP -> resources.getString(R.string.content_type_clip)
+        }
     }
 }

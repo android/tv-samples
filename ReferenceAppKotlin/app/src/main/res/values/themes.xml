@@ -22,4 +22,9 @@
         <item name="android:windowBackground">@color/gray_dark</item>
     </style>
 
+    <!-- Theme for card views that show a Video -->
+    <style name="VideoCardViewTheme">
+        <item name="imageCardViewStyle">@style/CardViewStyle</item>
+        <item name="imageCardViewInfoAreaStyle">@style/CardViewInfoAreaStyle</item>
+    </style>
 </resources>
