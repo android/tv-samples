@@ -33,7 +33,7 @@ import csv
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 csv_columns_to_json_keys_movie = {"id": "@id", "name": "name", "description": "description", "uri": "url", "duration": "duration"}
@@ -53,6 +53,7 @@ tvSeriesUri_csv_key = "TVSeriesUri"
 tvSeasonUri_csv_key = "TVSeasonUri"
 seasonNumber_csv_key = "seasonNumber"
 category_csv_key = "category"
+potential_action_key = "potentialAction"
 csv_type_to_media_action_type = {"clip" : "Clip", "episode": "TVEpisode", "movie": "Movie"}
 
 def main():
@@ -125,6 +126,8 @@ def create_json_movies_list(csv_content_list):
     for csv_key, json_key in csv_columns_to_json_keys_movie.items():
       movie_item[json_key] = content[csv_key]
 
+    movie_item[potential_action_key] = create_potentialAction_object(content["uri"])
+
     json_movies_list.append(movie_item)
   return json_movies_list
 
@@ -143,6 +146,7 @@ def create_json_episodes_list(csv_content_list):
 
     episode_item[partOfSeason_json_key] = create_partOfSeason_object(content)
     episode_item[partOfSeries_json_key] = create_partOfSeries_object(content)
+    episode_item[potential_action_key] = create_potentialAction_object(content["uri"])
 
     json_episodes_list.append(episode_item)
   return json_episodes_list
@@ -156,6 +160,8 @@ def create_tv_series_list(tv_series_tuple_list):
     series_item[id_json_key] = series_tuple[tvSeriesUri_csv_key]
     series_item["url"] = series_tuple[tvSeriesUri_csv_key]
     series_item["name"] = series_tuple[category_csv_key]
+    series_item[potential_action_key] = \
+      create_potentialAction_object(series_tuple[tvSeriesUri_csv_key])
     tv_series_list.append(series_item)
   return tv_series_list
 
@@ -172,6 +178,35 @@ def create_partOfSeries_object(csv_content):
   partOfSeries[id_json_key] = csv_content[tvSeriesUri_csv_key]
   partOfSeries["name"] = csv_content[category_csv_key]
   return partOfSeries
+
+def create_potentialAction_object(csv_content_uri):
+  potentialAction = {}
+  potentialAction[type_json_key] = "WatchAction"
+
+  target = {}
+  target[type_json_key] = "EntryPoint"
+  target["urlTemplate"] = csv_content_uri
+  target["actionPlatform"] = ["http://schema.org/AndroidTVPlatform",
+                              "http://schema.googleapis.com/GoogleVideoCast"]
+  potentialAction["target"] = target
+
+  accessibility_requirement = {}
+  accessibility_requirement[type_json_key] = "ActionAccessSpecification"
+  accessibility_requirement[category_csv_key] = "nologinrequired"
+  accessibility_requirement["availabilityStarts"] = datetime.now().replace(microsecond=0) \
+                                                    .isoformat()+"Z"
+
+  """
+  Since the content is always available after it's published, the availability end date property is
+  set to be 20 years from the current date. For further details on the properties, visit the link -
+  https://developers.google.com/actions/media/reference/data-specification/watch-actions-common-specification.
+  """
+  accessibility_requirement["availabilityEnds"] = (datetime.now() + timedelta(days=(20*365))) \
+                                                  .replace(microsecond=0).isoformat()+"Z"
+  accessibility_requirement["eligibleRegion"] = "EARTH"
+  potentialAction["actionAccessibilityRequirement"] = accessibility_requirement
+
+  return potentialAction
 
 def get_unique_tv_series(csv_content_list):
   unique_tv_series = []
