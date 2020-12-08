@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html tabindex="-1">
+<head>
+  <title>Web View Demo</title>
+  <style>
+      div.outer {display: grid; grid-template-columns: 150px 150px;}
+      div.inner {background: teal; margin: 20px; color: white; font-size: 30px; font-family: Sans-Serif; display: flex; align-items: center; justify-content: center;}
+      .movie-list-class {
+        width:100%;
+        overflow:auto;
+        white-space:nowrap;
+      }
+      .movie-item-class {
+        display:inline-block;
+        margin: 10px
+      }
+      .movie-item-class:focus {
+        background:red;
+      }
+    </style>
+  <script lang="javascript" src="model.js"></script>
+</head>
+
+<body role="application" tabindex="=-1">
+<div id=parent-div>
+  This is a web view page.
+</div>
+
+</body>
+
+<script>
+  function keyListener(event) {
+    switch(event.code) {
+      case 'ArrowUp':
+        console.log("1. ArrowUp");
+        break;
+      case 'ArrowLeft':
+        console.log("2. ArrowLeft");
+        break;
+      case 'ArrowRight':
+        console.log("3. ArrowRight");
+        break;
+      case 'ArrowDown':
+        console.log("4. ArrowDown");
+        break;
+    }
+  }
+
+  function createMovieEleDiv(ele) {
+    var newMovieDiv = document.createElement("div");
+    newMovieDiv.setAttribute("class", "movie-item-class");
+    var newMoviePicDiv = document.createElement("div");
+    var newMovieTitleDiv = document.createElement("div");
+    var newMoviePicImg = document.createElement("img");
+    newMoviePicImg.setAttribute("src", "movie.png");
+    newMoviePicImg.setAttribute("object-fit", "cover");
+    newMoviePicDiv.append(newMoviePicImg);
+    newMovieTitleDiv.textContent = movieList[movieIndex].title;
+    newMovieDiv.append(newMoviePicDiv);
+    newMovieDiv.append(newMovieTitleDiv);
+    newMovieDiv.setAttribute("tabindex", 0);
+    newMovieDiv.setAttribute("aria-label",
+        movieList[movieIndex].title + " in list " + movieList.length + " items");
+    newMovieDiv.addEventListener('keydown', keyListener);
+    return newMovieDiv;
+  }
+
+  var movieList = getMovieList();
+  for (var categoryIndex = 0; categoryIndex < categories.length; ++categoryIndex) {
+    var newCategoryDiv = document.createElement("div");
+    document.getElementById("parent-div").appendChild(newCategoryDiv);
+    var newTitleDiv = document.createElement("div");
+    newTitleDiv.textContent = categories[categoryIndex];
+    newTitleDiv.setAttribute("alt", categories[categoryIndex]);
+    newTitleDiv.setAttribute("tabindex", "0");
+    newCategoryDiv.appendChild(newTitleDiv);
+    var newMovieListDiv = document.createElement("div");
+    newMovieListDiv.setAttribute("class", "movie-list-class");
+    newMovieListDiv.setAttribute("role", "row");
+    newMovieListDiv.setAttribute("tabindex", "0");
+    newMovieListDiv.setAttribute("aria-label", categories[categoryIndex] + " movie list");
+    for (var movieIndex = 0; movieIndex < movieList.length; ++movieIndex) {
+      newMovieListDiv.append(createMovieEleDiv(movieList[movieIndex]));
+    }
+    newCategoryDiv.appendChild(newMovieListDiv);
+  }
+</script>
+</html>

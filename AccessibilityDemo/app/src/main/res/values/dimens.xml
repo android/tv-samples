@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="grid_item_width">154dp</dimen>
+  <dimen name="grid_item_height">88dp</dimen>
+  <dimen name="grid_width_margin">10dp</dimen>
+  <dimen name="grid_height_margin">40dp</dimen>
+  <dimen name="title_height">10dp</dimen>
+  <dimen name="title_margin">5dp</dimen>
+  <dimen name="text_bounds_vertical_offset">2dp</dimen>
+  <dimen name="text_bounds_horizontal_offset">4dp</dimen>
+  <dimen name="rect_bounds_horizontal_offset">25dp</dimen>
+  <dimen name="best_practice_rectangle_start_point_left">25dp</dimen>
+  <dimen name="best_practice_rectangle_start_point_top">50dp</dimen>
+  <dimen name="best_practice_rectangle_width">100dp</dimen>
+  <dimen name="best_practice_rectangle_height">50dp</dimen>
+  <dimen name="best_practice_horizontal_spacing">25dp</dimen>
+  <dimen name="best_practice_vertical_spacing">50dp</dimen>
+  <dimen name="text_size_sp">20sp</dimen>
+</resources>

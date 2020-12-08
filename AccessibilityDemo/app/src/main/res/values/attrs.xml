@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="SampleCustomView">
+    <attr name="rect_color" format="color"/>
+    <attr name="rect_selected_color" format="color" />
+    <attr name="use_explore_by_touch_helper" format="boolean" />
+  </declare-styleable>
+</resources>
