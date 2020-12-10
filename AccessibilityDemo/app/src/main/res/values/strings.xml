@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">AtvA11yDemo</string>
+  <string name="standard_view_title">Standard View Demo</string>
+  <string name="custom_view_best_practice_title">Custom View Best Practice</string>
+  <string name="custom_view_with_explore_by_touch_helper_title">Custom View Demo with ExploreByTouchHelper</string>
+  <string name="custom_view_with_accessibility_node_provider_title">Custom View Demo with AccessibilityNodeProvider</string>
+  <string name="web_view_title">Web View Demo</string>
+</resources>
