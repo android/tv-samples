@@ -33,6 +33,16 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Helper class that simplifies interactions with the ATV home screen.
+ *
+ * To view the play next row directly through adb, run the following command (assumes `adb root`):
+ * ```
+ * adb shell "sqlite3 -header -csv /data/data/com.android.providers.tv/databases/tv.db \"SELECT * FROM watch_next_programs where package_name='com.android.tv.reference';\"";
+ * ```
+ * For example, this query returns the title and position of the Play Next entries, which is useful
+ * for debugging updates to a particular entry.
+ * ```
+ * adb shell "sqlite3 -header -csv /data/data/com.android.providers.tv/databases/tv.db \"SELECT title, last_playback_position_millis FROM watch_next_programs where package_name='com.android.tv.reference';\"";
+ * ```
  */
 object PlayNextHelper {
 

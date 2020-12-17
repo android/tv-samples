@@ -54,7 +54,7 @@ class LoadPlaybackStateListener(
         stateMachine.onStateChange(VideoPlaybackState.Prepare(video!!, startPosition))
     }
 
-    override fun onChanged(state: VideoPlaybackState?) {
+    override fun onChanged(state: VideoPlaybackState) {
         if (state !is VideoPlaybackState.Load) {
             // Prevent getting notified as the watch progress is updated. This could trigger an
             // infinite loop as this listener will trigger the Prepare state every time the progress

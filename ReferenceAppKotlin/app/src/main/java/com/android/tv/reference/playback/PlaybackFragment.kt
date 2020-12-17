@@ -25,13 +25,8 @@ import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackGlue
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.android.tv.reference.R
 import com.android.tv.reference.castconnect.CastHelper
-import com.android.tv.reference.playnext.PlayNextHelper
-import com.android.tv.reference.playnext.PlayNextWorker
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.android.tv.reference.shared.watchprogress.WatchProgress
@@ -49,9 +44,7 @@ import com.google.android.gms.cast.tv.CastReceiverContext
 import timber.log.Timber
 import java.time.Duration
 
-/**
- * Fragment that plays video content with ExoPlayer
- */
+/** Fragment that plays video content with ExoPlayer. */
 class PlaybackFragment : VideoSupportFragment() {
 
     private lateinit var video: Video
@@ -72,6 +65,13 @@ class PlaybackFragment : VideoSupportFragment() {
         Timber.v("State: %s", state)
         if (state is VideoPlaybackState.Prepare) {
             startPlaybackFromWatchProgress(state.startPosition)
+        }
+        if (state is VideoPlaybackState.End) {
+            // To get to playback, the user always goes through browse first. Deep links for
+            // directly playing a video also go to browse before playback. If playback finishes the
+            // entire video, the PlaybackFragment is popped off the back stack and the user returns
+            // to browse.
+            findNavController().popBackStack()
         }
     }
 
@@ -106,8 +106,8 @@ class PlaybackFragment : VideoSupportFragment() {
             Timber.w("Warning : ExoPlayer is null. Cannot update in onPause()")
             return
         }
-        notifyPlayNext(PlayNextHelper.PLAY_STATE_PAUSED)
         Timber.v("Playback Paused. Add last known position ${exoplayer!!.currentPosition}")
+        viewModel.onStateChange(VideoPlaybackState.Pause(video, exoplayer!!.currentPosition))
     }
 
     override fun onStop() {
@@ -248,12 +248,7 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onPlayCompleted(glue: PlaybackGlue) {
             super.onPlayCompleted(glue)
             Timber.v("Finished playing content")
-            notifyPlayNext(PlayNextHelper.PLAY_STATE_ENDED)
-            // To get to playback, the user always goes through browse first. Deep links
-            // for directly playing a video also go to browse before playback. If
-            // playback finishes the entire video, the PlaybackFragment is popped off
-            // the back stack and the user returns to browse.
-            findNavController().popBackStack()
+            viewModel.onStateChange(VideoPlaybackState.End(video))
         }
 
         override fun onPlayStateChanged(glue: PlaybackGlue) {
@@ -262,39 +257,20 @@ class PlaybackFragment : VideoSupportFragment() {
             if (glue.isPlaying) {
                 scheduleWatchProgressUpdate()
             } else {
+                // In onStop(), we remove the fragment's reference to the player yet during the
+                // player's cleanup/release, the play state changed callback is called. So we need
+                // to guard with a null-check. The pause state is already triggered from onPause(),
+                // in the fragment's lifecycle, while we have a reference to the player, so the
+                // state machine does not need this particular event to be triggered during
+                // onStop().
+                exoplayer?.let {
+                    viewModel.onStateChange(
+                        VideoPlaybackState.Pause(video, it.currentPosition)
+                    )
+                }
                 cancelWatchProgressUpdates()
             }
         }
-    }
-
-    /**
-     * Notifies the video state and relevant metadata for adding/removing to Play Next Channel.
-     * Used for adding un-finished/next content & removing finished content from Play Next.
-     */
-    private fun notifyPlayNext(state: String) {
-        Timber.v("Notify to play next from playback. State is $state")
-
-        // If the exoplayer is invalid, throw a warning that video cant be added to Play next.
-        if (exoplayer == null) {
-            Timber.w("Warning : ExoPlayer is null. Cannot add to Play Next")
-            return
-        }
-
-        // Set relevant data about playback state and video.
-        val watchData = Data.Builder().apply {
-            putString(PlayNextHelper.VIDEO_ID, video.id)
-            putLong(PlayNextHelper.CURRENT_POSITION, exoplayer!!.currentPosition)
-            putLong(PlayNextHelper.DURATION, exoplayer!!.duration)
-            putString(PlayNextHelper.PLAYER_STATE, state)
-        }
-
-        // Run on a background thread to process playback states and do relevant operations for
-        // Play Next.
-        WorkManager.getInstance(requireContext()).enqueue(
-            OneTimeWorkRequest.Builder(PlayNextWorker::class.java)
-                .setInputData(watchData.build())
-                .build()
-        )
     }
 
     companion object {

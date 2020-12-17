@@ -69,7 +69,7 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
         // Step 3: Get video object from videoId to be added to play next.
         val video =
             VideoRepositoryFactory.getVideoRepository(context.applicationContext as Application)
-                .getVideoByVideoUri(videoId)
+                .getVideoById(videoId)
 
         Timber.v(" Get video from video list: watched video id  $videoId ,retrieved vid $video.id")
 
