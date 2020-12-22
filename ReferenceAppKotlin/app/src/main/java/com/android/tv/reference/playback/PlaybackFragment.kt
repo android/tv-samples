@@ -171,6 +171,10 @@ class PlaybackFragment : VideoSupportFragment() {
             // methods are available in exoplayer's EventListener and should not be used otherwise
             // the fragment receives duplicate events.
             addPlayerCallback(PlaybackGlueCallback())
+            // Enable seek manually since PlaybackTransportControlGlue.getSeekProvider() is null,
+            // so that PlayerAdapter.seekTo(long) will be called during user seeking.
+            // TODO(gargsahil@): Add a PlaybackSeekDataProvider to support video scrubbing.
+            isSeekEnabled = true
         }
     }
 
