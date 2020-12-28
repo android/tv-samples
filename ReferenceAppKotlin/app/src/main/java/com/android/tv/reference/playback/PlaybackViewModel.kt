@@ -26,10 +26,10 @@ import com.android.tv.reference.playnext.PlayNextPlaybackStateListener
 import com.android.tv.reference.shared.playback.PlaybackStateMachine
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.android.tv.reference.shared.watchprogress.LoadPlaybackStateListener
-import com.android.tv.reference.shared.watchprogress.WatchProgress
 import com.android.tv.reference.shared.watchprogress.WatchProgressDatabase
+import com.android.tv.reference.shared.watchprogress.WatchProgressPlaybackStateListener
 import com.android.tv.reference.shared.watchprogress.WatchProgressRepository
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
 
 /**
  * ViewModel for playback that allows for reading and writing watch progress
@@ -46,13 +46,6 @@ class PlaybackViewModel(application: Application) :
     init {
         val watchProgressDao = WatchProgressDatabase.getDatabase(application).watchProgressDao()
         repository = WatchProgressRepository(watchProgressDao)
-    }
-
-    /**
-     * Updates the watch progress
-     */
-    fun update(watchProgress: WatchProgress) = viewModelScope.launch {
-        repository.insert(watchProgress)
     }
 
     /**
@@ -74,9 +67,17 @@ class PlaybackViewModel(application: Application) :
             )
         )
         playbackState.nonNull().observe(owner, PlayNextPlaybackStateListener(getApplication()))
+        playbackState.nonNull().observe(
+            owner,
+            WatchProgressPlaybackStateListener(
+                watchProgressRepository = repository,
+                coroutineScope = viewModelScope,
+                coroutineDispatcher = Dispatchers.IO
+            )
+        )
     }
 
     override fun onStateChange(state: VideoPlaybackState) {
-        _playbackState.postValue(state)
+        _playbackState.value = state
     }
 }

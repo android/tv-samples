@@ -17,7 +17,6 @@ package com.android.tv.reference.playback
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
@@ -29,7 +28,6 @@ import com.android.tv.reference.R
 import com.android.tv.reference.castconnect.CastHelper
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.playback.VideoPlaybackState
-import com.android.tv.reference.shared.watchprogress.WatchProgress
 import com.google.android.exoplayer2.DefaultControlDispatcher
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
@@ -48,13 +46,6 @@ import java.time.Duration
 class PlaybackFragment : VideoSupportFragment() {
 
     private lateinit var video: Video
-    private lateinit var handler: Handler
-
-    // Self-posting Runnable that posts an updated watch progress
-    private val updateWatchProgressRunnable = Runnable {
-        saveUpdatedWatchProgress()
-        scheduleWatchProgressUpdate()
-    }
 
     private var exoplayer: ExoPlayer? = null
     private val viewModel: PlaybackViewModel by viewModels()
@@ -80,9 +71,6 @@ class PlaybackFragment : VideoSupportFragment() {
 
         // Get the video data.
         video = PlaybackFragmentArgs.fromBundle(requireArguments()).video
-
-        // Create the handler for posting watch progress updates.
-        handler = Handler()
 
         // Create the MediaSession that will be used throughout the lifecycle of this Fragment.
         createMediaSession()
@@ -112,7 +100,6 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onStop() {
         super.onStop()
-        cancelWatchProgressUpdates()
         destroyPlayer()
     }
 
@@ -213,31 +200,8 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private val onProgressUpdate: () -> Unit = {
-        scheduleWatchProgressUpdate()
-    }
-
-    private fun scheduleWatchProgressUpdate() {
-        Timber.v("Scheduling watch progress updates")
-        // Remove any pending callbacks to reduce the number of updates during playback.
-        handler.removeCallbacks(updateWatchProgressRunnable)
-        handler.postDelayed(updateWatchProgressRunnable, WATCH_PROGRESS_SAVE_INTERVAL_MILLIS)
-    }
-
-    private fun cancelWatchProgressUpdates() {
-        Timber.v("Canceling watch progress updates")
-        handler.removeCallbacks(updateWatchProgressRunnable)
-
-        // Store the last progress update
-        saveUpdatedWatchProgress()
-    }
-
-    private fun saveUpdatedWatchProgress() {
-        if (exoplayer == null) {
-            Timber.w("Warning : ExoPlayer is null. Cannot update watch progress")
-            return
-        }
-        Timber.v("Saving updated WatchProgress position: ${exoplayer!!.contentPosition}")
-        viewModel.update(WatchProgress(video.id, startPosition = exoplayer!!.currentPosition))
+        // TODO(benbaxter): Calculate when end credits are displaying and show the next episode for
+        //  episodic content.
     }
 
     inner class PlayerEventListener : Player.EventListener {
@@ -258,9 +222,7 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onPlayStateChanged(glue: PlaybackGlue) {
             super.onPlayStateChanged(glue)
             Timber.v("Is playing: %b", glue.isPlaying)
-            if (glue.isPlaying) {
-                scheduleWatchProgressUpdate()
-            } else {
+            if (!glue.isPlaying) {
                 // In onStop(), we remove the fragment's reference to the player yet during the
                 // player's cleanup/release, the play state changed callback is called. So we need
                 // to guard with a null-check. The pause state is already triggered from onPause(),
@@ -272,17 +234,15 @@ class PlaybackFragment : VideoSupportFragment() {
                         VideoPlaybackState.Pause(video, it.currentPosition)
                     )
                 }
-                cancelWatchProgressUpdates()
             }
         }
     }
 
     companion object {
-        // How often to update the player UI.
+        // Update the player UI fairly often. The frequency of updates affects several UI components
+        // such as the smoothness of the progress bar and time stamp labels updating. This value can
+        // be tweaked for better performance.
         private val PLAYER_UPDATE_INTERVAL_MILLIS = Duration.ofMillis(50).toMillis()
-
-        // How often to save watch progress to the database.
-        private val WATCH_PROGRESS_SAVE_INTERVAL_MILLIS = Duration.ofSeconds(10).toMillis()
 
         // A short name to identify the media session when debugging.
         private const val MEDIA_SESSION_TAG = "ReferenceAppKotlin"
