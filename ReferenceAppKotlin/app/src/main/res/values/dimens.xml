@@ -27,4 +27,22 @@
     <dimen name="image_card_width">192dp</dimen>
     <dimen name="image_card_height">108dp</dimen>
 
+    <!-- Text sizes. -->
+    <dimen name="text_size_h3">16sp</dimen>
+
+    <!-- Error Fragment. -->
+    <dimen name="error_ui_margin_start">194dp</dimen>
+    <dimen name="error_ui_margin_end">194dp</dimen>
+    <dimen name="error_ui_message_margin_top">21dp</dimen>
+    <dimen name="error_actions_spacing">24dp</dimen>
+    <dimen name="error_actions_margin_top">24dp</dimen>
+    <dimen name="error_actions_container_padding">12dp</dimen>
+    <!-- Error Action Button. -->
+    <dimen name="action_button_height">40dp</dimen>
+    <dimen name="action_button_text_size">@dimen/text_size_h3</dimen>
+    <dimen name="action_button_corner_radius">20dp</dimen>
+    <dimen name="action_button_base_elevation">0dp</dimen>
+    <dimen name="action_button_focused_elevation">4dp</dimen>
+    <dimen name="action_button_padding_horizontal">20dp</dimen>
+
 </resources>

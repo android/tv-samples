@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2020 Google LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <resources>
 
     <style name="Body">
@@ -34,5 +33,36 @@
     <style name="CardViewInfoAreaStyle" parent="Widget.Leanback.ImageCardView.InfoAreaStyle">
         <item name="android:background">@color/gray_dark</item>
     </style>
+
+    <style name="ErrorUiTheme" parent="AppTheme">
+        <item name="actionButtonStyle">@style/ErrorActionButton</item>
+    </style>
+
+    <style name="ErrorUiTitle" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="ErrorUiMessage" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:layout_marginTop">@dimen/error_ui_message_margin_top</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="ErrorActionButtonBase" parent="@android:style/Widget.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/action_button_height</item>
+        <item name="android:stateListAnimator">@animator/action_button_animator</item>
+        <item name="android:background">@drawable/action_button_background</item>
+        <item name="android:textAppearance">
+            @style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
+        <item name="android:textColor">@color/action_button_text_color_state_list</item>
+        <item name="android:textSize">@dimen/action_button_text_size</item>
+        <item name="android:paddingStart">@dimen/action_button_padding_horizontal</item>
+        <item name="android:paddingEnd">@dimen/action_button_padding_horizontal</item>
+    </style>
+
+    <style name="ErrorActionButton" parent="ErrorActionButtonBase" />
 
 </resources>

@@ -54,15 +54,22 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private val uiPlaybackStateListener = Observer<VideoPlaybackState> { state ->
         Timber.v("State: %s", state)
-        if (state is VideoPlaybackState.Prepare) {
-            startPlaybackFromWatchProgress(state.startPosition)
-        }
-        if (state is VideoPlaybackState.End) {
-            // To get to playback, the user always goes through browse first. Deep links for
-            // directly playing a video also go to browse before playback. If playback finishes the
-            // entire video, the PlaybackFragment is popped off the back stack and the user returns
-            // to browse.
-            findNavController().popBackStack()
+        when (state) {
+            is VideoPlaybackState.Prepare -> startPlaybackFromWatchProgress(state.startPosition)
+            is VideoPlaybackState.End ->
+                // To get to playback, the user always goes through browse first. Deep links for
+                // directly playing a video also go to browse before playback. If playback finishes
+                // the entire video, the PlaybackFragment is popped off the back stack and the user
+                // returns to browse.
+                findNavController().popBackStack()
+            is VideoPlaybackState.Error ->
+                findNavController().navigate(
+                    PlaybackFragmentDirections
+                        .actionPlaybackFragmentToPlaybackErrorFragment(state.video, state.exception)
+                )
+            else -> {
+                // Do nothing.
+            }
         }
     }
 
@@ -206,8 +213,8 @@ class PlaybackFragment : VideoSupportFragment() {
 
     inner class PlayerEventListener : Player.EventListener {
         override fun onPlayerError(error: ExoPlaybackException) {
-            // TODO(b/158233485): Display an error dialog with retry/stop options
             Timber.w(error, "Playback error")
+            viewModel.onStateChange(VideoPlaybackState.Error(video, error))
         }
     }
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Google LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+       This is a non-perfect workaround to achieve a ripple effect. The material library does not
+       supply a drawable that can perform the ripple well. The final solution needs a custom
+       Drawable to do the ripple effect.
+
+       Because ripple by default applies half of the alpha of the color when focused, changed it to
+       transparent while not pressed, when the user starts pressing the button then we animate the
+       color. -->
+    <item android:state_pressed="true"
+        android:color="@color/action_button_ripple_color"/>
+    <item  android:state_pressed="false" android:color="@android:color/transparent"/>
+</selector>

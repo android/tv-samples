@@ -72,7 +72,9 @@ class BrowseFragment : BrowseSupportFragment(), Target {
 
         handler = Handler()
         backgroundManager = BackgroundManager.getInstance(requireActivity()).apply {
-            attach(requireActivity().window)
+            if (!isAttached) {
+                attach(requireActivity().window)
+            }
             setThemeDrawableResourceId(BACKGROUND_RESOURCE_ID)
         }
 

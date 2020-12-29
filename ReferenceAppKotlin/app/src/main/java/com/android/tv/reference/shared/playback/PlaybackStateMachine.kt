@@ -37,4 +37,6 @@ sealed class VideoPlaybackState {
     data class Pause(val video: Video, val position: Long) : VideoPlaybackState()
     /** The video has ended. */
     data class End(val video: Video) : VideoPlaybackState()
+    /** Something terribly wrong occurred. */
+    data class Error(val video: Video, val exception: Exception) : VideoPlaybackState()
 }

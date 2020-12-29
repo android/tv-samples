@@ -32,6 +32,30 @@
         <argument
             android:name="video"
             app:argType="com.android.tv.reference.shared.datamodel.Video" />
+        <action
+            android:id="@+id/action_playbackFragment_to_playbackErrorFragment"
+            app:destination="@id/playbackErrorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playbackErrorFragment"
+        android:name="com.android.tv.reference.playback.PlaybackErrorFragment"
+        android:label="PlaybackErrorFragment">
+        <argument
+            android:name="video"
+            app:argType="com.android.tv.reference.shared.datamodel.Video" />
+        <argument
+            android:name="error"
+            app:argType="java.lang.Exception" />
+        <action
+            app:popUpTo="@+id/playbackFragment"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_playbackErrorFragment_to_playbackFragment"
+            app:destination="@id/playbackFragment" />
+        <action
+            app:popUpTo="@+id/playbackFragment"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_playbackErrorFragment_to_browseFragment"
+            app:destination="@id/browseFragment" />
     </fragment>
     <fragment
         android:id="@+id/browseFragment"

@@ -18,8 +18,12 @@
     <!-- The Leanback theme is available at https://cs.android.com/androidx/platform/frameworks/support/+/androidx-master-dev:leanback/src/main/res/values/themes.xml -->
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.Leanback">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Leanback">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowBackground">@color/gray_dark</item>
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:textColorPrimary">@color/default_text_color</item>
+        <item name="android:textColorSecondary">@color/default_text_color_secondary</item>
     </style>
 
     <!-- Theme for card views that show a Video -->

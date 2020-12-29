@@ -51,4 +51,9 @@
     <string name="content_type_season_episode">Season %s Episode %s</string>
     <string name="content_type_movie">Movie</string>
     <string name="content_type_clip">Clip</string>
+
+    <!-- Playback error actions -->
+    <string name="retry">Retry</string>
+    <string name="go_back">Return to browsing</string>
+    <string name="error_title_with_video">Something terrible happened with %s</string>
 </resources>

@@ -22,4 +22,23 @@
     <color name="gray_dark">#212121</color>
 
     <color name="black">#000000</color>
+
+    <!-- Colors defined dedicated for TV screen white. -->
+    <color name="screen_white">#E8EAED</color>
+    <color name="screen_white_70">#B2E8EAED</color>
+    <color name="screen_white_60">#99E8EAED</color>
+    <color name="screen_white_10">#1AE8EAED</color>
+
+    <!-- Colors defined dedicated for TV screen black. -->
+    <color name="screen_black">#0E0E0F</color>
+
+    <color name="default_text_color">@color/screen_white</color>
+    <color name="default_text_color_secondary">@color/screen_white_60</color>
+
+    <color name="action_button_ripple_color">@color/black</color>
+    <color name="action_button_background_focused_color">@color/screen_white</color>
+    <color name="action_button_background_unfocused_color">@color/screen_white_10</color>
+    <color name="action_button_text_focused_color">@color/screen_black</color>
+    <color name="action_button_text_unfocused_color">@color/screen_white_70</color>
+
 </resources>
