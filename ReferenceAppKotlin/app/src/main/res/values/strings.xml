@@ -42,6 +42,7 @@
     <string name="onetap_error">One Tap returned an error</string>
     <string name="server_error">Server error</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="sign_in_intro">Without any changes, this app uses local authorization (MockAuthClient). You can log in using "%1$s" as the email and any non-empty string as the password. To update the app to use remote auth, see the RemoteAuthClient class.</string>
 
     <!-- Channel strings -->
     <string name="default_home_screen_channel_name">Example Channel</string>

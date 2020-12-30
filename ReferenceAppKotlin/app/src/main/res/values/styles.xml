@@ -17,13 +17,17 @@
 
     <style name="Body">
         <item name="android:textSize">@dimen/text_body</item>
-        <item name="android:textColor">@color/near_white</item>
+        <item name="android:textColor">@color/screen_white</item>
+    </style>
+
+    <style name="Body.Error">
+        <item name="android:textColor">@color/error_text</item>
     </style>
 
     <style name="Title">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textSize">@dimen/text_title</item>
-        <item name="android:textColor">@color/near_white</item>
+        <item name="android:textColor">@color/screen_white</item>
     </style>
 
     <style name="CardViewStyle" parent="Widget.Leanback.ImageCardViewStyle">

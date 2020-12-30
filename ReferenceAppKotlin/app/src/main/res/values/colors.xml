@@ -15,9 +15,6 @@
   -->
 
 <resources>
-    <!-- White can be too strong on some TVs, so a near-white color is preferred -->
-    <color name="near_white">#EEEEEE</color>
-
     <!-- Warm dark gray for backgrounds -->
     <color name="gray_dark">#212121</color>
 
@@ -41,4 +38,5 @@
     <color name="action_button_text_focused_color">@color/screen_black</color>
     <color name="action_button_text_unfocused_color">@color/screen_white_70</color>
 
+    <color name="error_text">#EF9A9A</color>
 </resources>

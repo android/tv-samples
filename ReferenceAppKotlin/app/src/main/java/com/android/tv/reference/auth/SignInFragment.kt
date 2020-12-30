@@ -84,6 +84,7 @@ class SignInFragment : Fragment() {
                 }
             }
         )
+        binding.signInIntro.text = getString(R.string.sign_in_intro, MockAuthClient.MOCK_USER_EMAIL)
         binding.signInButton.setOnClickListener {
             val username = binding.usernameEdit.text.toString()
             val password = binding.passwordEdit.text.toString()

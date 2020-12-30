@@ -41,7 +41,6 @@ sealed class AuthClientError(message: String) : Exception(message) {
  */
 class MockAuthClient : AuthClient {
     private val mockUser = UserInfo("myUserToken", "A. N. Other")
-    private val mockUserEmail = "user@gmail.com"
 
     override suspend fun validateToken(token: String): Result<UserInfo> {
         if (token == mockUser.token) {
@@ -51,15 +50,22 @@ class MockAuthClient : AuthClient {
     }
 
     override suspend fun authWithPassword(username: String, password: String): Result<UserInfo> {
-        if (username == mockUserEmail) {
+        if (username == MOCK_USER_EMAIL) {
             return Result.Success(mockUser)
         }
         return Result.Error(AuthClientError.AuthenticationError)
     }
 
     override suspend fun authWithGoogleIdToken(idToken: String): Result<UserInfo> {
-        TODO("Not yet implemented")
+        if (idToken.isEmpty()) {
+            return Result.Error(AuthClientError.AuthenticationError)
+        }
+        return Result.Success(mockUser)
     }
 
     override suspend fun invalidateToken(token: String): Result<Unit> = Result.Success(Unit)
+
+    companion object {
+        const val MOCK_USER_EMAIL = "user@gmail.com"
+    }
 }

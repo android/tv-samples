@@ -21,4 +21,4 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:background="@color/gray_dark"
-    android:textColor="@color/near_white" />
+    android:textColor="@color/screen_white" />
