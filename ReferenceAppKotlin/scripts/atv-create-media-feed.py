@@ -36,8 +36,8 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-csv_columns_to_json_keys_movie = {"id": "@id", "name": "name", "description": "description", "uri": "url", "duration": "duration"}
-csv_columns_to_json_keys_episode = {"id": "@id", "name": "name", "description": "description", "uri": "url", "episodeNumber": "episodeNumber", "duration": "duration"}
+csv_columns_to_json_keys_movie = {"id": "@id", "name": "name", "description": "description", "uri": "url", "duration": "duration", "EIDR": "titleEIDR"}
+csv_columns_to_json_keys_episode = {"id": "@id", "name": "name", "description": "description", "uri": "url", "episodeNumber": "episodeNumber", "duration": "duration", "EIDR": "titleEIDR"}
 context_json_key = "@context"
 context_value_media = ["http://schema.org", {"@language": "en"}]
 context_value = "http://schema.org"
