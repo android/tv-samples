@@ -20,7 +20,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.android.tv.reference.R
-import com.android.tv.reference.databinding.PresenterCardBinding
+import com.android.tv.reference.databinding.PresenterVideoCardBinding
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
 import com.squareup.picasso.Picasso
@@ -31,7 +31,7 @@ import com.squareup.picasso.Picasso
 class VideoCardPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val context = parent.context
-        val binding = PresenterCardBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = PresenterVideoCardBinding.inflate(LayoutInflater.from(context), parent, false)
 
         // Set the image size ahead of time since loading can take a while.
         val resources = context.resources
@@ -45,7 +45,7 @@ class VideoCardPresenter : Presenter() {
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         checkNotNull(item)
         val video = item as Video
-        val binding = PresenterCardBinding.bind(viewHolder.view)
+        val binding = PresenterVideoCardBinding.bind(viewHolder.view)
         binding.root.titleText = video.name
         binding.root.contentText = getContentText(binding.root.resources, video)
 
@@ -54,7 +54,7 @@ class VideoCardPresenter : Presenter() {
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val binding = PresenterCardBinding.bind(viewHolder.view)
+        val binding = PresenterVideoCardBinding.bind(viewHolder.view)
         binding.root.mainImage = null
     }
 
