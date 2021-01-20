@@ -49,8 +49,8 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
     fun createHomeScreenDefaultChannel(context: Context): Long {
         val logo = BitmapFactory.decodeResource(
             context.resources,
-            R.mipmap.ic_channel_placeholder
-        ) // TODO change to the correct image
+            R.mipmap.ic_channel_default
+        )
         val defaultChannel = PreviewChannel.Builder()
             .setDisplayName(context.getString(R.string.default_home_screen_channel_name))
             .setDescription(context.getString(R.string.default_home_screen_channel_description))
