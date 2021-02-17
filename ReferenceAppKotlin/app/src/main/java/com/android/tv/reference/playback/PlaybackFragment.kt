@@ -54,6 +54,12 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private val uiPlaybackStateListener = Observer<VideoPlaybackState> { state ->
         Timber.v("State: %s", state)
+
+        // While a video is playing, the screen should stay on and the device should not go to
+        // sleep. When in any other state such as if the user pauses the video, the app should not
+        // prevent the device from going to sleep.
+        view?.keepScreenOn = state is VideoPlaybackState.Play
+
         when (state) {
             is VideoPlaybackState.Prepare -> startPlaybackFromWatchProgress(state.startPosition)
             is VideoPlaybackState.End ->
@@ -229,7 +235,9 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onPlayStateChanged(glue: PlaybackGlue) {
             super.onPlayStateChanged(glue)
             Timber.v("Is playing: %b", glue.isPlaying)
-            if (!glue.isPlaying) {
+            if (glue.isPlaying) {
+                viewModel.onStateChange(VideoPlaybackState.Play(video))
+            } else {
                 // In onStop(), we remove the fragment's reference to the player yet during the
                 // player's cleanup/release, the play state changed callback is called. So we need
                 // to guard with a null-check. The pause state is already triggered from onPause(),

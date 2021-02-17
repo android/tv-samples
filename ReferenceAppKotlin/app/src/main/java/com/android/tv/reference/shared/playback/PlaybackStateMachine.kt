@@ -33,6 +33,8 @@ sealed class VideoPlaybackState {
     data class Load(val video: Video) : VideoPlaybackState()
     /** Loading has completed and the player can be prepared. */
     data class Prepare(val video: Video, val startPosition: Long) : VideoPlaybackState()
+    /** The video has started playback such as playing after Prepare or resuming after Pause. */
+    data class Play(val video: Video) : VideoPlaybackState()
     /** The video is currently paused. */
     data class Pause(val video: Video, val position: Long) : VideoPlaybackState()
     /** The video has ended. */
