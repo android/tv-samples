@@ -21,7 +21,6 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.android.tv.reference.repository.VideoRepositoryFactory
-import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
 import timber.log.Timber
 
@@ -48,7 +47,6 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
         val videoId = inputData.getString(PlayNextHelper.VIDEO_ID)
         val watchPosition =
             inputData.getLong(PlayNextHelper.CURRENT_POSITION, /* defaultValue= */ 0)
-        val duration = inputData.getLong(PlayNextHelper.DURATION, /* defaultValue= */ 0)
         val state = inputData.getString(PlayNextHelper.PLAYER_STATE)
         Timber.v("Work Manager called watch id $videoId , watchTime $watchPosition")
 
@@ -59,8 +57,8 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
             return Result.failure()
         }
         // Check for invalid player state.
-        if (!state.equals(PlayNextHelper.PLAY_STATE_PAUSED) and
-            !state.equals(PlayNextHelper.PLAY_STATE_ENDED)
+        if ((state != PlayNextHelper.PLAY_STATE_PAUSED) and
+            (state != PlayNextHelper.PLAY_STATE_ENDED)
         ) {
             Timber.e("Error.Invalid entry for Play Next. Player state: $state")
             return Result.failure()
@@ -76,9 +74,16 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
         // Step 4 : Handle Play Next for different types of content.
         when (video?.videoType) {
             VideoType.MOVIE -> {
-                handlePlayNextForMovie(video, watchPosition.toInt(), duration.toInt(), state)
+                Timber.v("Add Movie to Play Next : id = ${video.id}")
+                PlayNextHelper.handlePlayNextForMovie(video, watchPosition.toInt(), state, context)
             }
-            VideoType.EPISODE -> Timber.v("Add Episode to Play Next : type = ${video.videoType}")
+            VideoType.EPISODE -> {
+                Timber.v("Add Episode to Play Next : id = ${video.id}")
+                PlayNextHelper.handlePlayNextForEpisode(
+                    video, watchPosition.toInt(), state,
+                    VideoRepositoryFactory.getVideoRepository(
+                        context.applicationContext as Application), context)
+            }
             VideoType.CLIP -> Timber.w(
                 "NOT recommended to add Clips / Trailers /Short videos to Play Next "
             )
@@ -89,42 +94,4 @@ class PlayNextWorker(private val context: Context, params: WorkerParameters) :
         return Result.success()
     }
 
-    /**
-     * Handle operations for Play Next Channel for video type 'Movie'.
-     */
-    // TODO(mayurikhin@) : create a @StringDef for the string constants for the different
-    //  player states.
-    private fun handlePlayNextForMovie(
-        video: Video,
-        watchPosition: Int,
-        duration: Int,
-        state: String?
-    ) {
-        Timber.v("Adding/remove movie to Play Next. Video Name: ${video.name}")
-
-        when {
-            // If movie has finished, remove from Play Next Channel.
-            state.equals(PlayNextHelper.PLAY_STATE_ENDED) or
-                video.isAfterEndCreditsPosition(watchPosition.toLong()) -> {
-                PlayNextHelper.removeVideoFromPlayNext(context, video)
-            }
-
-            // Add or update unfinished movie to Play Next Channel.
-            PlayNextHelper.hasVideoStarted(duration, watchPosition) -> {
-                PlayNextHelper.insertOrUpdateVideoToPlayNext(
-                    video,
-                    watchPosition,
-                    duration,
-                    context
-                )
-            }
-            else -> {
-                Timber.w(
-                    "Video not started yet. Can't add to PlayNext.watchPosition: %s, duration: %s",
-                    watchPosition,
-                    duration
-                )
-            }
-        }
-    }
 }

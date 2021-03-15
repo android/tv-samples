@@ -19,6 +19,7 @@ import android.app.Application
 import com.android.tv.reference.R
 import com.android.tv.reference.parser.VideoParser
 import com.android.tv.reference.shared.datamodel.Video
+import com.android.tv.reference.shared.datamodel.VideoType
 
 /**
  * VideoRepository implementation to read video data from a file saved on /res/raw
@@ -49,5 +50,9 @@ class FileVideoRepository(override val application: Application) : VideoReposito
     override fun getVideoByVideoUri(uri: String): Video? {
         return getAllVideos()
             .firstOrNull { it.videoUri == uri }
+    }
+
+    override fun getAllVideosFromSeries(seriesUri: String): List<Video> {
+        return getAllVideos().filter { it.seriesUri == seriesUri }
     }
 }

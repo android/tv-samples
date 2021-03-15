@@ -16,20 +16,29 @@
 package com.android.tv.reference.playnext
 
 import android.annotation.SuppressLint
+import android.content.ContentProviderOperation
 import android.content.Context
 import android.database.Cursor
 import android.media.tv.TvContract.WatchNextPrograms.COLUMN_INTERNAL_PROVIDER_ID
+import android.media.tv.TvContract.WatchNextPrograms.TYPE_MOVIE
+import android.media.tv.TvContract.WatchNextPrograms.TYPE_TV_EPISODE
+import android.media.tv.TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE
+import android.media.tv.TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_NEXT
 import android.net.Uri
 import androidx.tvprovider.media.tv.PreviewChannelHelper
 import androidx.tvprovider.media.tv.TvContractCompat
-import androidx.tvprovider.media.tv.TvContractCompat.PreviewPrograms
-import androidx.tvprovider.media.tv.TvContractCompat.WatchNextPrograms
 import androidx.tvprovider.media.tv.WatchNextProgram
 import androidx.tvprovider.media.tv.WatchNextProgram.Builder
 import androidx.tvprovider.media.tv.WatchNextProgram.fromCursor
+import com.android.tv.reference.R
+import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.shared.datamodel.Video
-import timber.log.Timber
+import com.android.tv.reference.shared.datamodel.VideoType
+import java.time.Duration
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
+import timber.log.Timber
+
 
 /**
  * Helper class that simplifies interactions with the ATV home screen.
@@ -64,20 +73,21 @@ object PlayNextHelper {
     /**
      * Add all relevant metadata which will be displayed on Play Next Channel.
      */
-    private fun setBuilderMetadataForMovie(
+    private fun setBuilderMetadata(
         builder: Builder,
         video: Video,
         watchNextType: Int,
         watchPosition: Int,
         type: Int,
-        duration: Int
+        duration: Duration,
+        context: Context
     ): Builder {
         builder.setType(type)
             .setWatchNextType(watchNextType)
             .setLastPlaybackPositionMillis(watchPosition)
             .setLastEngagementTimeUtcMillis(System.currentTimeMillis())
             .setTitle(video.name)
-            .setDurationMillis(duration)
+            .setDurationMillis(duration.toMillis().toInt())
             .setPreviewVideoUri(Uri.parse(video.videoUri))
             .setDescription(video.description)
             .setPosterArtUri(Uri.parse(video.thumbnailUri))
@@ -90,6 +100,19 @@ object PlayNextHelper {
             .setInternalProviderId(video.id)
             // Use the contentId to recognize same content across different channels.
             .setContentId(video.id)
+
+        if (type == TYPE_TV_EPISODE) {
+            builder.setEpisodeNumber(video.episodeNumber.toInt())
+                .setSeasonNumber(video.seasonNumber.toInt())
+                // User TV series name and season number to generate a fake season name.
+                .setSeasonTitle(context.getString(
+                    R.string.season, video.category, video.seasonNumber))
+                // Use the name of the video as the episode name.
+                .setEpisodeTitle(video.name)
+                // Use TV series name as the tile, in this sample,
+                // we use category as a fake TV series.
+                .setTitle(video.category)
+        }
         return builder
     }
 
@@ -98,17 +121,18 @@ object PlayNextHelper {
      * whichever timestamp is earlier.
      * https://developer.android.com/training/tv/discovery/guidelines-app-developers
      */
-    internal fun hasVideoStarted(duration: Int, currentPosition: Int): Boolean {
+    internal fun hasVideoStarted(duration: Duration, currentPosition: Int): Boolean {
         Timber.v("Find if Video started: duration: $duration ,watchPosition: $currentPosition")
 
+        val durationInMilliSeconds = duration.toMillis().toInt()
         // Return true if either X minutes or Y % have passed
         // Following formatting spans over multiple lines to accommodate max 100 limit
         val playNextMinStartedMillis = TimeUnit.MINUTES.toMillis(PLAY_NEXT_STARTED_MIN_MINUTES)
         // Check if either X minutes or Y% has passed
         val hasVideoStarted =
-            (currentPosition >= (duration * PLAY_NEXT_STARTED_MIN_PERCENTAGE)) or
-                (currentPosition >= playNextMinStartedMillis)
-        return ((currentPosition <= duration) and hasVideoStarted)
+            (currentPosition >= (durationInMilliSeconds * PLAY_NEXT_STARTED_MIN_PERCENTAGE)) or
+              (currentPosition >= playNextMinStartedMillis)
+        return ((currentPosition <= durationInMilliSeconds) and hasVideoStarted)
     }
 
     /**
@@ -146,9 +170,14 @@ object PlayNextHelper {
     internal fun insertOrUpdateVideoToPlayNext(
         video: Video,
         watchPosition: Int,
-        duration: Int,
+        watchNextType: Int,
         context: Context
     ): Long {
+
+        if (video.videoType != VideoType.MOVIE && video.videoType != VideoType.EPISODE) {
+            throw IllegalArgumentException(
+                "Play Next is not supported for Video Type: ${video?.videoType}")
+        }
 
         var programId = 0L
         // If we already have a program with this ID, use it as a base for updated program.
@@ -164,14 +193,20 @@ object PlayNextHelper {
                 Builder(it)
             } ?: Builder()
 
-        // Set appropriate types for resuming movie.
-        val updatedBuilder = setBuilderMetadataForMovie(
+        val videoType = if(video.videoType == VideoType.MOVIE) {
+            TYPE_MOVIE
+        } else {
+            TYPE_TV_EPISODE
+        }
+
+        val updatedBuilder = setBuilderMetadata(
             programBuilder,
             video,
-            WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
+            watchNextType,
             watchPosition,
-            PreviewPrograms.TYPE_MOVIE,
-            duration
+            videoType,
+            video.duration(),
+            context
         )
 
         // Build the program with all the metadata
@@ -206,9 +241,9 @@ object PlayNextHelper {
      *  Typically after user has finished watching the video.
      *  Returns the number of rows deleted or null if delete fails
      */
+    @Synchronized
     @SuppressLint("RestrictedApi")
     // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
-    @Synchronized
     fun removeVideoFromPlayNext(context: Context, video: Video): Uri? {
         Timber.v("Trying to Removing content from Play next: ${video.name}")
 
@@ -239,16 +274,44 @@ object PlayNextHelper {
         }
     }
 
+    @Synchronized
+    @SuppressLint("RestrictedApi")
+    // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
+    fun removeVideosFromPlayNext(context: Context, videos: List<Video>) {
+        // Find the program with the matching ID for our metadata.
+        val foundPrograms = getWatchNextProgramByVideoIds(videos.map { it.id }, context)
+        val operations = foundPrograms.map {
+            val programUri = TvContractCompat.buildWatchNextProgramUri(it.id)
+            ContentProviderOperation.newDelete(programUri).build()
+        } as ArrayList<ContentProviderOperation>
+
+        val results = context.contentResolver.applyBatch(TvContractCompat.AUTHORITY, operations)
+
+        results.forEach { result ->
+            if (result.count != 1) {
+                Timber.e("Content failed to be removed from Play next: ${result.uri}")
+            }
+        }
+    }
+
     /**
      * Query the play next list and find the program with given videoId.
      * Return null if not found.
      */
-    @SuppressLint("RestrictedApi")
-    // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
     @Synchronized
     private fun getWatchNextProgramByVideoId(id: String, context: Context): WatchNextProgram? {
         return findFirstWatchNextProgram(context) { cursor ->
             (cursor.getString(cursor.getColumnIndex(COLUMN_INTERNAL_PROVIDER_ID)) == id)
+        }
+    }
+
+    @Synchronized
+    @SuppressLint("RestrictedApi")
+    // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
+    private fun getWatchNextProgramByVideoIds(ids: List<String>, context: Context):
+        List<WatchNextProgram> {
+        return getWatchNextPrograms(context).filter {
+            ids.contains(it.internalProviderId)
         }
     }
 
@@ -278,5 +341,122 @@ object PlayNextHelper {
                 }
             }
             return null
+    }
+
+    /**
+     *  Returns a list of videos which is visible on Play next row.
+     */
+    @SuppressLint("RestrictedApi")
+    internal fun filterWatchNextVideos(videos: List<Video>, context: Context): List<Video> {
+        val watchedPrograms = getWatchNextProgramByVideoIds(videos.map { it.id }, context)
+        val watchedVideosIds = watchedPrograms.map { it.internalProviderId }
+        return videos.filter { watchedVideosIds.contains(it.id) }
+    }
+
+    /**
+     * Handle operations for Play Next Channel for video type 'Movie'.
+     */
+    // TODO(mayurikhin@) : create a @StringDef for the string constants for the different
+    //  player states.
+    internal fun handlePlayNextForMovie(
+        video: Video,
+        watchPosition: Int,
+        state: String?,
+        context: Context
+    ) {
+        Timber.v("Adding/remove movie to Play Next. Video Name: ${video.name}")
+
+        when {
+            // If movie has finished, remove from Play Next Channel.
+            (state == PLAY_STATE_ENDED) or
+                video.isAfterEndCreditsPosition(watchPosition.toLong()) -> {
+                removeVideoFromPlayNext(context, video)
+            }
+
+            // Add or update unfinished movie to Play Next Channel.
+            hasVideoStarted(video.duration(), watchPosition) -> {
+                insertOrUpdateVideoToPlayNext(
+                    video,
+                    watchPosition,
+                    WATCH_NEXT_TYPE_CONTINUE,
+                    context
+                )
+            }
+            else -> {
+                Timber.w(
+                    "Video not started yet. Can't add to PlayNext.watchPosition: %s, duration: %d",
+                    watchPosition,
+                    video.duration().toMillis()
+                )
+            }
         }
+    }
+
+    /**
+     * Handle operations for Play Next Channel for video type 'Episode'.
+     */
+    internal fun handlePlayNextForEpisode(
+        video: Video,
+        watchPosition: Int,
+        state: String?,
+        videoRepository: VideoRepository,
+        context: Context
+    ) {
+        Timber.v("Adding/remove episode to Play Next. Video Name: ${video.name}")
+
+        var newPlayNextVideo: Video? = null
+        when {
+            // If episode has finished, remove from Play Next Channel.
+            (state == PLAY_STATE_ENDED) or
+                video.isAfterEndCreditsPosition(watchPosition.toLong()) -> {
+                removeVideoFromPlayNext(context, video)
+
+                // Add next episode from TV series.
+                videoRepository.getNextEpisodeInSeries(video)?.let {
+                        insertOrUpdateVideoToPlayNext(
+                            it,
+                            0,
+                            WATCH_NEXT_TYPE_NEXT,
+                            context
+                        )
+                        newPlayNextVideo = it
+                    }
+            }
+
+            // Add or update unfinished episode to Play Next Channel.
+            hasVideoStarted(video.duration(), watchPosition) -> {
+                insertOrUpdateVideoToPlayNext(
+                    video,
+                    watchPosition,
+                    WATCH_NEXT_TYPE_CONTINUE,
+                    context
+                )
+                newPlayNextVideo = video
+            }
+            else -> {
+                Timber.w(
+                    "Video not started yet. Can't add to PlayNext.watchPosition: %s, duration: %d",
+                    watchPosition,
+                    video.duration().toMillis()
+                )
+            }
+        }
+
+        /**
+         *  We suggest to keep only 1 episode for each TV show in Play next, remove previous
+         *  watched episodes and only keep the last watched one.
+         *  1. Figures out which episode from this TV Series are visible in the Play next row;
+         *  2. Sorts the filtered episodes and excludes the last watched episode;
+         *  3. Removes all other episode from Play next row;
+         */
+        newPlayNextVideo?.let { videoToKeep ->
+            videoRepository.getAllVideosFromSeries(videoToKeep.seriesUri)?.let { allEpisodes ->
+                    filterWatchNextVideos(allEpisodes, context)
+                        ?.let { watchedEpisodes ->
+                            removeVideosFromPlayNext(
+                                context, watchedEpisodes.filter { it.id != videoToKeep.id })
+                        }
+                }
+        }
+    }
 }

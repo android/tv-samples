@@ -15,22 +15,29 @@
  */
 package com.android.tv.reference.playnext
 
+import android.app.Application
 import android.content.ContentProvider
+import android.content.ContentProviderOperation
+import android.content.ContentProviderResult
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.media.tv.TvContract
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.tvprovider.media.tv.TvContractCompat
 import androidx.tvprovider.media.tv.WatchNextProgram
-import com.android.tv.reference.playnext.PlayNextTest.FakeInMemoryTvProvider.Companion.TEST_VIDEO_DURATION_MILLIS
-import com.android.tv.reference.playnext.PlayNextTest.FakeInMemoryTvProvider.Companion.TEST_VIDEO_ID
-import com.android.tv.reference.playnext.PlayNextTest.FakeInMemoryTvProvider.Companion.TEST_VIDEO_NAME
-import com.android.tv.reference.playnext.PlayNextTest.FakeInMemoryTvProvider.Companion.TEST_VIDEO_PLAYBACK_POSITION_MILLIS
-import com.android.tv.reference.playnext.PlayNextTest.FakeInMemoryTvProvider.Companion.video_movie
-import com.android.tv.reference.shared.datamodel.Video
-import com.android.tv.reference.shared.datamodel.VideoType.MOVIE
+import com.android.tv.reference.R
+import com.android.tv.reference.playnext.PlayNextHelper.PLAY_STATE_PAUSED
+import com.android.tv.reference.repository.FakeVideoRepository
+import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_ID
+import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_NAME
+import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS
+import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_PLAYBACK_POSITION_MILLIS
+import com.android.tv.reference.repository.FakeVideoRepository.Companion.episodes
+import com.android.tv.reference.repository.FakeVideoRepository.Companion.video_movie
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -62,15 +69,15 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding unfinished video to Play Next
+     * Test adding unfinished movie to Play Next.
      */
     @Test
-    fun insertVideoToPlayNext() {
+    fun insertMovieToPlayNext() {
 
         // Actual : Call the method.
-        PlayNextHelper.insertOrUpdateVideoToPlayNext(
-            video_movie, TEST_VIDEO_PLAYBACK_POSITION_MILLIS,
-            TEST_VIDEO_DURATION_MILLIS, ApplicationProvider.getApplicationContext()
+        PlayNextHelper.handlePlayNextForMovie(
+            video_movie, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            ApplicationProvider.getApplicationContext()
         )
 
         // Expected : verify if program was added to play next.
@@ -83,6 +90,215 @@ class PlayNextTest {
         assertThat(program).isNotNull()
         assertThat(program?.internalProviderId).isEqualTo(TEST_VIDEO_ID)
         assertThat(program?.title).isEqualTo(TEST_VIDEO_NAME)
+        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+    }
+
+    /**
+     * Test adding a finished movie to Play Next.
+     */
+    @Test
+    fun insertFinishedMovieToPlayNext() {
+
+        // Actual : Call the method.
+        PlayNextHelper.handlePlayNextForMovie(
+            video_movie, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            ApplicationProvider.getApplicationContext()
+        )
+
+        // Expected : verify if program was added to play next.
+        val watchList =
+            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+
+        assertThat(watchList).hasSize(0)
+    }
+
+    /**
+     * Test adding unfinished episode to Play Next.
+     */
+    @Test
+    fun insertUnfinishedEpisodeToPlayNext() {
+
+        val unfinishedEpisode = episodes[0]
+        // Actual : Call the method.
+        PlayNextHelper.handlePlayNextForEpisode(
+            unfinishedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        // Expected : verify if program was added to play next.
+        val watchList =
+            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+
+        assertThat(watchList).hasSize(1)
+        val program = watchList[0]
+
+        // Verify the correct metadata was set.
+        assertThat(program).isNotNull()
+        assertThat(program?.internalProviderId).isEqualTo(unfinishedEpisode.id)
+        assertThat(program?.title).isEqualTo(unfinishedEpisode.category)
+        assertThat(program?.episodeNumber).isEqualTo(unfinishedEpisode.episodeNumber)
+        assertThat(program?.seasonNumber).isEqualTo(unfinishedEpisode.seasonNumber)
+        assertThat(program?.episodeTitle).isEqualTo(unfinishedEpisode.name)
+        assertThat(program?.seasonTitle).isEqualTo(
+            (ApplicationProvider.getApplicationContext() as Context).getString(
+                R.string.season, unfinishedEpisode.category, unfinishedEpisode.seasonNumber))
+        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+    }
+
+    /**
+     * Test adding multiple episodes to Play Next.
+     */
+    @Test
+    fun insertMultipleEpisodeToPlayNext() {
+
+        val firstWatchedEpisode = episodes[0]
+        val secondWatchedEpisode = episodes[1]
+        // Actual : Call the method.
+        PlayNextHelper.handlePlayNextForEpisode(
+            firstWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        PlayNextHelper.handlePlayNextForEpisode(
+            secondWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        // Expected : verify if program was added to play next.
+        val watchList =
+            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+
+        assertThat(watchList).hasSize(1)
+
+        val program = watchList[0]
+
+        // Verify the correct metadata was set.
+        assertThat(program).isNotNull()
+        assertThat(program?.internalProviderId).isEqualTo(secondWatchedEpisode.id)
+        assertThat(program?.title).isEqualTo(secondWatchedEpisode.category)
+        assertThat(program?.episodeNumber).isEqualTo(secondWatchedEpisode.episodeNumber)
+        assertThat(program?.seasonNumber).isEqualTo(secondWatchedEpisode.seasonNumber)
+        assertThat(program?.episodeTitle).isEqualTo(secondWatchedEpisode.name)
+        assertThat(program?.seasonTitle).isEqualTo(
+            (ApplicationProvider.getApplicationContext() as Context).getString(
+                R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber))
+        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+    }
+
+    /**
+     * Test adding multiple episodes to Play Next.
+     */
+    @Test
+    fun insertMultipleEpisodeInReverseOrderToPlayNext() {
+
+        val firstWatchedEpisode = episodes[1]
+        val secondWatchedEpisode = episodes[0]
+        // Actual : Call the method.
+        PlayNextHelper.handlePlayNextForEpisode(
+            firstWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        PlayNextHelper.handlePlayNextForEpisode(
+            secondWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        // Expected : verify if program was added to play next.
+        val watchList =
+            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+
+        assertThat(watchList).hasSize(1)
+
+        val program = watchList[0]
+
+        // Verify the correct metadata was set.
+        assertThat(program).isNotNull()
+        assertThat(program?.internalProviderId).isEqualTo(secondWatchedEpisode.id)
+        assertThat(program?.title).isEqualTo(secondWatchedEpisode.category)
+        assertThat(program?.episodeNumber).isEqualTo(secondWatchedEpisode.episodeNumber)
+        assertThat(program?.seasonNumber).isEqualTo(secondWatchedEpisode.seasonNumber)
+        assertThat(program?.episodeTitle).isEqualTo(secondWatchedEpisode.name)
+        assertThat(program?.seasonTitle).isEqualTo(
+            (ApplicationProvider.getApplicationContext() as Context).getString(
+                R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber))
+        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+    }
+
+    /**
+     * Test adding next episode to Play Next.
+     */
+    @Test
+    fun insertNextEpisodeToPlayNext() {
+
+        val currentEpisode = episodes[0]
+        val nextEpisode = episodes[1]
+
+        // Actual : Call the method.
+        PlayNextHelper.handlePlayNextForEpisode(
+            currentEpisode, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        // Expected : verify if program was added to play next.
+        val watchList =
+            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+
+        assertThat(watchList).hasSize(1)
+
+        val program = watchList[0]
+
+        // Verify the correct metadata was set.
+        assertThat(program).isNotNull()
+        assertThat(program?.internalProviderId).isEqualTo(nextEpisode.id)
+        assertThat(program?.title).isEqualTo(nextEpisode.category)
+        assertThat(program?.episodeNumber).isEqualTo(nextEpisode.episodeNumber)
+        assertThat(program?.seasonNumber).isEqualTo(nextEpisode.seasonNumber)
+        assertThat(program?.episodeTitle).isEqualTo(nextEpisode.name)
+        assertThat(program?.seasonTitle).isEqualTo(
+            (ApplicationProvider.getApplicationContext() as Context).getString(
+                R.string.season, nextEpisode.category, nextEpisode.seasonNumber))
+        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(0)
+    }
+
+    /**
+     * Test adding episode in next season to Play Next
+     */
+    @Test
+    fun insertEpisodeFromNextSeasonToPlayNext() {
+
+        val currentEpisode = episodes[1]
+        val nextEpisode = episodes[2]
+
+        // Actual : Call the method.
+        PlayNextHelper.handlePlayNextForEpisode(
+            currentEpisode, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
+            FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
+            ApplicationProvider.getApplicationContext())
+
+        // Expected : verify if program was added to play next.
+        val watchList =
+            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+
+        assertThat(watchList).hasSize(1)
+
+        val program = watchList[0]
+
+        // Verify the correct metadata was set.
+        assertThat(program).isNotNull()
+        assertThat(program?.internalProviderId).isEqualTo(nextEpisode.id)
+        assertThat(program?.title).isEqualTo(nextEpisode.category)
+        assertThat(program?.episodeNumber).isEqualTo(nextEpisode.episodeNumber)
+        assertThat(program?.seasonNumber).isEqualTo(nextEpisode.seasonNumber)
+        assertThat(program?.episodeTitle).isEqualTo(nextEpisode.name)
+        assertThat(program?.seasonTitle).isEqualTo(
+            (ApplicationProvider.getApplicationContext() as Context).getString(
+                R.string.season, nextEpisode.category, nextEpisode.seasonNumber))
+        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(0)
     }
 
     /**
@@ -94,7 +310,7 @@ class PlayNextTest {
         PlayNextHelper.insertOrUpdateVideoToPlayNext(
             video_movie,
             TEST_VIDEO_PLAYBACK_POSITION_MILLIS,
-            TEST_VIDEO_DURATION_MILLIS,
+            TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
             ApplicationProvider.getApplicationContext()
         )
 
@@ -121,7 +337,8 @@ class PlayNextTest {
         // Add the entry to Play next row.
         PlayNextHelper.insertOrUpdateVideoToPlayNext(
             video_movie, TEST_VIDEO_PLAYBACK_POSITION_MILLIS,
-            TEST_VIDEO_DURATION_MILLIS, ApplicationProvider.getApplicationContext()
+            TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
+            ApplicationProvider.getApplicationContext()
         )
 
         // Update the video data. eg: update playback position by 2 minutes.
@@ -132,7 +349,8 @@ class PlayNextTest {
         // Call the updated method.
         PlayNextHelper.insertOrUpdateVideoToPlayNext(
             video_movie, updatedVideoPlaybackPosition,
-            TEST_VIDEO_DURATION_MILLIS, ApplicationProvider.getApplicationContext()
+            TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
+            ApplicationProvider.getApplicationContext()
         )
 
         // Expected : verify if program was updated in play next.
@@ -163,7 +381,11 @@ class PlayNextTest {
             TvContractCompat
                 .WatchNextPrograms.COLUMN_TITLE,
             TvContractCompat.WatchNextPrograms.COLUMN_INTERNAL_PROVIDER_ID,
-            TvContractCompat.WatchNextPrograms.COLUMN_LAST_PLAYBACK_POSITION_MILLIS
+            TvContractCompat.WatchNextPrograms.COLUMN_LAST_PLAYBACK_POSITION_MILLIS,
+            TvContractCompat.WatchNextPrograms.COLUMN_SEASON_DISPLAY_NUMBER,
+            TvContractCompat.WatchNextPrograms.COLUMN_SEASON_TITLE,
+            TvContractCompat.WatchNextPrograms.COLUMN_EPISODE_DISPLAY_NUMBER,
+            TvContractCompat.WatchNextPrograms.COLUMN_EPISODE_TITLE
         )
 
         // For testing purpose, mimic a mutable list rather than an actual db.
@@ -176,7 +398,7 @@ class PlayNextTest {
             // Insert a new row.
             rowId++
 
-            val program = WatchNextProgram.Builder()
+            val programBuilder = WatchNextProgram.Builder()
                 .setId(rowId)
                 .setTitle(values?.getAsString(TvContractCompat.WatchNextPrograms.COLUMN_TITLE))
                 .setInternalProviderId(
@@ -190,7 +412,25 @@ class PlayNextTest {
                         TvContractCompat.WatchNextPrograms.COLUMN_LAST_PLAYBACK_POSITION_MILLIS
                     )
                 )
-                .build()
+
+            values?.getAsInteger(
+                TvContractCompat.WatchNextPrograms.COLUMN_SEASON_DISPLAY_NUMBER
+            )?.let { programBuilder.setSeasonNumber(it) }
+
+            values?.getAsString(
+                TvContractCompat.WatchNextPrograms.COLUMN_SEASON_TITLE
+            )?.let { programBuilder.setSeasonTitle(it) }
+
+            values?.getAsInteger(
+                TvContractCompat.WatchNextPrograms.COLUMN_EPISODE_DISPLAY_NUMBER
+            )?.let { programBuilder.setEpisodeNumber(it) }
+
+            values?.getAsString(
+                TvContractCompat.WatchNextPrograms.COLUMN_EPISODE_TITLE
+            )?.let { programBuilder.setEpisodeTitle(it) }
+
+            val program = programBuilder.build()
+
             this.valuesInMemory.add(program)
             return TvContractCompat.buildWatchNextProgramUri(rowId)
         }
@@ -209,7 +449,12 @@ class PlayNextTest {
                         it.id,
                         it.title,
                         it.internalProviderId,
-                        it.lastPlaybackPositionMillis
+                        it.lastPlaybackPositionMillis,
+                        it.seasonNumber,
+                        it.seasonTitle,
+                        it.episodeNumber,
+                        it.episodeTitle
+
                     )
                 )
             }
@@ -261,48 +506,31 @@ class PlayNextTest {
             return 1
         }
 
+        override fun applyBatch(authority: String, operations: ArrayList<ContentProviderOperation>):
+            Array<out ContentProviderResult> {
+            var results = ArrayList<ContentProviderResult>()
+
+            operations.forEach { operation ->
+                if (operation.isDelete) {
+                    val id = operation.uri.lastPathSegment?.toLong() ?: -1L
+                    val removed = this.valuesInMemory.removeIf { it.id == id }
+                    if (removed) {
+                        var result = ContentProviderResult(1)
+                        results.add(result)
+                    } else {
+                        results.add(ContentProviderResult(0))
+                    }
+                }
+            }
+
+            return results.toArray() as Array<out ContentProviderResult>
+        }
+
         override fun getType(uri: Uri): String? {
             // This is an in-memory fake so getType is trivial.
             return ""
         }
 
-        companion object {
 
-            // values taken from api.json from resources.
-            const val TEST_VIDEO_ID =
-                "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-seo-mythbusting-101"
-            const val TEST_VIDEO_NAME = "SEO Mythbusting 101"
-            /*  ktlint-disable max-line-length */
-            private const val TEST_VIDEO_DESCRIPTION =
-                "In this first - introductory - episode of SEO Mythbusting, Martin Splitt (WebMaster Trends Analyst, Google) and his guest Juan Herrera (Angular GDE, Wed Developer at Parkside) discuss the very basics of SEO."
-            /*  ktlint-disable max-line-length */
-            private const val TEST_VIDEO_URI =
-                "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
-            /*  ktlint-disable max-line-length */
-            private const val TEST_VIDEO_PLACEHOLDER_URI =
-                "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
-            /*  ktlint-disable max-line-length */
-            private const val TEST_VIDEO_THUMBNAIL_URI =
-                "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-thumbnail.png"
-
-            // Adjust the playback position and duration with the time you want to test
-            // Add approximate duration and playback position.
-            var TEST_VIDEO_DURATION_MILLIS = Duration.ofMinutes(40).toMillis().toInt()
-            var TEST_VIDEO_PLAYBACK_POSITION_MILLIS = Duration.ofMinutes(17).toMillis().toInt()
-            var TEST_VIDEO_DURATION = "PT00H10M"
-
-            var video_movie = Video(
-                id = TEST_VIDEO_ID,
-                name = TEST_VIDEO_NAME,
-                description = TEST_VIDEO_DESCRIPTION,
-                uri = TEST_VIDEO_URI,
-                videoUri = TEST_VIDEO_PLACEHOLDER_URI,
-                thumbnailUri = TEST_VIDEO_THUMBNAIL_URI,
-                backgroundImageUri = TEST_VIDEO_PLACEHOLDER_URI,
-                category = "",
-                videoType = MOVIE,
-                duration = TEST_VIDEO_DURATION
-            )
-        }
     }
 }
