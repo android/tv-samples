@@ -32,7 +32,7 @@ class NoFirebaseFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentNoFirebaseBinding.inflate(inflater, container, false)
         binding.continueButton.setOnClickListener {
             findNavController()
