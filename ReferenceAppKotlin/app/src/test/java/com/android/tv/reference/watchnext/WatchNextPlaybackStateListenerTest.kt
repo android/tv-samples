@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.playnext
+package com.android.tv.reference.watchnext
 
 import android.content.Context
 import android.util.Log
@@ -32,11 +32,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class PlayNextPlaybackStateListenerTest {
+class WatchNextPlaybackStateListenerTest {
 
     private val context = ApplicationProvider.getApplicationContext() as Context
 
-    private val playNextPlaybackStateListener = PlayNextPlaybackStateListener(context)
+    private val watchNextPlaybackStateListener = WatchNextPlaybackStateListener(context)
 
     private lateinit var workManager: WorkManager
 
@@ -52,28 +52,28 @@ class PlayNextPlaybackStateListenerTest {
 
     @Test
     fun onChanged_pauseState_enqueuesWorkRequest() {
-        playNextPlaybackStateListener.onChanged(VideoPlaybackState.Pause(VIDEO, position = 10L))
+        watchNextPlaybackStateListener.onChanged(VideoPlaybackState.Pause(VIDEO, position = 10L))
 
         val workInfos: List<WorkInfo> =
-            workManager.getWorkInfosByTag(PlayNextWorker::class.java.name).get()
+            workManager.getWorkInfosByTag(WatchNextWorker::class.java.name).get()
         assertThat(workInfos).hasSize(1)
     }
 
     @Test
     fun onChanged_endState_enqueuesWorkRequest() {
-        playNextPlaybackStateListener.onChanged(VideoPlaybackState.End(VIDEO))
+        watchNextPlaybackStateListener.onChanged(VideoPlaybackState.End(VIDEO))
 
         val workInfos: List<WorkInfo> =
-            workManager.getWorkInfosByTag(PlayNextWorker::class.java.name).get()
+            workManager.getWorkInfosByTag(WatchNextWorker::class.java.name).get()
         assertThat(workInfos).hasSize(1)
     }
 
     @Test
     fun onChanged_nonPauseOrEndState_doesNotEnqueWork() {
-        playNextPlaybackStateListener.onChanged(VideoPlaybackState.Load(VIDEO))
+        watchNextPlaybackStateListener.onChanged(VideoPlaybackState.Load(VIDEO))
 
         val workInfos: List<WorkInfo> =
-            workManager.getWorkInfosByTag(PlayNextWorker::class.java.name).get()
+            workManager.getWorkInfosByTag(WatchNextWorker::class.java.name).get()
         assertThat(workInfos).isEmpty()
     }
 

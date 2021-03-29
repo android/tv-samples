@@ -61,9 +61,9 @@ class VideoCardPresenter : Presenter() {
     /**
      * Returns a string to display as the "content" for an [ImageCardView].
      *
-     * Since Play Next behavior differs for episodes, movies, and clips, this string makes it
+     * Since Watch Next behavior differs for episodes, movies, and clips, this string makes it
      * more clear which [VideoType] each [Video] is. For example, clips are never included in
-     * Play Next.
+     * Watch Next.
      */
     private fun getContentText(resources: Resources, video: Video): String {
         return when (video.videoType) {

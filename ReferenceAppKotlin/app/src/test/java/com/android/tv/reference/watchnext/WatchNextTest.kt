@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.playnext
+package com.android.tv.reference.watchnext
 
 import android.app.Application
 import android.content.ContentProvider
@@ -30,7 +30,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.tvprovider.media.tv.TvContractCompat
 import androidx.tvprovider.media.tv.WatchNextProgram
 import com.android.tv.reference.R
-import com.android.tv.reference.playnext.PlayNextHelper.PLAY_STATE_PAUSED
 import com.android.tv.reference.repository.FakeVideoRepository
 import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_ID
 import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_NAME
@@ -38,6 +37,7 @@ import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VI
 import com.android.tv.reference.repository.FakeVideoRepository.Companion.TEST_VIDEO_PLAYBACK_POSITION_MILLIS
 import com.android.tv.reference.repository.FakeVideoRepository.Companion.episodes
 import com.android.tv.reference.repository.FakeVideoRepository.Companion.video_movie
+import com.android.tv.reference.watchnext.WatchNextHelper.PLAY_STATE_PAUSED
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -47,10 +47,10 @@ import java.time.Duration
 
 /**
  * Test cases to test adding / updating / removing content
- * from Play Next channel in Home Screen.
+ * from Watch Next channel in Home Screen.
  */
 @RunWith(AndroidJUnit4::class)
-class PlayNextTest {
+class WatchNextTest {
 
     private lateinit var fakeInMemoryTvProvider: FakeInMemoryTvProvider
 
@@ -69,20 +69,20 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding unfinished movie to Play Next.
+     * Test adding unfinished movie to Watch Next.
      */
     @Test
-    fun insertMovieToPlayNext() {
+    fun insertMovieToWatchNext() {
 
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForMovie(
+        WatchNextHelper.handleWatchNextForMovie(
             video_movie, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             ApplicationProvider.getApplicationContext()
         )
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
         val program =
             watchList.firstOrNull { it.internalProviderId == TEST_VIDEO_ID }
 
@@ -95,40 +95,40 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding a finished movie to Play Next.
+     * Test adding a finished movie to Watch Next.
      */
     @Test
-    fun insertFinishedMovieToPlayNext() {
+    fun insertFinishedMovieToWatchNext() {
 
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForMovie(
+        WatchNextHelper.handleWatchNextForMovie(
             video_movie, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
             ApplicationProvider.getApplicationContext()
         )
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
 
         assertThat(watchList).hasSize(0)
     }
 
     /**
-     * Test adding unfinished episode to Play Next.
+     * Test adding unfinished episode to Watch Next.
      */
     @Test
-    fun insertUnfinishedEpisodeToPlayNext() {
+    fun insertUnfinishedEpisodesToWatchNext() {
 
         val unfinishedEpisode = episodes[0]
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             unfinishedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
 
         assertThat(watchList).hasSize(1)
         val program = watchList[0]
@@ -148,27 +148,27 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding multiple episodes to Play Next.
+     * Test adding multiple episodes to Watch Next.
      */
     @Test
-    fun insertMultipleEpisodeToPlayNext() {
+    fun insertMultipleEpisodeToWatchNext() {
 
         val firstWatchedEpisode = episodes[0]
         val secondWatchedEpisode = episodes[1]
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             firstWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             secondWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
 
         assertThat(watchList).hasSize(1)
 
@@ -189,27 +189,27 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding multiple episodes to Play Next.
+     * Test adding multiple episodes to Watch Next.
      */
     @Test
-    fun insertMultipleEpisodeInReverseOrderToPlayNext() {
+    fun insertMultipleEpisodesInReverseOrderToWatchNext() {
 
         val firstWatchedEpisode = episodes[1]
         val secondWatchedEpisode = episodes[0]
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             firstWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             secondWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
 
         assertThat(watchList).hasSize(1)
 
@@ -230,23 +230,23 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding next episode to Play Next.
+     * Test adding next episode to Watch Next.
      */
     @Test
-    fun insertNextEpisodeToPlayNext() {
+    fun insertNextEpisodeToWatchNext() {
 
         val currentEpisode = episodes[0]
         val nextEpisode = episodes[1]
 
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             currentEpisode, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
 
         assertThat(watchList).hasSize(1)
 
@@ -266,23 +266,23 @@ class PlayNextTest {
     }
 
     /**
-     * Test adding episode in next season to Play Next
+     * Test adding episode in next season to Watch Next
      */
     @Test
-    fun insertEpisodeFromNextSeasonToPlayNext() {
+    fun insertEpisodeFromNextSeasonToWatchNext() {
 
         val currentEpisode = episodes[1]
         val nextEpisode = episodes[2]
 
         // Actual : Call the method.
-        PlayNextHelper.handlePlayNextForEpisode(
+        WatchNextHelper.handleWatchNextForEpisode(
             currentEpisode, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
             ApplicationProvider.getApplicationContext())
 
-        // Expected : verify if program was added to play next.
+        // Expected : verify if program was added to Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
 
         assertThat(watchList).hasSize(1)
 
@@ -302,12 +302,12 @@ class PlayNextTest {
     }
 
     /**
-     * Remove finished video from Play next channel.
+     * Remove finished video from Watch Next channel.
      */
     @Test
-    fun removeVideoFromPlayNext() {
+    fun removeVideoFromWatchNext() {
 
-        PlayNextHelper.insertOrUpdateVideoToPlayNext(
+        WatchNextHelper.insertOrUpdateVideoToWatchNext(
             video_movie,
             TEST_VIDEO_PLAYBACK_POSITION_MILLIS,
             TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
@@ -315,7 +315,7 @@ class PlayNextTest {
         )
 
         // Actual : Call the method for delete.
-        val deletedId = PlayNextHelper.removeVideoFromPlayNext(
+        val deletedId = WatchNextHelper.removeVideoFromWatchNext(
             ApplicationProvider.getApplicationContext(), video_movie
         )
 
@@ -327,15 +327,15 @@ class PlayNextTest {
     }
 
     /**
-     * Update video metadata in Play next channel.
+     * Update video metadata in Watch Next channel.
      * Example: Update playback time.
      */
     @Test
-    fun updateVideoInPlayNext() {
+    fun updateVideoInWatchNext() {
 
         // Actual : Call the method.
-        // Add the entry to Play next row.
-        PlayNextHelper.insertOrUpdateVideoToPlayNext(
+        // Add the entry to Watch Next row.
+        WatchNextHelper.insertOrUpdateVideoToWatchNext(
             video_movie, TEST_VIDEO_PLAYBACK_POSITION_MILLIS,
             TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
             ApplicationProvider.getApplicationContext()
@@ -347,15 +347,15 @@ class PlayNextTest {
             TEST_VIDEO_PLAYBACK_POSITION_MILLIS + Duration.ofMinutes(2).toMillis().toInt()
 
         // Call the updated method.
-        PlayNextHelper.insertOrUpdateVideoToPlayNext(
+        WatchNextHelper.insertOrUpdateVideoToWatchNext(
             video_movie, updatedVideoPlaybackPosition,
             TvContract.WatchNextPrograms.WATCH_NEXT_TYPE_CONTINUE,
             ApplicationProvider.getApplicationContext()
         )
 
-        // Expected : verify if program was updated in play next.
+        // Expected : verify if program was updated in Watch Next.
         val watchList =
-            PlayNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
+            WatchNextHelper.getWatchNextPrograms(ApplicationProvider.getApplicationContext())
         val program =
             watchList.firstOrNull { it.internalProviderId == TEST_VIDEO_ID }
 

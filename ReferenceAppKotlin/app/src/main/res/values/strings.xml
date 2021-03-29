@@ -58,6 +58,6 @@
     <string name="go_back">Return to browsing</string>
     <string name="error_title_with_video">Something terrible happened with %s</string>
 
-    <!-- Play next -->
+    <!-- Watch Next -->
     <string name="season">%1$s Season %2$s</string>
 </resources>

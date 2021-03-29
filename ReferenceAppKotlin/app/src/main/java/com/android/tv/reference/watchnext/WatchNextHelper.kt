@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.playnext
+package com.android.tv.reference.watchnext
 
 import android.annotation.SuppressLint
 import android.content.ContentProviderOperation
@@ -34,32 +34,31 @@ import com.android.tv.reference.R
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import java.time.Duration
-import java.util.ArrayList
-import java.util.concurrent.TimeUnit
 import timber.log.Timber
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 
 /**
  * Helper class that simplifies interactions with the ATV home screen.
  *
- * To view the play next row directly through adb, run the following command (assumes `adb root`):
+ * To view the Watch Next row directly through adb, run the following command (assumes `adb root`):
  * ```
  * adb shell "sqlite3 -header -csv /data/data/com.android.providers.tv/databases/tv.db \"SELECT * FROM watch_next_programs where package_name='com.android.tv.reference';\"";
  * ```
- * For example, this query returns the title and position of the Play Next entries, which is useful
+ * For example, this query returns the title and position of the Watch Next entries, which is useful
  * for debugging updates to a particular entry.
  * ```
  * adb shell "sqlite3 -header -csv /data/data/com.android.providers.tv/databases/tv.db \"SELECT title, last_playback_position_millis FROM watch_next_programs where package_name='com.android.tv.reference';\"";
  * ```
  */
-object PlayNextHelper {
+object WatchNextHelper {
 
     // Values to approximate if video has started.
-    private const val PLAY_NEXT_STARTED_MIN_PERCENTAGE = 0.03
-    private const val PLAY_NEXT_STARTED_MIN_MINUTES = 2L
+    private const val WATCH_NEXT_STARTED_MIN_PERCENTAGE = 0.03
+    private const val WATCH_NEXT_STARTED_MIN_MINUTES = 2L
 
-    // MetaData sent from Playback to process Play Next operations.
+    // MetaData sent from Playback to process Watch Next operations.
     internal const val VIDEO_ID = "VIDEO_ID"
     internal const val CURRENT_POSITION = "CURRENT_POSITION"
     internal const val DURATION = "DURATION"
@@ -71,7 +70,7 @@ object PlayNextHelper {
     internal const val PLAY_STATE_ENDED = "STATE_ENDED"
 
     /**
-     * Add all relevant metadata which will be displayed on Play Next Channel.
+     * Add all relevant metadata which will be displayed on Watch Next Channel.
      */
     private fun setBuilderMetadata(
         builder: Builder,
@@ -91,7 +90,7 @@ object PlayNextHelper {
             .setPreviewVideoUri(Uri.parse(video.videoUri))
             .setDescription(video.description)
             .setPosterArtUri(Uri.parse(video.thumbnailUri))
-            // Intent uri used to deep link video when user clicks on play next item.
+            // Intent uri used to deep link video when user clicks on Watch Next item.
             .setIntentUri(Uri.parse(video.uri))
             /* The internalProviderId attribute must match the internal ID you provide in the
             Media PlaybackStateCompat.Actions feed. This allows Android TV to reconcile
@@ -127,16 +126,16 @@ object PlayNextHelper {
         val durationInMilliSeconds = duration.toMillis().toInt()
         // Return true if either X minutes or Y % have passed
         // Following formatting spans over multiple lines to accommodate max 100 limit
-        val playNextMinStartedMillis = TimeUnit.MINUTES.toMillis(PLAY_NEXT_STARTED_MIN_MINUTES)
+        val watchNextMinStartedMillis = TimeUnit.MINUTES.toMillis(WATCH_NEXT_STARTED_MIN_MINUTES)
         // Check if either X minutes or Y% has passed
         val hasVideoStarted =
-            (currentPosition >= (durationInMilliSeconds * PLAY_NEXT_STARTED_MIN_PERCENTAGE)) or
-              (currentPosition >= playNextMinStartedMillis)
+            (currentPosition >= (durationInMilliSeconds * WATCH_NEXT_STARTED_MIN_PERCENTAGE)) or
+              (currentPosition >= watchNextMinStartedMillis)
         return ((currentPosition <= durationInMilliSeconds) and hasVideoStarted)
     }
 
     /**
-     * Retrieve all programs in Play Next row.
+     * Retrieve all programs in Watch Next row.
      */
     @SuppressLint("RestrictedApi")
     // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
@@ -161,13 +160,13 @@ object PlayNextHelper {
     }
 
     /**
-     * Add unfinished program to play next.
-     * Update the playback position if program already exists in Play Next Channel.
+     * Add unfinished program to Watch Next.
+     * Update the playback position if program already exists in Watch Next channel.
      */
     @SuppressLint("RestrictedApi")
     // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
     @Synchronized
-    internal fun insertOrUpdateVideoToPlayNext(
+    internal fun insertOrUpdateVideoToWatchNext(
         video: Video,
         watchPosition: Int,
         watchNextType: Int,
@@ -176,7 +175,7 @@ object PlayNextHelper {
 
         if (video.videoType != VideoType.MOVIE && video.videoType != VideoType.EPISODE) {
             throw IllegalArgumentException(
-                "Play Next is not supported for Video Type: ${video?.videoType}")
+                "Watch Next is not supported for Video Type: ${video?.videoType}")
         }
 
         var programId = 0L
@@ -185,7 +184,7 @@ object PlayNextHelper {
 
         val existingProgram = getWatchNextProgramByVideoId(video.id, context)
         Timber.v(
-            "insertOrUpdateToPlayNext, existingProgram = $existingProgram ,videoid = ${video.id}"
+            "insertOrUpdateToWatchNext, existingProgram = $existingProgram ,videoid = ${video.id}"
         )
         // If program exists,create builder with existing program.
         val programBuilder = existingProgram
@@ -212,21 +211,21 @@ object PlayNextHelper {
         // Build the program with all the metadata
         val updatedProgram = updatedBuilder.build()
 
-        // If the program is already in the Play next row, update it
+        // If the program is already in the Watch Next row, update it
         if (existingProgram != null) {
             programId = existingProgram.id
             PreviewChannelHelper(context).updateWatchNextProgram(updatedProgram, programId)
-            Timber.v("Updated program in Play next row: ${updatedProgram.title}")
+            Timber.v("Updated program in Watch Next row: ${updatedProgram.title}")
         }
         // Otherwise build the program and insert it into the channel
         else {
             try {
                 programId = PreviewChannelHelper(context)
                     .publishWatchNextProgram(updatedProgram)
-                Timber.v("Added New program to Play next row: ${updatedProgram.title}")
+                Timber.v("Added New program to Watch Next row: ${updatedProgram.title}")
             } catch (exc: IllegalArgumentException) {
                 Timber.e(
-                    exc, "Unable to add program to Play next row. ${exc.localizedMessage}"
+                    exc, "Unable to add program to Watch Next row. ${exc.localizedMessage}"
                 )
                 exc.printStackTrace()
             }
@@ -237,15 +236,15 @@ object PlayNextHelper {
     }
 
     /**
-     *  Remove a Video object from the Play next row,
+     *  Remove a Video object from the Watch Next row,
      *  Typically after user has finished watching the video.
      *  Returns the number of rows deleted or null if delete fails
      */
     @Synchronized
     @SuppressLint("RestrictedApi")
     // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
-    fun removeVideoFromPlayNext(context: Context, video: Video): Uri? {
-        Timber.v("Trying to Removing content from Play next: ${video.name}")
+    fun removeVideoFromWatchNext(context: Context, video: Video): Uri? {
+        Timber.v("Trying to Removing content from Watch Next: ${video.name}")
 
         // Find the program with the matching ID for our metadata.
         val foundProgram = getWatchNextProgramByVideoId(video.id, context)
@@ -265,10 +264,10 @@ object PlayNextHelper {
             )
 
             if (deleteCount == 1) {
-                Timber.v("Content successfully removed from Play next")
+                Timber.v("Content successfully removed from Watch Next")
                 programUri
             } else {
-                Timber.e("Content failed to be removed from Play next, delete count $deleteCount")
+                Timber.e("Content failed to be removed from Watch Next, delete count $deleteCount")
                 null
             }
         }
@@ -277,7 +276,7 @@ object PlayNextHelper {
     @Synchronized
     @SuppressLint("RestrictedApi")
     // Suppress RestrictedApi due to https://issuetracker.google.com/138150076
-    fun removeVideosFromPlayNext(context: Context, videos: List<Video>) {
+    fun removeVideosFromWatchNext(context: Context, videos: List<Video>) {
         // Find the program with the matching ID for our metadata.
         val foundPrograms = getWatchNextProgramByVideoIds(videos.map { it.id }, context)
         val operations = foundPrograms.map {
@@ -289,13 +288,13 @@ object PlayNextHelper {
 
         results.forEach { result ->
             if (result.count != 1) {
-                Timber.e("Content failed to be removed from Play next: ${result.uri}")
+                Timber.e("Content failed to be removed from Watch Next: ${result.uri}")
             }
         }
     }
 
     /**
-     * Query the play next list and find the program with given videoId.
+     * Query the Watch Next list and find the program with given videoId.
      * Return null if not found.
      */
     @Synchronized
@@ -344,7 +343,7 @@ object PlayNextHelper {
     }
 
     /**
-     *  Returns a list of videos which is visible on Play next row.
+     *  Returns a list of videos which is visible on Watch Next row.
      */
     @SuppressLint("RestrictedApi")
     internal fun filterWatchNextVideos(videos: List<Video>, context: Context): List<Video> {
@@ -354,28 +353,28 @@ object PlayNextHelper {
     }
 
     /**
-     * Handle operations for Play Next Channel for video type 'Movie'.
+     * Handle operations for Watch Next channel for video type 'Movie'.
      */
     // TODO(mayurikhin@) : create a @StringDef for the string constants for the different
     //  player states.
-    internal fun handlePlayNextForMovie(
+    internal fun handleWatchNextForMovie(
         video: Video,
         watchPosition: Int,
         state: String?,
         context: Context
     ) {
-        Timber.v("Adding/remove movie to Play Next. Video Name: ${video.name}")
+        Timber.v("Adding/remove movie to Watch Next. Video Name: ${video.name}")
 
         when {
-            // If movie has finished, remove from Play Next Channel.
+            // If movie has finished, remove from Watch Next channel.
             (state == PLAY_STATE_ENDED) or
                 video.isAfterEndCreditsPosition(watchPosition.toLong()) -> {
-                removeVideoFromPlayNext(context, video)
+                removeVideoFromWatchNext(context, video)
             }
 
-            // Add or update unfinished movie to Play Next Channel.
+            // Add or update unfinished movie to Watch Next channel.
             hasVideoStarted(video.duration(), watchPosition) -> {
-                insertOrUpdateVideoToPlayNext(
+                insertOrUpdateVideoToWatchNext(
                     video,
                     watchPosition,
                     WATCH_NEXT_TYPE_CONTINUE,
@@ -384,7 +383,7 @@ object PlayNextHelper {
             }
             else -> {
                 Timber.w(
-                    "Video not started yet. Can't add to PlayNext.watchPosition: %s, duration: %d",
+                    "Video not started yet. Can't add to WatchNext.watchPosition: %s, duration: %d",
                     watchPosition,
                     video.duration().toMillis()
                 )
@@ -393,49 +392,49 @@ object PlayNextHelper {
     }
 
     /**
-     * Handle operations for Play Next Channel for video type 'Episode'.
+     * Handle operations for Watch Next channel for video type 'Episode'.
      */
-    internal fun handlePlayNextForEpisode(
+    internal fun handleWatchNextForEpisode(
         video: Video,
         watchPosition: Int,
         state: String?,
         videoRepository: VideoRepository,
         context: Context
     ) {
-        Timber.v("Adding/remove episode to Play Next. Video Name: ${video.name}")
+        Timber.v("Adding/remove episode to Watch Next. Video Name: ${video.name}")
 
-        var newPlayNextVideo: Video? = null
+        var newWatchNextVideo: Video? = null
         when {
-            // If episode has finished, remove from Play Next Channel.
+            // If episode has finished, remove from Watch Next channel.
             (state == PLAY_STATE_ENDED) or
                 video.isAfterEndCreditsPosition(watchPosition.toLong()) -> {
-                removeVideoFromPlayNext(context, video)
+                removeVideoFromWatchNext(context, video)
 
                 // Add next episode from TV series.
                 videoRepository.getNextEpisodeInSeries(video)?.let {
-                        insertOrUpdateVideoToPlayNext(
+                        insertOrUpdateVideoToWatchNext(
                             it,
                             0,
                             WATCH_NEXT_TYPE_NEXT,
                             context
                         )
-                        newPlayNextVideo = it
+                        newWatchNextVideo = it
                     }
             }
 
-            // Add or update unfinished episode to Play Next Channel.
+            // Add or update unfinished episode to Watch Next channel.
             hasVideoStarted(video.duration(), watchPosition) -> {
-                insertOrUpdateVideoToPlayNext(
+                insertOrUpdateVideoToWatchNext(
                     video,
                     watchPosition,
                     WATCH_NEXT_TYPE_CONTINUE,
                     context
                 )
-                newPlayNextVideo = video
+                newWatchNextVideo = video
             }
             else -> {
                 Timber.w(
-                    "Video not started yet. Can't add to PlayNext.watchPosition: %s, duration: %d",
+                    "Video not started yet. Can't add to WatchNext.watchPosition: %s, duration: %d",
                     watchPosition,
                     video.duration().toMillis()
                 )
@@ -443,17 +442,17 @@ object PlayNextHelper {
         }
 
         /**
-         *  We suggest to keep only 1 episode for each TV show in Play next, remove previous
+         *  We suggest to keep only 1 episode for each TV show in Watch Next, remove previous
          *  watched episodes and only keep the last watched one.
-         *  1. Figures out which episode from this TV Series are visible in the Play next row;
+         *  1. Figures out which episode from this TV Series are visible in the Watch Next row;
          *  2. Sorts the filtered episodes and excludes the last watched episode;
-         *  3. Removes all other episode from Play next row;
+         *  3. Removes all other episode from Watch Next row;
          */
-        newPlayNextVideo?.let { videoToKeep ->
+        newWatchNextVideo?.let { videoToKeep ->
             videoRepository.getAllVideosFromSeries(videoToKeep.seriesUri)?.let { allEpisodes ->
                     filterWatchNextVideos(allEpisodes, context)
                         ?.let { watchedEpisodes ->
-                            removeVideosFromPlayNext(
+                            removeVideosFromWatchNext(
                                 context, watchedEpisodes.filter { it.id != videoToKeep.id })
                         }
                 }

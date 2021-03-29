@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.playnext
+package com.android.tv.reference.watchnext
 
 import android.content.Context
 import androidx.lifecycle.Observer
@@ -22,43 +22,42 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import timber.log.Timber
-import java.lang.IllegalStateException
 
 /**
- * Notifies the video state and relevant metadata for adding/removing to Play Next Channel. Used for
- * adding un-finished/next content & removing finished content from Play Next.
+ * Notifies the video state and relevant metadata for adding/removing to Watch Next channel. Used
+ * for adding un-finished/next content & removing finished content from Watch Next.
  */
-class PlayNextPlaybackStateListener(private val context: Context) : Observer<VideoPlaybackState> {
+class WatchNextPlaybackStateListener(private val context: Context) : Observer<VideoPlaybackState> {
     override fun onChanged(state: VideoPlaybackState) {
         if (!(state is VideoPlaybackState.Pause || state is VideoPlaybackState.End)) {
             return
         }
 
-        Timber.v("State is $state: Notify to play next.")
+        Timber.v("State is $state: Notify to Watch Next.")
 
         val video = when (state) {
             is VideoPlaybackState.Pause -> state.video
             is VideoPlaybackState.End -> state.video
-            else -> throw IllegalStateException("Play Next only operates in Pause or End states.")
+            else -> throw IllegalStateException("Watch Next only operates in Pause or End states.")
         }
         val (playerState, position) = when (state) {
             is VideoPlaybackState.Pause ->
-                PlayNextHelper.PLAY_STATE_PAUSED to state.position
-            else -> PlayNextHelper.PLAY_STATE_ENDED to video.duration().toMillis()
+                WatchNextHelper.PLAY_STATE_PAUSED to state.position
+            else -> WatchNextHelper.PLAY_STATE_ENDED to video.duration().toMillis()
         }
 
         // Set relevant data about playback state and video.
         val watchData = Data.Builder().apply {
-            putString(PlayNextHelper.VIDEO_ID, video.id)
-            putLong(PlayNextHelper.CURRENT_POSITION, position)
-            putLong(PlayNextHelper.DURATION, video.duration().toMillis())
-            putString(PlayNextHelper.PLAYER_STATE, playerState)
+            putString(WatchNextHelper.VIDEO_ID, video.id)
+            putLong(WatchNextHelper.CURRENT_POSITION, position)
+            putLong(WatchNextHelper.DURATION, video.duration().toMillis())
+            putString(WatchNextHelper.PLAYER_STATE, playerState)
         }
 
-        // Run on a background thread to process playback states and do relevant operations for Play
-        // Next.
+        // Run on a background thread to process playback states and do relevant operations for
+        // Watch Next.
         WorkManager.getInstance(context.applicationContext).enqueue(
-            OneTimeWorkRequest.Builder(PlayNextWorker::class.java)
+            OneTimeWorkRequest.Builder(WatchNextWorker::class.java)
                 .setInputData(watchData.build())
                 .build()
         )

@@ -22,7 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.tv.reference.lifecycle.ext.nonNull
-import com.android.tv.reference.playnext.PlayNextPlaybackStateListener
+import com.android.tv.reference.watchnext.WatchNextPlaybackStateListener
 import com.android.tv.reference.shared.playback.PlaybackStateMachine
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.android.tv.reference.shared.watchprogress.LoadPlaybackStateListener
@@ -66,7 +66,7 @@ class PlaybackViewModel(application: Application) :
                 lifecycleOwner = owner
             )
         )
-        playbackState.nonNull().observe(owner, PlayNextPlaybackStateListener(getApplication()))
+        playbackState.nonNull().observe(owner, WatchNextPlaybackStateListener(getApplication()))
         playbackState.nonNull().observe(
             owner,
             WatchProgressPlaybackStateListener(

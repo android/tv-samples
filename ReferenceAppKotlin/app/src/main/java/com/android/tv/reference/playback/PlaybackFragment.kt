@@ -101,7 +101,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onPause() {
         super.onPause()
-        // TODO(mayurikhin@) :  Find valid data points to debate both cases when to notify Play Next
+        // TODO(mayurikhin@):  Find valid data points to debate both cases when to notify Watch Next
         // (Either Player callback states or lifecycle Pause events)
         if (exoplayer == null) {
             Timber.w("Warning : ExoPlayer is null. Cannot update in onPause()")

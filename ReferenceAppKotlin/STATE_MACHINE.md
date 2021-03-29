@@ -12,7 +12,7 @@ shown.
 * Watch Progress - When a video is paused, the locally stored progress should be updated. When a
 video is first prepared, the watch progress needs to be loaded to resume from the last watched
 position.
-* Play Next - When a video is paused or completed, the Play Next tiles should be updated.
+* Watch Next - When a video is paused or completed, the Watch Next tiles should be updated.
 * Video completion - When the user finishes watching a full video, playback should stop and the app
 should return to the previous screen.
 
