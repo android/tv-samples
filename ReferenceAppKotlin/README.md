@@ -1,4 +1,4 @@
-# Android TV Reference App
+# TV Reference App
 
 This sample demonstrates how to create a video playback app that is optimized for Android TV and
 Google TV. It demonstrates how to

@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">ATV Reference App</string>
+    <string name="app_name">TV Reference App</string>
 
     <!-- Preference -->
     <string name="info">Info</string>

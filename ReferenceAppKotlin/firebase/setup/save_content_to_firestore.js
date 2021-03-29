@@ -8,7 +8,7 @@ const admin = require('./../server/node_modules/firebase-admin');
 const serviceAccount = require("./../service-account-key.json");
 
 // Replace the value with databaseURL given in firebase admin SDK configuration
-const dbURL = "https://atv-reference-app.firebaseio.com"
+const dbURL = "https://tv-reference-app.firebaseio.com"
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
