@@ -95,6 +95,20 @@ details). That means it's easiest to test this feature by running the sample on 
 watching a movie for a few minutes, and then returning to the Android TV home screen. The Watch Next
 content will show just below the apps row.
 
+### Cast Connect
+
+Android TV and Google TV Receivers use the Cast Connect library to allow existing sender
+applications to communicate with Android TV/Google TV applications via the Cast protocol.
+Cast Connect builds on top of the Cast infrastructure, with your TV app acting as a receiver.
+
+The Cast Connect library allows your TV app to receive messages and broadcast media
+status, as if it were a Chromecast. Using Cast Connect, a cast sender application on a mobile
+device can directly send cast signals to your TV App and open the TV App for casting, playback
+and media controls. See the [documendation][cast-connect] for more details and the
+[README file](app/src/castconnect/README.md) in the [castconnect](app/src/castconnect)
+directory for steps on how to configure a Cast Sender application to work with this
+TV Reference App.
+
 ## Support
 
 For general Android, Android TV, and Google TV related questions, please use the
