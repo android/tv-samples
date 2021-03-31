@@ -17,10 +17,17 @@
 import {assert} from "chai";
 import * as firebaseTest from 'firebase-functions-test';
 
+// Example for database URL - https://my-app.firebaseio.com
+const dbURL = "REPLACE_ME"
+// Example for projectId - my-app
+const projectIdentifier = "REPLACE_ME"
+// Example for storageBucket - my-app.appspot.com
+const StorageBucketId = "REPLACE_ME"
+
 const test = firebaseTest({
-  databaseURL: "https://tv-reference.firebaseio.com",
-  projectId: "tv-reference",
-  storageBucket: "tv-reference.appspot.com"
+  databaseURL: dbURL,
+  projectId: projectIdentifier,
+  storageBucket: storageBucketId
 }, './service-account-firebase.json');
 test.mockConfig({
   app: {
@@ -30,16 +37,18 @@ test.mockConfig({
 
 import * as firebase from 'firebase-admin';
 import firebaseServiceAccountJson = require('./service-account-firebase.json');
+
 firebase.initializeApp({
   credential: firebase.credential.cert(firebaseServiceAccountJson),
-  databaseURL: "https://tv-reference.firebaseio.com"
+  databaseURL: dbURL,
 });
 
 import {auth_endpoint, user_info, token_exchange} from "../src/controller/functions/authentication";
 
 const AUTH_CODE_EXPIRY = 600; // seconds until expiry, 10 minutes
 const ACCESS_TOKEN_EXPIRY = 3600; // seconds until expiry, 1 hour
-const PROJECT_ID = "tv-reference";
+
+const PROJECT_ID = projectIdentifier;
 // ID Token for classy.taxi.exists@gmail.com, account exists
 const id_token_valid = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImEwNjgyNGI3OWUzOTgyMzk0ZDVjZTdhYzc1YmY5MmNiYTMwYTJlMjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJuYmYiOjE1NzMxNzQ2NDYsImF1ZCI6IjcwMTk2NjM5MTI4MS1tam8zaG85NXViajA0M2tkaWJkMmgwdW1zanBkcHRpci5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjExMjE4MDY1MTM0OTc5NTM3ODA1NiIsImVtYWlsIjoiY2xhc3N5LnRheGkuZXhpc3RzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiQ2xhc3N5VGF4aSBFeGlzdHMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1ocXhidmNBVWlLay9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BQ0hpM3JlOV90Vm5CNjh4VTduZmlJQVhOMmx4U1ZnSEx3L3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJDbGFzc3lUYXhpIiwiZmFtaWx5X25hbWUiOiJFeGlzdHMiLCJsb2NhbGUiOiJlbi1VUyIsImlhdCI6MTU3MzE3NDk0NiwiZXhwIjoxNTczMTc4NTQ2LCJqdGkiOiIxZGExNTAxMGZlYWYzOTcyMThjY2JlYzI1ZWNlYjU3YjA4NjgyMDA4In0.D7BPcBbcBh0XeKM9UxEsV1JTpN-CMl3j80Lo9D4-UyN8gs_FvZDyeHPmPxo0LiCcG2dubyWs09PdNRUhsZeXEmIQeoKj4qXDMto-jOltljDcA7fjHC_EpgW6rbj-pQIsfe7MdEBx3PapPFF8dtNAXiBhpcg9KJloul_wrDYyWot2e13qaM9cAhOXA8N1k2BKDUtLVECW1OAoEVHniK9oNu5EqmQc0wl2-K95BoXpoaOx8fpX0g9zZW2Hz_8O6mdqA6bJO6rwhBkdvPw1OkduMOxzqO9Xg_ZdBEQW2ZOdqOVgSzn3rq3xxkU_kA9VGTqY44eMPCUvMAgelA4coavuhg";
 // ID Token for classy.taxi.fake@gmail.com, account doesn't exist

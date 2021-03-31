@@ -26,7 +26,8 @@ const uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: function(authResult) {
       console.log(authResult);
-      const redirectUrl = 'https://us-central1-atv-reference-app.cloudfunctions.net/auth_callback';
+      // Example redirectUrl = 'https://my-app.cloudfunctions.net/auth_callback'
+      const redirectUrl = 'REPLACE_ME';
       const params = (new URL(window.location.href)).searchParams;
       window.location.href = redirectUrl + "?client_id=" + params.get("client_id") +
           "&state=" + params.get("state") + "&scope=" + params.get("scope") +

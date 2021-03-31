@@ -42,7 +42,7 @@ package.
 If FIREBASE_ENABLED is set to false in the app's [build.gradle](app/build.gradle) file (not the
 project's file) the app displays a warning when it starts up saying that Firebase is not configured.
 In this case account-specific features are disabled. If you change the flag to true the message no
-longer appears, but you must still update the project to use Firebase.
+longer appears, but you will need to still update the project to use Firebase.
 
 See the [firebase](firebase) directory and its [README file](firebase/README.md) for an example of
 how to set up Firebase. You should modify
