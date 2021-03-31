@@ -18,4 +18,4 @@
       android:layout_marginLeft="48dp"
       android:layout_marginRight="48dp">
   </LinearLayout>
-</ScrollView>>
+</ScrollView>

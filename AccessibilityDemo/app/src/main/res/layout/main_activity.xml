@@ -9,7 +9,7 @@
       android:orientation="vertical"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/standard_view_title" />
+      android:text="@string/standard_view_title" >
   <Button
         android:id="@+id/standard_view_button"
         android:layout_width="match_parent"
