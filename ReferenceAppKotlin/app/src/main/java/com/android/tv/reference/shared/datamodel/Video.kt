@@ -69,13 +69,15 @@ class Video(
      */
     fun isAfterEndCreditsPosition(positionMillis: Long): Boolean {
         val durationMillis = duration().toMillis() * VIDEO_COMPLETED_DURATION_MAX_PERCENTAGE
+        val isAfterEndCreditsPosition = positionMillis >= durationMillis
         Timber.v(
-            "Has video Ended? duration: %s, durationMillis: %s, positionMillis: %s",
+            "Has video Ended? %s, duration: %s, durationMillis: %s, positionMillis: %s",
+            isAfterEndCreditsPosition,
             duration,
             durationMillis,
             positionMillis
         )
-        return positionMillis >= durationMillis
+        return isAfterEndCreditsPosition
         // TODO(mayurkhin@) add metadata to check completion with video credits
     }
 

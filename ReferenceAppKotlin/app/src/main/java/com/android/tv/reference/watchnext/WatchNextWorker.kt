@@ -69,7 +69,7 @@ class WatchNextWorker(private val context: Context, params: WorkerParameters) :
             VideoRepositoryFactory.getVideoRepository(context.applicationContext as Application)
                 .getVideoById(videoId)
 
-        Timber.v(" Get video from video list: watched video id  $videoId ,retrieved vid $video.id")
+        Timber.v("Retrieved video from repository with id %s, %s", videoId, video)
 
         // Step 4 : Handle Watch Next for different types of content.
         when (video?.videoType) {

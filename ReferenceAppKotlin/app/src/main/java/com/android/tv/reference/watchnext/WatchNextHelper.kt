@@ -121,8 +121,6 @@ object WatchNextHelper {
      * https://developer.android.com/training/tv/discovery/guidelines-app-developers
      */
     internal fun hasVideoStarted(duration: Duration, currentPosition: Int): Boolean {
-        Timber.v("Find if Video started: duration: $duration ,watchPosition: $currentPosition")
-
         val durationInMilliSeconds = duration.toMillis().toInt()
         // Return true if either X minutes or Y % have passed
         // Following formatting spans over multiple lines to accommodate max 100 limit
@@ -131,7 +129,15 @@ object WatchNextHelper {
         val hasVideoStarted =
             (currentPosition >= (durationInMilliSeconds * WATCH_NEXT_STARTED_MIN_PERCENTAGE)) or
               (currentPosition >= watchNextMinStartedMillis)
-        return ((currentPosition <= durationInMilliSeconds) and hasVideoStarted)
+        val hasVideoStartedWithValidPosition =
+            ((currentPosition <= durationInMilliSeconds) and hasVideoStarted)
+        Timber.v(
+            "Has video started: %s, duration: %s, watchPosition: %s",
+            hasVideoStartedWithValidPosition,
+            duration,
+            currentPosition
+        )
+        return hasVideoStartedWithValidPosition
     }
 
     /**
