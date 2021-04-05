@@ -22,6 +22,12 @@
 
     <style name="Body.Error">
         <item name="android:textColor">@color/error_text</item>
+        <!-- Setting accessibilityLiveRegion to assertive means that accessibility services
+        should interrupt any current speech to announce changes to this view. This is only
+        appropriate if the changes to the view are vital to the user experience. In this case,
+        the Error style is used for blocking error messages that are displayed only as a result
+        of user action -->
+        <item name="android:accessibilityLiveRegion">assertive</item>
     </style>
 
     <style name="Title">
