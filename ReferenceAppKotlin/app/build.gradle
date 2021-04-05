@@ -85,7 +85,6 @@ dependencies {
     implementation "androidx.core:core-ktx:1.3.2"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation "androidx.leanback:leanback:$leanback_version"
-    implementation "androidx.leanback:leanback-preference:$leanback_version"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"

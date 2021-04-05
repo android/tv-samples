@@ -19,7 +19,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Leanback">
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="android:textColor">@color/default_text_color</item>
         <item name="android:textColorPrimary">@color/default_text_color</item>
