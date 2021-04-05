@@ -18,7 +18,7 @@ package com.android.tv.reference.shared.datamodel
 import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Duration
 

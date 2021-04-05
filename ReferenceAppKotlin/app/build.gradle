@@ -16,7 +16,7 @@
 
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
-apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-parcelize"
 
 // Safe args allows the passing of data in bundles with type safety
 // See more at https://developer.android.com/guide/navigation/navigation-pass-data
