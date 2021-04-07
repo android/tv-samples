@@ -135,15 +135,15 @@ class WatchNextTest {
 
         // Verify the correct metadata was set.
         assertThat(program).isNotNull()
-        assertThat(program?.internalProviderId).isEqualTo(unfinishedEpisode.id)
-        assertThat(program?.title).isEqualTo(unfinishedEpisode.category)
-        assertThat(program?.episodeNumber).isEqualTo(unfinishedEpisode.episodeNumber)
-        assertThat(program?.seasonNumber).isEqualTo(unfinishedEpisode.seasonNumber)
-        assertThat(program?.episodeTitle).isEqualTo(unfinishedEpisode.name)
-        assertThat(program?.seasonTitle).isEqualTo(
+        assertThat(program.internalProviderId).isEqualTo(unfinishedEpisode.id)
+        assertThat(program.title).isEqualTo(unfinishedEpisode.category)
+        assertThat(program.episodeNumber).isEqualTo(unfinishedEpisode.episodeNumber)
+        assertThat(program.seasonNumber).isEqualTo(unfinishedEpisode.seasonNumber)
+        assertThat(program.episodeTitle).isEqualTo(unfinishedEpisode.name)
+        assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
                 R.string.season, unfinishedEpisode.category, unfinishedEpisode.seasonNumber))
-        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+        assertThat(program.lastPlaybackPositionMillis).isEqualTo(
             TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
     }
 
@@ -176,15 +176,15 @@ class WatchNextTest {
 
         // Verify the correct metadata was set.
         assertThat(program).isNotNull()
-        assertThat(program?.internalProviderId).isEqualTo(secondWatchedEpisode.id)
-        assertThat(program?.title).isEqualTo(secondWatchedEpisode.category)
-        assertThat(program?.episodeNumber).isEqualTo(secondWatchedEpisode.episodeNumber)
-        assertThat(program?.seasonNumber).isEqualTo(secondWatchedEpisode.seasonNumber)
-        assertThat(program?.episodeTitle).isEqualTo(secondWatchedEpisode.name)
-        assertThat(program?.seasonTitle).isEqualTo(
+        assertThat(program.internalProviderId).isEqualTo(secondWatchedEpisode.id)
+        assertThat(program.title).isEqualTo(secondWatchedEpisode.category)
+        assertThat(program.episodeNumber).isEqualTo(secondWatchedEpisode.episodeNumber)
+        assertThat(program.seasonNumber).isEqualTo(secondWatchedEpisode.seasonNumber)
+        assertThat(program.episodeTitle).isEqualTo(secondWatchedEpisode.name)
+        assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
                 R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber))
-        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+        assertThat(program.lastPlaybackPositionMillis).isEqualTo(
             TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
     }
 
@@ -217,15 +217,15 @@ class WatchNextTest {
 
         // Verify the correct metadata was set.
         assertThat(program).isNotNull()
-        assertThat(program?.internalProviderId).isEqualTo(secondWatchedEpisode.id)
-        assertThat(program?.title).isEqualTo(secondWatchedEpisode.category)
-        assertThat(program?.episodeNumber).isEqualTo(secondWatchedEpisode.episodeNumber)
-        assertThat(program?.seasonNumber).isEqualTo(secondWatchedEpisode.seasonNumber)
-        assertThat(program?.episodeTitle).isEqualTo(secondWatchedEpisode.name)
-        assertThat(program?.seasonTitle).isEqualTo(
+        assertThat(program.internalProviderId).isEqualTo(secondWatchedEpisode.id)
+        assertThat(program.title).isEqualTo(secondWatchedEpisode.category)
+        assertThat(program.episodeNumber).isEqualTo(secondWatchedEpisode.episodeNumber)
+        assertThat(program.seasonNumber).isEqualTo(secondWatchedEpisode.seasonNumber)
+        assertThat(program.episodeTitle).isEqualTo(secondWatchedEpisode.name)
+        assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
                 R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber))
-        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
+        assertThat(program.lastPlaybackPositionMillis).isEqualTo(
             TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
     }
 
@@ -254,15 +254,15 @@ class WatchNextTest {
 
         // Verify the correct metadata was set.
         assertThat(program).isNotNull()
-        assertThat(program?.internalProviderId).isEqualTo(nextEpisode.id)
-        assertThat(program?.title).isEqualTo(nextEpisode.category)
-        assertThat(program?.episodeNumber).isEqualTo(nextEpisode.episodeNumber)
-        assertThat(program?.seasonNumber).isEqualTo(nextEpisode.seasonNumber)
-        assertThat(program?.episodeTitle).isEqualTo(nextEpisode.name)
-        assertThat(program?.seasonTitle).isEqualTo(
+        assertThat(program.internalProviderId).isEqualTo(nextEpisode.id)
+        assertThat(program.title).isEqualTo(nextEpisode.category)
+        assertThat(program.episodeNumber).isEqualTo(nextEpisode.episodeNumber)
+        assertThat(program.seasonNumber).isEqualTo(nextEpisode.seasonNumber)
+        assertThat(program.episodeTitle).isEqualTo(nextEpisode.name)
+        assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
                 R.string.season, nextEpisode.category, nextEpisode.seasonNumber))
-        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(0)
+        assertThat(program.lastPlaybackPositionMillis).isEqualTo(0)
     }
 
     /**
@@ -290,15 +290,15 @@ class WatchNextTest {
 
         // Verify the correct metadata was set.
         assertThat(program).isNotNull()
-        assertThat(program?.internalProviderId).isEqualTo(nextEpisode.id)
-        assertThat(program?.title).isEqualTo(nextEpisode.category)
-        assertThat(program?.episodeNumber).isEqualTo(nextEpisode.episodeNumber)
-        assertThat(program?.seasonNumber).isEqualTo(nextEpisode.seasonNumber)
-        assertThat(program?.episodeTitle).isEqualTo(nextEpisode.name)
-        assertThat(program?.seasonTitle).isEqualTo(
+        assertThat(program.internalProviderId).isEqualTo(nextEpisode.id)
+        assertThat(program.title).isEqualTo(nextEpisode.category)
+        assertThat(program.episodeNumber).isEqualTo(nextEpisode.episodeNumber)
+        assertThat(program.seasonNumber).isEqualTo(nextEpisode.seasonNumber)
+        assertThat(program.episodeTitle).isEqualTo(nextEpisode.name)
+        assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
                 R.string.season, nextEpisode.category, nextEpisode.seasonNumber))
-        assertThat(program?.lastPlaybackPositionMillis).isEqualTo(0)
+        assertThat(program.lastPlaybackPositionMillis).isEqualTo(0)
     }
 
     /**
@@ -413,19 +413,19 @@ class WatchNextTest {
                     )
                 )
 
-            values?.getAsInteger(
+            values.getAsInteger(
                 TvContractCompat.WatchNextPrograms.COLUMN_SEASON_DISPLAY_NUMBER
             )?.let { programBuilder.setSeasonNumber(it) }
 
-            values?.getAsString(
+            values.getAsString(
                 TvContractCompat.WatchNextPrograms.COLUMN_SEASON_TITLE
             )?.let { programBuilder.setSeasonTitle(it) }
 
-            values?.getAsInteger(
+            values.getAsInteger(
                 TvContractCompat.WatchNextPrograms.COLUMN_EPISODE_DISPLAY_NUMBER
             )?.let { programBuilder.setEpisodeNumber(it) }
 
-            values?.getAsString(
+            values.getAsString(
                 TvContractCompat.WatchNextPrograms.COLUMN_EPISODE_TITLE
             )?.let { programBuilder.setEpisodeTitle(it) }
 
@@ -441,7 +441,7 @@ class WatchNextTest {
             selection: String?,
             selectionArgs: Array<out String>?,
             sortOrder: String?
-        ): Cursor? {
+        ): Cursor {
             val cursor = MatrixCursor(columns)
             valuesInMemory.forEach {
                 cursor.addRow(
@@ -526,7 +526,7 @@ class WatchNextTest {
             return results.toArray() as Array<out ContentProviderResult>
         }
 
-        override fun getType(uri: Uri): String? {
+        override fun getType(uri: Uri): String {
             // This is an in-memory fake so getType is trivial.
             return ""
         }

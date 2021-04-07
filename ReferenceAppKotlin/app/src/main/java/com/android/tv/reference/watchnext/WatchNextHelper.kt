@@ -120,7 +120,7 @@ object WatchNextHelper {
      * whichever timestamp is earlier.
      * https://developer.android.com/training/tv/discovery/guidelines-app-developers
      */
-    internal fun hasVideoStarted(duration: Duration, currentPosition: Int): Boolean {
+    private fun hasVideoStarted(duration: Duration, currentPosition: Int): Boolean {
         val durationInMilliSeconds = duration.toMillis().toInt()
         // Return true if either X minutes or Y % have passed
         // Following formatting spans over multiple lines to accommodate max 100 limit
@@ -181,7 +181,7 @@ object WatchNextHelper {
 
         if (video.videoType != VideoType.MOVIE && video.videoType != VideoType.EPISODE) {
             throw IllegalArgumentException(
-                "Watch Next is not supported for Video Type: ${video?.videoType}")
+                "Watch Next is not supported for Video Type: ${video.videoType}")
         }
 
         var programId = 0L
@@ -455,9 +455,9 @@ object WatchNextHelper {
          *  3. Removes all other episode from Watch Next row;
          */
         newWatchNextVideo?.let { videoToKeep ->
-            videoRepository.getAllVideosFromSeries(videoToKeep.seriesUri)?.let { allEpisodes ->
+            videoRepository.getAllVideosFromSeries(videoToKeep.seriesUri).let { allEpisodes ->
                     filterWatchNextVideos(allEpisodes, context)
-                        ?.let { watchedEpisodes ->
+                        .let { watchedEpisodes ->
                             removeVideosFromWatchNext(
                                 context, watchedEpisodes.filter { it.id != videoToKeep.id })
                         }

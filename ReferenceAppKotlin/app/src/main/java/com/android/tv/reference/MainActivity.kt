@@ -83,7 +83,7 @@ class MainActivity : FragmentActivity() {
         )
         viewModel.deepLinkResult.observe(
             this,
-            Observer {
+            {
                 when (val result = it.getContentIfNotHandled()) {
                     is Result.Success -> {
                         val video = result.data

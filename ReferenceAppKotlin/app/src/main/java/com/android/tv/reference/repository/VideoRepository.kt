@@ -59,13 +59,13 @@ interface VideoRepository {
 
         // Put all episodes of the same series in a map. With season number as the key and a
         // list of videos from the specified season as the value.
-        val tvSeasonMap = getAllVideosFromSeries(episode.seriesUri)?.groupBy { it.seasonNumber }
+        val tvSeasonMap = getAllVideosFromSeries(episode.seriesUri).groupBy { it.seasonNumber }
 
         var nextEpisode: Video? = null
         val nextEpisodeNumber = (episode.episodeNumber.toInt() + 1).toString()
 
         // Searching for next episode in the same season.
-        tvSeasonMap?.get(episode.seasonNumber)?.let { currentSeason ->
+        tvSeasonMap[episode.seasonNumber]?.let { currentSeason ->
             nextEpisode = currentSeason.firstOrNull { videoInCurrentSeason ->
                 videoInCurrentSeason.episodeNumber == nextEpisodeNumber
             }
@@ -74,7 +74,7 @@ interface VideoRepository {
         // If not found in previous step, checking if there's an episode available in next season.
         if (nextEpisode == null) {
             val nextSeasonNumber = (episode.seasonNumber.toInt() + 1).toString()
-            tvSeasonMap?.get(nextSeasonNumber)?.let { nextSeason ->
+            tvSeasonMap[nextSeasonNumber]?.let { nextSeason ->
                 nextEpisode = if (nextSeason.sortedBy { it.episodeNumber }.isNotEmpty()) {
                     nextSeason[0]
                 } else {

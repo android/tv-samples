@@ -78,7 +78,7 @@ dependencies {
     // AndroidX libraries
     def leanback_version = "1.1.0-beta01"
     def room_version = "2.2.6"
-    def fragment_version = "1.3.1"
+    def fragment_version = "1.3.2"
     def cast_tv_version = "17.0.0"
     def cast_version = "19.0.0"
     implementation "androidx.appcompat:appcompat:1.2.0"
@@ -131,7 +131,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:4.7.1")
 
     // Testing libraries
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'android.arch.core:core-testing:1.1.1'
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation 'androidx.test:core:1.3.0'

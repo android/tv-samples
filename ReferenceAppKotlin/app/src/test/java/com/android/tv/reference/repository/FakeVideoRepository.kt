@@ -29,8 +29,8 @@ class FakeVideoRepository(override val application: Application) : VideoReposito
             "https://atv-reference-app.firebaseapp.com/movies-tech/seomb-seo-mythbusting-101"
         const val TEST_VIDEO_NAME = "SEO Mythbusting 101"
 
-        const val TEST_EPISODE_PREFIX = "https://atv-reference-app.firebaseapp.com/tv/"
-        const val TEST_EPISODE_CATEGORY = "TV Category"
+        private const val TEST_EPISODE_PREFIX = "https://atv-reference-app.firebaseapp.com/tv/"
+        private const val TEST_EPISODE_CATEGORY = "TV Category"
 
         /*  ktlint-disable max-line-length */
         private const val TEST_VIDEO_DESCRIPTION =
@@ -50,10 +50,9 @@ class FakeVideoRepository(override val application: Application) : VideoReposito
 
         // Adjust the playback position and duration with the time you want to test
         // Add approximate duration and playback position.
-        var TEST_VIDEO_DURATION_MILLIS = Duration.ofMinutes(40).toMillis().toInt()
         var TEST_VIDEO_PLAYBACK_POSITION_MILLIS = Duration.ofMinutes(17).toMillis().toInt()
         var TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS = Duration.ofMinutes(38).toMillis().toInt()
-        var TEST_VIDEO_DURATION = "PT00H40M"
+        private var TEST_VIDEO_DURATION = "PT00H40M"
 
         var video_movie = Video(
             id = TEST_VIDEO_ID,

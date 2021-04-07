@@ -19,10 +19,10 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.DisplayMetrics
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
@@ -67,10 +67,10 @@ class BrowseFragment : BrowseSupportFragment(), Target {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        displayMetrics.setTo(resources.displayMetrics)
         blurImageTransformation = BlurImageTransformation(requireContext())
 
-        handler = Handler()
+        handler = Handler(Looper.getMainLooper())
         backgroundManager = BackgroundManager.getInstance(requireActivity()).apply {
             if (!isAttached) {
                 attach(requireActivity().window)
@@ -88,19 +88,19 @@ class BrowseFragment : BrowseSupportFragment(), Target {
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
         viewModel.browseContent.observe(
             this,
-            Observer {
+            {
                 adapter = BrowseAdapter(it, viewModel.customMenuItems.value ?: listOf())
             }
         )
         viewModel.customMenuItems.observe(
             this,
-            Observer {
+            {
                 adapter = BrowseAdapter(viewModel.browseContent.value ?: listOf(), it)
             }
         )
         viewModel.isSignedIn.observe(
             this,
-            Observer {
+            {
                 viewModel.customMenuItems.postValue(
                     listOf(
                         BrowseCustomMenu(

@@ -24,15 +24,12 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
 import com.android.tv.reference.auth.SignInViewModel.SignInStatus
 import com.android.tv.reference.databinding.FragmentSignInBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
-// import com.google.android.gms.auth.api.identity.SavePasswordRequest
-// import com.google.android.gms.auth.api.identity.SignInPassword
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
@@ -56,11 +53,11 @@ class SignInFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentSignInBinding.inflate(inflater, container, false)
         viewModel.signInStatus.observe(
             viewLifecycleOwner,
-            Observer { status ->
+            { status ->
                 when (status) {
                     is SignInStatus.Success -> findNavController().popBackStack()
                     is SignInStatus.ShouldSavePassword -> startSavePasswordWithGoogle(
