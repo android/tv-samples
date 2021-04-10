@@ -16,10 +16,10 @@
 package com.android.tv.reference.watchnext
 
 import android.content.Context
-import androidx.lifecycle.Observer
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.android.tv.reference.playback.PlaybackStateListener
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import timber.log.Timber
 
@@ -27,7 +27,7 @@ import timber.log.Timber
  * Notifies the video state and relevant metadata for adding/removing to Watch Next channel. Used
  * for adding un-finished/next content & removing finished content from Watch Next.
  */
-class WatchNextPlaybackStateListener(private val context: Context) : Observer<VideoPlaybackState> {
+class WatchNextPlaybackStateListener(private val context: Context) : PlaybackStateListener {
     override fun onChanged(state: VideoPlaybackState) {
         if (!(state is VideoPlaybackState.Pause || state is VideoPlaybackState.End)) {
             return

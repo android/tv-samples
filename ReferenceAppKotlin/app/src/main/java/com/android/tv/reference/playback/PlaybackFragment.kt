@@ -17,11 +17,10 @@ package com.android.tv.reference.playback
 
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
-import androidx.leanback.media.PlaybackGlue
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
 import com.android.tv.reference.castconnect.CastHelper
@@ -52,27 +51,33 @@ class PlaybackFragment : VideoSupportFragment() {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var mediaSessionConnector: MediaSessionConnector
 
-    private val uiPlaybackStateListener = Observer<VideoPlaybackState> { state ->
-        // While a video is playing, the screen should stay on and the device should not go to
-        // sleep. When in any other state such as if the user pauses the video, the app should not
-        // prevent the device from going to sleep.
-        view?.keepScreenOn = state is VideoPlaybackState.Play
+    private val uiPlaybackStateListener = object : PlaybackStateListener {
+        override fun onChanged(state: VideoPlaybackState) {
+            // While a video is playing, the screen should stay on and the device should not go to
+            // sleep. When in any other state such as if the user pauses the video, the app should
+            // not prevent the device from going to sleep.
+            view?.keepScreenOn = state is VideoPlaybackState.Play
 
-        when (state) {
-            is VideoPlaybackState.Prepare -> startPlaybackFromWatchProgress(state.startPosition)
-            is VideoPlaybackState.End ->
-                // To get to playback, the user always goes through browse first. Deep links for
-                // directly playing a video also go to browse before playback. If playback finishes
-                // the entire video, the PlaybackFragment is popped off the back stack and the user
-                // returns to browse.
-                findNavController().popBackStack()
-            is VideoPlaybackState.Error ->
-                findNavController().navigate(
-                    PlaybackFragmentDirections
-                        .actionPlaybackFragmentToPlaybackErrorFragment(state.video, state.exception)
-                )
-            else -> {
-                // Do nothing.
+            when (state) {
+                is VideoPlaybackState.Prepare -> startPlaybackFromWatchProgress(state.startPosition)
+                is VideoPlaybackState.End -> {
+                    // To get to playback, the user always goes through browse first. Deep links for
+                    // directly playing a video also go to browse before playback. If playback
+                    // finishes the entire video, the PlaybackFragment is popped off the back stack
+                    // and the user returns to browse.
+                    findNavController().popBackStack()
+                }
+                is VideoPlaybackState.Error ->
+                    findNavController().navigate(
+                        PlaybackFragmentDirections
+                            .actionPlaybackFragmentToPlaybackErrorFragment(
+                                state.video,
+                                state.exception
+                            )
+                    )
+                else -> {
+                    // Do nothing.
+                }
             }
         }
     }
@@ -85,28 +90,21 @@ class PlaybackFragment : VideoSupportFragment() {
 
         // Create the MediaSession that will be used throughout the lifecycle of this Fragment.
         createMediaSession()
+    }
 
-        // Load the ViewModel for this specific video.
-        viewModel.registerStateListeners(owner = this)
-        viewModel.playbackState.observe(/* owner= */ this, uiPlaybackStateListener)
-        viewModel.onStateChange(VideoPlaybackState.Load(video))
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.addPlaybackStateListener(uiPlaybackStateListener)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.removePlaybackStateListener(uiPlaybackStateListener)
     }
 
     override fun onStart() {
         super.onStart()
         initializePlayer()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // TODO(mayurikhin@):  Find valid data points to debate both cases when to notify Watch Next
-        // (Either Player callback states or lifecycle Pause events)
-        if (exoplayer == null) {
-            Timber.w("Warning : ExoPlayer is null. Cannot update in onPause()")
-            return
-        }
-        Timber.v("Playback Paused. Add last known position ${exoplayer!!.currentPosition}")
-        viewModel.onStateChange(VideoPlaybackState.Pause(video, exoplayer!!.currentPosition))
     }
 
     override fun onStop() {
@@ -140,13 +138,19 @@ class PlaybackFragment : VideoSupportFragment() {
             mediaSessionConnector.setPlayer(this)
             mediaSession.isActive = true
         }
+
+        viewModel.onStateChange(VideoPlaybackState.Load(video))
     }
 
     private fun destroyPlayer() {
         mediaSession.isActive = false
         mediaSessionConnector.setPlayer(null)
-        exoplayer?.release()
-        exoplayer = null
+        exoplayer?.let {
+            // Pause the player to notify listeners before it is released.
+            it.pause()
+            it.release()
+            exoplayer = null
+        }
     }
 
     private fun prepareGlue(localExoplayer: ExoPlayer) {
@@ -161,11 +165,6 @@ class PlaybackFragment : VideoSupportFragment() {
         ).apply {
             host = VideoSupportFragmentGlueHost(this@PlaybackFragment)
             title = video.name
-            // Using the glue's callback allows the fragment to be player agnostic as the callback
-            // abstracts a lot of details from the the player into a simple API. Note that similar
-            // methods are available in exoplayer's EventListener and should not be used otherwise
-            // the fragment receives duplicate events.
-            addPlayerCallback(PlaybackGlueCallback())
             // Enable seek manually since PlaybackTransportControlGlue.getSeekProvider() is null,
             // so that PlayerAdapter.seekTo(long) will be called during user seeking.
             // TODO(gargsahil@): Add a PlaybackSeekDataProvider to support video scrubbing.
@@ -217,33 +216,15 @@ class PlaybackFragment : VideoSupportFragment() {
             Timber.w(error, "Playback error")
             viewModel.onStateChange(VideoPlaybackState.Error(video, error))
         }
-    }
 
-    inner class PlaybackGlueCallback : PlaybackGlue.PlayerCallback() {
-
-        override fun onPlayCompleted(glue: PlaybackGlue) {
-            super.onPlayCompleted(glue)
-            Timber.v("Finished playing content")
-            viewModel.onStateChange(VideoPlaybackState.End(video))
-        }
-
-        override fun onPlayStateChanged(glue: PlaybackGlue) {
-            super.onPlayStateChanged(glue)
-            Timber.v("Is playing: %b", glue.isPlaying)
-            if (glue.isPlaying) {
-                viewModel.onStateChange(VideoPlaybackState.Play(video))
-            } else {
-                // In onStop(), we remove the fragment's reference to the player yet during the
-                // player's cleanup/release, the play state changed callback is called. So we need
-                // to guard with a null-check. The pause state is already triggered from onPause(),
-                // in the fragment's lifecycle, while we have a reference to the player, so the
-                // state machine does not need this particular event to be triggered during
-                // onStop().
-                exoplayer?.let {
-                    viewModel.onStateChange(
-                        VideoPlaybackState.Pause(video, it.currentPosition)
-                    )
-                }
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            when {
+                isPlaying -> viewModel.onStateChange(
+                    VideoPlaybackState.Play(video))
+                exoplayer!!.playbackState == Player.STATE_ENDED -> viewModel.onStateChange(
+                    VideoPlaybackState.End(video))
+                else -> viewModel.onStateChange(
+                    VideoPlaybackState.Pause(video, exoplayer!!.currentPosition))
             }
         }
     }

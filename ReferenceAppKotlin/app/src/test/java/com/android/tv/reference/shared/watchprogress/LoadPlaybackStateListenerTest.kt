@@ -16,7 +16,6 @@
 package com.android.tv.reference.shared.watchprogress
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -32,7 +31,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import java.time.Duration
 
 @RunWith(AndroidJUnit4::class)
@@ -56,14 +54,9 @@ class LoadPlaybackStateListenerTest {
         val watchProgressDao = watchProgressDatabase.watchProgressDao()
         watchProgressRepository = WatchProgressRepository(watchProgressDao)
 
-        val activityLifecycleOwner =
-            Robolectric.buildActivity(ComponentActivity::class.java).create().restart().resume()
-                .get()
-
         loadPlaybackStateListener = LoadPlaybackStateListener(
             FakePlaybackStateMachine,
             watchProgressRepository,
-            activityLifecycleOwner
         )
     }
 
@@ -71,6 +64,7 @@ class LoadPlaybackStateListenerTest {
     fun tearDown() {
         watchProgressDatabase.close()
         FakePlaybackStateMachine.reset()
+        loadPlaybackStateListener.onDestroy()
     }
 
     @Test

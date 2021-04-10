@@ -15,7 +15,7 @@
  */
 package com.android.tv.reference.shared.watchprogress
 
-import androidx.lifecycle.Observer
+import com.android.tv.reference.playback.PlaybackStateListener
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +30,7 @@ class WatchProgressPlaybackStateListener(
     private val watchProgressRepository: WatchProgressRepository,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatcher: CoroutineDispatcher
-) : Observer<VideoPlaybackState> {
+) : PlaybackStateListener {
 
     override fun onChanged(state: VideoPlaybackState) {
         if (!(state is VideoPlaybackState.Pause || state is VideoPlaybackState.End)) {

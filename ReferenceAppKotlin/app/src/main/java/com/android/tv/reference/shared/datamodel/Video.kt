@@ -68,6 +68,10 @@ class Video(
      * in a video so we are using an approximation.
      */
     fun isAfterEndCreditsPosition(positionMillis: Long): Boolean {
+        // Skip calculation for the common case of starting from 0ms.
+        if (positionMillis <= 0) {
+            return false
+        }
         val durationMillis = duration().toMillis() * VIDEO_COMPLETED_DURATION_MAX_PERCENTAGE
         val isAfterEndCreditsPosition = positionMillis >= durationMillis
         Timber.v(

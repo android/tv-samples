@@ -17,11 +17,7 @@ package com.android.tv.reference.playback
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.android.tv.reference.lifecycle.ext.nonNull
 import com.android.tv.reference.shared.playback.PlaybackStateMachine
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.android.tv.reference.shared.watchprogress.LoadPlaybackStateListener
@@ -33,7 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 
 /**
- * ViewModel for playback that allows for reading and writing watch progress
+ * ViewModel for playback that allows for reading and writing watch progress.
  */
 class PlaybackViewModel(application: Application) :
     AndroidViewModel(application),
@@ -41,45 +37,55 @@ class PlaybackViewModel(application: Application) :
 
     private val repository: WatchProgressRepository
 
-    private val _playbackState = MutableLiveData<VideoPlaybackState>()
-    val playbackState: LiveData<VideoPlaybackState> = _playbackState
+    private val playbackStateListeners = arrayListOf<PlaybackStateListener>()
 
     init {
         val watchProgressDao = WatchProgressDatabase.getDatabase(application).watchProgressDao()
         repository = WatchProgressRepository(watchProgressDao)
+        playbackStateListeners.addAll(createNonUiPlaybackStateListeners())
     }
 
     /**
-     * Registers non-UI related listeners to the playback state machine. UI-related listeners should
-     * directly register themselves on the live data object. In lei of a DI technology, this method
-     * acts as manual DI.
-     *
-     * The state machine is agnostic of the Android Lifecycle process. Since the lifecycle process
-     * is a detail of the fragment/ViewModel, this method acts as the entry point of the lifecycle
-     * process into the state machine for the listeners that observe LiveData.
+     * Adds a [PlaybackStateListener] to be notified of [VideoPlaybackState] changes.
      */
-    fun registerStateListeners(owner: LifecycleOwner) {
-        playbackState.nonNull().observe(
-            owner,
-            LoadPlaybackStateListener(
-                stateMachine = this,
-                watchProgressRepository = repository,
-                lifecycleOwner = owner
-            )
-        )
-        playbackState.nonNull().observe(owner, WatchNextPlaybackStateListener(getApplication()))
-        playbackState.nonNull().observe(
-            owner,
-            WatchProgressPlaybackStateListener(
-                watchProgressRepository = repository,
-                coroutineScope = viewModelScope,
-                coroutineDispatcher = Dispatchers.IO
-            )
-        )
+    fun addPlaybackStateListener(listener: PlaybackStateListener) {
+        playbackStateListeners.add(listener)
+    }
+
+    /**
+     * Removes the [PlaybackStateListener] so it receives no further [VideoPlaybackState] changes.
+     */
+    fun removePlaybackStateListener(listener: PlaybackStateListener) {
+        playbackStateListeners.remove(listener)
     }
 
     override fun onStateChange(state: VideoPlaybackState) {
         Timber.d("Playback state machine updated to $state")
-        _playbackState.value = state
+        playbackStateListeners.forEach {
+            it.onChanged(state)
+        }
+    }
+
+    override fun onCleared() {
+        playbackStateListeners.forEach { it.onDestroy() }
+    }
+
+    /**
+     * Creates and returns a new List of non-UI [PlaybackStateListener] objects to register with the
+     * state machine.
+     */
+    private fun createNonUiPlaybackStateListeners(): List<PlaybackStateListener> {
+        return listOf(
+            LoadPlaybackStateListener(
+                    stateMachine = this,
+                    watchProgressRepository = repository,
+            ),
+            WatchNextPlaybackStateListener(getApplication()),
+            WatchProgressPlaybackStateListener(
+                    watchProgressRepository = repository,
+                    coroutineScope = viewModelScope,
+                    coroutineDispatcher = Dispatchers.IO
+            )
+        )
     }
 }
