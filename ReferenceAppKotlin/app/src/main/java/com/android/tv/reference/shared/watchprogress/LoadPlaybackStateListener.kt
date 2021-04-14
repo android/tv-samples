@@ -66,6 +66,7 @@ class LoadPlaybackStateListener(
             return
         }
 
+        Timber.d("Loading watch progress for video ${state.video.name}")
         video = state.video
         watchProgress = watchProgressRepository.getWatchProgressByVideoId(state.video.id).apply {
             observe(lifecycleOwner, watchProgressObserver)

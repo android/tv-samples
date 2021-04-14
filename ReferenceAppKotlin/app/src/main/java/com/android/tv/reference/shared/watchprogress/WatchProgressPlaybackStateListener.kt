@@ -37,8 +37,6 @@ class WatchProgressPlaybackStateListener(
             return
         }
 
-        Timber.d("State is %s. Updating watch progress", state)
-
         val (videoId, position) = when (state) {
             is VideoPlaybackState.Pause -> state.video.id to state.position
             is VideoPlaybackState.End -> state.video.id to state.video.duration().toMillis()

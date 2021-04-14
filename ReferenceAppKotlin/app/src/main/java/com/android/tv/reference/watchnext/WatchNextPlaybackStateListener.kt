@@ -33,8 +33,6 @@ class WatchNextPlaybackStateListener(private val context: Context) : Observer<Vi
             return
         }
 
-        Timber.v("State is $state: Notify to Watch Next.")
-
         val video = when (state) {
             is VideoPlaybackState.Pause -> state.video
             is VideoPlaybackState.End -> state.video
@@ -52,13 +50,14 @@ class WatchNextPlaybackStateListener(private val context: Context) : Observer<Vi
             putLong(WatchNextHelper.CURRENT_POSITION, position)
             putLong(WatchNextHelper.DURATION, video.duration().toMillis())
             putString(WatchNextHelper.PLAYER_STATE, playerState)
-        }
+        }.build()
 
         // Run on a background thread to process playback states and do relevant operations for
         // Watch Next.
+        Timber.d("Trigger WorkManager with updated watchData $watchData")
         WorkManager.getInstance(context.applicationContext).enqueue(
             OneTimeWorkRequest.Builder(WatchNextWorker::class.java)
-                .setInputData(watchData.build())
+                .setInputData(watchData)
                 .build()
         )
     }

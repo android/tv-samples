@@ -22,14 +22,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.tv.reference.lifecycle.ext.nonNull
-import com.android.tv.reference.watchnext.WatchNextPlaybackStateListener
 import com.android.tv.reference.shared.playback.PlaybackStateMachine
 import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.android.tv.reference.shared.watchprogress.LoadPlaybackStateListener
 import com.android.tv.reference.shared.watchprogress.WatchProgressDatabase
 import com.android.tv.reference.shared.watchprogress.WatchProgressPlaybackStateListener
 import com.android.tv.reference.shared.watchprogress.WatchProgressRepository
+import com.android.tv.reference.watchnext.WatchNextPlaybackStateListener
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 /**
  * ViewModel for playback that allows for reading and writing watch progress
@@ -78,6 +79,7 @@ class PlaybackViewModel(application: Application) :
     }
 
     override fun onStateChange(state: VideoPlaybackState) {
+        Timber.d("Playback state machine updated to $state")
         _playbackState.value = state
     }
 }

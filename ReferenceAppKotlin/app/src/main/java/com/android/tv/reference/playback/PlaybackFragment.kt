@@ -53,8 +53,6 @@ class PlaybackFragment : VideoSupportFragment() {
     private lateinit var mediaSessionConnector: MediaSessionConnector
 
     private val uiPlaybackStateListener = Observer<VideoPlaybackState> { state ->
-        Timber.v("State: %s", state)
-
         // While a video is playing, the screen should stay on and the device should not go to
         // sleep. When in any other state such as if the user pauses the video, the app should not
         // prevent the device from going to sleep.
