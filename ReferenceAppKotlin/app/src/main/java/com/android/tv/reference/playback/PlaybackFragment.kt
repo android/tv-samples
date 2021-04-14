@@ -15,7 +15,6 @@
  */
 package com.android.tv.reference.playback
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.fragment.app.viewModels
@@ -31,6 +30,7 @@ import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.google.android.exoplayer2.DefaultControlDispatcher
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
@@ -132,14 +132,11 @@ class PlaybackFragment : VideoSupportFragment() {
             requireContext(),
             Util.getUserAgent(requireContext(), getString(R.string.app_name))
         )
-        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(Uri.parse(video.videoUri))
+        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).
+            createMediaSource(MediaItem.fromUri((video.videoUri)))
         exoplayer = SimpleExoPlayer.Builder(requireContext()).build().apply {
-            prepare(
-                /* mediaSource= */ mediaSource,
-                /* resetPosition= */ false,
-                /* resetState= */ true
-            )
+            setMediaSource(mediaSource)
+            prepare()
             addListener(PlayerEventListener())
             prepareGlue(this)
             mediaSessionConnector.setPlayer(this)
