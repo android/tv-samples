@@ -20,7 +20,7 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.android.tv.reference.playback.PlaybackStateListener
-import com.android.tv.reference.shared.playback.VideoPlaybackState
+import com.android.tv.reference.playback.VideoPlaybackState
 import timber.log.Timber
 
 /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.parser
+package com.android.tv.reference.repository
 
 import com.android.tv.reference.shared.datamodel.ApiResponse
 import com.android.tv.reference.shared.datamodel.Video

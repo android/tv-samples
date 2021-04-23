@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/noFirebaseFragment"
-        android:name="com.android.tv.reference.welcome.NoFirebaseFragment"
+        android:name="com.android.tv.reference.auth.NoFirebaseFragment"
         android:label="NoFirebaseFragment">
         <action
             android:id="@+id/action_noFirebaseFragment_to_browseFragment"

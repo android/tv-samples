@@ -18,8 +18,6 @@ package com.android.tv.reference.playback
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.tv.reference.shared.playback.PlaybackStateMachine
-import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.android.tv.reference.shared.watchprogress.LoadPlaybackStateListener
 import com.android.tv.reference.shared.watchprogress.WatchProgressDatabase
 import com.android.tv.reference.shared.watchprogress.WatchProgressPlaybackStateListener

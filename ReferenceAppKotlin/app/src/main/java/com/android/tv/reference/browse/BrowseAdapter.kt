@@ -20,8 +20,6 @@ import androidx.leanback.widget.DividerRow
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
-import com.android.tv.reference.presenter.VideoCardPresenter
-import com.android.tv.reference.presenter.CustomMenuItemPresenter
 import com.android.tv.reference.shared.datamodel.VideoGroup
 
 class BrowseAdapter(videoGroup: List<VideoGroup>, customMenus: List<BrowseCustomMenu>) :

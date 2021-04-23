@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.tv.reference.presenter
+package com.android.tv.reference.browse
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

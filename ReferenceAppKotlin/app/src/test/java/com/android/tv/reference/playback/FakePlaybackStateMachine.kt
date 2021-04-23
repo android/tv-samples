@@ -15,9 +15,6 @@
  */
 package com.android.tv.reference.playback
 
-import com.android.tv.reference.shared.playback.PlaybackStateMachine
-import com.android.tv.reference.shared.playback.VideoPlaybackState
-
 /**
  * Fake [PlaybackStateMachine] to be used for testing. To confirm the state, use
  * [FakePlaybackStateMachine.playbackState] to access the current state. To check a progression of

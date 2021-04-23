@@ -16,8 +16,6 @@
 
 package com.android.tv.reference.playback
 
-import com.android.tv.reference.shared.playback.VideoPlaybackState
-
 /**
  * Listens to changes in [VideoPlaybackState].
  */

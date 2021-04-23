@@ -25,7 +25,6 @@ import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
 import com.android.tv.reference.castconnect.CastHelper
 import com.android.tv.reference.shared.datamodel.Video
-import com.android.tv.reference.shared.playback.VideoPlaybackState
 import com.google.android.exoplayer2.DefaultControlDispatcher
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer

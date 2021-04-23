@@ -18,9 +18,9 @@ package com.android.tv.reference.shared.watchprogress
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.android.tv.reference.playback.PlaybackStateListener
+import com.android.tv.reference.playback.PlaybackStateMachine
+import com.android.tv.reference.playback.VideoPlaybackState
 import com.android.tv.reference.shared.datamodel.Video
-import com.android.tv.reference.shared.playback.PlaybackStateMachine
-import com.android.tv.reference.shared.playback.VideoPlaybackState
 import timber.log.Timber
 
 /**

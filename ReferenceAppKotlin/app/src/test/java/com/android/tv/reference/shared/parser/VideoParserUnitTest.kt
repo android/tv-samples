@@ -15,7 +15,7 @@
  */
 package com.android.tv.reference.shared.parser
 
-import com.android.tv.reference.parser.VideoParser
+import com.android.tv.reference.repository.VideoParser
 import com.android.tv.reference.shared.datamodel.VideoType
 import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.JsonDataException

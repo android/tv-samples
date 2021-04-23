@@ -17,7 +17,6 @@ package com.android.tv.reference.repository
 
 import android.app.Application
 import com.android.tv.reference.R
-import com.android.tv.reference.parser.VideoParser
 import com.android.tv.reference.shared.datamodel.Video
 
 /**
