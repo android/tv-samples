@@ -104,10 +104,9 @@ Cast Connect builds on top of the Cast infrastructure, with your TV app acting a
 The Cast Connect library allows your TV app to receive messages and broadcast media
 status, as if it were a Chromecast. Using Cast Connect, a cast sender application on a mobile
 device can directly send cast signals to your TV App and open the TV App for casting, playback
-and media controls. See the [documendation][cast-connect] for more details and the
-[README file](app/src/castconnect/README.md) in the [castconnect](app/src/castconnect)
-directory for steps on how to configure a Cast Sender application to work with this
-TV Reference App.
+and media controls. See the [documentation][cast-connect] for more details and the
+[README file](CAST_CONNECT.md) for steps on how to configure a Cast Sender application to work with
+this TV Reference App.
 
 ## Support
 
