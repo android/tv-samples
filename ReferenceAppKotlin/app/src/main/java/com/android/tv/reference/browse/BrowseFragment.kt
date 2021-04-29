@@ -133,6 +133,11 @@ class BrowseFragment : BrowseSupportFragment(), Target {
                 updateBackgroundDelayed(item)
             }
         }
+
+        // BrowseSupportFragment allows for adding either text (with setTitle) or a Drawable
+        // (with setBadgeDrawable) to the top right of the screen. Since we don't have a suitable
+        // Drawable, we just display the app name in text.
+        title = getString(R.string.app_name)
     }
 
     /**
