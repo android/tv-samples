@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Google LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/error_ui_margin_start"
+    android:background="@color/screen_black"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/ErrorUiTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        tools:text="Title goes here" />
+
+    <TextView
+        android:id="@+id/message"
+        style="@style/ErrorUiMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        tools:text="Subtext for error state goes here. This is a lot of text and can span multiple line and that's okay because sometimes you just want to be verbose and give a lot of details about what went wrong. In Android Studio, this text should go over 3 lines in the design view." />
+
+    <LinearLayout
+        android:id="@+id/error_dialog_actions_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/error_actions_margin_top"
+        android:padding="@dimen/error_actions_container_padding"
+        android:clipToPadding="false"
+        android:gravity="center"
+        android:divider="@drawable/error_action_divider"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <Button
+            android:id="@+id/action_retry"
+            style="?attr/actionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/action_button_height"
+            android:text="@string/retry" />
+
+        <Button
+            android:id="@+id/action_go_back"
+            style="?attr/actionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/action_button_height"
+            android:text="@string/go_back" />
+
+    </LinearLayout>
+
+</LinearLayout>

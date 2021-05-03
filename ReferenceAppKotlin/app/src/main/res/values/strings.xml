@@ -1,0 +1,58 @@
+<!--
+  ~ Copyright 2020 Google LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">TV Reference App</string>
+
+    <!-- Strings for the "No Firebase" screen -->
+    <string name="no_firebase_title">Firebase not configured</string>
+    <string name="no_firebase_body">Firebase has not been configured for this app. That means no account-specific features are enabled and watch progress is stored locally. To enable Firebase features, refer to the readme file.</string>
+    <string name="continue_text">Continue</string>
+
+    <!-- Menus -->
+    <string name="menu_identity">Identity</string>
+
+    <!-- Authentication and identity -->
+    <string name="email">E-mail address</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="not_signed_in">Not signed in</string>
+    <string name="sign_in_error">Error signing in: %1$s</string>
+    <string name="empty_username_or_password">Both username and password must be provided</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="onetap_error">One Tap returned an error</string>
+    <string name="server_error">Server error</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="sign_in_intro">Without any changes, this app uses local authorization (MockAuthClient). You can log in using "%1$s" as the email and any non-empty string as the password. To update the app to use remote auth, see the RemoteAuthClient class.</string>
+
+    <!-- Channel strings -->
+    <string name="default_home_screen_channel_name">Example Channel</string>
+    <string name="default_home_screen_channel_description">An example of a default home screen channel</string>
+
+    <!-- Content types -->
+    <string name="content_type_season_episode">Season %s Episode %s</string>
+    <string name="content_type_movie">Movie</string>
+    <string name="content_type_clip">Clip</string>
+
+    <!-- Playback error actions -->
+    <string name="retry">Retry</string>
+    <string name="go_back">Return to browsing</string>
+    <string name="error_title_with_video">Something terrible happened with %s</string>
+
+    <!-- Watch Next -->
+    <string name="season">%1$s Season %2$s</string>
+</resources>
