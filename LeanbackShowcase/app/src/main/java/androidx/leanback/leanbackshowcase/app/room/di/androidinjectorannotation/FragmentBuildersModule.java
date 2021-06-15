@@ -17,11 +17,11 @@
 package androidx.leanback.leanbackshowcase.app.room.di.androidinjectorannotation;
 
 import androidx.leanback.leanbackshowcase.app.room.controller.overview.LiveDataFragment;
-import androidx.fragment.app.Fragment;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.android.AndroidInjector;
-import dagger.android.support.FragmentKey;
+import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = LiveDataOverviewFragmentSubComponent.class)
@@ -29,7 +29,7 @@ public abstract class FragmentBuildersModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LiveDataFragment.class)
-    abstract AndroidInjector.Factory<? extends Fragment> bindFragmentInjectorFactory(
+    @ClassKey(LiveDataFragment.class)
+    abstract AndroidInjector.Factory<?> bindFragmentInjectorFactory(
             LiveDataOverviewFragmentSubComponent.Builder builder);
 }

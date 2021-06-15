@@ -165,7 +165,7 @@ public class VideoContent implements Parcelable {
         mCategory = in.readString();
     }
 
-    /* package */ static final Creator CREATOR = new Creator() {
+    public static final Creator<VideoContent> CREATOR = new Creator<VideoContent>() {
         public VideoContent createFromParcel(Parcel in) {
             return new VideoContent(in);
         }

@@ -15,6 +15,8 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -23,6 +25,7 @@ android {
         applicationId 'com.example.android.persistence'
         minSdkVersion 21
         targetSdkVersion 28
+        compileSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -38,8 +41,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
     productFlavors {
     }
@@ -47,7 +50,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
 }
 
 dependencies {
@@ -59,8 +61,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:' + rootProject.supportLibVersion
     implementation 'androidx.lifecycle:lifecycle-extensions:' + rootProject.archLifecycleVersion
     implementation 'androidx.room:room-runtime:' + rootProject.archRoomVersion
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:" + rootProject.archLifecycleVersion
-    annotationProcessor "androidx.room:room-compiler:" + rootProject.archRoomVersion
+    kapt "androidx.lifecycle:lifecycle-compiler:" + rootProject.archLifecycleVersion
+    kapt "androidx.room:room-compiler:" + rootProject.archRoomVersion
 
     testImplementation 'junit:junit:4.12'
 
@@ -96,7 +98,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android:" + rootProject.daggerVersion
     implementation "com.google.dagger:dagger-android-support:" + rootProject.daggerVersion
 
-    annotationProcessor "com.google.dagger:dagger-android-processor:" + rootProject.daggerVersion
-    annotationProcessor "com.google.dagger:dagger-compiler:" + rootProject.daggerVersion
+    kapt "com.google.dagger:dagger-android-processor:" + rootProject.daggerVersion
+    kapt "com.google.dagger:dagger-compiler:" + rootProject.daggerVersion
 }
 
