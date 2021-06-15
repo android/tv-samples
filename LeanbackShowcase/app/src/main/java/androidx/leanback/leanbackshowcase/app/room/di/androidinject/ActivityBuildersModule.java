@@ -16,17 +16,15 @@
 
 package androidx.leanback.leanbackshowcase.app.room.di.androidinject;
 
-import android.app.Activity;
 import androidx.leanback.leanbackshowcase.app.room.controller.overview.LiveDataRowsActivity;
 import androidx.leanback.leanbackshowcase.app.room.controller.search.SearchActivity;
 import androidx.leanback.leanbackshowcase.app.room.di.androidinjectorannotation.LiveDataOverviewActivitySubcomponent;
 import androidx.leanback.leanbackshowcase.app.room.di.scope.PerActivity;
-import dagger.Binds;
+
 import dagger.Module;
-import dagger.android.ActivityKey;
 import dagger.android.AndroidInjector;
 import dagger.android.ContributesAndroidInjector;
-import dagger.multibindings.IntoMap;
+import dagger.multibindings.ClassKey;
 
 @Module
 public abstract class ActivityBuildersModule {
@@ -37,8 +35,6 @@ public abstract class ActivityBuildersModule {
             SearchFragmentInjectorInstallmentFactoryBindingModule.class})
     abstract SearchActivity contributeToAndriodInjectorForSearchActivity();
 
-    @Binds
-    @IntoMap
-    @ActivityKey(LiveDataRowsActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindActivityInjectorFactory(LiveDataOverviewActivitySubcomponent.Builder builder);
+    @ClassKey(LiveDataRowsActivity.class)
+    abstract AndroidInjector.Factory<?> bindActivityInjectorFactory(LiveDataOverviewActivitySubcomponent.Builder builder);
 }

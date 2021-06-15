@@ -78,7 +78,7 @@ public class MusicPlaybackService extends Service {
     private boolean mInitialized = false; // true when the MediaPlayer is prepared/initialized
 
     private static final int FOCUS_CHANGE = 2;
-    private NotificationManager mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+    private NotificationManager mNotificationManager;
 
 
     private Handler mMediaPlayerHandler = new Handler() {
@@ -520,7 +520,7 @@ public class MusicPlaybackService extends Service {
     private void createNowPlayingChannel() {
         NotificationChannel channel = new NotificationChannel(NOW_PLAYING_CHANNEL, getString(R.string.now_playing_channel_name), NotificationManager.IMPORTANCE_LOW);
         channel.setDescription(getString(R.string.now_playing_channel_description));
-        mNotificationManager.createNotificationChannel(channel);
+        getNotificationManager().createNotificationChannel(channel);
     }
 
     private Boolean shouldCreateNowPlayingChannel() {
@@ -529,7 +529,14 @@ public class MusicPlaybackService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Boolean notificationChannelExists() {
-        return mNotificationManager.getNotificationChannel(NOW_PLAYING_CHANNEL) != null;
+        return getNotificationManager().getNotificationChannel(NOW_PLAYING_CHANNEL) != null;
+    }
+
+    private NotificationManager getNotificationManager() {
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return mNotificationManager;
     }
 
     @Override
