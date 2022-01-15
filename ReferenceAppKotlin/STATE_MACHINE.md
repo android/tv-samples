@@ -44,4 +44,4 @@ player's lifecycle events, which enables the view model to transform highly spec
 Android/ExoPlayer details into the app's domain business logic. For testing, the
 `FakePlaybackStateMachine` implements the interface and provides methods to verify states.
 
-[state-machine-code]: app/src/main/java/com/android/tv/reference/shared/playback/PlaybackStateMachine.kt
+[state-machine-code]: https://github.com/android/tv-samples/blob/main/ReferenceAppKotlin/app/src/main/java/com/android/tv/reference/playback/PlaybackStateMachine.kt
