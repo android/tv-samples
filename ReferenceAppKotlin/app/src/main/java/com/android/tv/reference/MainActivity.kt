@@ -111,10 +111,10 @@ class MainActivity : FragmentActivity() {
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FIREBASE_ENABLED) {
             Timber.d("Firebase is enabled, loading browse")
-            navGraph.startDestination = R.id.browseFragment
+            navGraph.setStartDestination(R.id.browseFragment)
         } else {
             Timber.d("Firebase is not enabled; showing notice")
-            navGraph.startDestination = R.id.noFirebaseFragment
+            navGraph.setStartDestination(R.id.noFirebaseFragment)
         }
 
         // Set the graph to trigger loading the start destination

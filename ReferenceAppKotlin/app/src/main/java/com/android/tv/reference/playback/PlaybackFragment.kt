@@ -25,15 +25,16 @@ import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.R
 import com.android.tv.reference.castconnect.CastHelper
 import com.android.tv.reference.shared.datamodel.Video
-import com.google.android.exoplayer2.DefaultControlDispatcher
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ForwardingPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.cast.tv.CastReceiverContext
@@ -113,28 +114,31 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         // Releasing the mediaSession due to inactive playback and setting token for cast to null.
         mediaSession.release()
-        CastHelper.setMediaSessionTokenForCast(
-            /* mediaSession =*/ null,
-            CastReceiverContext.getInstance().mediaManager
-        )
     }
 
     private fun initializePlayer() {
-        val dataSourceFactory = DefaultDataSourceFactory(
-            requireContext(),
-            Util.getUserAgent(requireContext(), getString(R.string.app_name))
-        )
+        val dataSourceFactory = DefaultDataSource.Factory(requireContext())
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).
             createMediaSource(MediaItem.fromUri((video.videoUri)))
-        exoplayer = SimpleExoPlayer.Builder(requireContext()).build().apply {
+        exoplayer = ExoPlayer.Builder(requireContext()).build().apply {
             setMediaSource(mediaSource)
             prepare()
             addListener(PlayerEventListener())
             prepareGlue(this)
-            mediaSessionConnector.setPlayer(this)
+            mediaSessionConnector.setPlayer(object: ForwardingPlayer(this) {
+                override fun stop() {
+                    // Treat stop commands as pause, this keeps ExoPlayer, MediaSession, etc.
+                    // in memory to allow for quickly resuming. This also maintains the playback
+                    // position so that the user will resume from the current position when backing
+                    // out and returning to this video
+                    Timber.v("Playback stopped at $currentPosition")
+                    // This both prevents playback from starting automatically and pauses it if
+                    // it's already playing
+                    playWhenReady = false
+                }
+            })
             mediaSession.isActive = true
         }
 
@@ -176,25 +180,9 @@ class PlaybackFragment : VideoSupportFragment() {
 
         mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
             setQueueNavigator(SingleVideoQueueNavigator(video, mediaSession))
-            setControlDispatcher(object : DefaultControlDispatcher() {
-                override fun dispatchStop(player: Player, reset: Boolean): Boolean {
-                    // Treat stop commands as pause, this keeps ExoPlayer, MediaSession, etc.
-                    // in memory to allow for quickly resuming. This also maintains the playback
-                    // position so that the user will resume from the current position when backing
-                    // out and returning to this video
-                    Timber.v("Playback stopped at ${player.currentPosition}")
-                    // This both prevents playback from starting automatically and pauses it if
-                    // it's already playing
-                    player.playWhenReady = false
-                    return true
-                }
-            })
         }
-
-        CastHelper.setMediaSessionTokenForCast(
-            mediaSession,
-            CastReceiverContext.getInstance().mediaManager
-        )
+        CastReceiverContext.getInstance().mediaManager.setSessionCompatToken(
+            mediaSession.sessionToken)
     }
 
     private fun startPlaybackFromWatchProgress(startPosition: Long) {
@@ -210,8 +198,8 @@ class PlaybackFragment : VideoSupportFragment() {
         //  episodic content.
     }
 
-    inner class PlayerEventListener : Player.EventListener {
-        override fun onPlayerError(error: ExoPlaybackException) {
+    inner class PlayerEventListener : Player.Listener {
+        override fun onPlayerError(error: PlaybackException) {
             Timber.w(error, "Playback error")
             viewModel.onStateChange(VideoPlaybackState.Error(video, error))
         }

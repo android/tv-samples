@@ -72,22 +72,4 @@ class CastHelperTest {
          */
         assertThat(isCallbackInvoked).isFalse()
     }
-
-    @Test
-    fun setMediaSessionTokenForCast_createMediaSession() {
-        // There is no getter for CastReceiverContext because of which we need to use spy
-        val mediaManagerSpy = Mockito.spy(CastReceiverContext.getInstance().mediaManager)
-
-        CastHelper.setMediaSessionTokenForCast(mockMediaSession, mediaManagerSpy)
-        verify(mediaManagerSpy).setSessionCompatToken(mockMediaSession.sessionToken)
-    }
-
-    @Test
-    fun setMediaSessionTokenForCast_removeMediaSession() {
-        // There is no getter for CastReceiverContext because of which we need to use spy
-        val mediaManagerSpy = Mockito.spy(CastReceiverContext.getInstance().mediaManager)
-
-        CastHelper.setMediaSessionTokenForCast(null, mediaManagerSpy)
-        verify(mediaManagerSpy).setSessionCompatToken(null)
-    }
 }
