@@ -48,31 +48,19 @@ class CastMediaLoadCommandCallback(
 
     override fun onLoad(
         senderId: String?,
-        mediaLoadRequestData: MediaLoadRequestData?
+        mediaLoadRequestData: MediaLoadRequestData
     ): Task<MediaLoadRequestData> {
-        return if (mediaLoadRequestData == null) {
-            // Throw MediaException to indicate load failure.
-            Tasks.forException(
-                MediaException(
-                    MediaError.Builder()
-                        .setDetailedErrorCode(MediaError.DetailedErrorCode.LOAD_FAILED)
-                        .setReason(MediaError.ERROR_REASON_INVALID_REQUEST)
-                        .build()
-                )
+        return Tasks.call {
+            var videoToPlay = convertLoadRequestToVideo(
+                mediaLoadRequestData, VideoRepositoryFactory.getVideoRepository(application)
             )
-        } else {
-            Tasks.call {
-                var videoToPlay = convertLoadRequestToVideo(
-                    mediaLoadRequestData, VideoRepositoryFactory.getVideoRepository(application)
-                )
-                if (videoToPlay != null) {
-                    onLoaded(videoToPlay, mediaLoadRequestData)
-                } else {
-                    Timber.w("Failed to convert cast load request to application-specific video")
-                }
-
-                mediaLoadRequestData
+            if (videoToPlay != null) {
+                onLoaded(videoToPlay, mediaLoadRequestData)
+            } else {
+                Timber.w("Failed to convert cast load request to application-specific video")
             }
+
+            mediaLoadRequestData
         }
     }
 
