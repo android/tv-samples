@@ -65,17 +65,4 @@ class CastHelper(val loadVideo: (Video) -> Unit, private val application: Applic
         // The intent was not recognized by the Cast SDK, so return false.
         return false
     }
-
-    companion object {
-        fun setMediaSessionTokenForCast(
-            mediaSession: MediaSessionCompat?,
-            mediaManager: MediaManager
-        ) {
-            if (mediaSession != null) {
-                mediaManager.setSessionCompatToken(mediaSession.sessionToken)
-            } else {
-                mediaManager.setSessionCompatToken(null)
-            }
-        }
-    }
 }
