@@ -24,7 +24,7 @@ import androidx.leanback.widget.Action
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow.FastForwardAction
 import androidx.leanback.widget.PlaybackControlsRow.RewindAction
-import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
+import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import java.util.concurrent.TimeUnit
 
 /**

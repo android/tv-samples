@@ -16,32 +16,17 @@
 package com.android.tv.reference.castconnect
 
 import android.content.Intent
-import android.support.v4.media.session.MediaSessionCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.android.gms.cast.tv.CastReceiverContext
 import com.google.common.truth.Truth.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations
 
 /**
  * Test cases to process intent for Cast and setting MediaSession token for Cast.
  */
 @RunWith(AndroidJUnit4::class)
 class CastHelperTest {
-
-    @Mock
-    private lateinit var mockMediaSession: MediaSessionCompat
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-    }
 
     @Test
     fun processCastIntent_invalidIntent() {

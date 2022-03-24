@@ -79,7 +79,7 @@ dependencies {
     def room_version = "2.4.2"
     def fragment_version = "1.4.1"
     def cast_tv_version = "19.0.1"
-    def cast_version = "19.0.0"
+    def cast_version = "21.0.1"
     implementation "androidx.appcompat:appcompat:1.4.1"
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
@@ -108,11 +108,24 @@ dependencies {
     // Picasso for image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    // Exoplayer for playback
-    def exoplayer_version = "2.17.1"
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation "com.google.android.exoplayer:extension-leanback:$exoplayer_version"
-    implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
+    // AndroidX Media3 for playback
+    def androidx_media3_version = "1.0.0-alpha03"
+    // If we find ":media3-lib-common", we link against the local media3 source
+    // (see settings.gradle also).
+    if (findProject(':media3-lib-common') != null) {
+        implementation project(':media3-lib-common')
+        implementation project(':media3-lib-exoplayer')
+        implementation project(':media3-lib-datasource')
+        implementation project(':media3-lib-ui')
+        implementation project(':media3-lib-ui-leanback')
+        implementation project(':media3-lib-session')
+    } else {
+        implementation "androidx.media3:media3-exoplayer:$androidx_media3_version"
+        implementation "androidx.media3:media3-datasource:$androidx_media3_version"
+        implementation "androidx.media3:media3-ui:$androidx_media3_version"
+        implementation "androidx.media3:media3-ui-leanback:$androidx_media3_version"
+        implementation "androidx.media3:media3-session:$androidx_media3_version"
+    }
 
     // Google Play Services for identity
     def playservices_version = "20.1.0"

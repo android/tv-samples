@@ -41,6 +41,11 @@ allprojects {
         google()
         mavenCentral()
     }
+    String homeDir = System.getProperty("user.home")
+    if (homeDir.startsWith("/usr/local/google")) {
+        String buildOutRootDir = "${homeDir}/.tvSamplesBuildOut"
+        buildDir = "${buildOutRootDir}/${project.name}/build"
+    }
 }
 
 subprojects {
