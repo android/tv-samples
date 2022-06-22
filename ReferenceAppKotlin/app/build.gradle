@@ -109,7 +109,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // AndroidX Media3 for playback
-    def androidx_media3_version = "1.0.0-alpha03"
+    def androidx_media3_version = "1.0.0-beta01"
     // If we find ":media3-lib-common", we link against the local media3 source
     // (see settings.gradle also).
     if (findProject(':media3-lib-common') != null) {

@@ -5,8 +5,7 @@ Google TV. It demonstrates how to
 
 * Use [Leanback templates][leanback-templates] for browse and playback
 * Play remote video with [ExoPlayer][exoplayer]
-* Support playback controls with [MediaSession][media-session] support via
-[MediaSessionConnector][media-session-connector]
+* Support playback commands (TV remote, Assistant, Bluetooth) with [MediaSession][media-session]
 * Deep link directly into playback for Assistant, Cast, and home screen programs
 * Create and populate a [home screen channel][home-screen-channel]
 * Update the [Watch Next][watch-next] row to support play next/continue watching
@@ -128,12 +127,11 @@ domain.
 
 [leanback-templates]: https://developer.android.com/training/tv/playback
 [browse-support-fragment]: https://developer.android.com/reference/androidx/leanback/app/BrowseSupportFragment
-[media-session-connector]: https://exoplayer.dev/doc/reference/com/google/android/exoplayer2/ext/mediasession/MediaSessionConnector.html
 [cast-connect]: https://developers.google.com/cast/docs/android_tv_receiver
 [api-json]: app/src/main/res/raw/api.json
-[exoplayer]: https://github.com/google/ExoPlayer
+[exoplayer]: https://github.com/androidx/media
 [video-support-fragment]: https://developer.android.com/reference/androidx/leanback/app/VideoSupportFragment
-[media-session]: https://developer.android.com/guide/topics/media-apps/working-with-a-media-session
+[media-session]: https://developer.android.com/guide/topics/media/media3/getting-started/mediasession
 [home-screen-channel]: https://developer.android.com/training/tv/discovery/recommendations-channel
 [watch-next]: https://developer.android.com/training/tv/discovery/watch-next-add-programs
 [watch-next-guidelines]: https://developer.android.com/training/tv/discovery/guidelines-app-developers
