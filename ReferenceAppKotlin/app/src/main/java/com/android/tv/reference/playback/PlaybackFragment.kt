@@ -25,9 +25,6 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
-import androidx.navigation.fragment.findNavController
-import com.android.tv.reference.shared.datamodel.Video
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -35,12 +32,15 @@ import androidx.media3.common.Player
 import androidx.media3.common.Player.EVENT_IS_PLAYING_CHANGED
 import androidx.media3.common.Player.EVENT_PLAYER_ERROR
 import androidx.media3.common.Player.EVENT_POSITION_DISCONTINUITY
-import androidx.media3.ui.leanback.LeanbackPlayerAdapter
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
+import androidx.media3.ui.leanback.LeanbackPlayerAdapter
+import androidx.navigation.fragment.findNavController
 import com.android.tv.reference.MainActivity
+import com.android.tv.reference.shared.datamodel.Video
 import com.google.android.gms.cast.tv.CastReceiverContext
-import timber.log.Timber
 import java.time.Duration
+import timber.log.Timber
 
 /** Fragment that plays video content with ExoPlayer. */
 class PlaybackFragment : VideoSupportFragment() {
@@ -86,8 +86,6 @@ class PlaybackFragment : VideoSupportFragment() {
         // Get the video data.
         video = PlaybackFragmentArgs.fromBundle(requireArguments()).video
 
-        // Create the MediaSession that will be used throughout the lifecycle of this Fragment.
-        createMediaSession()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,12 +95,12 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onStart() {
         super.onStart()
-        preparePlayer()
+        createMediaSession()
     }
 
     override fun onStop() {
         super.onStop()
-        stopPlayer()
+        releaseMediaSession()
     }
 
     override fun onDestroyView() {
@@ -110,17 +108,10 @@ class PlaybackFragment : VideoSupportFragment() {
         viewModel.removePlaybackStateListener(uiPlaybackStateListener)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        releaseMediaSession()
-    }
-
     @SuppressLint("UnsafeOptInUsageError")
     private fun createMediaSession() {
         if (mediaSession == null) {
-            val exoplayer = ExoPlayer.Builder(requireContext()).build().apply {
-                addListener(PlayerEventListener())
-            }
+            val exoplayer = ExoPlayer.Builder(requireContext()).build().apply { addListener(PlayerEventListener()) }
             val forwardingPlayer = object : ForwardingPlayer(exoplayer) {
                 override fun stop() {
                     // Treat stop commands as pause, this keeps ExoPlayer, MediaSession, etc.
@@ -148,11 +139,7 @@ class PlaybackFragment : VideoSupportFragment() {
                     .build()
             CastReceiverContext.getInstance().mediaManager.setSessionCompatToken(
                 mediaSession!!.sessionCompatToken as MediaSessionCompat.Token)
-        }
-    }
 
-    private fun preparePlayer() {
-        mediaSession?.run {
             val mediaMetadata =
                 MediaMetadata.Builder()
                     .setArtworkUri(Uri.parse(video.thumbnailUri))
@@ -165,18 +152,10 @@ class PlaybackFragment : VideoSupportFragment() {
                     .setMediaId(video.id)
                     .setMediaMetadata(mediaMetadata)
                     .build()
-            player.setMediaItem(mediaItem)
-            player.prepare()
-            prepareGlue(player)
-        }
-        viewModel.onStateChange(VideoPlaybackState.Load(video))
-    }
-
-    private fun stopPlayer() {
-        mediaSession?.run {
-            // Pause the player to notify listeners before it is stopped.
-            player.pause()
-            player.stop()
+            exoplayer.setMediaItem(mediaItem)
+            exoplayer.prepare()
+            prepareGlue(exoplayer)
+            viewModel.onStateChange(VideoPlaybackState.Load(video))
         }
     }
 
