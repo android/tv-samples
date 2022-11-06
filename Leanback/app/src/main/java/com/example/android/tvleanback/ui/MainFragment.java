@@ -24,6 +24,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -31,21 +37,15 @@ import androidx.leanback.widget.CursorObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
-import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
-import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-import androidx.core.app.ActivityOptionsCompat;
+import androidx.leanback.widget.SinglePresenterSelector;
 import androidx.loader.app.LoaderManager;
-import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -53,12 +53,14 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.android.tvleanback.R;
 import com.example.android.tvleanback.data.FetchVideoService;
+import com.example.android.tvleanback.data.HeaderListRow;
 import com.example.android.tvleanback.data.VideoContract;
 import com.example.android.tvleanback.model.Video;
 import com.example.android.tvleanback.model.VideoCursorMapper;
 import com.example.android.tvleanback.presenter.CardPresenter;
 import com.example.android.tvleanback.presenter.GridItemPresenter;
-import com.example.android.tvleanback.presenter.IconHeaderItemPresenter;
+import com.example.android.tvleanback.presenter.PagingListRowPresenter;
+import com.example.android.tvleanback.presenter.RowHeaderPresenter;
 import com.example.android.tvleanback.recommendation.UpdateRecommendationsService;
 
 import java.util.HashMap;
@@ -111,7 +113,7 @@ public class MainFragment extends BrowseSupportFragment
 
         // Map category results from the database to ListRow objects.
         // This Adapter is used to render the MainFragment sidebar labels.
-        mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        mCategoryRowAdapter = new ArrayObjectAdapter(new PagingListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
         updateRecommendations();
@@ -152,12 +154,7 @@ public class MainFragment extends BrowseSupportFragment
         // Set search icon color.
         setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
 
-        setHeaderPresenterSelector(new PresenterSelector() {
-            @Override
-            public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter();
-            }
-        });
+        setHeaderPresenterSelector(new SinglePresenterSelector(new RowHeaderPresenter()));
     }
 
     private void setupEventListeners() {
@@ -264,7 +261,7 @@ public class MainFragment extends BrowseSupportFragment
                         videoCursorAdapter.setMapper(new VideoCursorMapper());
                         mVideoCursorAdapters.put(videoLoaderId, videoCursorAdapter);
 
-                        ListRow row = new ListRow(header, videoCursorAdapter);
+                        ListRow row = new HeaderListRow(categoryIndex, new com.example.android.tvleanback.data.HeaderItem(categoryIndex,R.drawable.android_header,category), videoCursorAdapter);
                         mCategoryRowAdapter.add(row);
 
                         // Start loading the videos from the database for a particular category.
@@ -272,7 +269,8 @@ public class MainFragment extends BrowseSupportFragment
                         args.putString(VideoContract.VideoEntry.COLUMN_CATEGORY, category);
                         mLoaderManager.initLoader(videoLoaderId, args, this);
                     } else {
-                        ListRow row = new ListRow(header, existingAdapter);
+//                        ListRow row = new ListRow(header, existingAdapter);
+                        ListRow row = new HeaderListRow(categoryIndex, new com.example.android.tvleanback.data.HeaderItem(categoryIndex,R.drawable.android_header,category), existingAdapter);
                         mCategoryRowAdapter.add(row);
                     }
 
@@ -287,7 +285,8 @@ public class MainFragment extends BrowseSupportFragment
                 gridRowAdapter.add(getString(R.string.guidedstep_first_title));
                 gridRowAdapter.add(getString(R.string.error_fragment));
                 gridRowAdapter.add(getString(R.string.personal_settings));
-                ListRow row = new ListRow(gridHeader, gridRowAdapter);
+//                ListRow row = new ListRow(gridHeader, gridRowAdapter);
+                ListRow row = new HeaderListRow(123, new com.example.android.tvleanback.data.HeaderItem(123,R.drawable.android_header,getString(R.string.more_samples)), gridRowAdapter);
                 mCategoryRowAdapter.add(row);
 
                 startEntranceTransition(); // TODO: Move startEntranceTransition to after all

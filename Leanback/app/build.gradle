@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.13.0'
     implementation 'com.google.android.exoplayer:extension-leanback:2.13.0'
     implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.fragment:fragment:1.5.4'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.8'
