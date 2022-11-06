@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import androidx.leanback.widget.RowHeaderPresenter
-import com.example.android.tvleanback.databinding.TextRowHeaderBinding
 import com.example.android.tvleanback.interfaces.HasHeader
+import com.example.android.tvleanback.databinding.TextRowHeaderBinding
 
 class RowHeaderPresenter : RowHeaderPresenter() {
     class ViewHolder(

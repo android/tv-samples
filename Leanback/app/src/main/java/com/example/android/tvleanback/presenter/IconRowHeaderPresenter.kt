@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import androidx.leanback.widget.RowHeaderPresenter
-import com.example.android.tvleanback.databinding.IconRowHeaderBinding
-
 import com.example.android.tvleanback.interfaces.HasHeader
+import com.example.android.tvleanback.databinding.IconRowHeaderBinding
 
 class IconRowHeaderPresenter : RowHeaderPresenter() {
     class ViewHolder(val binding: IconRowHeaderBinding) : RowHeaderPresenter.ViewHolder(binding.root)
