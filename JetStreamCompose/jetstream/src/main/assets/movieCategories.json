@@ -1,0 +1,42 @@
+[
+  {
+    "id": "100",
+    "name": "Action"
+  },
+  {
+    "id": "101",
+    "name": "Drama"
+  },
+  {
+    "id": "102",
+    "name": "Comedy"
+  },
+  {
+    "id": "103",
+    "name": "Horror"
+  },
+  {
+    "id": "104",
+    "name": "Fantasy"
+  },
+  {
+    "id": "105",
+    "name": "Romance"
+  },
+  {
+    "id": "106",
+    "name": "Documentary"
+  },
+  {
+    "id": "107",
+    "name": "Animation"
+  },
+  {
+    "id": "108",
+    "name": "Thriller"
+  },
+  {
+    "id": "109",
+    "name": "Adventure"
+  }
+]

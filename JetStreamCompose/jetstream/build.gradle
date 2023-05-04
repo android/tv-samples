@@ -1,0 +1,122 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
+
+android {
+    namespace "com.google.jetstream"
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.google.jetstream"
+        minSdk 28
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_compiler_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    tasks.withType(KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs += "-Xopt-in=androidx.tv.tvMaterial3.ExperimentalTvMaterial3Api"
+            freeCompilerArgs += "-Xopt-in=androidx.tv.material3.ExperimentalTvMaterial3Api"
+            freeCompilerArgs += "-Xopt-in=androidx.tv.foundation.ExperimentalTvFoundationApi"
+        }
+    }
+}
+
+kapt {
+    correctErrorTypes true
+}
+
+dependencies {
+    def tv_compose_version = "1.0.0-SNAPSHOT"
+//    def tv_compose_version = "1.0.0-alpha06"
+    def core_ktx_version = "1.9.0"
+    def lifecycle_runtime_ktx_version = "2.5.1"
+    def compose_activity_version = "1.6.1"
+    def splash_screen_version = "1.0.0"
+    def nav_version = "2.5.3"
+    def gson_version = "2.9.1"
+    def media3_version = "1.0.0-beta03"
+
+    implementation("androidx.core:core-ktx:$core_ktx_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version")
+    implementation("androidx.activity:activity-compose:$compose_activity_version")
+    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation("androidx.compose.ui:ui-tooling-preview:$compose_version")
+
+    // extra material icons
+    implementation("androidx.compose.material:material-icons-extended:$compose_version")
+
+    // TV Compose
+    implementation("androidx.tv:tv-foundation:$tv_compose_version")
+    implementation("androidx.tv:tv-material:$tv_compose_version")
+
+    // TODO: Investigate why do we need this dependency if we're not using it
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha05")
+
+    // Compose Navigation
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.2.1")
+
+    // GSON
+    implementation("com.google.code.gson:gson:$gson_version")
+
+    // Media3
+    implementation("androidx.media3:media3-exoplayer:$media3_version")
+    implementation("androidx.media3:media3-ui:$media3_version")
+
+    // SplashScreen
+    implementation("androidx.core:core-splashscreen:$splash_screen_version")
+}
