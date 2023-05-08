@@ -1,0 +1,42 @@
+<!--
+ Copyright 2023 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">JetStream</string>
+    <string name="generic_error_msg">Couldn\'t get %1s. Reason: %2s</string>
+    <string name="brand_logo_text">JET STREAM</string>
+    <string name="watch_now">Watch Now</string>
+    <string name="cast_and_crew"><![CDATA[Cast & Crew]]></string>
+    <string name="director">Director</string>
+    <string name="screenplay">Screenplay</string>
+    <string name="music">Music</string>
+    <string name="watch_trailer">Watch trailer</string>
+    <string name="status">Status</string>
+    <string name="original_language">Original Language</string>
+    <string name="budget">Budget</string>
+    <string name="revenue">Revenue</string>
+    <string name="reviews">Reviews</string>
+    <string name="delete_account_dialog_title">Delete account?</string>
+    <string name="delete_account_dialog_text">"By deactivating your account, you will no longer be able to sign in, your activity will be removed from JetStream and your profile preferences will go away.\n\nDo you wish to continue?\n"</string>
+    <string name="yes_delete_account">Yes, delete my account</string>
+    <string name="no_keep_it">No, keep it</string>
+    <string name="search_screen_et_placeholder">Search for movies, shows and more…</string>
+    <string name="top_10_movies_title">Top 10 in the US</string>
+    <string name="profile_screen_listItem_icon_content_description">%s icon</string>
+    <string name="language_section_listItem_icon_content_description">%s language option</string>
+    <string name="loading_text">Loading</string>
+    <string name="movie_category_desc">movie category %s</string>
+</resources>
