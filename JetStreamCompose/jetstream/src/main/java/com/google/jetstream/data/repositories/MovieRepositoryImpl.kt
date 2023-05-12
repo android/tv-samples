@@ -22,10 +22,9 @@ import com.google.jetstream.data.entities.MovieCategory
 import com.google.jetstream.data.entities.MovieCategoryDetails
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.entities.MovieReviewsAndRatings
-import com.google.jetstream.data.models.InTheatersResponse
 import com.google.jetstream.data.models.MovieCastResponse
 import com.google.jetstream.data.models.MovieCategoriesResponse
-import com.google.jetstream.data.models.Top250MoviesResponse
+import com.google.jetstream.data.models.MoviesResponse
 import com.google.jetstream.data.util.AssetsReader
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultCount
@@ -35,19 +34,19 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerNam
 
 class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
     private val _top250Movies = assetsReader
-        .readJsonFile<Top250MoviesResponse>(fileName = StringConstants.Assets.Top250Movies)
+        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.Top250Movies)
         ?: emptyList()
 
     private val _mostPopularMovies = assetsReader
-        .readJsonFile<Top250MoviesResponse>(fileName = StringConstants.Assets.MostPopularMovies)
+        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.MostPopularMovies)
         ?: emptyList()
 
     private val _inTheatersMovies = assetsReader
-        .readJsonFile<InTheatersResponse>(fileName = StringConstants.Assets.InTheaters)
+        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.InTheaters)
         ?: emptyList()
 
     private val _mostPopularTVShows = assetsReader
-        .readJsonFile<Top250MoviesResponse>(fileName = StringConstants.Assets.MostPopularTVShows)
+        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.MostPopularTVShows)
         ?: emptyList()
 
     private val _movieCategories = assetsReader
