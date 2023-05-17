@@ -18,4 +18,7 @@ limitations under the License.
 
 ## [Big Buck Bunny Video](https://peach.blender.org/about/)
 
+This work is licensed under
+a [Creative Commons Attribution 2.5](https://creativecommons.org/licenses/by/2.5/legalcode) license.
+
 (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org
