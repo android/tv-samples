@@ -1,0 +1,62 @@
+[
+  {
+    "id": "00",
+    "characterName": "Blaze Bolt",
+    "realName": "Sophia Adams",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "01",
+    "characterName": "Shadow Storm",
+    "realName": "Jackson Brown",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "02",
+    "characterName": "Nova Knight",
+    "realName": "Olivia Carter",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "03",
+    "characterName": "Crimson Crusader",
+    "realName": "Liam Davis",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "04",
+    "characterName": "Silver Sentinel",
+    "realName": "Emma Evans",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "05",
+    "characterName": "Lightning Lass",
+    "realName": "Lucas Foster",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "06",
+    "characterName": "Phoenix Fury",
+    "realName": "Ava Green",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "07",
+    "characterName": "Ice Queen",
+    "realName": "Noah Harris",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "08",
+    "characterName": "Steel Striker",
+    "realName": "Ethan King",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  },
+  {
+    "id": "09",
+    "characterName": "Thunderbolt Titan",
+    "realName": "Mia Lee",
+    "avatarUrl": "https://storage.googleapis.com/androiddevelopers/samples/media/cast/an-actor.png"
+  }
+]

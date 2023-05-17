@@ -15,3 +15,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+## [Big Buck Bunny Video](https://peach.blender.org/about/)
+
+This work is licensed under
+a [Creative Commons Attribution 2.5](https://creativecommons.org/licenses/by/2.5/legalcode) license.
+
+(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org
