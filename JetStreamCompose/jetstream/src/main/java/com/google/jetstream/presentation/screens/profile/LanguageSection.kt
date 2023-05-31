@@ -49,8 +49,8 @@ fun LanguageSection(
             items(LanguageSectionItems.size) { index ->
                 ListItem(
                     modifier = Modifier.padding(top = 16.dp),
-                    isSelected = false,
-                    onSelectionChanged = { onSelectedIndexChange(index) },
+                    selected = false,
+                    onClick = { onSelectedIndexChange(index) },
                     trailingContent = if (selectedIndex == index) {
                         {
                             Icon(
@@ -62,14 +62,14 @@ fun LanguageSection(
                             )
                         }
                     } else null,
-                    headlineText = {
+                    headlineContent = {
                         Text(
                             text = LanguageSectionItems[index],
                             style = MaterialTheme.typography.titleMedium
                         )
                     },
-                    color = ListItemDefaults.color(
-                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                    colors = ListItemDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                     ),
                     shape = ListItemDefaults.shape(shape = JetStreamCardShape)
                 )

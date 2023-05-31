@@ -56,7 +56,6 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import com.google.jetstream.R
-import com.google.jetstream.data.repositories.MovieRepositoryImpl
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.presentation.LocalMovieRepository
 import com.google.jetstream.presentation.common.MoviesRow
@@ -102,14 +101,12 @@ fun SearchScreen(
             Surface(
                 shape = ClickableSurfaceDefaults.shape(shape = JetStreamCardShape),
                 scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
-                color = ClickableSurfaceDefaults.color(
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
-                    focusedColor = MaterialTheme.colorScheme.inverseOnSurface,
-                    pressedColor = MaterialTheme.colorScheme.inverseOnSurface
-                ),
-                contentColor = ClickableSurfaceDefaults.contentColor(
-                    focusedColor = MaterialTheme.colorScheme.onSurface,
-                    pressedColor = MaterialTheme.colorScheme.onSurface
+                colors = ClickableSurfaceDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    pressedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    focusedContentColor = MaterialTheme.colorScheme.onSurface,
+                    pressedContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 border = ClickableSurfaceDefaults.border(
                     focusedBorder = Border(

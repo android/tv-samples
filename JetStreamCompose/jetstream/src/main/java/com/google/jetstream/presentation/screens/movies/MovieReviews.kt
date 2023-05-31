@@ -88,13 +88,11 @@ fun MovieReviews(
                         )
                     ),
                     shape = ClickableSurfaceDefaults.shape(shape = JetStreamCardShape),
-                    color = ClickableSurfaceDefaults.color(
-                        focusedColor = MaterialTheme.colorScheme.surface,
-                        pressedColor = MaterialTheme.colorScheme.surface
-                    ),
-                    contentColor = ClickableSurfaceDefaults.contentColor(
-                        focusedColor = MaterialTheme.colorScheme.onSurface,
-                        pressedColor = MaterialTheme.colorScheme.onSurface
+                    colors = ClickableSurfaceDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        pressedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContentColor = MaterialTheme.colorScheme.onSurface,
+                        pressedContentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
                     Row(

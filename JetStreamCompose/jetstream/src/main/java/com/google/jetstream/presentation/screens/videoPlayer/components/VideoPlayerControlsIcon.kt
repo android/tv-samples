@@ -58,8 +58,8 @@ fun VideoPlayerControlsIcon(
         modifier = modifier.size(40.dp),
         onClick = onClick,
         shape = ClickableSurfaceDefaults.shape(shape = CircleShape),
-        color = ClickableSurfaceDefaults.color(
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+        colors = ClickableSurfaceDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
         ),
         scale = ClickableSurfaceDefaults.scale(focusedScale = 1.05f),
         interactionSource = interactionSource

@@ -1,31 +1,11 @@
-/*
- * Copyright 2023 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.google.jetstream.tvmaterial
-
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Indication
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.tv.material3.Border
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Glow
-import androidx.tv.material3.ToggleableSurfaceDefaults
 
 /**
  * Defines [Shape] for all TV [Indication] states of a ListItem.
@@ -40,9 +20,7 @@ class ListItemShape internal constructor(
     internal val disabledShape: Shape,
     internal val focusedSelectedShape: Shape,
     internal val focusedDisabledShape: Shape,
-    internal val pressedSelectedShape: Shape,
-    internal val selectedDisabledShape: Shape,
-    internal val focusedSelectedDisabledShape: Shape
+    internal val pressedSelectedShape: Shape
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -58,8 +36,6 @@ class ListItemShape internal constructor(
         if (focusedSelectedShape != other.focusedSelectedShape) return false
         if (focusedDisabledShape != other.focusedDisabledShape) return false
         if (pressedSelectedShape != other.pressedSelectedShape) return false
-        if (selectedDisabledShape != other.selectedDisabledShape) return false
-        if (focusedSelectedDisabledShape != other.focusedSelectedDisabledShape) return false
 
         return true
     }
@@ -73,102 +49,106 @@ class ListItemShape internal constructor(
         result = 31 * result + focusedSelectedShape.hashCode()
         result = 31 * result + focusedDisabledShape.hashCode()
         result = 31 * result + pressedSelectedShape.hashCode()
-        result = 31 * result + selectedDisabledShape.hashCode()
-        result = 31 * result + focusedSelectedDisabledShape.hashCode()
 
         return result
     }
 
     override fun toString(): String {
-        return "ListItemShape(shape=$shape, focusedShape=$focusedShape," +
-                "pressedShape=$pressedShape, selectedShape=$selectedShape, " +
-                "disabledShape=$disabledShape, focusedSelectedShape=$focusedSelectedShape, " +
+        return "ListItemShape(shape=$shape, " +
+                "focusedShape=$focusedShape," +
+                "pressedShape=$pressedShape, " +
+                "selectedShape=$selectedShape, " +
+                "disabledShape=$disabledShape, " +
+                "focusedSelectedShape=$focusedSelectedShape, " +
                 "focusedDisabledShape=$focusedDisabledShape, " +
-                "pressedSelectedShape=$pressedSelectedShape, " +
-                "selectedDisabledShape=$selectedDisabledShape, " +
-                "focusedSelectedDisabledShape=$focusedSelectedDisabledShape)"
+                "pressedSelectedShape=$pressedSelectedShape)"
     }
-
-    @Composable
-    internal fun toToggleableSurfaceShape() = ToggleableSurfaceDefaults.shape(
-        shape = shape,
-        focusedShape = focusedShape,
-        pressedShape = pressedShape,
-        selectedShape = selectedShape,
-        disabledShape = disabledShape,
-        focusedSelectedShape = focusedSelectedShape,
-        focusedDisabledShape = focusedDisabledShape,
-        pressedSelectedShape = pressedSelectedShape,
-        selectedDisabledShape = selectedDisabledShape,
-        focusedSelectedDisabledShape = focusedSelectedDisabledShape
-    )
 }
 
 /**
- * Defines [Color] for all TV [Indication] states of a ListItem.
+ * Defines container & content color [Color] for all TV [Indication] states of a ListItem.
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class ListItemColor internal constructor(
-    internal val color: Color,
-    internal val focusedColor: Color,
-    internal val pressedColor: Color,
-    internal val selectedColor: Color,
-    internal val disabledColor: Color,
-    internal val focusedSelectedColor: Color,
-    internal val pressedSelectedColor: Color
+class ListItemColors internal constructor(
+    internal val containerColor: Color,
+    internal val contentColor: Color,
+    internal val focusedContainerColor: Color,
+    internal val focusedContentColor: Color,
+    internal val pressedContainerColor: Color,
+    internal val pressedContentColor: Color,
+    internal val selectedContainerColor: Color,
+    internal val selectedContentColor: Color,
+    internal val disabledContainerColor: Color,
+    internal val disabledContentColor: Color,
+    internal val focusedSelectedContainerColor: Color,
+    internal val focusedSelectedContentColor: Color,
+    internal val pressedSelectedContainerColor: Color,
+    internal val pressedSelectedContentColor: Color
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as ListItemColor
+        other as ListItemColors
 
-        if (color != other.color) return false
-        if (focusedColor != other.focusedColor) return false
-        if (pressedColor != other.pressedColor) return false
-        if (selectedColor != other.selectedColor) return false
-        if (disabledColor != other.disabledColor) return false
-        if (focusedSelectedColor != other.focusedSelectedColor) return false
-        if (pressedSelectedColor != other.pressedSelectedColor) return false
+        if (containerColor != other.containerColor) return false
+        if (contentColor != other.contentColor) return false
+        if (focusedContainerColor != other.focusedContainerColor) return false
+        if (focusedContentColor != other.focusedContentColor) return false
+        if (pressedContainerColor != other.pressedContainerColor) return false
+        if (pressedContentColor != other.pressedContentColor) return false
+        if (selectedContainerColor != other.selectedContainerColor) return false
+        if (selectedContentColor != other.selectedContentColor) return false
+        if (disabledContainerColor != other.disabledContainerColor) return false
+        if (disabledContentColor != other.disabledContentColor) return false
+        if (focusedSelectedContainerColor != other.focusedSelectedContainerColor) return false
+        if (focusedSelectedContentColor != other.focusedSelectedContentColor) return false
+        if (pressedSelectedContainerColor != other.pressedSelectedContainerColor) return false
+        if (pressedSelectedContentColor != other.pressedSelectedContentColor) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = color.hashCode()
-        result = 31 * result + focusedColor.hashCode()
-        result = 31 * result + pressedColor.hashCode()
-        result = 31 * result + selectedColor.hashCode()
-        result = 31 * result + disabledColor.hashCode()
-        result = 31 * result + focusedSelectedColor.hashCode()
-        result = 31 * result + pressedSelectedColor.hashCode()
-
+        var result = containerColor.hashCode()
+        result = 31 * result + contentColor.hashCode()
+        result = 31 * result + focusedContainerColor.hashCode()
+        result = 31 * result + focusedContentColor.hashCode()
+        result = 31 * result + pressedContainerColor.hashCode()
+        result = 31 * result + pressedContentColor.hashCode()
+        result = 31 * result + selectedContainerColor.hashCode()
+        result = 31 * result + selectedContentColor.hashCode()
+        result = 31 * result + disabledContainerColor.hashCode()
+        result = 31 * result + disabledContentColor.hashCode()
+        result = 31 * result + focusedSelectedContainerColor.hashCode()
+        result = 31 * result + focusedSelectedContentColor.hashCode()
+        result = 31 * result + pressedSelectedContainerColor.hashCode()
+        result = 31 * result + pressedSelectedContentColor.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "ListItemColor(color=$color, focusedColor=$focusedColor, " +
-                "pressedColor=$pressedColor, selectedColor=$selectedColor, " +
-                "disabledColor=$disabledColor, focusedSelectedColor=$focusedSelectedColor, " +
-                "pressedSelectedColor=$pressedSelectedColor)"
+        return "ListItemColors(containerColor=$containerColor, " +
+                "contentColor=$contentColor, " +
+                "focusedContainerColor=$focusedContainerColor, " +
+                "focusedContentColor=$focusedContentColor, " +
+                "pressedContainerColor=$pressedContainerColor, " +
+                "pressedContentColor=$pressedContentColor, " +
+                "selectedContainerColor=$selectedContainerColor, " +
+                "selectedContentColor=$selectedContentColor, " +
+                "disabledContainerColor=$disabledContainerColor, " +
+                "disabledContentColor=$disabledContentColor, " +
+                "focusedSelectedContainerColor=$focusedSelectedContainerColor, " +
+                "focusedSelectedContentColor=$focusedSelectedContentColor, " +
+                "pressedSelectedContainerColor=$pressedSelectedContainerColor, " +
+                "pressedSelectedContentColor=$pressedSelectedContentColor)"
     }
-
-    @Composable
-    internal fun toToggleableSurfaceColor() = ToggleableSurfaceDefaults.color(
-        color = color,
-        focusedColor = focusedColor,
-        pressedColor = pressedColor,
-        selectedColor = selectedColor,
-        disabledColor = disabledColor,
-        focusedSelectedColor = focusedSelectedColor,
-        pressedSelectedColor = pressedSelectedColor
-    )
 }
 
 /**
- * Defines the scale for all TV [Indication] states of a ListItem. Note: This scale must always be
- * a non-negative float.
+ * Defines the scale for all TV [Indication] states of a ListItem.
+ * Note: This scale must always be a non-negative float.
  */
 @ExperimentalTvMaterial3Api
 @Immutable
@@ -180,9 +160,7 @@ class ListItemScale internal constructor(
     @FloatRange(from = 0.0) internal val disabledScale: Float,
     @FloatRange(from = 0.0) internal val focusedSelectedScale: Float,
     @FloatRange(from = 0.0) internal val focusedDisabledScale: Float,
-    @FloatRange(from = 0.0) internal val pressedSelectedScale: Float,
-    @FloatRange(from = 0.0) internal val selectedDisabledScale: Float,
-    @FloatRange(from = 0.0) internal val focusedSelectedDisabledScale: Float
+    @FloatRange(from = 0.0) internal val pressedSelectedScale: Float
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -198,8 +176,6 @@ class ListItemScale internal constructor(
         if (focusedSelectedScale != other.focusedSelectedScale) return false
         if (focusedDisabledScale != other.focusedDisabledScale) return false
         if (pressedSelectedScale != other.pressedSelectedScale) return false
-        if (selectedDisabledScale != other.selectedDisabledScale) return false
-        if (focusedSelectedDisabledScale != other.focusedSelectedDisabledScale) return false
 
         return true
     }
@@ -213,38 +189,40 @@ class ListItemScale internal constructor(
         result = 31 * result + focusedSelectedScale.hashCode()
         result = 31 * result + focusedDisabledScale.hashCode()
         result = 31 * result + pressedSelectedScale.hashCode()
-        result = 31 * result + selectedDisabledScale.hashCode()
-        result = 31 * result + focusedSelectedDisabledScale.hashCode()
 
         return result
     }
 
     override fun toString(): String {
-        return "ListItemScale(scale=$scale, focusedScale=$focusedScale, " +
-                "pressedScale=$pressedScale, selectedScale=$selectedScale, " +
-                "disabledScale=$disabledScale, focusedSelectedScale=$focusedSelectedScale, " +
+        return "ListItemScale(scale=$scale, " +
+                "focusedScale=$focusedScale, " +
+                "pressedScale=$pressedScale, " +
+                "selectedScale=$selectedScale, " +
+                "disabledScale=$disabledScale, " +
+                "focusedSelectedScale=$focusedSelectedScale, " +
                 "focusedDisabledScale=$focusedDisabledScale, " +
-                "pressedSelectedScale=$pressedSelectedScale, " +
-                "selectedDisabledScale=$selectedDisabledScale, " +
-                "focusedSelectedDisabledScale=$focusedSelectedDisabledScale)"
+                "pressedSelectedScale=$pressedSelectedScale)"
     }
 
-    internal fun toToggleableSurfaceScale() = ToggleableSurfaceDefaults.scale(
-        scale = scale,
-        focusedScale = focusedScale,
-        pressedScale = pressedScale,
-        selectedScale = selectedScale,
-        disabledScale = disabledScale,
-        focusedSelectedScale = focusedSelectedScale,
-        focusedDisabledScale = focusedDisabledScale,
-        pressedSelectedScale = pressedSelectedScale,
-        selectedDisabledScale = selectedDisabledScale,
-        focusedSelectedDisabledScale = focusedSelectedDisabledScale
-    )
+    companion object {
+        /**
+         * Signifies the absence of a [ScaleIndication] in ListItem component.
+         */
+        val None = ListItemScale(
+            scale = 1f,
+            focusedScale = 1f,
+            pressedScale = 1f,
+            selectedScale = 1f,
+            disabledScale = 1f,
+            focusedSelectedScale = 1f,
+            focusedDisabledScale = 1f,
+            pressedSelectedScale = 1f
+        )
+    }
 }
 
 /**
- * Defines [Outline] for all TV [Indication] states of a ListItem.
+ * Defines [Border] for all TV [Indication] states of a ListItem.
  */
 @ExperimentalTvMaterial3Api
 @Immutable
@@ -256,9 +234,7 @@ class ListItemBorder internal constructor(
     internal val disabledBorder: Border,
     internal val focusedSelectedBorder: Border,
     internal val focusedDisabledBorder: Border,
-    internal val pressedSelectedBorder: Border,
-    internal val selectedDisabledBorder: Border,
-    internal val focusedSelectedDisabledBorder: Border
+    internal val pressedSelectedBorder: Border
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -274,8 +250,6 @@ class ListItemBorder internal constructor(
         if (focusedSelectedBorder != other.focusedSelectedBorder) return false
         if (focusedDisabledBorder != other.focusedDisabledBorder) return false
         if (pressedSelectedBorder != other.pressedSelectedBorder) return false
-        if (selectedDisabledBorder != other.selectedDisabledBorder) return false
-        if (focusedSelectedDisabledBorder != other.focusedSelectedDisabledBorder) return false
 
         return true
     }
@@ -289,34 +263,20 @@ class ListItemBorder internal constructor(
         result = 31 * result + focusedSelectedBorder.hashCode()
         result = 31 * result + focusedDisabledBorder.hashCode()
         result = 31 * result + pressedSelectedBorder.hashCode()
-        result = 31 * result + selectedDisabledBorder.hashCode()
-        result = 31 * result + focusedSelectedDisabledBorder.hashCode()
 
         return result
     }
 
     override fun toString(): String {
-        return "ListItemBorder(border=$border, focusedBorder=$focusedBorder, " +
-                "pressedBorder=$pressedBorder, selectedBorder=$selectedBorder, " +
-                "disabledBorder=$disabledBorder, focusedSelectedBorder=$focusedSelectedBorder, " +
+        return "ListItemBorder(border=$border, " +
+                "focusedBorder=$focusedBorder, " +
+                "pressedBorder=$pressedBorder, " +
+                "selectedBorder=$selectedBorder, " +
+                "disabledBorder=$disabledBorder, " +
+                "focusedSelectedBorder=$focusedSelectedBorder, " +
                 "focusedDisabledBorder=$focusedDisabledBorder, " +
-                "pressedSelectedBorder=$pressedSelectedBorder, " +
-                "selectedDisabledBorder=$selectedDisabledBorder, " +
-                "focusedSelectedDisabledBorder=$focusedSelectedDisabledBorder)"
+                "pressedSelectedBorder=$pressedSelectedBorder)"
     }
-
-    internal fun toToggleableSurfaceBorder() = ToggleableSurfaceDefaults.border(
-        border = border,
-        focusedBorder = focusedBorder,
-        pressedBorder = pressedBorder,
-        selectedBorder = selectedBorder,
-        disabledBorder = disabledBorder,
-        focusedSelectedBorder = focusedSelectedBorder,
-        focusedDisabledBorder = focusedDisabledBorder,
-        pressedSelectedBorder = pressedSelectedBorder,
-        selectedDisabledBorder = selectedDisabledBorder,
-        focusedSelectedDisabledBorder = focusedSelectedDisabledBorder
-    )
 }
 
 /**
@@ -359,12 +319,12 @@ class ListItemGlow internal constructor(
         return result
     }
 
-    internal fun toToggleableSurfaceGlow() = ToggleableSurfaceDefaults.glow(
-        glow = glow,
-        focusedGlow = focusedGlow,
-        pressedGlow = pressedGlow,
-        selectedGlow = selectedGlow,
-        focusedSelectedGlow = focusedSelectedGlow,
-        pressedSelectedGlow = pressedSelectedGlow
-    )
+    override fun toString(): String {
+        return "ListItemGlow(glow=$glow, " +
+                "focusedGlow=$focusedGlow, " +
+                "pressedGlow=$pressedGlow, " +
+                "selectedGlow=$selectedGlow, " +
+                "focusedSelectedGlow=$focusedSelectedGlow, " +
+                "pressedSelectedGlow=$pressedSelectedGlow)"
+    }
 }

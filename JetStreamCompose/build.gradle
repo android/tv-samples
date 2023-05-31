@@ -18,7 +18,7 @@
 buildscript {
     ext {
         compose_compiler_version = "1.4.0"
-        compose_version = "1.4.2"
+        compose_version = "1.4.3"
         secrets_plugin_version = '2.0.1'
     }
     dependencies {

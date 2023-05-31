@@ -64,7 +64,7 @@ import com.google.jetstream.R
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamTheme
 import com.google.jetstream.presentation.utils.FocusGroup
-import com.google.jetstream.tvmaterial.DenseListItem
+import com.google.jetstream.tvmaterial.ListItem
 import com.google.jetstream.tvmaterial.ListItemDefaults
 
 @OptIn(
@@ -104,8 +104,9 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 ProfileScreens.values().forEachIndexed { index, profileScreen ->
-                    DenseListItem(
-                        icon = {
+                    // TODO: make this dense list item
+                    ListItem(
+                        trailingContent = {
                             Icon(
                                 modifier = Modifier
                                     .padding(vertical = 2.dp)
@@ -118,7 +119,7 @@ fun ProfileScreen(
                                 )
                             )
                         },
-                        headlineText = {
+                        headlineContent = {
                             Text(
                                 text = profileScreen.tabTitle,
                                 style = MaterialTheme.typography.bodyMedium.copy(
@@ -127,8 +128,8 @@ fun ProfileScreen(
                                 modifier = Modifier.fillMaxWidth()
                             )
                         },
-                        isSelected = currentDestination == profileScreen.name,
-                        onSelectionChanged = { focusManager.moveFocus(FocusDirection.Right) },
+                        selected = currentDestination == profileScreen.name,
+                        onClick = { focusManager.moveFocus(FocusDirection.Right) },
                         modifier = Modifier
                             .restorableFocus()
                             .fillMaxWidth()
@@ -146,12 +147,10 @@ fun ProfileScreen(
                                 }
                             },
                         scale = ListItemDefaults.scale(focusedScale = 1f),
-                        color = ListItemDefaults.color(
-                            focusedColor = MaterialTheme.colorScheme.inverseSurface,
-                            selectedColor = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.4f)
-                        ),
-                        contentColor = ListItemDefaults.contentColor(
-                            selectedColor = MaterialTheme.colorScheme.surface
+                        colors = ListItemDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
+                            selectedContainerColor = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.4f),
+                            selectedContentColor = MaterialTheme.colorScheme.surface,
                         ),
                         shape = ListItemDefaults.shape(shape = MaterialTheme.shapes.extraSmall)
                     )
