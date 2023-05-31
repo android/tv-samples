@@ -49,8 +49,8 @@ fun AccountsSelectionItem(
                 .padding(8.dp)
                 .fillMaxWidth()
                 .aspectRatio(2f),
-            color = ClickableSurfaceDefaults.color(
-                color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+            colors = ClickableSurfaceDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
             ),
             shape = ClickableSurfaceDefaults.shape(shape = MaterialTheme.shapes.extraSmall),
             scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)

@@ -29,11 +29,11 @@ import androidx.tv.material3.Glow
 import androidx.tv.material3.ToggleableSurfaceDefaults
 
 /**
- * Defines [Shape] for all TV [Indication] states of [Chip].
+ * Defines [Shape] for all TV [Indication] states of [ClickableChip].
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class ChipShape internal constructor(
+class ClickableChipShape internal constructor(
     internal val shape: Shape,
     internal val focusedShape: Shape,
     internal val pressedShape: Shape,
@@ -44,7 +44,7 @@ class ChipShape internal constructor(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as ChipShape
+        other as ClickableChipShape
 
         if (shape != other.shape) return false
         if (focusedShape != other.focusedShape) return false
@@ -66,8 +66,9 @@ class ChipShape internal constructor(
     }
 
     override fun toString(): String {
-        return "ChipShape(shape=$shape, focusedShape=$focusedShape, pressedShape=$pressedShape, " +
-                "disabledShape=$disabledShape, focusedDisabledShape=$focusedDisabledShape)"
+        return "ClickableChipShape(shape=$shape, focusedShape=$focusedShape, " +
+                "pressedShape=$pressedShape, disabledShape=$disabledShape, " +
+                "focusedDisabledShape=$focusedDisabledShape)"
     }
 
     @Composable
@@ -158,51 +159,69 @@ class SelectableChipShape internal constructor(
 }
 
 /**
- * Defines [Color] for all TV [Indication] states of [Chip].
+ * Defines [Color] for all TV [Indication] states of [ClickableChip].
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class ChipColor internal constructor(
-    internal val color: Color,
-    internal val focusedColor: Color,
-    internal val pressedColor: Color,
-    internal val disabledColor: Color
+class ClickableChipColors internal constructor(
+    internal val containerColor: Color,
+    internal val contentColor: Color,
+    internal val focusedContainerColor: Color,
+    internal val focusedContentColor: Color,
+    internal val pressedContainerColor: Color,
+    internal val pressedContentColor: Color,
+    internal val disabledContainerColor: Color,
+    internal val disabledContentColor: Color
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as ChipColor
+        other as ClickableChipColors
 
-        if (color != other.color) return false
-        if (focusedColor != other.focusedColor) return false
-        if (pressedColor != other.pressedColor) return false
-        if (disabledColor != other.disabledColor) return false
+        if (containerColor != other.containerColor) return false
+        if (contentColor != other.contentColor) return false
+        if (focusedContainerColor != other.focusedContainerColor) return false
+        if (focusedContentColor != other.focusedContentColor) return false
+        if (pressedContainerColor != other.pressedContainerColor) return false
+        if (pressedContentColor != other.pressedContentColor) return false
+        if (disabledContainerColor != other.disabledContainerColor) return false
+        if (disabledContentColor != other.disabledContentColor) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = color.hashCode()
-        result = 31 * result + focusedColor.hashCode()
-        result = 31 * result + pressedColor.hashCode()
-        result = 31 * result + disabledColor.hashCode()
-
+        var result = containerColor.hashCode()
+        result = 31 * result + contentColor.hashCode()
+        result = 31 * result + focusedContainerColor.hashCode()
+        result = 31 * result + focusedContentColor.hashCode()
+        result = 31 * result + pressedContainerColor.hashCode()
+        result = 31 * result + pressedContentColor.hashCode()
+        result = 31 * result + disabledContainerColor.hashCode()
+        result = 31 * result + disabledContentColor.hashCode()
         return result
     }
 
-    override fun toString(): String {
-        return "ChipColor(color=$color, focusedColor=$focusedColor, pressedColor=$pressedColor, " +
-                "disabledColor=$disabledColor)"
-    }
-
     @Composable
-    internal fun toClickableSurfaceColor() = ClickableSurfaceDefaults.color(
-        color = color,
-        focusedColor = focusedColor,
-        pressedColor = pressedColor,
-        disabledColor = disabledColor
+    internal fun toClickableSurfaceColors() = ClickableSurfaceDefaults.colors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        focusedContainerColor = focusedContainerColor,
+        focusedContentColor = focusedContentColor,
+        pressedContainerColor = pressedContainerColor,
+        pressedContentColor = pressedContentColor,
+        disabledContainerColor = disabledContainerColor,
+        disabledContentColor = disabledContentColor,
     )
+
+    override fun toString(): String {
+        return "ClickableChipColors(containerColor=$containerColor, contentColor=$contentColor, " +
+                "focusedContainerColor=$focusedContainerColor, focusedContentColor=" +
+                "$focusedContentColor, pressedContainerColor=$pressedContainerColor, " +
+                "pressedContentColor=$pressedContentColor, disabledContainerColor=" +
+                "$disabledContainerColor, disabledContentColor=$disabledContentColor)"
+    }
 }
 
 /**
@@ -210,70 +229,106 @@ class ChipColor internal constructor(
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class SelectableChipColor internal constructor(
-    internal val color: Color,
-    internal val focusedColor: Color,
-    internal val pressedColor: Color,
-    internal val selectedColor: Color,
-    internal val disabledColor: Color,
-    internal val focusedSelectedColor: Color,
-    internal val pressedSelectedColor: Color
+class SelectableChipColors internal constructor(
+    internal val containerColor: Color,
+    internal val contentColor: Color,
+    internal val focusedContainerColor: Color,
+    internal val focusedContentColor: Color,
+    internal val pressedContainerColor: Color,
+    internal val pressedContentColor: Color,
+    internal val selectedContainerColor: Color,
+    internal val selectedContentColor: Color,
+    internal val disabledContainerColor: Color,
+    internal val disabledContentColor: Color,
+    internal val focusedSelectedContainerColor: Color,
+    internal val focusedSelectedContentColor: Color,
+    internal val pressedSelectedContainerColor: Color,
+    internal val pressedSelectedContentColor: Color
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as SelectableChipColor
+        other as SelectableChipColors
 
-        if (color != other.color) return false
-        if (focusedColor != other.focusedColor) return false
-        if (pressedColor != other.pressedColor) return false
-        if (selectedColor != other.selectedColor) return false
-        if (disabledColor != other.disabledColor) return false
-        if (focusedSelectedColor != other.focusedSelectedColor) return false
-        if (pressedSelectedColor != other.pressedSelectedColor) return false
+        if (containerColor != other.containerColor) return false
+        if (contentColor != other.contentColor) return false
+        if (focusedContainerColor != other.focusedContainerColor) return false
+        if (focusedContentColor != other.focusedContentColor) return false
+        if (pressedContainerColor != other.pressedContainerColor) return false
+        if (pressedContentColor != other.pressedContentColor) return false
+        if (selectedContainerColor != other.selectedContainerColor) return false
+        if (selectedContentColor != other.selectedContentColor) return false
+        if (disabledContainerColor != other.disabledContainerColor) return false
+        if (disabledContentColor != other.disabledContentColor) return false
+        if (focusedSelectedContainerColor != other.focusedSelectedContainerColor) return false
+        if (focusedSelectedContentColor != other.focusedSelectedContentColor) return false
+        if (pressedSelectedContainerColor != other.pressedSelectedContainerColor) return false
+        if (pressedSelectedContentColor != other.pressedSelectedContentColor) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = color.hashCode()
-        result = 31 * result + focusedColor.hashCode()
-        result = 31 * result + pressedColor.hashCode()
-        result = 31 * result + selectedColor.hashCode()
-        result = 31 * result + disabledColor.hashCode()
-        result = 31 * result + focusedSelectedColor.hashCode()
-        result = 31 * result + pressedSelectedColor.hashCode()
-
+        var result = containerColor.hashCode()
+        result = 31 * result + contentColor.hashCode()
+        result = 31 * result + focusedContainerColor.hashCode()
+        result = 31 * result + focusedContentColor.hashCode()
+        result = 31 * result + pressedContainerColor.hashCode()
+        result = 31 * result + pressedContentColor.hashCode()
+        result = 31 * result + selectedContainerColor.hashCode()
+        result = 31 * result + selectedContentColor.hashCode()
+        result = 31 * result + disabledContainerColor.hashCode()
+        result = 31 * result + disabledContentColor.hashCode()
+        result = 31 * result + focusedSelectedContainerColor.hashCode()
+        result = 31 * result + focusedSelectedContentColor.hashCode()
+        result = 31 * result + pressedSelectedContainerColor.hashCode()
+        result = 31 * result + pressedSelectedContentColor.hashCode()
         return result
     }
 
-    override fun toString(): String {
-        return "SelectableChipColor(color=$color, focusedColor=$focusedColor, " +
-                "pressedColor=$pressedColor, selectedColor=$selectedColor, " +
-                "disabledColor=$disabledColor, focusedSelectedColor=$focusedSelectedColor, " +
-                "pressedSelectedColor=$pressedSelectedColor)"
-    }
-
     @Composable
-    internal fun toToggleableSurfaceColor() = ToggleableSurfaceDefaults.color(
-        color = color,
-        focusedColor = focusedColor,
-        pressedColor = pressedColor,
-        selectedColor = selectedColor,
-        disabledColor = disabledColor,
-        focusedSelectedColor = focusedSelectedColor,
-        pressedSelectedColor = pressedSelectedColor
+    internal fun toToggleableSurfaceColors() = ToggleableSurfaceDefaults.colors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        focusedContainerColor = focusedContainerColor,
+        focusedContentColor = focusedContentColor,
+        pressedContainerColor = pressedContainerColor,
+        pressedContentColor = pressedContentColor,
+        selectedContainerColor = selectedContainerColor,
+        selectedContentColor = selectedContentColor,
+        disabledContainerColor = disabledContainerColor,
+        disabledContentColor = disabledContentColor,
+        focusedSelectedContainerColor = focusedSelectedContainerColor,
+        focusedSelectedContentColor = focusedSelectedContentColor,
+        pressedSelectedContainerColor = pressedSelectedContainerColor,
+        pressedSelectedContentColor = pressedSelectedContentColor,
     )
+
+    override fun toString(): String {
+        return "SelectableChipColors(containerColor=$containerColor, " +
+                "contentColor=$contentColor, focusedContainerColor=$focusedContainerColor, " +
+                "focusedContentColor=$focusedContentColor, " +
+                "pressedContainerColor=$pressedContainerColor, " +
+                "pressedContentColor=$pressedContentColor, " +
+                "selectedContainerColor=$selectedContainerColor, " +
+                "selectedContentColor=$selectedContentColor, " +
+                "disabledContainerColor=$disabledContainerColor, " +
+                "disabledContentColor=$disabledContentColor, " +
+                "focusedSelectedContainerColor=$focusedSelectedContainerColor, " +
+                "focusedSelectedContentColor=$focusedSelectedContentColor, " +
+                "pressedSelectedContainerColor=$pressedSelectedContainerColor, " +
+                "pressedSelectedContentColor=$pressedSelectedContentColor)"
+    }
 }
 
 /**
- * Defines the scale for all TV states of [Chip]. Note: This scale must always be a non-negative
- * float.
+ * Defines the scale for all TV states of [ClickableChip]. Note: This scale must always be a
+ * non-negative float.
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class ChipScale internal constructor(
+class ClickableChipScale internal constructor(
     @FloatRange(from = 0.0) internal val scale: Float,
     @FloatRange(from = 0.0) internal val focusedScale: Float,
     @FloatRange(from = 0.0) internal val pressedScale: Float,
@@ -284,7 +339,7 @@ class ChipScale internal constructor(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as ChipScale
+        other as ClickableChipScale
 
         if (scale != other.scale) return false
         if (focusedScale != other.focusedScale) return false
@@ -306,10 +361,12 @@ class ChipScale internal constructor(
     }
 
     override fun toString(): String {
-        return "ChipScale(scale=$scale, focusedScale=$focusedScale, pressedScale=$pressedScale, " +
-                "disabledScale=$disabledScale, focusedDisabledScale=$focusedDisabledScale)"
+        return "ClickableChipScale(scale=$scale, focusedScale=$focusedScale, " +
+                "pressedScale=$pressedScale, disabledScale=$disabledScale, " +
+                "focusedDisabledScale=$focusedDisabledScale)"
     }
 
+    @Composable
     internal fun toClickableSurfaceScale() = ClickableSurfaceDefaults.scale(
         scale = scale,
         focusedScale = focusedScale,
@@ -397,11 +454,11 @@ class SelectableChipScale internal constructor(
 }
 
 /**
- * Defines [Border] for all TV [Indication] states of [Chip].
+ * Defines [Border] for all TV [Indication] states of [ClickableChip].
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class ChipBorder internal constructor(
+class ClickableChipBorder internal constructor(
     internal val border: Border,
     internal val focusedBorder: Border,
     internal val pressedBorder: Border,
@@ -412,7 +469,7 @@ class ChipBorder internal constructor(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as ChipBorder
+        other as ClickableChipBorder
 
         if (border != other.border) return false
         if (focusedBorder != other.focusedBorder) return false
@@ -434,7 +491,7 @@ class ChipBorder internal constructor(
     }
 
     override fun toString(): String {
-        return "ChipBorder(border=$border, focusedBorder=$focusedBorder, " +
+        return "ClickableChipBorder(border=$border, focusedBorder=$focusedBorder, " +
                 "pressedBorder=$pressedBorder, disabledBorder=$disabledBorder, " +
                 "focusedDisabledBorder=$focusedDisabledBorder)"
     }
@@ -460,11 +517,11 @@ class SelectableChipBorder internal constructor(
     internal val pressedBorder: Border,
     internal val selectedBorder: Border,
     internal val disabledBorder: Border,
-    internal val focusedSelected: Border,
-    internal val focusedDisabled: Border,
-    internal val pressedSelected: Border,
-    internal val selectedDisabled: Border,
-    internal val focusedSelectedDisabled: Border
+    internal val focusedSelectedBorder: Border,
+    internal val focusedDisabledBorder: Border,
+    internal val pressedSelectedBorder: Border,
+    internal val selectedDisabledBorder: Border,
+    internal val focusedSelectedDisabledBorder: Border
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -477,11 +534,11 @@ class SelectableChipBorder internal constructor(
         if (pressedBorder != other.pressedBorder) return false
         if (selectedBorder != other.selectedBorder) return false
         if (disabledBorder != other.disabledBorder) return false
-        if (focusedSelected != other.focusedSelected) return false
-        if (focusedDisabled != other.focusedDisabled) return false
-        if (pressedSelected != other.pressedSelected) return false
-        if (selectedDisabled != other.selectedDisabled) return false
-        if (focusedSelectedDisabled != other.focusedSelectedDisabled) return false
+        if (focusedSelectedBorder != other.focusedSelectedBorder) return false
+        if (focusedDisabledBorder != other.focusedDisabledBorder) return false
+        if (pressedSelectedBorder != other.pressedSelectedBorder) return false
+        if (selectedDisabledBorder != other.selectedDisabledBorder) return false
+        if (focusedSelectedDisabledBorder != other.focusedSelectedDisabledBorder) return false
 
         return true
     }
@@ -492,11 +549,11 @@ class SelectableChipBorder internal constructor(
         result = 31 * result + pressedBorder.hashCode()
         result = 31 * result + selectedBorder.hashCode()
         result = 31 * result + disabledBorder.hashCode()
-        result = 31 * result + focusedSelected.hashCode()
-        result = 31 * result + focusedDisabled.hashCode()
-        result = 31 * result + pressedSelected.hashCode()
-        result = 31 * result + selectedDisabled.hashCode()
-        result = 31 * result + focusedSelectedDisabled.hashCode()
+        result = 31 * result + focusedSelectedBorder.hashCode()
+        result = 31 * result + focusedDisabledBorder.hashCode()
+        result = 31 * result + pressedSelectedBorder.hashCode()
+        result = 31 * result + selectedDisabledBorder.hashCode()
+        result = 31 * result + focusedSelectedDisabledBorder.hashCode()
 
         return result
     }
@@ -504,11 +561,11 @@ class SelectableChipBorder internal constructor(
     override fun toString(): String {
         return "SelectableChipBorder(border=$border, focusedBorder=$focusedBorder, " +
                 "pressedBorder=$pressedBorder, selectedBorder=$selectedBorder, " +
-                "disabledBorder=$disabledBorder, focusedSelectedBorder=$focusedSelected, " +
-                "focusedDisabledBorder=$focusedDisabled, " +
-                "pressedSelectedBorder=$pressedSelected, " +
-                "selectedDisabledBorder=$selectedDisabled, " +
-                "focusedSelectedDisabledBorder=$focusedSelectedDisabled)"
+                "disabledBorder=$disabledBorder, focusedSelectedBorder=$focusedSelectedBorder, " +
+                "focusedDisabledBorder=$focusedDisabledBorder, " +
+                "pressedSelectedBorder=$pressedSelectedBorder, " +
+                "selectedDisabledBorder=$selectedDisabledBorder, " +
+                "focusedSelectedDisabledBorder=$focusedSelectedDisabledBorder)"
     }
 
     internal fun toToggleableSurfaceBorder() = ToggleableSurfaceDefaults.border(
@@ -517,20 +574,20 @@ class SelectableChipBorder internal constructor(
         pressedBorder = pressedBorder,
         selectedBorder = selectedBorder,
         disabledBorder = disabledBorder,
-        focusedSelectedBorder = focusedSelected,
-        focusedDisabledBorder = focusedDisabled,
-        pressedSelectedBorder = pressedSelected,
-        selectedDisabledBorder = selectedDisabled,
-        focusedSelectedDisabledBorder = focusedSelectedDisabled
+        focusedSelectedBorder = focusedSelectedBorder,
+        focusedDisabledBorder = focusedDisabledBorder,
+        pressedSelectedBorder = pressedSelectedBorder,
+        selectedDisabledBorder = selectedDisabledBorder,
+        focusedSelectedDisabledBorder = focusedSelectedDisabledBorder
     )
 }
 
 /**
- * Defines [Glow] for all TV [Indication] states of [Chip].
+ * Defines [Glow] for all TV [Indication] states of [ClickableChip].
  */
 @ExperimentalTvMaterial3Api
 @Immutable
-class ChipGlow internal constructor(
+class ClickableChipGlow internal constructor(
     internal val glow: Glow,
     internal val focusedGlow: Glow,
     internal val pressedGlow: Glow
@@ -539,7 +596,7 @@ class ChipGlow internal constructor(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as ChipGlow
+        other as ClickableChipGlow
 
         if (glow != other.glow) return false
         if (focusedGlow != other.focusedGlow) return false
@@ -557,7 +614,7 @@ class ChipGlow internal constructor(
     }
 
     override fun toString(): String {
-        return "ChipGlow(glow=$glow, focusedGlow=$focusedGlow, pressedGlow=$pressedGlow)"
+        return "ClickableChipGlow(glow=$glow, focusedGlow=$focusedGlow, pressedGlow=$pressedGlow)"
     }
 
     internal fun toClickableSurfaceGlow() = ClickableSurfaceDefaults.glow(

@@ -59,8 +59,8 @@ private fun HelpAndSupportSectionItem(
 ) {
     ListItem(
         modifier = Modifier.padding(top = 16.dp),
-        isSelected = false,
-        onSelectionChanged = {},
+        selected = false,
+        onClick = {},
         trailingContent = {
             value?.let { nnValue ->
                 Text(
@@ -78,18 +78,16 @@ private fun HelpAndSupportSectionItem(
                 )
             }
         },
-        headlineText = {
+        headlineContent = {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium
             )
         },
-        color = ListItemDefaults.color(
-            color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
-        ),
-        contentColor = ListItemDefaults.contentColor(
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            focusedColor = MaterialTheme.colorScheme.surfaceVariant
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp),
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedContentColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = ListItemDefaults.shape(shape = JetStreamCardShape)
     )

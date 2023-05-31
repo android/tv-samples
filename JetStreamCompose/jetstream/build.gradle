@@ -80,13 +80,13 @@ kapt {
 dependencies {
     def tv_compose_version = "1.0.0-SNAPSHOT"
 //    def tv_compose_version = "1.0.0-alpha06"
-    def core_ktx_version = "1.9.0"
+    def core_ktx_version = "1.12.0-alpha04"
     def lifecycle_runtime_ktx_version = "2.5.1"
-    def compose_activity_version = "1.6.1"
-    def splash_screen_version = "1.0.0"
+    def compose_activity_version = "1.7.2"
+    def splash_screen_version = "1.0.1"
     def nav_version = "2.5.3"
     def gson_version = "2.9.1"
-    def media3_version = "1.0.0-beta03"
+    def media3_version = "1.1.0-alpha01"
 
     implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version")
@@ -102,13 +102,13 @@ dependencies {
     implementation("androidx.tv:tv-material:$tv_compose_version")
 
     // TODO: Investigate why do we need this dependency if we're not using it
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha05")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
     // Compose Navigation
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.2.1")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
     // GSON
     implementation("com.google.code.gson:gson:$gson_version")

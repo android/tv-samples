@@ -22,9 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import androidx.tv.material3.Switch
 import androidx.tv.material3.SwitchDefaults
+import androidx.tv.material3.Text
 import androidx.tv.material3.surfaceColorAtElevation
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamCardShape
@@ -44,8 +44,8 @@ fun SubtitlesSection(
             )
             ListItem(
                 modifier = Modifier.padding(top = 16.dp),
-                isSelected = false,
-                onSelectionChanged = { onSubtitleCheckChange(!isSubtitlesChecked) },
+                selected = false,
+                onClick = { onSubtitleCheckChange(!isSubtitlesChecked) },
                 trailingContent = {
                     Switch(
                         checked = isSubtitlesChecked,
@@ -56,35 +56,35 @@ fun SubtitlesSection(
                         )
                     )
                 },
-                headlineText = {
+                headlineContent = {
                     Text(
                         text = SubtitlesSectionSubtitlesItem,
                         style = MaterialTheme.typography.titleMedium
                     )
                 },
-                color = ListItemDefaults.color(
-                    color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                colors = ListItemDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                 ),
                 shape = ListItemDefaults.shape(shape = JetStreamCardShape)
             )
             ListItem(
                 modifier = Modifier.padding(top = 16.dp),
-                isSelected = false,
-                onSelectionChanged = {},
+                selected = false,
+                onClick = {},
                 trailingContent = {
                     Text(
                         text = SubtitlesSectionLanguageValue,
                         style = MaterialTheme.typography.labelLarge
                     )
                 },
-                headlineText = {
+                headlineContent = {
                     Text(
                         text = SubtitlesSectionLanguageItem,
                         style = MaterialTheme.typography.titleMedium
                     )
                 },
-                color = ListItemDefaults.color(
-                    color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                colors = ListItemDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                 ),
                 shape = ListItemDefaults.shape(shape = JetStreamCardShape)
             )

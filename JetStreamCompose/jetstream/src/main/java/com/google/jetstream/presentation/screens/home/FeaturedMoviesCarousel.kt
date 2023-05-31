@@ -68,8 +68,8 @@ import androidx.tv.material3.ShapeDefaults
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.google.jetstream.R
-import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import com.google.jetstream.presentation.utils.Padding
@@ -148,33 +148,34 @@ fun FeaturedMoviesCarousel(
                 .togetherWith(fadeOut(tween(durationMillis = 1000))),
             content = { index ->
                 val movie = remember(index) { moviesState[index] }
-                CarouselItem(
-                    background = {
-                        Box {
-                            AsyncImage(
-                                model = movie.posterUri,
-                                contentDescription = StringConstants
-                                    .Composable
-                                    .ContentDescription
-                                    .moviePoster(movie.name),
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(
-                                        brush = Brush.verticalGradient(
-                                            colors = listOf(
-                                                Color.Transparent,
-                                                Color.Black.copy(alpha = 0.5f)
-                                            )
+
+                Box {
+                    // background
+                    Box {
+                        AsyncImage(
+                            model = movie.posterUri,
+                            contentDescription = StringConstants
+                                .Composable
+                                .ContentDescription
+                                .moviePoster(movie.name),
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            Color.Black.copy(alpha = 0.5f)
                                         )
                                     )
-                            )
-                        }
+                                )
+                        )
                     }
-                ) {
+
+                    // foreground
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomStart

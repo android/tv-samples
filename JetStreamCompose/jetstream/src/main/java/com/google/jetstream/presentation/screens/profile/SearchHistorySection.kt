@@ -53,9 +53,9 @@ fun SearchHistorySection() {
             items(SampleSearchHistory.size) { index ->
                 ListItem(
                     modifier = Modifier.padding(top = 8.dp),
-                    isSelected = false,
-                    onSelectionChanged = {},
-                    headlineText = {
+                    selected = false,
+                    onClick = {},
+                    headlineContent = {
                         Text(
                             text = SampleSearchHistory[index],
                             style = MaterialTheme.typography.titleMedium

@@ -88,20 +88,18 @@ fun MovieFilterChip(
             focusedBorder = ChipFocusedBorder,
         ),
         scale = FilterChipDefaults.scale(focusedScale = 1f),
-        color = FilterChipDefaults.color(
-            focusedColor = ChipColor,
-            selectedColor = ChipColor,
-            focusedSelectedColor = ChipColor,
-        ),
-        contentColor = FilterChipDefaults.contentColor(
-            focusedColor = ChipContentColor, focusedSelectedColor = ChipContentColor
-        ),
-        label = {
-            ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
-                Text(text = label)
-            }
+        colors = FilterChipDefaults.colors(
+            focusedContainerColor = ChipColor,
+            selectedContainerColor = ChipColor,
+            focusedSelectedContainerColor = ChipColor,
+            focusedContentColor = ChipContentColor,
+            focusedSelectedContentColor = ChipContentColor
+        )
+    ) {
+        ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
+            Text(text = label)
         }
-    )
+    }
 }
 
 private val ChipColor @Composable get() = Color.White.copy(alpha = 0.1f)

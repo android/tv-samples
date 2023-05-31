@@ -38,6 +38,10 @@ real-world architecture.
   * Switch
   * Dialogs
 
+## Screenshots
+
+![](./Screenshots.png)
+
 ## License
 ```
 Copyright 2023 Google LLC
