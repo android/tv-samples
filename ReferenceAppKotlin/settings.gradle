@@ -16,3 +16,27 @@
 
 include ':app'
 rootProject.name = "TV Reference App"
+
+// Link in a locally cloned repo of the AndroidX Media3 project if available
+// (see https://github.com/androidx/media#locally also):
+// ```
+// # mkdir -p /home/$USER/github/androidx/
+// # cd /home/$USER/github/androidx/
+// # git clone https://github.com/androidx/media.git
+// ```
+//
+// Set `androidx.media3.dir` to the path of the root dir of the media3
+// repository in your `local.properties`:
+// ```
+// androidx.media3.dir=/home/$USER/github/androidx/media
+// ```
+File localPropertyFile = new File(rootDir.toString() + '/local.properties')
+if (localPropertyFile.canRead()) {
+    Properties properties = new Properties()
+    properties.load(localPropertyFile.newDataInputStream())
+    String androidxMediaSourceRepositoryDir = properties.getProperty("androidx.media3.dir", null)
+    if (androidxMediaSourceRepositoryDir != null) {
+        gradle.ext.androidxMediaModulePrefix = 'media3-'
+        apply from: file("$androidxMediaSourceRepositoryDir/core_settings.gradle")
+    }
+}
