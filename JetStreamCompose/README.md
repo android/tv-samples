@@ -40,7 +40,7 @@ real-world architecture.
 
 ## Screenshots
 
-![](./Screenshots.png)
+![List of screenshots from the JetStream sample application](./Screenshots.png)
 
 ## License
 ```

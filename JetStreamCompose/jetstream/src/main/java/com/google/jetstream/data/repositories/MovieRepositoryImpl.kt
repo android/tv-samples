@@ -136,7 +136,7 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
 
     override fun getMovieDetails(movieId: String): MovieDetails {
         val movies = getMovies_2_3()
-        val movie = movies.find { it.id === movieId } ?: movies.first()
+        val movie = movies.find { it.id == movieId } ?: movies.first()
 
         return MovieDetails(
             id = movie.id,
@@ -195,7 +195,6 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
 
     override fun getMovies_16_9(): List<Movie> {
         return _top250Movies
-            .filterIndexed { index, _ -> listOf(2, 4, 6, 8, 10).contains(index) }
             .map {
                 Movie(
                     id = it.id,
@@ -208,7 +207,6 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
 
     override fun getMovies_2_3(): List<Movie> {
         return _top250Movies
-            .filterIndexed { index, _ -> listOf(2, 4, 6, 8, 10).contains(index) }
             .map {
                 Movie(
                     id = it.id,
