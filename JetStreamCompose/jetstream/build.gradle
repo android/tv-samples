@@ -87,12 +87,15 @@ dependencies {
     def nav_version = "2.5.3"
     def gson_version = "2.9.1"
     def media3_version = "1.1.0-alpha01"
+    def compose_ui_version = "1.6.0-SNAPSHOT"
 
     implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version")
     implementation("androidx.activity:activity-compose:$compose_activity_version")
-    implementation("androidx.compose.ui:ui:$compose_version")
     implementation("androidx.compose.ui:ui-tooling-preview:$compose_version")
+
+    // Compose UI (Using snapshot build for focus restoring APIs)
+    implementation("androidx.compose.ui:ui:$compose_ui_version")
 
     // extra material icons
     implementation("androidx.compose.material:material-icons-extended:$compose_version")
