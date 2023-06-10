@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
@@ -118,8 +119,22 @@ fun MoviesRow(
             targetState = movies,
             label = "",
         ) { movieState ->
+            val focusRequester = remember { FocusRequester() }
+            val movieItemFocusRequester = remember { FocusRequester() }
+
             TvLazyRow(
-                modifier = Modifier.focusRestorer(),
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .focusProperties {
+                        enter = {
+                            if (focusRequester.restoreFocusedChild()) FocusRequester.Cancel
+                            else movieItemFocusRequester
+                        }
+                        exit = {
+                            focusRequester.saveFocusedChild()
+                            FocusRequester.Default
+                        }
+                    },
                 pivotOffsets = PivotOffsets(parentFraction = 0.07f)
             ) {
                 item { Spacer(modifier = Modifier.padding(start = startPadding)) }
@@ -128,6 +143,9 @@ fun MoviesRow(
                     item {
                         key(movie.id) {
                             MoviesRowItem(
+                                modifier =
+                                    if (index == 0) Modifier.focusRequester(movieItemFocusRequester)
+                                    else Modifier,
                                 focusedItemIndex = focusedItemIndex,
                                 index = index,
                                 itemWidth = itemWidth,
