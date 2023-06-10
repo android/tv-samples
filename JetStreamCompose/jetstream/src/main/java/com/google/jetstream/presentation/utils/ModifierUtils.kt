@@ -19,8 +19,17 @@ package com.google.jetstream.presentation.utils
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.layout.onPlaced
 
 private val DPadEventsKeyCodes = listOf(
     KeyEvent.KEYCODE_DPAD_LEFT,
@@ -75,3 +84,20 @@ fun Modifier.handleDPadKeyEvents(
  * cases when you need to quickly center the item on the available area.
  * */
 fun Modifier.occupyScreenSize() = this.fillMaxSize().wrapContentSize()
+
+/**
+ * This modifier can be used to gain focus on a focusable component when it becomes visible
+ * for the first time.
+ * */
+@Composable
+fun Modifier.focusOnInitialVisibility(): Modifier {
+    val focusRequester = remember { FocusRequester() }
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isVisible) {
+        if (isVisible) focusRequester.requestFocus()
+    }
+
+    return focusRequester(focusRequester)
+        .onPlaced { isVisible = true }
+}

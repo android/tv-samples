@@ -56,6 +56,7 @@ import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.theme.JetStreamTheme
+import com.google.jetstream.presentation.utils.focusOnInitialVisibility
 
 object CategoryMovieListScreen {
     const val CategoryIdBundleKey = "categoryId"
@@ -88,13 +89,17 @@ fun CategoryMovieListScreen(
             )
         )
         TvLazyVerticalGrid(columns = TvGridCells.Fixed(6), content = {
-            categoryDetails.movies.forEach { movie ->
+            categoryDetails.movies.forEachIndexed { index, movie ->
                 item {
                     key(movie.id) {
                         StandardCardLayout(
                             modifier = Modifier
                                 .aspectRatio(1 / 1.5f)
-                                .padding(8.dp),
+                                .padding(8.dp)
+                                .then(
+                                    if (index == 0) Modifier.focusOnInitialVisibility()
+                                    else Modifier
+                                ),
                             imageCard = {
                                 CardLayoutDefaults.ImageCard(
                                     shape = CardDefaults.shape(shape = JetStreamCardShape),
