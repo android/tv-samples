@@ -43,6 +43,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Icon
@@ -88,7 +90,11 @@ fun DashboardTopBar(
             key(ProfileScreenIndex) {
                 UserAvatar(
                     modifier = Modifier
-                        .focusRequester(focusRequesters[0]),
+                        .focusRequester(focusRequesters[0])
+                        .semantics {
+                            contentDescription =
+                                StringConstants.Composable.ContentDescription.UserAvatar
+                        },
                     selected = selectedTabIndex == ProfileScreenIndex,
                     onClick = {
                         onScreenSelection(Screens.Profile)

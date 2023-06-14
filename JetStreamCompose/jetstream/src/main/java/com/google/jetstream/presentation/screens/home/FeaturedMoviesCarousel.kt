@@ -55,6 +55,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
@@ -119,6 +121,10 @@ fun FeaturedMoviesCarousel(
         Carousel(
             modifier = Modifier
                 .fillMaxSize()
+                .semantics {
+                    contentDescription =
+                        StringConstants.Composable.ContentDescription.MoviesCarousel
+                }
                 .handleDPadKeyEvents(onEnter = goToVideoPlayer),
             itemCount = moviesState.size,
             carouselState = carouselState,
