@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,6 +75,8 @@ fun CategoryMovieListScreen(
     val categoryDetails =
         remember { movieRepository.getMovieCategoryDetails(categoryId = categoryId) }
 
+    val isFirstItemVisible = remember { mutableStateOf(false) }
+
     BackHandler(onBack = onBackPressed)
 
     Column(
@@ -88,7 +91,9 @@ fun CategoryMovieListScreen(
                 vertical = childPadding.top.times(3.5f)
             )
         )
-        TvLazyVerticalGrid(columns = TvGridCells.Fixed(6), content = {
+        TvLazyVerticalGrid(
+            columns = TvGridCells.Fixed(6)
+        ) {
             categoryDetails.movies.forEachIndexed { index, movie ->
                 item {
                     key(movie.id) {
@@ -97,7 +102,8 @@ fun CategoryMovieListScreen(
                                 .aspectRatio(1 / 1.5f)
                                 .padding(8.dp)
                                 .then(
-                                    if (index == 0) Modifier.focusOnInitialVisibility()
+                                    if (index == 0)
+                                        Modifier.focusOnInitialVisibility(isFirstItemVisible)
                                     else Modifier
                                 ),
                             imageCard = {
@@ -149,7 +155,7 @@ fun CategoryMovieListScreen(
             item(span = { TvGridItemSpan(currentLineSpan = 6) }) {
                 Spacer(modifier = Modifier.padding(bottom = JetStreamBottomListPadding))
             }
-        })
+        }
     }
 }
 
