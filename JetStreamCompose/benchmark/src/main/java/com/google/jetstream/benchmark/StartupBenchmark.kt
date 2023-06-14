@@ -1,5 +1,7 @@
 package com.google.jetstream.benchmark
 
+import androidx.benchmark.macro.BaselineProfileMode
+import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
@@ -25,16 +27,32 @@ class StartupBenchmark {
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
 
+    /**
+     * Tests the worst case startup performance. No baseline profile, no pre-compilation.
+     */
     @Test
-    fun startup() = benchmarkRule.measureRepeated(
-        packageName = JETSTREAM_PACKAGE_NAME,
-        metrics = listOf(StartupTimingMetric()),
-        iterations = 5,
-        startupMode = StartupMode.COLD
-    ) {
-        pressHome()
-        startActivityAndWait()
-    }
+    fun startupNoCompilation() = startup(CompilationMode.None())
+
+    /**
+     * Tests the average startup time a user will see with our baseline profile. This is the test
+     * you are trying to optimise when working out what to include in your profile.
+     */
+    @Test
+    fun startupBaselineProfile() =
+        startup(CompilationMode.Partial(baselineProfileMode = BaselineProfileMode.Require))
+
+    private fun startup(compilationMode: CompilationMode) =
+        benchmarkRule.measureRepeated(
+            packageName = JETSTREAM_PACKAGE_NAME,
+            metrics = listOf(StartupTimingMetric()),
+            compilationMode = compilationMode,
+            iterations = STARTUP_TEST_ITERATIONS,
+            startupMode = StartupMode.COLD,
+            setupBlock = { pressHome() }
+        ) {
+            startActivityAndWait()
+        }
 }
 
 private const val JETSTREAM_PACKAGE_NAME = "com.google.jetstream"
+private const val STARTUP_TEST_ITERATIONS = 5
