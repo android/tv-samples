@@ -58,14 +58,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.tv.foundation.ExperimentalTvFoundationApi
 import androidx.tv.material3.Icon
+import androidx.tv.material3.ListItem
+import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamTheme
 import com.google.jetstream.presentation.utils.FocusGroup
-import com.google.jetstream.tvmaterial.ListItem
-import com.google.jetstream.tvmaterial.ListItemDefaults
 
 @OptIn(
     ExperimentalTvFoundationApi::class,
