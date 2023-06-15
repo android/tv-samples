@@ -1,6 +1,6 @@
 # Baseline Profiles
 
-https://developer.android.com/studio/profile/baselineprofiles
+[Details on developer.android.com](https://developer.android.com/studio/profile/baselineprofiles)
 
 
 ## Generating baseline profiles
@@ -26,7 +26,7 @@ To apply the baseline profile when running the app from Android Studio, follow t
 **Step-1**: Install and launch the app manually or follow this command:
 
 ```
-am start -n com.google.jetstream/com.google.jetstream.MainActivity
+adb shell am start -n com.google.jetstream/com.google.jetstream.MainActivity
 ```
 
 > Note: When testing for performance, it is always best to install the release build of the app.
@@ -66,7 +66,7 @@ It executes a background task that typically takes about ~40 seconds to complete
 adb shell am force-stop com.google.jetstream
 
 // Launch the app
-am start -n com.google.jetstream/com.google.jetstream.MainActivity
+adb shell am start -n com.google.jetstream/com.google.jetstream.MainActivity
 ```
 
 Now, you can observe the improvement in the app's startup and overall performance as perceived by the end user.
