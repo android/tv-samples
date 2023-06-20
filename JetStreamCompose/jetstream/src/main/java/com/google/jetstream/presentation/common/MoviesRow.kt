@@ -41,7 +41,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
@@ -73,6 +72,8 @@ import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
+import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
+import com.google.jetstream.presentation.utils.ifElse
 
 enum class ItemDirection(val aspectRatio: Float) {
     Vertical(10.5f / 16f),
@@ -80,8 +81,7 @@ enum class ItemDirection(val aspectRatio: Float) {
 }
 
 @OptIn(
-    ExperimentalFoundationApi::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalFoundationApi::class
 )
 @Composable
 fun MoviesRow(
@@ -119,22 +119,11 @@ fun MoviesRow(
             targetState = movies,
             label = "",
         ) { movieState ->
-            val focusRequester = remember { FocusRequester() }
-            val movieItemFocusRequester = remember { FocusRequester() }
+            val focusRestorerModifiers = createInitialFocusRestorerModifiers()
 
             TvLazyRow(
                 modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .focusProperties {
-                        enter = {
-                            if (focusRequester.restoreFocusedChild()) FocusRequester.Cancel
-                            else movieItemFocusRequester
-                        }
-                        exit = {
-                            focusRequester.saveFocusedChild()
-                            FocusRequester.Default
-                        }
-                    },
+                    .then(focusRestorerModifiers.parentModifier),
                 pivotOffsets = PivotOffsets(parentFraction = 0.07f)
             ) {
                 item { Spacer(modifier = Modifier.padding(start = startPadding)) }
@@ -143,9 +132,10 @@ fun MoviesRow(
                     item {
                         key(movie.id) {
                             MoviesRowItem(
-                                modifier =
-                                    if (index == 0) Modifier.focusRequester(movieItemFocusRequester)
-                                    else Modifier,
+                                modifier = Modifier.ifElse(
+                                    index == 0,
+                                    focusRestorerModifiers.childModifier
+                                ),
                                 focusedItemIndex = focusedItemIndex,
                                 index = index,
                                 itemWidth = itemWidth,

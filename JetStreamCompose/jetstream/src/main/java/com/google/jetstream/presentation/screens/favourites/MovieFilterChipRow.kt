@@ -30,12 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyRow
+import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
+import com.google.jetstream.presentation.utils.ifElse
 
 @Suppress("EnumEntryName")
 enum class ChipListItems {
@@ -58,24 +56,13 @@ fun MovieFilterChipRow(
     var isTvShowsFilterSelected by remember { mutableStateOf(false) }
     var isAddedLastWeekFilterSelected by remember { mutableStateOf(false) }
     var isAvailableIn4KFilterSelected by remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
-    val chipFocusRequester = remember { FocusRequester() }
+    val focusRestorerModifiers = createInitialFocusRestorerModifiers()
 
     TvLazyRow(
         modifier = modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .focusRequester(focusRequester)
-            .focusProperties {
-                enter = {
-                    if (focusRequester.restoreFocusedChild()) FocusRequester.Cancel
-                    else chipFocusRequester
-                }
-                exit = {
-                    focusRequester.saveFocusedChild()
-                    FocusRequester.Default
-                }
-            },
+            .then(focusRestorerModifiers.parentModifier),
         contentPadding = PaddingValues(start = 2.dp)
     ) {
         ChipListItems.values().forEachIndexed { index, chipItem ->
@@ -94,8 +81,10 @@ fun MovieFilterChipRow(
                     MovieFilterChip(
                         label = chipItem(),
                         isChecked = isChecked,
-                        modifier = if (index == 0) Modifier.focusRequester(chipFocusRequester)
-                            else Modifier,
+                        modifier = Modifier.ifElse(
+                            index == 0,
+                            focusRestorerModifiers.childModifier
+                        ),
                         onCheckedChange = {
                             when (chipItem) {
                                 ChipListItems.Movies -> {
