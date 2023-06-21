@@ -29,8 +29,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,9 +50,9 @@ import com.google.jetstream.data.entities.MovieCast
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
-import com.google.jetstream.presentation.utils.FocusGroup
 import com.google.jetstream.presentation.utils.ourColors
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CastAndCrewList(castAndCrew: List<MovieCast>) {
     val childPadding = rememberChildPadding()
@@ -65,23 +67,22 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
             ),
             modifier = Modifier.padding(start = childPadding.start)
         )
-        FocusGroup {
-            TvLazyRow(
-                modifier = Modifier.padding(top = 16.dp),
-                pivotOffsets = PivotOffsets(
-                    parentFraction = 0.07f
-                )
-            ) {
-                item { Spacer(modifier = Modifier.padding(start = childPadding.start)) }
+        TvLazyRow(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .focusRestorer(),
+            pivotOffsets = PivotOffsets(
+                parentFraction = 0.07f
+            )
+        ) {
+            item { Spacer(modifier = Modifier.padding(start = childPadding.start)) }
 
-                items(castAndCrew.size) { index ->
-                    val castMember = remember(index) { castAndCrew[index] }
-                    key(castMember.id) {
-                        CastAndCrewItem(
-                            modifier = Modifier.restorableFocus(),
-                            castMember = castMember
-                        )
-                    }
+            items(castAndCrew.size) { index ->
+                val castMember = remember(index) { castAndCrew[index] }
+                key(castMember.id) {
+                    CastAndCrewItem(
+                        castMember = castMember
+                    )
                 }
             }
         }

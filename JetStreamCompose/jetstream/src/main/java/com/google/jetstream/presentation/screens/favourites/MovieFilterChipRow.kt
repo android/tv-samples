@@ -28,10 +28,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyRow
-import com.google.jetstream.presentation.utils.FocusGroup
+import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
+import com.google.jetstream.presentation.utils.ifElse
 
 @Suppress("EnumEntryName")
 enum class ChipListItems {
@@ -40,6 +42,7 @@ enum class ChipListItems {
     operator fun invoke() = this.name.replace("_", " ")
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MovieFilterChipRow(
     movieListRange: SnapshotStateList<Int>,
@@ -53,52 +56,55 @@ fun MovieFilterChipRow(
     var isTvShowsFilterSelected by remember { mutableStateOf(false) }
     var isAddedLastWeekFilterSelected by remember { mutableStateOf(false) }
     var isAvailableIn4KFilterSelected by remember { mutableStateOf(false) }
+    val focusRestorerModifiers = createInitialFocusRestorerModifiers()
 
-    FocusGroup {
-        TvLazyRow(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            contentPadding = PaddingValues(start = 2.dp)
-        ) {
-            ChipListItems.values().forEachIndexed { index, chipItem ->
-                item {
-                    key(chipItem.ordinal) {
-                        val isChecked by remember {
-                            derivedStateOf {
-                                when (chipItem) {
-                                    ChipListItems.Movies -> isMovieFilterSelected
-                                    ChipListItems.TV_Shows -> isTvShowsFilterSelected
-                                    ChipListItems.Added_Last_Week -> isAddedLastWeekFilterSelected
-                                    ChipListItems.Available_in_4K -> isAvailableIn4KFilterSelected
+    TvLazyRow(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+            .then(focusRestorerModifiers.parentModifier),
+        contentPadding = PaddingValues(start = 2.dp)
+    ) {
+        ChipListItems.values().forEachIndexed { index, chipItem ->
+            item {
+                key(chipItem.ordinal) {
+                    val isChecked by remember {
+                        derivedStateOf {
+                            when (chipItem) {
+                                ChipListItems.Movies -> isMovieFilterSelected
+                                ChipListItems.TV_Shows -> isTvShowsFilterSelected
+                                ChipListItems.Added_Last_Week -> isAddedLastWeekFilterSelected
+                                ChipListItems.Available_in_4K -> isAvailableIn4KFilterSelected
+                            }
+                        }
+                    }
+                    MovieFilterChip(
+                        label = chipItem(),
+                        isChecked = isChecked,
+                        modifier = Modifier.ifElse(
+                            index == 0,
+                            focusRestorerModifiers.childModifier
+                        ),
+                        onCheckedChange = {
+                            when (chipItem) {
+                                ChipListItems.Movies -> {
+                                    isMovieFilterSelected = !isMovieFilterSelected
+                                }
+
+                                ChipListItems.TV_Shows -> {
+                                    isTvShowsFilterSelected = !isTvShowsFilterSelected
+                                }
+
+                                ChipListItems.Added_Last_Week -> {
+                                    isAddedLastWeekFilterSelected = !isAddedLastWeekFilterSelected
+                                }
+
+                                ChipListItems.Available_in_4K -> {
+                                    isAvailableIn4KFilterSelected = !isAvailableIn4KFilterSelected
                                 }
                             }
                         }
-                        MovieFilterChip(
-                            label = chipItem(),
-                            isChecked = isChecked,
-                            modifier = if (index == 0) Modifier.initiallyFocused() else Modifier,
-                            onCheckedChange = {
-                                when (chipItem) {
-                                    ChipListItems.Movies -> {
-                                        isMovieFilterSelected = !isMovieFilterSelected
-                                    }
-
-                                    ChipListItems.TV_Shows -> {
-                                        isTvShowsFilterSelected = !isTvShowsFilterSelected
-                                    }
-
-                                    ChipListItems.Added_Last_Week -> {
-                                        isAddedLastWeekFilterSelected = !isAddedLastWeekFilterSelected
-                                    }
-
-                                    ChipListItems.Available_in_4K -> {
-                                        isAvailableIn4KFilterSelected = !isAvailableIn4KFilterSelected
-                                    }
-                                }
-                            }
-                        )
-                    }
+                    )
                 }
             }
         }

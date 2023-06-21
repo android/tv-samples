@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -55,7 +56,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.foundation.ExperimentalTvFoundationApi
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
 import androidx.tv.material3.Border
@@ -72,7 +72,8 @@ import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
-import com.google.jetstream.presentation.utils.FocusGroup
+import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
+import com.google.jetstream.presentation.utils.ifElse
 
 enum class ItemDirection(val aspectRatio: Float) {
     Vertical(10.5f / 16f),
@@ -80,8 +81,7 @@ enum class ItemDirection(val aspectRatio: Float) {
 }
 
 @OptIn(
-    ExperimentalFoundationApi::class,
-    ExperimentalTvFoundationApi::class
+    ExperimentalFoundationApi::class
 )
 @Composable
 fun MoviesRow(
@@ -119,33 +119,38 @@ fun MoviesRow(
             targetState = movies,
             label = "",
         ) { movieState ->
-            FocusGroup {
-                TvLazyRow(
-                    pivotOffsets = PivotOffsets(parentFraction = 0.07f)
-                ) {
-                    item { Spacer(modifier = Modifier.padding(start = startPadding)) }
+            val focusRestorerModifiers = createInitialFocusRestorerModifiers()
 
-                    movieState.forEachIndexed { index, movie ->
-                        item {
-                            key(movie.id) {
-                                MoviesRowItem(
-                                    modifier = Modifier.restorableFocus(),
-                                    focusedItemIndex = focusedItemIndex,
-                                    index = index,
-                                    itemWidth = itemWidth,
-                                    itemDirection = itemDirection,
-                                    onMovieClick = onMovieClick,
-                                    movie = movie,
-                                    showItemTitle = showItemTitle,
-                                    showIndexOverImage = showIndexOverImage
-                                )
-                            }
+            TvLazyRow(
+                modifier = Modifier
+                    .then(focusRestorerModifiers.parentModifier),
+                pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+            ) {
+                item { Spacer(modifier = Modifier.padding(start = startPadding)) }
+
+                movieState.forEachIndexed { index, movie ->
+                    item {
+                        key(movie.id) {
+                            MoviesRowItem(
+                                modifier = Modifier.ifElse(
+                                    index == 0,
+                                    focusRestorerModifiers.childModifier
+                                ),
+                                focusedItemIndex = focusedItemIndex,
+                                index = index,
+                                itemWidth = itemWidth,
+                                itemDirection = itemDirection,
+                                onMovieClick = onMovieClick,
+                                movie = movie,
+                                showItemTitle = showItemTitle,
+                                showIndexOverImage = showIndexOverImage
+                            )
                         }
-                        item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
                     }
-
-                    item { Spacer(modifier = Modifier.padding(start = endPadding)) }
+                    item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
                 }
+
+                item { Spacer(modifier = Modifier.padding(start = endPadding)) }
             }
         }
     }
@@ -153,7 +158,7 @@ fun MoviesRow(
 
 @OptIn(
     ExperimentalFoundationApi::class,
-    ExperimentalTvFoundationApi::class
+    ExperimentalComposeUiApi::class
 )
 @Composable
 fun ImmersiveListScope.ImmersiveListMoviesRow(
@@ -191,35 +196,33 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
             targetState = movies,
             label = "",
         ) { movieState ->
-            FocusGroup {
-                TvLazyRow(
-                    pivotOffsets = PivotOffsets(parentFraction = 0.07f)
-                ) {
-                    item { Spacer(modifier = Modifier.padding(start = startPadding)) }
+            TvLazyRow(
+                modifier = Modifier.focusRestorer(),
+                pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+            ) {
+                item { Spacer(modifier = Modifier.padding(start = startPadding)) }
 
-                    movieState.forEachIndexed { index, movie ->
-                        item {
-                            key(movie.id) {
-                                MoviesRowItem(
-                                    modifier = Modifier
-                                        .immersiveListItem(index)
-                                        .restorableFocus(),
-                                    focusedItemIndex = focusedItemIndex,
-                                    index = index,
-                                    itemWidth = itemWidth,
-                                    itemDirection = itemDirection,
-                                    onMovieClick = onMovieClick,
-                                    movie = movie,
-                                    showItemTitle = showItemTitle,
-                                    showIndexOverImage = showIndexOverImage
-                                )
-                            }
+                movieState.forEachIndexed { index, movie ->
+                    item {
+                        key(movie.id) {
+                            MoviesRowItem(
+                                modifier = Modifier
+                                    .immersiveListItem(index),
+                                focusedItemIndex = focusedItemIndex,
+                                index = index,
+                                itemWidth = itemWidth,
+                                itemDirection = itemDirection,
+                                onMovieClick = onMovieClick,
+                                movie = movie,
+                                showItemTitle = showItemTitle,
+                                showIndexOverImage = showIndexOverImage
+                            )
                         }
-                        item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
                     }
-
-                    item { Spacer(modifier = Modifier.padding(start = endPadding)) }
+                    item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
                 }
+
+                item { Spacer(modifier = Modifier.padding(start = endPadding)) }
             }
         }
     }

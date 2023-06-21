@@ -31,7 +31,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -40,7 +42,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.ExperimentalTvFoundationApi
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
 import androidx.tv.material3.Border
@@ -53,9 +54,8 @@ import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
-import com.google.jetstream.presentation.utils.FocusGroup
 
-@OptIn(ExperimentalTvFoundationApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MoviesScreenMovieList(
     modifier: Modifier = Modifier,
@@ -71,23 +71,21 @@ fun MoviesScreenMovieList(
         targetState = movieList,
         label = "",
     ) { movieListTarget ->
-        FocusGroup {
-            TvLazyRow(
-                pivotOffsets = PivotOffsets(parentFraction = 0.07f)
-            ) {
-                item { Spacer(modifier = Modifier.padding(start = startPadding)) }
-                movieListTarget.forEach { movie ->
-                    item {
-                        MovieListItem(
-                            modifier = Modifier.restorableFocus(),
-                            itemWidth = itemWidth,
-                            onMovieClick = onMovieClick,
-                            movie = movie
-                        )
-                    }
+        TvLazyRow(
+            modifier = Modifier.focusRestorer(),
+            pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+        ) {
+            item { Spacer(modifier = Modifier.padding(start = startPadding)) }
+            movieListTarget.forEach { movie ->
+                item {
+                    MovieListItem(
+                        itemWidth = itemWidth,
+                        onMovieClick = onMovieClick,
+                        movie = movie
+                    )
                 }
-                item { Spacer(modifier = Modifier.padding(start = endPadding)) }
             }
+            item { Spacer(modifier = Modifier.padding(start = endPadding)) }
         }
     }
 }
