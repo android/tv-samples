@@ -25,7 +25,8 @@ plugins {
 
 android {
     namespace "com.google.jetstream"
-    compileSdk 33
+    // Needed for latest androidx snapshot build
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.google.jetstream"
@@ -65,6 +66,7 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_compiler_version
