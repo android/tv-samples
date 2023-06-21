@@ -68,9 +68,6 @@ import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamTheme
-import com.google.jetstream.presentation.utils.FocusGroup
-import com.google.jetstream.tvmaterial.ListItem
-import com.google.jetstream.tvmaterial.ListItemDefaults
 
 @OptIn(
     ExperimentalComposeUiApi::class,
