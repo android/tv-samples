@@ -39,6 +39,12 @@ https://www.apache.org/licenses/LICENSE-2.0
         android:theme="@style/Theme.App.Starting"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- Enable profiling by macrobenchmark -->
+        <profileable
+            android:shell="true"
+            tools:targetApi="31" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -27,19 +27,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Icon
@@ -54,7 +59,6 @@ import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.theme.IconSize
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.theme.LexendExa
-import com.google.jetstream.presentation.utils.FocusGroup
 import com.google.jetstream.presentation.utils.occupyScreenSize
 
 val TopBarTabs = Screens.values().toList().filter { it.isTabItem }
@@ -64,6 +68,7 @@ val TopBarFocusRequesters = List(size = TopBarTabs.size + 1) { FocusRequester() 
 
 private const val ProfileScreenIndex = -1
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DashboardTopBar(
     modifier: Modifier = Modifier,
@@ -74,50 +79,55 @@ fun DashboardTopBar(
 ) {
     val focusManager = LocalFocusManager.current
     Box(modifier = modifier) {
-        FocusGroup {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .background(MaterialTheme.colorScheme.surface),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .background(MaterialTheme.colorScheme.surface)
+                .focusRestorer(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            key(ProfileScreenIndex) {
                 UserAvatar(
                     modifier = Modifier
-                        .restorableFocus()
-                        .focusRequester(focusRequesters[0]),
+                        .focusRequester(focusRequesters[0])
+                        .semantics {
+                            contentDescription =
+                                StringConstants.Composable.ContentDescription.UserAvatar
+                        },
                     selected = selectedTabIndex == ProfileScreenIndex,
                     onClick = {
                         onScreenSelection(Screens.Profile)
                     }
                 )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    var isTabRowFocused by remember { mutableStateOf(false) }
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                var isTabRowFocused by remember { mutableStateOf(false) }
 
-                    Spacer(modifier = Modifier.width(20.dp))
-                    TabRow(
-                        modifier = Modifier
-                            .onFocusChanged {
-                                isTabRowFocused = it.isFocused || it.hasFocus
-                            },
-                        selectedTabIndex = selectedTabIndex,
-                        indicator = { tabPositions ->
-                            if (selectedTabIndex >= 0) {
-                                DashboardTopBarItemIndicator(
-                                    currentTabPosition = tabPositions[selectedTabIndex],
-                                    anyTabFocused = isTabRowFocused,
-                                    shape = JetStreamCardShape
-                                )
-                            }
+                Spacer(modifier = Modifier.width(20.dp))
+                TabRow(
+                    modifier = Modifier
+                        .onFocusChanged {
+                            isTabRowFocused = it.isFocused || it.hasFocus
                         },
-                        separator = { Spacer(modifier = Modifier) }
-                    ) {
-                        screens.forEachIndexed { index, screen ->
+                    selectedTabIndex = selectedTabIndex,
+                    indicator = { tabPositions ->
+                        if (selectedTabIndex >= 0) {
+                            DashboardTopBarItemIndicator(
+                                currentTabPosition = tabPositions[selectedTabIndex],
+                                anyTabFocused = isTabRowFocused,
+                                shape = JetStreamCardShape
+                            )
+                        }
+                    },
+                    separator = { Spacer(modifier = Modifier) }
+                ) {
+                    screens.forEachIndexed { index, screen ->
+                        key(index) {
                             Tab(
                                 modifier = Modifier
-                                    .restorableFocus()
                                     .height(32.dp)
                                     .focusRequester(focusRequesters[index + 1]),
                                 selected = index == selectedTabIndex,
@@ -147,30 +157,29 @@ fun DashboardTopBar(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                Row(
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                modifier = Modifier
+                    .alpha(0.75f)
+                    .padding(end = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_play_circle),
+                    contentDescription = StringConstants.Composable
+                        .ContentDescription.BrandLogoImage,
                     modifier = Modifier
-                        .alpha(0.75f)
-                        .padding(end = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_play_circle),
-                        contentDescription = StringConstants.Composable
-                            .ContentDescription.BrandLogoImage,
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .size(IconSize)
-                    )
-                    Text(
-                        text = stringResource(R.string.brand_logo_text),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = LexendExa
-                    )
-                }
+                        .padding(end = 4.dp)
+                        .size(IconSize)
+                )
+                Text(
+                    text = stringResource(R.string.brand_logo_text),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = LexendExa
+                )
             }
         }
     }
-
 }

@@ -17,7 +17,9 @@
 package com.google.jetstream.presentation.screens.profile
 
 import androidx.annotation.FloatRange
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +32,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -56,20 +60,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.tv.foundation.ExperimentalTvFoundationApi
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamTheme
-import com.google.jetstream.presentation.utils.FocusGroup
 import com.google.jetstream.tvmaterial.ListItem
 import com.google.jetstream.tvmaterial.ListItemDefaults
 
 @OptIn(
-    ExperimentalTvFoundationApi::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
 )
 @Composable
 fun ProfileScreen(
@@ -93,18 +95,20 @@ fun ProfileScreen(
             .fillMaxSize()
             .padding(horizontal = childPadding.start, vertical = childPadding.top)
     ) {
-        FocusGroup {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(fraction = sidebarWidthFraction)
-                    .fillMaxHeight()
-                    .onFocusChanged {
-                        isLeftColumnFocused = it.hasFocus
-                    },
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ProfileScreens.values().forEachIndexed { index, profileScreen ->
-                    // TODO: make this dense list item
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(fraction = sidebarWidthFraction)
+                .fillMaxHeight()
+                .onFocusChanged {
+                    isLeftColumnFocused = it.hasFocus
+                }
+                .focusRestorer()
+                .focusGroup(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ProfileScreens.values().forEachIndexed { index, profileScreen ->
+                // TODO: make this dense list item
+                key(index) {
                     ListItem(
                         trailingContent = {
                             Icon(
@@ -131,10 +135,10 @@ fun ProfileScreen(
                         selected = currentDestination == profileScreen.name,
                         onClick = { focusManager.moveFocus(FocusDirection.Right) },
                         modifier = Modifier
-                            .restorableFocus()
                             .fillMaxWidth()
                             .then(
-                                if (index == 0) Modifier.focusRequester(focusRequester) else Modifier
+                                if (index == 0) Modifier.focusRequester(focusRequester)
+                                else Modifier
                             )
                             .onFocusChanged {
                                 if (it.isFocused && currentDestination != profileScreen.name) {
@@ -149,7 +153,8 @@ fun ProfileScreen(
                         scale = ListItemDefaults.scale(focusedScale = 1f),
                         colors = ListItemDefaults.colors(
                             focusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
-                            selectedContainerColor = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.4f),
+                            selectedContainerColor = MaterialTheme.colorScheme.inverseSurface
+                                .copy(alpha = 0.4f),
                             selectedContentColor = MaterialTheme.colorScheme.surface,
                         ),
                         shape = ListItemDefaults.shape(shape = MaterialTheme.shapes.extraSmall)
