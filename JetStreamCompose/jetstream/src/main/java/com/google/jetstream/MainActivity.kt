@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -22,8 +21,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
-import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.screens.categories.CategoryMovieListScreen
 import com.google.jetstream.presentation.screens.dashboard.DashboardScreen
@@ -69,32 +66,19 @@ private fun MainActivity.App() {
                                     type = NavType.StringType
                                 }
                             )
-                        ) { backStackEntry ->
-                            backStackEntry.arguments?.let { nnBundle ->
-                                val categoryId =
-                                    nnBundle.getString(CategoryMovieListScreen.CategoryIdBundleKey)
-                                categoryId?.let {
-                                    CategoryMovieListScreen(
-                                        onBackPressed = {
-                                            if (navController.navigateUp()) {
-                                                isComingBackFromDifferentScreen = true
-                                            }
-                                        },
-                                        onMovieSelected = { movie ->
-                                            navController.navigate(
-                                                Screens.MovieDetails.withArgs(movie.id)
-                                            )
-                                        }
-                                    )
-                                } ?: run {
-                                    Text(
-                                        text = StringConstants.Exceptions.InvalidCategoryId,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .wrapContentSize()
+                        ) {
+                            CategoryMovieListScreen(
+                                onBackPressed = {
+                                    if (navController.navigateUp()) {
+                                        isComingBackFromDifferentScreen = true
+                                    }
+                                },
+                                onMovieSelected = { movie ->
+                                    navController.navigate(
+                                        Screens.MovieDetails.withArgs(movie.id)
                                     )
                                 }
-                            }
+                            )
                         }
                         composable(
                             route = Screens.MovieDetails(),
