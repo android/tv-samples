@@ -46,5 +46,5 @@ class MoviesScreenViewModel @Inject constructor(
 
 sealed interface MoviesScreenUiState {
     object Loading: MoviesScreenUiState
-    class Ready(val movieList: MovieList, val popularFilmsThisWeek: MovieList): MoviesScreenUiState
+    data class Ready(val movieList: MovieList, val popularFilmsThisWeek: MovieList): MoviesScreenUiState
 }

@@ -44,6 +44,6 @@ class CategoriesScreenViewModel @Inject constructor(
 sealed interface CategoriesScreenUiState {
 
     object Loading: CategoriesScreenUiState
-    class Ready(val categoryList: MovieCategoryList): CategoriesScreenUiState
+    data class Ready(val categoryList: MovieCategoryList): CategoriesScreenUiState
 
 }

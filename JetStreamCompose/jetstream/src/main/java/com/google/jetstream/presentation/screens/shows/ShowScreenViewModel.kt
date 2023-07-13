@@ -46,6 +46,6 @@ class ShowScreenViewModel @Inject constructor(
 
 sealed interface ShowScreenUiState {
     object Loading : ShowScreenUiState
-    class Ready(val bingeWatchDramaList: MovieList, val tvShowList: MovieList)
+    data class Ready(val bingeWatchDramaList: MovieList, val tvShowList: MovieList): ShowScreenUiState
 
 }

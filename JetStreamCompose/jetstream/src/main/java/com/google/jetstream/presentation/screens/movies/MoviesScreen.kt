@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
 import androidx.tv.material3.Text
@@ -45,7 +45,7 @@ fun MoviesScreen(
     isTopBarVisible: Boolean,
     moviesScreenViewModel: MoviesScreenViewModel = hiltViewModel(),
 ) {
-    val uiState by moviesScreenViewModel.uiState.collectAsState()
+    val uiState by moviesScreenViewModel.uiState.collectAsStateWithLifecycle()
     when (val s = uiState) {
         is MoviesScreenUiState.Loading -> Loading()
         is MoviesScreenUiState.Ready -> {

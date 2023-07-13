@@ -51,5 +51,5 @@ class MovieDetailsScreenViewModel @Inject constructor(
 sealed class MovieDetailsScreenUiState {
     object Loading : MovieDetailsScreenUiState()
     object Error : MovieDetailsScreenUiState()
-    class Done(val movieDetails: MovieDetails) : MovieDetailsScreenUiState()
+    data class Done(val movieDetails: MovieDetails) : MovieDetailsScreenUiState()
 }

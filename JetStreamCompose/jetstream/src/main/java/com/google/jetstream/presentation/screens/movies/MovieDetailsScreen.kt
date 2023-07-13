@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -38,6 +37,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -59,7 +59,7 @@ fun MovieDetailsScreen(
     refreshScreenWithNewMovie: (Movie) -> Unit,
     movieDetailsScreenViewModel: MovieDetailsScreenViewModel = hiltViewModel()
 ) {
-    val uiState by movieDetailsScreenViewModel.uiState.collectAsState()
+    val uiState by movieDetailsScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     when (val s = uiState) {
         is MovieDetailsScreenUiState.Loading -> {

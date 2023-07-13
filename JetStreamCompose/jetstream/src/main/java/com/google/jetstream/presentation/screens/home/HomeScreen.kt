@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +31,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
@@ -50,7 +50,7 @@ fun HomeScreen(
     isTopBarVisible: Boolean,
     homeScreeViewModel: HomeScreeViewModel = hiltViewModel(),
 ) {
-    val uiState by homeScreeViewModel.uiState.collectAsState()
+    val uiState by homeScreeViewModel.uiState.collectAsStateWithLifecycle()
 
     when (val s = uiState) {
         is HomeScreenUiState.Ready -> {

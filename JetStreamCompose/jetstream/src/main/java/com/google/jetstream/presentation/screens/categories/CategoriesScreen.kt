@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +40,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.foundation.lazy.grid.itemsIndexed
@@ -65,7 +65,7 @@ fun CategoriesScreen(
     categoriesScreenViewModel: CategoriesScreenViewModel = hiltViewModel()
 ) {
 
-    val uiState by categoriesScreenViewModel.uiState.collectAsState()
+    val uiState by categoriesScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     when (val s = uiState) {
         is CategoriesScreenUiState.Loading -> {

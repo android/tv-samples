@@ -35,6 +35,7 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.FreshTomato
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : MovieRepository {
@@ -135,18 +136,15 @@ class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : Movi
         emit(MovieList(value = list))
     }
 
-    override fun getMovieCategories(): Flow<MovieCategoryList> = flow {
-        emit(categoryList)
-    }
+    override fun getMovieCategories() = flowOf(categoryList)
 
     override suspend fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails {
         val category = categoryList.find { it.id == categoryId } ?: categoryList.first()
+        val movieList = top250Movies.shuffled().subList(fromIndex = 0, toIndex = 20)
         return MovieCategoryDetails(
             id = category.id,
             name = category.name,
-            movies = top250Movies
-                .shuffled()
-                .subList(fromIndex = 0, toIndex = 20)
+            movies = MovieList(movieList)
         )
     }
 
@@ -200,13 +198,9 @@ class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : Movi
         return MovieList(value = list)
     }
 
-    override fun getMoviesWithLongThumbnail(): Flow<MovieList> = flow {
-        emit(top250MoviesWithWideThumbnail)
-    }
+    override fun getMoviesWithLongThumbnail() = flowOf(top250MoviesWithWideThumbnail)
 
-    override fun getMovies(): Flow<MovieList> = flow {
-        emit(top250Movies)
-    }
+    override fun getMovies(): Flow<MovieList> = flowOf(top250Movies)
 
     override fun getPopularFilmsThisWeek(): Flow<MovieList> = flow {
         val list = mostPopularMovies.subList(fromIndex = 11, toIndex = 20).map {

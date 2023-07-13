@@ -94,7 +94,7 @@ dependencies {
     def tv_compose_version = "1.0.0-SNAPSHOT"
 //    def tv_compose_version = "1.0.0-alpha06"
     def core_ktx_version = "1.10.1"
-    def lifecycle_runtime_ktx_version = "2.5.1"
+    def lifecycle_version = "2.6.1"
     def compose_activity_version = "1.7.2"
     def splash_screen_version = "1.0.1"
     def nav_version = "2.6.0"
@@ -102,11 +102,12 @@ dependencies {
     def media3_version = "1.1.0"
     def compose_ui_version = "1.6.0-SNAPSHOT"
     def profileinstaller_version = "1.3.1"
-    def hilt_version = "2.44"
+    def hilt_version = "2.47"
     def hilt_compose = "1.0.0"
 
     implementation("androidx.core:core-ktx:$core_ktx_version")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
     implementation("androidx.activity:activity-compose:$compose_activity_version")
 
     // Compose UI libs (Using snapshot build for focus restoring APIs)
@@ -121,13 +122,13 @@ dependencies {
     implementation("androidx.tv:tv-material:$tv_compose_version")
 
     // ViewModel in Compose
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
 
     // Compose Navigation
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     // GSON
     implementation("com.google.code.gson:gson:$gson_version")

@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvGridItemSpan
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
@@ -66,7 +66,7 @@ fun CategoryMovieListScreen(
     onMovieSelected: (Movie) -> Unit,
     categoryMovieListScreenViewModel: CategoryMovieListScreenViewModel = hiltViewModel()
 ) {
-    val uiState by categoryMovieListScreenViewModel.uiState.collectAsState()
+    val uiState by categoryMovieListScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     when (val s = uiState) {
         is CategoryMovieListScreenUiState.Loading -> {

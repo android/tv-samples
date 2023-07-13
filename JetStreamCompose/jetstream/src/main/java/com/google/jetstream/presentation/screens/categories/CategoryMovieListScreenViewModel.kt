@@ -55,5 +55,5 @@ class CategoryMovieListScreenViewModel @Inject constructor(
 sealed interface CategoryMovieListScreenUiState {
     object Loading : CategoryMovieListScreenUiState
     object Error : CategoryMovieListScreenUiState
-    class Done(val movieCategoryDetails: MovieCategoryDetails) : CategoryMovieListScreenUiState
+    data class Done(val movieCategoryDetails: MovieCategoryDetails) : CategoryMovieListScreenUiState
 }

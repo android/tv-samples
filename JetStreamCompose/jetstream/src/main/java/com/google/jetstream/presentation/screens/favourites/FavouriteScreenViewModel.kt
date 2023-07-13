@@ -22,18 +22,27 @@ import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.repositories.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouriteScreenViewModel @Inject constructor(
     movieRepository: MovieRepository
-): ViewModel() {
+) : ViewModel() {
 
-    val favouriteMovieList = movieRepository.getFavouriteMovies().stateIn(
+    val uiState = movieRepository.getFavouriteMovies().map {
+        FavouriteScreenUiState.Ready(it)
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = MovieList()
+        initialValue = FavouriteScreenUiState.Loading
     )
+}
+
+
+sealed interface FavouriteScreenUiState {
+    object Loading : FavouriteScreenUiState
+    data class Ready(val favouriteMovieList: MovieList)
 
 }

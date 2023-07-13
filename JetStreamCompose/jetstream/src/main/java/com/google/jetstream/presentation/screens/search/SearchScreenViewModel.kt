@@ -32,19 +32,19 @@ class SearchScreenViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
-    private val _searchState = MutableSharedFlow<SearchState>()
+    private val internalSearchState = MutableSharedFlow<SearchState>()
 
     fun query(queryString: String) {
         viewModelScope.launch { postQuery(queryString) }
     }
 
     private suspend fun postQuery(queryString: String) {
-        _searchState.emit(SearchState.Searching)
+        internalSearchState.emit(SearchState.Searching)
         val result = movieRepository.searchMovies(query = queryString)
-        _searchState.emit(SearchState.Done(result))
+        internalSearchState.emit(SearchState.Done(result))
     }
 
-    val searchState = _searchState.stateIn(
+    val searchState = internalSearchState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = SearchState.Done(MovieList())
@@ -52,7 +52,7 @@ class SearchScreenViewModel @Inject constructor(
 
 }
 
-sealed class SearchState {
-    object Searching : SearchState()
-    class Done(val movieList: MovieList) : SearchState()
+sealed interface SearchState {
+    object Searching : SearchState
+    data class Done(val movieList: MovieList) : SearchState
 }
