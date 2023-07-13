@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -24,32 +23,23 @@ import androidx.navigation.navArgument
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
-import com.google.gson.Gson
-import com.google.jetstream.data.repositories.MovieRepositoryImpl
-import com.google.jetstream.data.util.AssetsReader
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.LocalMovieRepository
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.screens.categories.CategoryMovieListScreen
 import com.google.jetstream.presentation.screens.dashboard.DashboardScreen
 import com.google.jetstream.presentation.screens.movies.MovieDetailsScreen
 import com.google.jetstream.presentation.screens.videoPlayer.VideoPlayerScreen
 import com.google.jetstream.presentation.theme.JetStreamTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
         setContent {
-            val context = LocalContext.current
-            val movieRepository = remember {
-                MovieRepositoryImpl(
-                    AssetsReader(context, Gson())
-                )
-            }
-            CompositionLocalProvider(LocalMovieRepository provides movieRepository) {
-                App()
-            }
+            App()
         }
     }
 }
@@ -57,9 +47,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainActivity.App() {
     JetStreamTheme {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
             CompositionLocalProvider(
                 LocalContentColor provides MaterialTheme.colorScheme.onSurface
             ) {
@@ -81,14 +73,17 @@ private fun MainActivity.App() {
                             backStackEntry.arguments?.let { nnBundle ->
                                 val categoryId =
                                     nnBundle.getString(CategoryMovieListScreen.CategoryIdBundleKey)
-                                categoryId?.let { nnCategoryId ->
+                                categoryId?.let {
                                     CategoryMovieListScreen(
-                                        categoryId = nnCategoryId,
-                                        parentNavController = navController,
                                         onBackPressed = {
                                             if (navController.navigateUp()) {
                                                 isComingBackFromDifferentScreen = true
                                             }
+                                        },
+                                        onMovieSelected = { movie ->
+                                            navController.navigate(
+                                                Screens.MovieDetails.withArgs(movie.id)
+                                            )
                                         }
                                     )
                                 } ?: run {
@@ -108,31 +103,26 @@ private fun MainActivity.App() {
                                     type = NavType.StringType
                                 }
                             )
-                        ) { backStackEntry ->
-                            val movieId =
-                                backStackEntry.arguments?.getString(MovieDetailsScreen.MovieIdBundleKey)
-                            movieId?.let { nnMovieId ->
-                                MovieDetailsScreen(
-                                    movieId = nnMovieId,
-                                    goToMoviePlayer = {
-                                        navController.navigate(Screens.VideoPlayer())
-                                    },
-                                    refreshScreenWithNewMovie = { movie ->
-                                        navController.navigate(
-                                            Screens.MovieDetails.withArgs(movie.id)
-                                        ) {
-                                            popUpTo(Screens.MovieDetails()) {
-                                                inclusive = true
-                                            }
-                                        }
-                                    },
-                                    onBackPressed = {
-                                        if (navController.navigateUp()) {
-                                            isComingBackFromDifferentScreen = true
+                        ) {
+                            MovieDetailsScreen(
+                                goToMoviePlayer = {
+                                    navController.navigate(Screens.VideoPlayer())
+                                },
+                                refreshScreenWithNewMovie = { movie ->
+                                    navController.navigate(
+                                        Screens.MovieDetails.withArgs(movie.id)
+                                    ) {
+                                        popUpTo(Screens.MovieDetails()) {
+                                            inclusive = true
                                         }
                                     }
-                                )
-                            }
+                                },
+                                onBackPressed = {
+                                    if (navController.navigateUp()) {
+                                        isComingBackFromDifferentScreen = true
+                                    }
+                                }
+                            )
                         }
                         composable(route = Screens.Dashboard()) {
                             DashboardScreen(

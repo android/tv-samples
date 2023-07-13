@@ -20,7 +20,9 @@ import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieCast
 import com.google.jetstream.data.entities.MovieCategory
 import com.google.jetstream.data.entities.MovieCategoryDetails
+import com.google.jetstream.data.entities.MovieCategoryList
 import com.google.jetstream.data.entities.MovieDetails
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.entities.MovieReviewsAndRatings
 import com.google.jetstream.data.models.MovieCastResponse
 import com.google.jetstream.data.models.MovieCategoriesResponse
@@ -31,36 +33,49 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultCoun
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultRating
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.FreshTomatoes
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerName
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
-    private val _top250Movies = assetsReader
-        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.Top250Movies)
-        ?: emptyList()
+class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : MovieRepository {
 
-    private val _mostPopularMovies = assetsReader
+    private val mostPopularMovies = assetsReader
         .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.MostPopularMovies)
         ?: emptyList()
 
-    private val _inTheatersMovies = assetsReader
+    private val inTheatersMovies = assetsReader
         .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.InTheaters)
         ?: emptyList()
 
-    private val _mostPopularTVShows = assetsReader
+    private val mostPopularTVShows = assetsReader
         .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.MostPopularTVShows)
         ?: emptyList()
 
-    private val _movieCategories = assetsReader
-        .readJsonFile<MovieCategoriesResponse>(fileName = StringConstants.Assets.MovieCategories)
-        ?: emptyList()
-
-    private val _movieCastContainer = assetsReader
+    private val movieCastContainer = assetsReader
         .readJsonFile<MovieCastResponse>(fileName = StringConstants.Assets.MovieCast)
         ?: emptyList()
 
-    override fun getFeaturedMovies(): List<Movie> {
-        return _top250Movies
-            .filterIndexed { index, _ -> listOf(1, 3, 5, 7, 9).contains(index) }
-            .map {
+    private val top250Movies: MovieList
+    private val top250MoviesWithWideThumbnail: MovieList
+    private val categoryList: MovieCategoryList
+
+    init {
+        val movieList = assetsReader
+            .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.Top250Movies)
+            ?: emptyList()
+
+        top250Movies = MovieList(
+            value = movieList.map {
+                Movie(
+                    id = it.id,
+                    posterUri = it.image_2_3,
+                    name = it.title,
+                    description = it.fullTitle
+                )
+            }
+        )
+        top250MoviesWithWideThumbnail = MovieList(
+            value = movieList.map {
                 Movie(
                     id = it.id,
                     posterUri = it.image_16_9,
@@ -68,10 +83,29 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
                     description = it.fullTitle
                 )
             }
+        )
+        val movieCategory = assetsReader
+            .readJsonFile<MovieCategoriesResponse>(fileName = StringConstants.Assets.MovieCategories)
+            ?: emptyList()
+        categoryList = MovieCategoryList(
+            value = movieCategory.map {
+                MovieCategory(
+                    id = it.id,
+                    name = it.name
+                )
+            }
+        )
+
     }
 
-    override fun getTrendingMovies(): List<Movie> {
-        return _mostPopularMovies.subList(fromIndex = 0, toIndex = 10).map {
+    override fun getFeaturedMovies(): Flow<MovieList> = flow {
+        val list = top250MoviesWithWideThumbnail
+            .filterIndexed { index, _ -> listOf(1, 3, 5, 7, 9).contains(index) }
+        emit(MovieList(value = list))
+    }
+
+    override fun getTrendingMovies(): Flow<MovieList> = flow {
+        val list = mostPopularMovies.subList(fromIndex = 0, toIndex = 10).map {
             Movie(
                 id = it.id,
                 description = it.fullTitle,
@@ -79,21 +113,16 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
                 posterUri = it.image_2_3
             )
         }
+        emit(MovieList(value = list))
     }
 
-    override fun getTop10Movies(): List<Movie> {
-        return _top250Movies.subList(fromIndex = 20, toIndex = 30).map {
-            Movie(
-                id = it.id,
-                posterUri = it.image_16_9,
-                name = it.title,
-                description = it.fullTitle
-            )
-        }
+    override fun getTop10Movies(): Flow<MovieList> = flow {
+        val list = top250MoviesWithWideThumbnail.subList(fromIndex = 20, toIndex = 30)
+        emit(MovieList(value = list))
     }
 
-    override fun getNowPlayingMovies(): List<Movie> {
-        return _inTheatersMovies
+    override fun getNowPlayingMovies(): Flow<MovieList> = flow {
+        val list = inTheatersMovies
             .map {
                 Movie(
                     id = it.id,
@@ -103,41 +132,26 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
                 )
             }
             .subList(fromIndex = 0, toIndex = 10)
+        emit(MovieList(value = list))
     }
 
-    override fun getMovieCategories(): List<MovieCategory> {
-        return _movieCategories.map {
-            MovieCategory(
-                id = it.id,
-                name = it.name
-            )
-        }
+    override fun getMovieCategories(): Flow<MovieCategoryList> = flow {
+        emit(categoryList)
     }
 
-    override fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails {
-        val movieCategories = getMovieCategories()
-        val movieCategory = movieCategories.find { it.id == categoryId } ?: movieCategories.first()
+    override suspend fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails {
+        val category = categoryList.find { it.id == categoryId } ?: categoryList.first()
         return MovieCategoryDetails(
-            id = movieCategory.id,
-            name = movieCategory.name,
-            movies = _top250Movies
+            id = category.id,
+            name = category.name,
+            movies = top250Movies
                 .shuffled()
                 .subList(fromIndex = 0, toIndex = 20)
-                .map {
-                    Movie(
-                        id = it.id,
-                        posterUri = it.image_2_3,
-                        name = it.title,
-                        description = it.fullTitle
-                    )
-                }
         )
     }
 
-    override fun getMovieDetails(movieId: String): MovieDetails {
-        val movies = getMovies_2_3()
-        val movie = movies.find { it.id == movieId } ?: movies.first()
-
+    override suspend fun getMovieDetails(movieId: String): MovieDetails {
+        val movie = top250Movies.find { it.id == movieId } ?: top250Movies.first()
         return MovieDetails(
             id = movie.id,
             posterUri = movie.posterUri,
@@ -150,7 +164,7 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
             director = "Larry Page",
             screenplay = "Sundai Pichai",
             music = "Sergey Brin",
-            castAndCrew = _movieCastContainer.map {
+            castAndCrew = movieCastContainer.map {
                 MovieCast(
                     id = it.id,
                     characterName = it.characterName,
@@ -162,7 +176,7 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
             originalLanguage = "English",
             budget = "$15M",
             revenue = "$40M",
-            similarMovies = (1..2).map { movies.random() },
+            similarMovies = (1..2).map { top250Movies.random() },
             reviewsAndRatings = listOf(
                 MovieReviewsAndRatings(
                     reviewerName = FreshTomatoes,
@@ -180,45 +194,22 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
         )
     }
 
-    override fun searchMovies(query: String): List<Movie> {
-        return _top250Movies
-            .filter { it.title.contains(other = query, ignoreCase = true) }
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_2_3,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
+    override suspend fun searchMovies(query: String): MovieList {
+        val list = top250Movies
+            .filter { it.name.contains(other = query, ignoreCase = true) }
+        return MovieList(value = list)
     }
 
-    override fun getMovies_16_9(): List<Movie> {
-        return _top250Movies
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_16_9,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
+    override fun getMoviesWithLongThumbnail(): Flow<MovieList> = flow {
+        emit(top250MoviesWithWideThumbnail)
     }
 
-    override fun getMovies_2_3(): List<Movie> {
-        return _top250Movies
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_2_3,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
+    override fun getMovies(): Flow<MovieList> = flow {
+        emit(top250Movies)
     }
 
-    override fun getPopularFilmsThisWeek(): List<Movie> {
-        return _mostPopularMovies.subList(fromIndex = 11, toIndex = 20).map {
+    override fun getPopularFilmsThisWeek(): Flow<MovieList> = flow {
+        val list = mostPopularMovies.subList(fromIndex = 11, toIndex = 20).map {
             Movie(
                 id = it.id,
                 posterUri = it.image_2_3,
@@ -226,10 +217,11 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
                 description = it.fullTitle
             )
         }
+        emit(MovieList(value = list))
     }
 
-    override fun getTVShows(): List<Movie> {
-        return _mostPopularTVShows
+    override fun getTVShows(): Flow<MovieList> = flow {
+        val list = mostPopularTVShows
             .subList(fromIndex = 0, toIndex = 5)
             .map {
                 Movie(
@@ -239,10 +231,11 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
                     description = it.fullTitle
                 )
             }
+        emit(MovieList(value = list))
     }
 
-    override fun getBingeWatchDramas(): List<Movie> {
-        return _mostPopularTVShows
+    override fun getBingeWatchDramas(): Flow<MovieList> = flow {
+        val list = mostPopularTVShows
             .subList(fromIndex = 6, toIndex = 15)
             .map {
                 Movie(
@@ -252,18 +245,13 @@ class MovieRepositoryImpl(val assetsReader: AssetsReader) : MovieRepository {
                     description = it.fullTitle
                 )
             }
+        emit(MovieList(value = list))
     }
 
-    override fun getFavouriteMovies(): List<Movie> {
-        return _top250Movies
+    override fun getFavouriteMovies(): Flow<MovieList> = flow {
+        val list = top250Movies
             .subList(fromIndex = 0, toIndex = 28)
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_2_3,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
+        emit(MovieList(value = list))
     }
+
 }

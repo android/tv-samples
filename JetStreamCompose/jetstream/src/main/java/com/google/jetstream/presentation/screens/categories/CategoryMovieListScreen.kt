@@ -18,14 +18,14 @@ package com.google.jetstream.presentation.screens.categories
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,10 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvGridItemSpan
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
@@ -49,14 +47,13 @@ import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.entities.MovieCategoryDetails
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.LocalMovieRepository
-import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
-import com.google.jetstream.presentation.theme.JetStreamTheme
 import com.google.jetstream.presentation.utils.focusOnInitialVisibility
 
 object CategoryMovieListScreen {
@@ -65,22 +62,46 @@ object CategoryMovieListScreen {
 
 @Composable
 fun CategoryMovieListScreen(
-    categoryId: String,
-    parentNavController: NavController,
     onBackPressed: () -> Unit,
+    onMovieSelected: (Movie) -> Unit,
+    categoryMovieListScreenViewModel: CategoryMovieListScreenViewModel = hiltViewModel()
+) {
+    val uiState by categoryMovieListScreenViewModel.uiState.collectAsState()
+
+    when (val s = uiState) {
+        is CategoryMovieListScreenUiState.Loading -> {
+            Loading()
+        }
+        is CategoryMovieListScreenUiState.Error -> {
+            Error()
+        }
+        is CategoryMovieListScreenUiState.Done -> {
+            val categoryDetails = s.movieCategoryDetails
+            CategoryDetails(
+                categoryDetails = categoryDetails,
+                onBackPressed = onBackPressed,
+                onMovieSelected = onMovieSelected
+            )
+        }
+    }
+
+}
+
+@Composable
+private fun CategoryDetails(
+    categoryDetails: MovieCategoryDetails,
+    onBackPressed: () -> Unit,
+    onMovieSelected: (Movie) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val childPadding = rememberChildPadding()
-
-    val movieRepository = LocalMovieRepository.current!!
-    val categoryDetails =
-        remember { movieRepository.getMovieCategoryDetails(categoryId = categoryId) }
-
     val isFirstItemVisible = remember { mutableStateOf(false) }
 
     BackHandler(onBack = onBackPressed)
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier,
     ) {
         Text(
             text = categoryDetails.name,
@@ -126,11 +147,7 @@ fun CategoryMovieListScreen(
                                         ),
                                     ),
                                     scale = CardDefaults.scale(focusedScale = 1f),
-                                    onClick = {
-                                        parentNavController.navigate(
-                                            Screens.MovieDetails.withArgs(movie.id)
-                                        )
-                                    },
+                                    onClick = { onMovieSelected(movie) },
                                     interactionSource = it
                                 ) {
                                     AsyncImage(
@@ -159,16 +176,12 @@ fun CategoryMovieListScreen(
     }
 }
 
-@Preview
 @Composable
-private fun CategoryMovieListScreenPreview() {
-    JetStreamTheme {
-        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            CategoryMovieListScreen(
-                categoryId = "1",
-                parentNavController = rememberNavController(),
-                onBackPressed = {}
-            )
-        }
-    }
+private fun Loading(modifier: Modifier = Modifier) {
+    Text(text = "Loading...", modifier = modifier)
+}
+
+@Composable
+private fun Error(modifier: Modifier = Modifier) {
+    Text(text = "Wops, something went wrong...", modifier = modifier)
 }

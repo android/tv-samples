@@ -21,17 +21,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
+import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.LocalMovieRepository
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -39,7 +42,33 @@ import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 fun MoviesScreen(
     onMovieClick: (movie: Movie) -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
-    isTopBarVisible: Boolean
+    isTopBarVisible: Boolean,
+    moviesScreenViewModel: MoviesScreenViewModel = hiltViewModel(),
+) {
+    val uiState by moviesScreenViewModel.uiState.collectAsState()
+    when (val s = uiState) {
+        is MoviesScreenUiState.Loading -> Loading()
+        is MoviesScreenUiState.Ready -> {
+            Catalog(
+                movieList = s.movieList,
+                popularFilmsThisWeek = s.popularFilmsThisWeek,
+                onMovieClick = onMovieClick,
+                onScroll = onScroll,
+                isTopBarVisible = isTopBarVisible,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun Catalog(
+    movieList: MovieList,
+    popularFilmsThisWeek: MovieList,
+    onMovieClick: (movie: Movie) -> Unit,
+    onScroll: (isTopBarVisible: Boolean) -> Unit,
+    isTopBarVisible: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val childPadding = rememberChildPadding()
     val tvLazyListState = rememberTvLazyListState()
@@ -50,11 +79,6 @@ fun MoviesScreen(
         }
     }
 
-    val movieRepository = LocalMovieRepository.current!!
-
-    val movies_16_9 = remember { movieRepository.getMovies_16_9() }
-    val popularFilmsThisWeek = remember { movieRepository.getPopularFilmsThisWeek() }
-
     LaunchedEffect(shouldShowTopBar) {
         onScroll(shouldShowTopBar)
     }
@@ -63,8 +87,7 @@ fun MoviesScreen(
     }
 
     TvLazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier,
         state = tvLazyListState
     ) {
         item {
@@ -72,7 +95,7 @@ fun MoviesScreen(
         }
         item {
             MoviesScreenMovieList(
-                movieList = movies_16_9,
+                movieList = movieList,
                 onMovieClick = onMovieClick
             )
         }
@@ -92,4 +115,9 @@ fun MoviesScreen(
             )
         }
     }
+}
+
+@Composable
+private fun Loading(modifier: Modifier = Modifier) {
+    Text(text = "Loading...", modifier = modifier)
 }

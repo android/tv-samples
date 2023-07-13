@@ -30,6 +30,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +48,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.foundation.lazy.list.TvLazyColumn
+import androidx.tv.foundation.lazy.list.TvLazyListState
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
 import androidx.tv.material3.Border
 import androidx.tv.material3.ClickableSurfaceDefaults
@@ -57,23 +60,17 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
-import com.google.jetstream.presentation.LocalMovieRepository
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen(
     onMovieClick: (movie: Movie) -> Unit,
-    onScroll: (isTopBarVisible: Boolean) -> Unit
+    onScroll: (isTopBarVisible: Boolean) -> Unit,
+    searchScreenViewModel: SearchScreenViewModel = hiltViewModel(),
 ) {
-    val childPadding = rememberChildPadding()
-    var searchQuery by remember { mutableStateOf("") }
-    val tfFocusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    val tfInteractionSource = remember { MutableInteractionSource() }
-    val isTfFocused by tfInteractionSource.collectIsFocusedAsState()
     val tvLazyColumnState = rememberTvLazyListState()
     val shouldShowTopBar by remember {
         derivedStateOf {
@@ -82,19 +79,47 @@ fun SearchScreen(
         }
     }
 
-    val movieRepository = LocalMovieRepository.current!!
-
-    var movies by remember { mutableStateOf(movieRepository.searchMovies(searchQuery)) }
-    fun searchMovies(query: String) {
-        movies = movieRepository.searchMovies(query)
-    }
+    val searchState by searchScreenViewModel.searchState.collectAsState()
 
     LaunchedEffect(shouldShowTopBar) {
         onScroll(shouldShowTopBar)
     }
 
+    when (val s = searchState) {
+        is SearchState.Searching -> {
+            Text(text = "Searching...")
+        }
+
+        is SearchState.Done -> {
+            val movieList = s.movieList
+            SearchResult(
+                movieList = movieList,
+                searchMovies = searchScreenViewModel::query,
+                onMovieClick = onMovieClick
+            )
+        }
+    }
+
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun SearchResult(
+    movieList: MovieList,
+    searchMovies: (queryString: String) -> Unit,
+    onMovieClick: (movie: Movie) -> Unit,
+    modifier: Modifier = Modifier,
+    tvLazyColumnState: TvLazyListState = rememberTvLazyListState(),
+) {
+    val childPadding = rememberChildPadding()
+    var searchQuery by remember { mutableStateOf("") }
+    val tfFocusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    val tfInteractionSource = remember { MutableInteractionSource() }
+
+    val isTfFocused by tfInteractionSource.collectIsFocusedAsState()
     TvLazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         state = tvLazyColumnState
     ) {
         item {
@@ -199,7 +224,7 @@ fun SearchScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = childPadding.top * 2),
-                movies = movies
+                movies = movieList
             ) { selectedMovie -> onMovieClick(selectedMovie) }
         }
     }

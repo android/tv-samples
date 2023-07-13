@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -29,15 +30,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
-import com.google.jetstream.presentation.LocalMovieRepository
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
 @Composable
 fun FavouritesScreen(
     onMovieClick: (movieId: String) -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
-    isTopBarVisible: Boolean
+    isTopBarVisible: Boolean,
+    favouriteScreenViewModel: FavouriteScreenViewModel = hiltViewModel()
 ) {
     val childPadding = rememberChildPadding()
     val filteredMoviesGridState = rememberTvLazyGridState()
@@ -48,8 +50,7 @@ fun FavouritesScreen(
         }
     }
 
-    val movieRepository = LocalMovieRepository.current!!
-    val favouriteMovies = remember { movieRepository.getFavouriteMovies() }
+    val favouriteMovies by favouriteScreenViewModel.favouriteMovieList.collectAsState()
 
     LaunchedEffect(shouldShowTopBar) {
         onScroll(shouldShowTopBar)
