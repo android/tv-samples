@@ -21,6 +21,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -130,7 +131,8 @@ fun MoviesRow(
                 contentPadding = PaddingValues(
                     start = startPadding,
                     end = endPadding,
-                )
+                ),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 itemsIndexed(movieState, key = { _, movie -> movie.id }) { index, movie ->
                     MoviesRowItem(
@@ -147,7 +149,6 @@ fun MoviesRow(
                         showItemTitle = showItemTitle,
                         showIndexOverImage = showIndexOverImage
                     )
-                    Spacer(modifier = Modifier.padding(end = 20.dp))
                 }
             }
         }
