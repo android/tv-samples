@@ -23,6 +23,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -125,10 +126,12 @@ fun MoviesRow(
             TvLazyRow(
                 modifier = Modifier
                     .then(focusRestorerModifiers.parentModifier),
-                pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+                pivotOffsets = PivotOffsets(parentFraction = 0.07f),
+                contentPadding = PaddingValues(
+                    start = startPadding,
+                    end = endPadding,
+                )
             ) {
-                item { Spacer(modifier = Modifier.padding(start = startPadding)) }
-
                 itemsIndexed(movieState, key = { _, movie -> movie.id }) { index, movie ->
                     MoviesRowItem(
                         modifier = Modifier.ifElse(
@@ -146,8 +149,6 @@ fun MoviesRow(
                     )
                     Spacer(modifier = Modifier.padding(end = 20.dp))
                 }
-
-                item { Spacer(modifier = Modifier.padding(start = endPadding)) }
             }
         }
     }
