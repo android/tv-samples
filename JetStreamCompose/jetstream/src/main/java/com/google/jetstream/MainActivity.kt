@@ -81,9 +81,9 @@ private fun MainActivity.App() {
                             backStackEntry.arguments?.let { nnBundle ->
                                 val categoryId =
                                     nnBundle.getString(CategoryMovieListScreen.CategoryIdBundleKey)
-                                categoryId?.let { nnCategoryId ->
+                                categoryId?.let {
                                     CategoryMovieListScreen(
-                                        categoryId = nnCategoryId,
+                                        categoryId = it,
                                         parentNavController = navController,
                                         onBackPressed = {
                                             if (navController.navigateUp()) {
