@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
+import androidx.tv.foundation.lazy.list.itemsIndexed
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CardLayoutDefaults
@@ -128,26 +129,22 @@ fun MoviesRow(
             ) {
                 item { Spacer(modifier = Modifier.padding(start = startPadding)) }
 
-                movieState.forEachIndexed { index, movie ->
-                    item {
-                        key(movie.id) {
-                            MoviesRowItem(
-                                modifier = Modifier.ifElse(
-                                    index == 0,
-                                    focusRestorerModifiers.childModifier
-                                ),
-                                focusedItemIndex = focusedItemIndex,
-                                index = index,
-                                itemWidth = itemWidth,
-                                itemDirection = itemDirection,
-                                onMovieClick = onMovieClick,
-                                movie = movie,
-                                showItemTitle = showItemTitle,
-                                showIndexOverImage = showIndexOverImage
-                            )
-                        }
-                    }
-                    item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
+                itemsIndexed(movieState, key = { _, movie -> movie.id }) { index, movie ->
+                    MoviesRowItem(
+                        modifier = Modifier.ifElse(
+                            index == 0,
+                            focusRestorerModifiers.childModifier
+                        ),
+                        focusedItemIndex = focusedItemIndex,
+                        index = index,
+                        itemWidth = itemWidth,
+                        itemDirection = itemDirection,
+                        onMovieClick = onMovieClick,
+                        movie = movie,
+                        showItemTitle = showItemTitle,
+                        showIndexOverImage = showIndexOverImage
+                    )
+                    Spacer(modifier = Modifier.padding(end = 20.dp))
                 }
 
                 item { Spacer(modifier = Modifier.padding(start = endPadding)) }
