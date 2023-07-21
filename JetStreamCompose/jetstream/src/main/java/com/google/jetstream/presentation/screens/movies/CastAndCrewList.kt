@@ -27,8 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -40,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
+import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.ClassicCard
@@ -77,13 +76,8 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
         ) {
             item { Spacer(modifier = Modifier.padding(start = childPadding.start)) }
 
-            items(castAndCrew.size) { index ->
-                val castMember = remember(index) { castAndCrew[index] }
-                key(castMember.id) {
-                    CastAndCrewItem(
-                        castMember = castMember
-                    )
-                }
+            items(castAndCrew, key = { it.id }) {
+                CastAndCrewItem(it)
             }
         }
     }
