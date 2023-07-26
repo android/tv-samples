@@ -134,15 +134,15 @@ fun DashboardTopBar(
                                 onFocus = { onScreenSelection(screen) },
                                 onClick = { focusManager.moveFocus(FocusDirection.Down) },
                             ) {
-                                screen.tabIcon?.let { nnTabIcon ->
+                                if (screen.tabIcon != null) {
                                     Icon(
                                         modifier = Modifier.padding(horizontal = 4.dp),
-                                        painter = painterResource(id = nnTabIcon),
+                                        painter = painterResource(id = screen.tabIcon),
                                         contentDescription = StringConstants.Composable
                                             .ContentDescription.DashboardSearchButton,
                                         tint = LocalContentColor.current
                                     )
-                                } ?: run {
+                                } else {
                                     Text(
                                         modifier = Modifier
                                             .occupyScreenSize()
