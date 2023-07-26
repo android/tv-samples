@@ -40,7 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRestorer
@@ -302,16 +302,14 @@ private fun MoviesRowItemImage(
         AsyncImage(
             modifier = modifier
                 .fillMaxWidth()
-                .drawWithCache {
-                    onDrawWithContent {
-                        drawContent()
-                        if (showIndexOverImage) {
-                            drawRect(
-                                color = Color.Black.copy(
-                                    alpha = 0.1f
-                                )
+                .drawWithContent {
+                    drawContent()
+                    if (showIndexOverImage) {
+                        drawRect(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
                             )
-                        }
+                        )
                     }
                 },
             model = ImageRequest.Builder(LocalContext.current)
