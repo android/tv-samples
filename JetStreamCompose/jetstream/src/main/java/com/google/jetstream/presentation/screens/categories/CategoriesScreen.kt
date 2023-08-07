@@ -39,6 +39,8 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.foundation.lazy.grid.itemsIndexed
@@ -49,18 +51,47 @@ import androidx.tv.material3.CardLayoutDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
-import com.google.jetstream.presentation.LocalMovieRepository
+import com.google.jetstream.data.entities.MovieCategoryList
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.utils.GradientBg
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CategoriesScreen(
     gridColumns: Int = 4,
     onCategoryClick: (categoryId: String) -> Unit,
-    onScroll: (isTopBarVisible: Boolean) -> Unit
+    onScroll: (isTopBarVisible: Boolean) -> Unit,
+    categoriesScreenViewModel: CategoriesScreenViewModel = hiltViewModel()
+) {
+
+    val uiState by categoriesScreenViewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val s = uiState) {
+        is CategoriesScreenUiState.Loading -> {
+            Loading()
+        }
+        is CategoriesScreenUiState.Ready -> {
+            Catalog(
+                gridColumns = gridColumns,
+                movieCategories = s.categoryList,
+                onCategoryClick = onCategoryClick,
+                onScroll = onScroll,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun Catalog(
+    movieCategories: MovieCategoryList,
+    modifier: Modifier = Modifier,
+    gridColumns: Int = 4,
+    onCategoryClick: (categoryId: String) -> Unit,
+    onScroll: (isTopBarVisible: Boolean) -> Unit,
 ) {
     val childPadding = rememberChildPadding()
     val tvLazyGridState = rememberTvLazyGridState()
@@ -70,11 +101,6 @@ fun CategoriesScreen(
                     tvLazyGridState.firstVisibleItemScrollOffset < 100
         }
     }
-    val movieRepository = LocalMovieRepository.current!!
-    val movieCategories = remember {
-        movieRepository.getMovieCategories()
-    }
-
     LaunchedEffect(shouldShowTopBar) {
         onScroll(shouldShowTopBar)
     }
@@ -88,7 +114,7 @@ fun CategoriesScreen(
     ) { it ->
         TvLazyVerticalGrid(
             state = tvLazyGridState,
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             columns = TvGridCells.Fixed(gridColumns),
             content = {
                 itemsIndexed(it) { index, movieCategory ->
@@ -153,4 +179,9 @@ fun CategoriesScreen(
             }
         )
     }
+}
+
+@Composable
+private fun Loading(modifier: Modifier = Modifier) {
+    Text(text = "Loading...", modifier = modifier)
 }

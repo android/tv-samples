@@ -16,24 +16,26 @@
 
 package com.google.jetstream.data.repositories
 
-import com.google.jetstream.data.entities.Movie
-import com.google.jetstream.data.entities.MovieCategory
 import com.google.jetstream.data.entities.MovieCategoryDetails
+import com.google.jetstream.data.entities.MovieCategoryList
 import com.google.jetstream.data.entities.MovieDetails
+import com.google.jetstream.data.entities.MovieList
+import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    fun getFeaturedMovies(): List<Movie>
-    fun getTrendingMovies(): List<Movie>
-    fun getTop10Movies(): List<Movie>
-    fun getNowPlayingMovies(): List<Movie>
-    fun getMovieCategories(): List<MovieCategory>
-    fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails
-    fun getMovieDetails(movieId: String): MovieDetails
-    fun searchMovies(query: String): List<Movie>
-    fun getMovies_16_9(): List<Movie>
-    fun getMovies_2_3(): List<Movie>
-    fun getPopularFilmsThisWeek(): List<Movie>
-    fun getTVShows(): List<Movie>
-    fun getBingeWatchDramas(): List<Movie>
-    fun getFavouriteMovies(): List<Movie>
+    fun getFeaturedMovies(): Flow<MovieList>
+    fun getTrendingMovies(): Flow<MovieList>
+    fun getTop10Movies(): Flow<MovieList>
+    fun getNowPlayingMovies(): Flow<MovieList>
+    fun getMovieCategories(): Flow<MovieCategoryList>
+    suspend fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails
+    suspend fun getMovieDetails(movieId: String): MovieDetails
+    suspend fun searchMovies(query: String): MovieList
+    fun getMoviesWithLongThumbnail(): Flow<MovieList>
+    fun getMovies(): Flow<MovieList>
+    fun getPopularFilmsThisWeek(): Flow<MovieList>
+    fun getTVShows(): Flow<MovieList>
+    fun getBingeWatchDramas(): Flow<MovieList>
+    fun getFavouriteMovies(): Flow<MovieList>
 }
+

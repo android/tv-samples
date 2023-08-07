@@ -30,19 +30,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.LocalMovieRepository
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -52,26 +54,48 @@ object MovieDetailsScreen {
 
 @Composable
 fun MovieDetailsScreen(
-    movieId: String,
     goToMoviePlayer: () -> Unit,
     onBackPressed: () -> Unit,
-    refreshScreenWithNewMovie: (Movie) -> Unit
+    refreshScreenWithNewMovie: (Movie) -> Unit,
+    movieDetailsScreenViewModel: MovieDetailsScreenViewModel = hiltViewModel()
+) {
+    val uiState by movieDetailsScreenViewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val s = uiState) {
+        is MovieDetailsScreenUiState.Loading -> {
+            Loading()
+        }
+        is MovieDetailsScreenUiState.Error -> {
+            Error()
+        }
+        is MovieDetailsScreenUiState.Done -> {
+            Details(
+                movieDetails = s.movieDetails,
+                goToMoviePlayer = goToMoviePlayer,
+                onBackPressed = onBackPressed,
+                refreshScreenWithNewMovie = refreshScreenWithNewMovie,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .animateContentSize()
+            )
+        }
+    }
+}
+
+@Composable
+private fun Details(
+    movieDetails: MovieDetails,
+    goToMoviePlayer: () -> Unit,
+    onBackPressed: () -> Unit,
+    refreshScreenWithNewMovie: (Movie) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val childPadding = rememberChildPadding()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val movieRepository = LocalMovieRepository.current!!
-    val movieDetails = remember { movieRepository.getMovieDetails(movieId = movieId) }
-
-    LaunchedEffect(Unit) {
-        movieRepository.getMovieDetails(movieId = movieId)
-    }
 
     BackHandler(onBack = onBackPressed)
-
     TvLazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .animateContentSize()
+        modifier = modifier
     ) {
         item {
             MovieDetails(
@@ -153,6 +177,16 @@ fun MovieDetailsScreen(
             Spacer(modifier = Modifier.padding(bottom = screenHeight.times(0.25f)))
         }
     }
+}
+
+@Composable
+private fun Loading(modifier: Modifier = Modifier) {
+    Text(text = "Loading...", modifier = modifier)
+}
+
+@Composable
+private fun Error(modifier: Modifier = Modifier) {
+    Text(text = "Something went wrong...", modifier = modifier)
 }
 
 private val BottomDividerPadding = PaddingValues(vertical = 48.dp)
