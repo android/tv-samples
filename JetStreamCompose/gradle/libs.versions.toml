@@ -1,0 +1,53 @@
+[versions]
+activity-compose = "1.7.2"
+android-gradle-plugin = "8.1.0"
+android-test-plugin = "8.1.0"
+benchmark-macro-junit4 = "1.2.0-beta02"
+coil-compose = "2.4.0"
+compose-for-tv = "1.0.0-SNAPSHOT"
+compose-ui = "1.6.0-SNAPSHOT"
+core-ktx = "1.11.0-beta02"
+core-splashscreen = "1.0.1"
+gson = "2.9.1"
+hilt-navigation-compose = "1.0.0"
+hilt-android = "2.47"
+junit = "1.1.5"
+kotlin-android = "1.8.10"
+lifecycle-runtime-ktx = "2.6.1"
+material-icons-extended = "1.4.3"
+media3-ui = "1.1.0"
+media3-exoplayer = "1.1.0"
+navigation-compose = "2.6.0"
+profileinstaller = "1.3.1"
+uiautomator = "2.2.0"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark-macro-junit4" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3-ui" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3-exoplayer" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
+androidx-tv-foundation = { module = "androidx.tv:tv-foundation", version.ref = "compose-for-tv" }
+androidx-tv-material = { module = "androidx.tv:tv-material", version.ref = "compose-for-tv" }
+androidx-compose-ui-base = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt-android"}
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref= "kotlin-android" }
+android-test = { id = "com.android.test", version.ref = "android-test-plugin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android"}

@@ -27,7 +27,7 @@ class BaselineProfileGenerator {
     val baselineProfileRule = BaselineProfileRule()
 
     @Test
-    fun startup() = baselineProfileRule.collectBaselineProfile(
+    fun startup() = baselineProfileRule.collect(
         packageName = JETSTREAM_PACKAGE_NAME
     ) {
         startActivityAndWait()
