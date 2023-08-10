@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation libs.androidx.lifecycle.runtime.compose
     implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
 
     // Compose UI libs (Using snapshot build for focus restoring APIs)
     //implementation(libs.androidx.)
