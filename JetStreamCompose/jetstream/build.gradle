@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     id 'kotlin-kapt'
     alias(libs.plugins.hilt)
 }
@@ -117,8 +118,8 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-    // GSON
-    implementation(libs.gson)
+    // JSON parser
+    implementation(libs.kotlinx.serialization)
 
     // Media3
     implementation(libs.androidx.media3.exoplayer)

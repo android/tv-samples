@@ -16,13 +16,11 @@
 
 package com.google.jetstream.data.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-class MovieCategoriesResponse : ArrayList<MovieCategoriesResponse.MovieCategoriesResponseItem>() {
-    data class MovieCategoriesResponseItem(
-        @SerializedName("id")
-        val id: String,
-        @SerializedName("name")
-        val name: String,
-    )
-}
+
+@Serializable
+data class MovieCategoriesResponseItem(
+    val id: String,
+    val name: String,
+)

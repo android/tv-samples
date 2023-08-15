@@ -24,9 +24,9 @@ import com.google.jetstream.data.entities.MovieCategoryList
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.entities.MovieReviewsAndRatings
-import com.google.jetstream.data.models.MovieCastResponse
-import com.google.jetstream.data.models.MovieCategoriesResponse
-import com.google.jetstream.data.models.MoviesResponse
+import com.google.jetstream.data.models.MovieCastResponseItem
+import com.google.jetstream.data.models.MovieCategoriesResponseItem
+import com.google.jetstream.data.models.MoviesResponseItem
 import com.google.jetstream.data.util.AssetsReader
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultCount
@@ -36,34 +36,41 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerNam
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : MovieRepository {
 
-    private val mostPopularMovies = assetsReader
-        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.MostPopularMovies)
-        ?: emptyList()
+    private val mostPopularMovies: List<MoviesResponseItem> =
+        assetsReader.getJsonDataFromAsset(StringConstants.Assets.MostPopularMovies).map {
+            Json.decodeFromString<List<MoviesResponseItem>>(it)
+        }.getOrDefault(emptyList())
 
-    private val inTheatersMovies = assetsReader
-        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.InTheaters)
-        ?: emptyList()
 
-    private val mostPopularTVShows = assetsReader
-        .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.MostPopularTVShows)
-        ?: emptyList()
+    private val inTheatersMovies =
+        assetsReader.getJsonDataFromAsset(StringConstants.Assets.InTheaters).map {
+            Json.decodeFromString<List<MoviesResponseItem>>(it)
+        }.getOrDefault(emptyList())
 
-    private val movieCastContainer = assetsReader
-        .readJsonFile<MovieCastResponse>(fileName = StringConstants.Assets.MovieCast)
-        ?: emptyList()
+    private val mostPopularTVShows =
+        assetsReader.getJsonDataFromAsset(StringConstants.Assets.MostPopularTVShows).map {
+            Json.decodeFromString<List<MoviesResponseItem>>(it)
+        }.getOrDefault(emptyList())
+
+    private val movieCastContainer =
+        assetsReader.getJsonDataFromAsset(StringConstants.Assets.MovieCast).map {
+            Json.decodeFromString<List<MovieCastResponseItem>>(it)
+        }.getOrDefault(emptyList())
 
     private val top250Movies: MovieList
     private val top250MoviesWithWideThumbnail: MovieList
     private val categoryList: MovieCategoryList
 
     init {
-        val movieList = assetsReader
-            .readJsonFile<MoviesResponse>(fileName = StringConstants.Assets.Top250Movies)
-            ?: emptyList()
+        val movieList =
+            assetsReader.getJsonDataFromAsset(StringConstants.Assets.Top250Movies).map {
+                Json.decodeFromString<List<MoviesResponseItem>>(it)
+            }.getOrDefault(emptyList())
 
         top250Movies = MovieList(
             value = movieList.map {
@@ -85,9 +92,11 @@ class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : Movi
                 )
             }
         )
-        val movieCategory = assetsReader
-            .readJsonFile<MovieCategoriesResponse>(fileName = StringConstants.Assets.MovieCategories)
-            ?: emptyList()
+        val movieCategory =
+            assetsReader.getJsonDataFromAsset(StringConstants.Assets.MovieCategories).map {
+                Json.decodeFromString<List<MovieCategoriesResponseItem>>(it)
+            }.getOrDefault(emptyList())
+
         categoryList = MovieCategoryList(
             value = movieCategory.map {
                 MovieCategory(

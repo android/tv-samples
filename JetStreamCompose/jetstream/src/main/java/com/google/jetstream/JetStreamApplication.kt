@@ -1,7 +1,6 @@
 package com.google.jetstream
 
 import android.app.Application
-import com.google.gson.Gson
 import com.google.jetstream.data.repositories.MovieRepository
 import com.google.jetstream.data.repositories.MovieRepositoryImpl
 import com.google.jetstream.data.util.AssetsReader
@@ -12,7 +11,7 @@ import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
 
 @HiltAndroidApp
-class JetStreamApplication: Application()
+class JetStreamApplication : Application()
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -22,8 +21,5 @@ object MovieRepositoryModule {
     fun provideMovieRepository(assetsReader: AssetsReader): MovieRepository {
         return MovieRepositoryImpl(assetsReader)
     }
-
-    @Provides
-    fun provideGson(): Gson = Gson()
 
 }
