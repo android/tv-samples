@@ -29,6 +29,7 @@ https://www.apache.org/licenses/LICENSE-2.0
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".JetStreamApplication"
         android:allowBackup="true"
         android:banner="@mipmap/app_banner"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -51,7 +52,7 @@ https://www.apache.org/licenses/LICENSE-2.0
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
 

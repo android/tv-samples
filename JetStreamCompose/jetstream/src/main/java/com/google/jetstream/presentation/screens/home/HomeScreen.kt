@@ -30,12 +30,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
+import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.LocalMovieRepository
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -44,23 +47,56 @@ fun HomeScreen(
     onMovieClick: (movie: Movie) -> Unit,
     goToVideoPlayer: () -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
-    isTopBarVisible: Boolean
+    isTopBarVisible: Boolean,
+    homeScreeViewModel: HomeScreeViewModel = hiltViewModel(),
 ) {
-    val childPadding = rememberChildPadding()
+    val uiState by homeScreeViewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val s = uiState) {
+        is HomeScreenUiState.Ready -> {
+            Catalog(
+                featuredMovies = s.featuredMovieList,
+                trendingMovies = s.trendingMovieList,
+                top10Movies = s.top10MovieList,
+                nowPlayingMovies = s.nowPlayingMovieList,
+                onMovieClick = onMovieClick,
+                onScroll = onScroll,
+                goToVideoPlayer = goToVideoPlayer,
+                isTopBarVisible = isTopBarVisible,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+        is HomeScreenUiState.Loading -> Loading()
+        is HomeScreenUiState.Error -> Error()
+    }
+
+}
+
+@Composable
+private fun Catalog(
+    featuredMovies: MovieList,
+    trendingMovies: MovieList,
+    top10Movies: MovieList,
+    nowPlayingMovies: MovieList,
+    onMovieClick: (movie: Movie) -> Unit,
+    onScroll: (isTopBarVisible: Boolean) -> Unit,
+    goToVideoPlayer: () -> Unit,
+    modifier: Modifier = Modifier,
+    isTopBarVisible: Boolean = true,
+) {
+
     val tvLazyListState = rememberTvLazyListState()
+    val childPadding = rememberChildPadding()
+    val pivotOffset = remember { PivotOffsets() }
+    val pivotOffsetForImmersiveList = remember { PivotOffsets(0f, 0f) }
+    var immersiveListHasFocus by remember { mutableStateOf(false) }
+
     val shouldShowTopBar by remember {
         derivedStateOf {
             tvLazyListState.firstVisibleItemIndex == 0 &&
                     tvLazyListState.firstVisibleItemScrollOffset < 300
         }
     }
-
-    val movieRepository = LocalMovieRepository.current!!
-
-    val featuredMovies = remember { movieRepository.getFeaturedMovies() }
-    val trendingMovies = remember { movieRepository.getTrendingMovies() }
-    val top10Movies = remember { movieRepository.getTop10Movies() }
-    val nowPlayingMovies = remember { movieRepository.getNowPlayingMovies() }
 
     LaunchedEffect(shouldShowTopBar) {
         onScroll(shouldShowTopBar)
@@ -69,10 +105,9 @@ fun HomeScreen(
         if (isTopBarVisible) tvLazyListState.animateScrollToItem(0)
     }
 
-    var immersiveListHasFocus by remember { mutableStateOf(false) }
     TvLazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        pivotOffsets = if (immersiveListHasFocus) PivotOffsets(0f, 0f) else PivotOffsets(),
+        modifier = modifier,
+        pivotOffsets = if (immersiveListHasFocus) pivotOffsetForImmersiveList else pivotOffset,
         state = tvLazyListState,
         contentPadding = PaddingValues(
             bottom = LocalConfiguration.current.screenHeightDp.dp.times(0.19f)
@@ -111,4 +146,14 @@ fun HomeScreen(
             )
         }
     }
+}
+
+@Composable
+private fun Loading(modifier: Modifier = Modifier) {
+    Text(text = "Loading...", modifier = modifier)
+}
+
+@Composable
+private fun Error(modifier: Modifier = Modifier) {
+    Text(text = "Wops, something went wrong.", modifier = modifier)
 }

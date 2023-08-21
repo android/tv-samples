@@ -19,5 +19,5 @@ package com.google.jetstream.data.entities
 data class MovieCategoryDetails(
     val id: String,
     val name: String,
-    val movies: List<Movie>
+    val movies: MovieList,
 )

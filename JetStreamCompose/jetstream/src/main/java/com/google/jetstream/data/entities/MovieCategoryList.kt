@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    alias(libs.plugins.android.application) apply(false)
-    alias(libs.plugins.kotlin.android) apply(false)
-    alias(libs.plugins.android.test) apply(false)
-    alias(libs.plugins.hilt) apply(false)
-}
+package com.google.jetstream.data.entities
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+import androidx.compose.runtime.Immutable
+
+@Immutable
+data class MovieCategoryList(
+    val value: List<MovieCategory> = emptyList()
+) : List<MovieCategory> by value

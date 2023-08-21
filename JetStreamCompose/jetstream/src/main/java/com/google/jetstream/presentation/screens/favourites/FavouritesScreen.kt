@@ -29,15 +29,49 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
-import com.google.jetstream.presentation.LocalMovieRepository
+import androidx.tv.material3.Text
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
 @Composable
 fun FavouritesScreen(
     onMovieClick: (movieId: String) -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
-    isTopBarVisible: Boolean
+    isTopBarVisible: Boolean,
+    favouriteScreenViewModel: FavouriteScreenViewModel = hiltViewModel()
+) {
+    val uiState by favouriteScreenViewModel.uiState.collectAsStateWithLifecycle()
+    when (val s = uiState) {
+        is FavouriteScreenUiState.Loading -> {
+            Loading()
+        }
+        is FavouriteScreenUiState.Ready -> {
+            Catalog(
+                favouriteMovieList = s.favouriteMovieList,
+                onMovieClick = onMovieClick,
+                onScroll = onScroll,
+                isTopBarVisible = isTopBarVisible,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+@Composable
+private fun Loading(modifier: Modifier = Modifier) {
+    Text(text = "Loading...", modifier = modifier)
+}
+
+@Composable
+private fun Catalog(
+    favouriteMovieList: MovieList,
+    onMovieClick: (movieId: String) -> Unit,
+    onScroll: (isTopBarVisible: Boolean) -> Unit,
+    isTopBarVisible: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val childPadding = rememberChildPadding()
     val filteredMoviesGridState = rememberTvLazyGridState()
@@ -47,9 +81,6 @@ fun FavouritesScreen(
                     filteredMoviesGridState.firstVisibleItemScrollOffset < 100
         }
     }
-
-    val movieRepository = LocalMovieRepository.current!!
-    val favouriteMovies = remember { movieRepository.getFavouriteMovies() }
 
     LaunchedEffect(shouldShowTopBar) {
         onScroll(shouldShowTopBar)
@@ -64,9 +95,7 @@ fun FavouritesScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = childPadding.start)
+        modifier = modifier.padding(horizontal = childPadding.start)
     ) {
         Column {
             val movieFilterRange = remember { (0..9).toList() }
@@ -85,7 +114,7 @@ fun FavouritesScreen(
             )
             FilteredMoviesGrid(
                 state = filteredMoviesGridState,
-                movies = favouriteMovies,
+                movies = favouriteMovieList,
                 movieListRange = movieListRange,
                 onMovieClick = onMovieClick
             )

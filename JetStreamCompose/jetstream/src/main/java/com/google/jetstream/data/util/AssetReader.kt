@@ -18,8 +18,13 @@ package com.google.jetstream.data.util // ktlint-disable filename
 
 import android.content.Context
 import com.google.gson.Gson
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class AssetsReader(val context: Context, val gson: Gson) {
+class AssetsReader @Inject constructor(
+    @ApplicationContext private val context: Context,
+    val gson: Gson = Gson()
+) {
     fun getJsonDataFromAsset(context: Context = this.context, fileName: String): String {
         return context.assets.open(fileName).bufferedReader().use { it.readText() }
     }
@@ -35,4 +40,5 @@ class AssetsReader(val context: Context, val gson: Gson) {
         val json = getJsonDataFromAsset(fileName = fileName)
         return gson.fromJson(json, T::class.java)
     }
+
 }
