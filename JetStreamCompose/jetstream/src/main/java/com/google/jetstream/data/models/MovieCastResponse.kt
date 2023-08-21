@@ -16,17 +16,12 @@
 
 package com.google.jetstream.data.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-class MovieCastResponse : ArrayList<MovieCastResponse.MovieCastResponseItem>() {
-    data class MovieCastResponseItem(
-        @SerializedName("id")
-        val id: String,
-        @SerializedName("characterName")
-        val characterName: String,
-        @SerializedName("realName")
-        val realName: String,
-        @SerializedName("avatarUrl")
-        val avatarUrl: String,
-    )
-}
+@Serializable
+data class MovieCastResponseItem(
+    val id: String,
+    val characterName: String,
+    val realName: String,
+    val avatarUrl: String,
+)

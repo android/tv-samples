@@ -16,47 +16,27 @@
 
 package com.google.jetstream.data.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-class MoviesResponse : ArrayList<MoviesResponse.MoviesResponseItem>() {
-    data class MoviesResponseItem(
-        @SerializedName("id")
-        val id: String,
-        @SerializedName("rank")
-        val rank: String,
-        @SerializedName("rankUpDown")
-        val rankUpDown: String,
-        @SerializedName("title")
-        val title: String,
-        @SerializedName("fullTitle")
-        val fullTitle: String,
-        @SerializedName("year")
-        val year: String,
-        @SerializedName("releaseDate")
-        val releaseDate: String,
-        @SerializedName("image_16_9")
-        val image_16_9: String,
-        @SerializedName("image_2_3")
-        val image_2_3: String,
-        @SerializedName("runtimeMins")
-        val runtimeMins: String,
-        @SerializedName("runtimeStr")
-        val runtimeStr: String,
-        @SerializedName("plot")
-        val plot: String,
-        @SerializedName("contentRating")
-        val contentRating: String,
-        @SerializedName("rating")
-        val rating: String,
-        @SerializedName("ratingCount")
-        val ratingCount: String,
-        @SerializedName("metaCriticRating")
-        val metaCriticRating: String,
-        @SerializedName("genres")
-        val genres: String,
-        @SerializedName("directors")
-        val directors: String,
-        @SerializedName("stars")
-        val stars: String,
-    )
-}
+@Serializable
+data class MoviesResponseItem(
+    val id: String,
+    val rank: Int,
+    val rankUpDown: String,
+    val title: String,
+    val fullTitle: String,
+    val year: Int,
+    val releaseDate: String,
+    val image_16_9: String,
+    val image_2_3: String,
+    val runtimeMins: Int,
+    val runtimeStr: String,
+    val plot: String,
+    val contentRating: String,
+    val rating: Float,
+    val ratingCount: Int,
+    val metaCriticRating: Int,
+    val genres: String,
+    val directors: String,
+    val stars: String,
+)

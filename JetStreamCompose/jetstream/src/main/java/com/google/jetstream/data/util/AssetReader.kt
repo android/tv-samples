@@ -17,28 +17,20 @@
 package com.google.jetstream.data.util // ktlint-disable filename
 
 import android.content.Context
-import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.IOException
 import javax.inject.Inject
 
 class AssetsReader @Inject constructor(
     @ApplicationContext private val context: Context,
-    val gson: Gson = Gson()
 ) {
-    fun getJsonDataFromAsset(context: Context = this.context, fileName: String): String {
-        return context.assets.open(fileName).bufferedReader().use { it.readText() }
-    }
-
-    /**
-     * Deserializes the given json file into the inferred return type.
-     * @param fileName Name (with extension) of the json file to be deserialized. For example if
-     * the json file's name is 'file1.json', then we call this method as follows:
-     * ###readJsonFile("file1.json")
-     * @return Deserialized object of the inferred type.
-     */
-    inline fun <reified T> readJsonFile(fileName: String): T? {
-        val json = getJsonDataFromAsset(fileName = fileName)
-        return gson.fromJson(json, T::class.java)
+    fun getJsonDataFromAsset(fileName: String, context: Context = this.context): Result<String> {
+        return try {
+            val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+            Result.success(jsonString)
+        } catch (e: IOException) {
+            Result.failure(e)
+        }
     }
 
 }

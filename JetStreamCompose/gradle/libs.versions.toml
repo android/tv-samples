@@ -4,7 +4,7 @@ android-gradle-plugin = "8.1.0"
 android-test-plugin = "8.1.0"
 benchmark-macro-junit4 = "1.2.0-beta02"
 coil-compose = "2.4.0"
-compose-bom = "2023.06.01"
+compose-bom = "2023.08.00"
 compose-for-tv = "1.0.0-SNAPSHOT"
 compose-ui = "1.6.0-SNAPSHOT"
 core-ktx = "1.11.0-beta02"
@@ -14,6 +14,7 @@ hilt-navigation-compose = "1.0.0"
 hilt-android = "2.47"
 junit = "1.1.5"
 kotlin-android = "1.8.10"
+kotlinx-serialization = "1.5.1"
 lifecycle-runtime-ktx = "2.6.1"
 media3-ui = "1.1.0"
 media3-exoplayer = "1.1.0"
@@ -43,12 +44,13 @@ androidx-tv-foundation = { module = "androidx.tv:tv-foundation", version.ref = "
 androidx-tv-material = { module = "androidx.tv:tv-material", version.ref = "compose-for-tv" }
 androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt-android" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-android" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-android" }
 android-test = { id = "com.android.test", version.ref = "android-test-plugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
