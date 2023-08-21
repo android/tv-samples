@@ -21,8 +21,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRestorer
@@ -58,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
+import androidx.tv.foundation.lazy.list.itemsIndexed
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CardLayoutDefaults
@@ -124,33 +127,29 @@ fun MoviesRow(
             TvLazyRow(
                 modifier = Modifier
                     .then(focusRestorerModifiers.parentModifier),
-                pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+                pivotOffsets = PivotOffsets(parentFraction = 0.07f),
+                contentPadding = PaddingValues(
+                    start = startPadding,
+                    end = endPadding,
+                ),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                item { Spacer(modifier = Modifier.padding(start = startPadding)) }
-
-                movieState.forEachIndexed { index, movie ->
-                    item {
-                        key(movie.id) {
-                            MoviesRowItem(
-                                modifier = Modifier.ifElse(
-                                    index == 0,
-                                    focusRestorerModifiers.childModifier
-                                ),
-                                focusedItemIndex = focusedItemIndex,
-                                index = index,
-                                itemWidth = itemWidth,
-                                itemDirection = itemDirection,
-                                onMovieClick = onMovieClick,
-                                movie = movie,
-                                showItemTitle = showItemTitle,
-                                showIndexOverImage = showIndexOverImage
-                            )
-                        }
-                    }
-                    item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
+                itemsIndexed(movieState, key = { _, movie -> movie.id }) { index, movie ->
+                    MoviesRowItem(
+                        modifier = Modifier.ifElse(
+                            index == 0,
+                            focusRestorerModifiers.childModifier
+                        ),
+                        focusedItemIndex = focusedItemIndex,
+                        index = index,
+                        itemWidth = itemWidth,
+                        itemDirection = itemDirection,
+                        onMovieClick = onMovieClick,
+                        movie = movie,
+                        showItemTitle = showItemTitle,
+                        showIndexOverImage = showIndexOverImage
+                    )
                 }
-
-                item { Spacer(modifier = Modifier.padding(start = endPadding)) }
             }
         }
     }
@@ -303,16 +302,14 @@ private fun MoviesRowItemImage(
         AsyncImage(
             modifier = modifier
                 .fillMaxWidth()
-                .drawWithCache {
-                    onDrawWithContent {
-                        drawContent()
-                        if (showIndexOverImage) {
-                            drawRect(
-                                color = Color.Black.copy(
-                                    alpha = 0.1f
-                                )
+                .drawWithContent {
+                    drawContent()
+                    if (showIndexOverImage) {
+                        drawRect(
+                            color = Color.Black.copy(
+                                alpha = 0.1f
                             )
-                        }
+                        )
                     }
                 },
             model = ImageRequest.Builder(LocalContext.current)

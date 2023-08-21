@@ -16,7 +16,7 @@
 
 package com.google.jetstream.presentation.screens.home
 
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -108,16 +108,19 @@ private fun Catalog(
     TvLazyColumn(
         modifier = modifier,
         pivotOffsets = if (immersiveListHasFocus) pivotOffsetForImmersiveList else pivotOffset,
-        state = tvLazyListState
+        state = tvLazyListState,
+        contentPadding = PaddingValues(
+            bottom = LocalConfiguration.current.screenHeightDp.dp.times(0.19f)
+        )
     ) {
-        item {
+        item(contentType = "FeaturedMoviesCarousel") {
             FeaturedMoviesCarousel(
                 movies = featuredMovies,
                 padding = childPadding,
                 goToVideoPlayer = goToVideoPlayer
             )
         }
-        item {
+        item(contentType = "MoviesRow") {
             MoviesRow(
                 modifier = Modifier.padding(top = 16.dp),
                 movies = trendingMovies,
@@ -125,7 +128,7 @@ private fun Catalog(
                 onMovieClick = onMovieClick
             )
         }
-        item {
+        item(contentType = "Top10MoviesList") {
             Top10MoviesList(
                 modifier = Modifier.onFocusChanged {
                     immersiveListHasFocus = it.hasFocus
@@ -134,19 +137,12 @@ private fun Catalog(
                 onMovieClick = onMovieClick
             )
         }
-        item {
+        item(contentType = "MoviesRow") {
             MoviesRow(
                 modifier = Modifier.padding(top = 16.dp),
                 movies = nowPlayingMovies,
                 title = StringConstants.Composable.HomeScreenNowPlayingMoviesTitle,
                 onMovieClick = onMovieClick
-            )
-        }
-        item {
-            Spacer(
-                modifier = Modifier.padding(
-                    bottom = LocalConfiguration.current.screenHeightDp.dp.times(0.19f)
-                )
             )
         }
     }

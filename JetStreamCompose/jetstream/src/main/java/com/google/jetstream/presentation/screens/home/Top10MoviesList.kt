@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.home
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -62,8 +63,6 @@ fun Top10MoviesList(
 ) {
     var currentItemIndex by remember { mutableStateOf(0) }
     var isListFocused by remember { mutableStateOf(false) }
-    var listCenterOffset by remember { mutableStateOf(Offset.Zero) }
-
     var currentYCoord: Float? by remember { mutableStateOf(null) }
 
     ImmersiveList(
@@ -77,69 +76,35 @@ fun Top10MoviesList(
                 exit = fadeOut() + shrinkVertically(),
                 modifier = Modifier
                     .height(LocalConfiguration.current.screenHeightDp.times(0.8f).dp)
-                    .drawWithCache {
-                        onDrawWithContent {
-                            if (listCenterOffset == Offset.Zero) {
-                                listCenterOffset = center
-                            }
-                            drawContent()
-                            drawRect(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        gradientColor,
-                                        Color.Transparent
-                                    ),
-                                    startX = size.width.times(0.2f),
-                                    endX = size.width.times(0.7f)
-                                )
-                            )
-                            drawRect(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        gradientColor
-                                    ),
-                                    endY = size.width.times(0.3f)
-                                )
-                            )
-                            drawRect(
-                                brush = Brush.linearGradient(
-                                    colors = listOf(
-                                        gradientColor,
-                                        Color.Transparent
-                                    ),
-                                    start = Offset(
-                                        size.width.times(0.2f),
-                                        size.height.times(0.5f)
-                                    ),
-                                    end = Offset(
-                                        size.width.times(0.9f),
-                                        0f
-                                    )
-                                )
-                            )
-                        }
-                    }
+                    .gradientOverlay(gradientColor)
             ) {
                 val movie = remember(moviesState, currentItemIndex) {
                     moviesState[currentItemIndex]
                 }
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(
-                            LocalConfiguration.current.screenHeightDp.times(0.8f).dp
-                        ),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie.posterUri)
-                        .build(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
+
+                Crossfade(
+                    targetState = movie.posterUri,
+                    label = "posterUriCrossfade"
+                ) { posterUri ->
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(
+                                LocalConfiguration.current.screenHeightDp.times(0.8f).dp
+                            ),
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(posterUri)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
             }
         },
         list = {
             Column {
+                // TODO this causes the whole vertical list to jump
                 if (isListFocused) {
                     val movie = remember(moviesState, currentItemIndex) {
                         moviesState[currentItemIndex]
@@ -175,4 +140,43 @@ fun Top10MoviesList(
             }
         }
     )
+}
+
+fun Modifier.gradientOverlay(gradientColor: Color) = this then drawWithCache {
+    val horizontalGradient = Brush.horizontalGradient(
+        colors = listOf(
+            gradientColor,
+            Color.Transparent
+        ),
+        startX = size.width.times(0.2f),
+        endX = size.width.times(0.7f)
+    )
+    val verticalGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color.Transparent,
+            gradientColor
+        ),
+        endY = size.width.times(0.3f)
+    )
+    val linearGradient = Brush.linearGradient(
+        colors = listOf(
+            gradientColor,
+            Color.Transparent
+        ),
+        start = Offset(
+            size.width.times(0.2f),
+            size.height.times(0.5f)
+        ),
+        end = Offset(
+            size.width.times(0.9f),
+            0f
+        )
+    )
+
+    onDrawWithContent {
+        drawContent()
+        drawRect(horizontalGradient)
+        drawRect(verticalGradient)
+        drawRect(linearGradient)
+    }
 }

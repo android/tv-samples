@@ -16,9 +16,7 @@
 
 package com.google.jetstream.presentation.screens.home
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -37,15 +35,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -77,6 +76,11 @@ import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import com.google.jetstream.presentation.utils.Padding
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
 
+val CarouselSaver = Saver<CarouselState, Int>(
+    save = { it.activeItemIndex },
+    restore = { CarouselState(it) }
+)
+
 @OptIn(
     ExperimentalTvMaterial3Api::class
 )
@@ -87,29 +91,17 @@ fun FeaturedMoviesCarousel(
     goToVideoPlayer: () -> Unit
 ) {
     val carouselHeight = LocalConfiguration.current.screenHeightDp.dp.times(0.60f)
-    var carouselCurrentIndex by rememberSaveable { mutableStateOf(0) }
-    val carouselState = remember { CarouselState(initialActiveItemIndex = carouselCurrentIndex) }
+    val carouselState = rememberSaveable(saver = CarouselSaver) { CarouselState(0) }
     var isCarouselFocused by remember { mutableStateOf(false) }
 
-    LaunchedEffect(carouselState.activeItemIndex) {
-        carouselCurrentIndex = carouselState.activeItemIndex
-    }
-
-    val carouselBorderAlpha by animateFloatAsState(
-        targetValue = if (isCarouselFocused) 1f else 0f,
-        label = "",
-    )
-
-    AnimatedContent(
-        targetState = movies,
-        label = "Featured Carousel animation",
+    Carousel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = padding.start, end = padding.start, top = padding.top)
             .height(carouselHeight)
             .border(
                 width = JetStreamBorderWidth,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = carouselBorderAlpha),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isCarouselFocused) 1f else 0f),
                 shape = ShapeDefaults.Medium,
             )
             .clip(ShapeDefaults.Medium)
@@ -117,119 +109,110 @@ fun FeaturedMoviesCarousel(
                 // Because the carousel itself never gets the focus
                 isCarouselFocused = it.hasFocus
             }
-    ) { moviesState ->
-        Carousel(
-            modifier = Modifier
-                .fillMaxSize()
-                .semantics {
-                    contentDescription =
-                        StringConstants.Composable.ContentDescription.MoviesCarousel
-                }
-                .handleDPadKeyEvents(onEnter = goToVideoPlayer),
-            itemCount = moviesState.size,
-            carouselState = carouselState,
-            carouselIndicator = {
-                Box(
+            .semantics {
+                contentDescription =
+                    StringConstants.Composable.ContentDescription.MoviesCarousel
+            }
+            .handleDPadKeyEvents(onEnter = goToVideoPlayer),
+        itemCount = movies.size,
+        carouselState = carouselState,
+        carouselIndicator = {
+            Box(
+                modifier = Modifier
+                    .padding(32.dp)
+                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                    .graphicsLayer {
+                        clip = true
+                        shape = ShapeDefaults.ExtraSmall
+                    }
+                    .align(Alignment.BottomEnd)
+            ) {
+                CarouselDefaults.IndicatorRow(
                     modifier = Modifier
-                        .padding(32.dp)
-                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
-                        .graphicsLayer {
-                            clip = true
-                            shape = ShapeDefaults.ExtraSmall
-                        }
                         .align(Alignment.BottomEnd)
+                        .padding(8.dp),
+                    itemCount = movies.size,
+                    activeItemIndex = carouselState.activeItemIndex,
+                )
+            }
+        },
+        contentTransformStartToEnd = fadeIn(tween(durationMillis = 1000))
+            .togetherWith(fadeOut(tween(durationMillis = 1000))),
+        contentTransformEndToStart = fadeIn(tween(durationMillis = 1000))
+            .togetherWith(fadeOut(tween(durationMillis = 1000))),
+        content = { index ->
+            val movie = movies[index]
+
+            // background
+            AsyncImage(
+                model = movie.posterUri,
+                contentDescription = StringConstants
+                    .Composable
+                    .ContentDescription
+                    .moviePoster(movie.name),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black.copy(alpha = 0.5f)
+                                )
+                            )
+                        )
+                    },
+                contentScale = ContentScale.Crop
+            )
+
+            // foreground
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    CarouselDefaults.IndicatorRow(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(8.dp),
-                        itemCount = moviesState.size,
-                        activeItemIndex = carouselState.activeItemIndex,
+                    Text(
+                        text = movie.name,
+                        style = MaterialTheme.typography.displayMedium.copy(
+                            shadow = Shadow(
+                                color = Color.Black.copy(alpha = 0.5f),
+                                offset = Offset(x = 2f, y = 4f),
+                                blurRadius = 2f
+                            )
+                        ),
+                        maxLines = 1
+                    )
+                    Text(
+                        text = movie.description,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurface.copy(
+                                alpha = 0.65f
+                            ),
+                            shadow = Shadow(
+                                color = Color.Black.copy(alpha = 0.5f),
+                                offset = Offset(x = 2f, y = 4f),
+                                blurRadius = 2f
+                            )
+                        ),
+                        maxLines = 1,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                    AnimatedVisibility(
+                        visible = isCarouselFocused,
+                        content = {
+                            WatchNowButton()
+                        }
                     )
                 }
-            },
-            contentTransformStartToEnd = fadeIn(tween(durationMillis = 1000))
-                .togetherWith(fadeOut(tween(durationMillis = 1000))),
-            contentTransformEndToStart = fadeIn(tween(durationMillis = 1000))
-                .togetherWith(fadeOut(tween(durationMillis = 1000))),
-            content = { index ->
-                val movie = remember(index) { moviesState[index] }
-
-                Box {
-                    // background
-                    Box {
-                        AsyncImage(
-                            model = movie.posterUri,
-                            contentDescription = StringConstants
-                                .Composable
-                                .ContentDescription
-                                .moviePoster(movie.name),
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            Color.Transparent,
-                                            Color.Black.copy(alpha = 0.5f)
-                                        )
-                                    )
-                                )
-                        )
-                    }
-
-                    // foreground
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.BottomStart
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(32.dp),
-                            verticalArrangement = Arrangement.Bottom
-                        ) {
-                            Text(
-                                text = movie.name,
-                                style = MaterialTheme.typography.displayMedium.copy(
-                                    shadow = Shadow(
-                                        color = Color.Black.copy(alpha = 0.5f),
-                                        offset = Offset(x = 2f, y = 4f),
-                                        blurRadius = 2f
-                                    )
-                                ),
-                                maxLines = 1
-                            )
-                            Text(
-                                text = movie.description,
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    color = MaterialTheme.colorScheme.onSurface.copy(
-                                        alpha = 0.65f
-                                    ),
-                                    shadow = Shadow(
-                                        color = Color.Black.copy(alpha = 0.5f),
-                                        offset = Offset(x = 2f, y = 4f),
-                                        blurRadius = 2f
-                                    )
-                                ),
-                                maxLines = 1,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                            AnimatedVisibility(
-                                visible = isCarouselFocused,
-                                content = {
-                                    WatchNowButton()
-                                }
-                            )
-                        }
-                    }
-                }
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
