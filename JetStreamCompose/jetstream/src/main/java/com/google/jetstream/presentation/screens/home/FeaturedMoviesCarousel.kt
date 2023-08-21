@@ -39,7 +39,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -77,15 +76,10 @@ import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import com.google.jetstream.presentation.utils.Padding
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
 
-object CarouselSaver : Saver<CarouselState, Int> {
-    override fun restore(value: Int): CarouselState {
-        return CarouselState(value)
-    }
-
-    override fun SaverScope.save(value: CarouselState): Int {
-        return value.activeItemIndex
-    }
-}
+val CarouselSaver = Saver<CarouselState, Int>(
+    save = { it.activeItemIndex },
+    restore = { CarouselState(it) }
+)
 
 @OptIn(
     ExperimentalTvMaterial3Api::class
