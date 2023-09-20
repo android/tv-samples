@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -126,6 +127,7 @@ fun MovieDetails(
 }
 
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun WatchTrailerButton(
     modifier: Modifier = Modifier,
@@ -180,6 +182,7 @@ private fun DirectorScreenplayMusicRow(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieDescription(description: String) {
     Text(
@@ -193,6 +196,7 @@ private fun MovieDescription(description: String) {
     )
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieLargeTitle(movieTitle: String) {
     Text(
@@ -204,7 +208,7 @@ private fun MovieLargeTitle(movieTitle: String) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieImageWithGradients(
     movieDetails: MovieDetails,

@@ -33,6 +33,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.FilterChip
 import androidx.tv.material3.FilterChipDefaults
 import androidx.tv.material3.Icon
@@ -42,6 +43,7 @@ import androidx.tv.material3.Text
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MovieFilterChip(
     label: String,
@@ -104,8 +106,10 @@ fun MovieFilterChip(
 
 private val ChipColor @Composable get() = Color.White.copy(alpha = 0.1f)
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 private val ChipContentColor @Composable get() = MaterialTheme.colorScheme.inverseSurface
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 private val ChipFocusedBorder
     @Composable get() = Border(
         border = BorderStroke(

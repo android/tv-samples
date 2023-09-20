@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.list.TvLazyColumn
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.R
@@ -82,6 +83,7 @@ fun MovieDetailsScreen(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Details(
     movieDetails: MovieDetails,
@@ -179,11 +181,13 @@ private fun Details(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Loading(modifier: Modifier = Modifier) {
     Text(text = "Loading...", modifier = modifier)
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Error(modifier: Modifier = Modifier) {
     Text(text = "Something went wrong...", modifier = modifier)

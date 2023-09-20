@@ -37,6 +37,7 @@ import androidx.tv.foundation.lazy.grid.itemsIndexed
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CardLayoutDefaults
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardLayout
 import coil.compose.AsyncImage
@@ -46,6 +47,7 @@ import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun FilteredMoviesGrid(
     state: TvLazyGridState,
@@ -72,7 +74,7 @@ fun FilteredMoviesGrid(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(bottom = JetStreamBottomListPadding),
         content = {
-            itemsIndexed(moviesFiltered, key = { _, movie -> movie.id }) { index, movie ->
+            itemsIndexed(moviesFiltered, key = { _, movie -> movie.id }) { _, movie ->
                 StandardCardLayout(
                     modifier = Modifier.aspectRatio(1 / 1.5f),
                     imageCard = {
