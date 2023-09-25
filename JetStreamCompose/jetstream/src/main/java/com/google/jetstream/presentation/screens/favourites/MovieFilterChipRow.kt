@@ -16,129 +16,60 @@
 
 package com.google.jetstream.presentation.screens.favourites
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.list.TvLazyRow
+import com.google.jetstream.R
 import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
-import com.google.jetstream.presentation.utils.ifElse
 
-@Suppress("EnumEntryName")
-enum class ChipListItems {
-    Movies, TV_Shows, Added_Last_Week, Available_in_4K; // ktlint-disable enum-entry-name-case
-
-    operator fun invoke() = this.name.replace("_", " ")
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MovieFilterChipRow(
-    movieListRange: SnapshotStateList<Int>,
-    movieFilterRange: List<Int>,
-    tvShowsFilterRange: List<Int>,
-    addedLastWeekFilterRange: List<Int>,
-    availableIn4KFilterRange: List<Int>,
+    filterList: FilterList,
+    selectedFilterList: FilterList,
+    onSelectedFilterListUpdated: (FilterList) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isMovieFilterSelected by remember { mutableStateOf(false) }
-    var isTvShowsFilterSelected by remember { mutableStateOf(false) }
-    var isAddedLastWeekFilterSelected by remember { mutableStateOf(false) }
-    var isAvailableIn4KFilterSelected by remember { mutableStateOf(false) }
     val focusRestorerModifiers = createInitialFocusRestorerModifiers()
 
-    TvLazyRow(
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
             .then(focusRestorerModifiers.parentModifier),
-        contentPadding = PaddingValues(start = 2.dp)
     ) {
-        ChipListItems.values().forEachIndexed { index, chipItem ->
-            item {
-                key(chipItem.ordinal) {
-                    val isChecked by remember {
-                        derivedStateOf {
-                            when (chipItem) {
-                                ChipListItems.Movies -> isMovieFilterSelected
-                                ChipListItems.TV_Shows -> isTvShowsFilterSelected
-                                ChipListItems.Added_Last_Week -> isAddedLastWeekFilterSelected
-                                ChipListItems.Available_in_4K -> isAvailableIn4KFilterSelected
-                            }
-                        }
+        filterList.items.forEachIndexed { index, filterCondition ->
+            val isChecked = selectedFilterList.items.contains(filterCondition)
+            MovieFilterChip(
+                label = stringResource(id = filterLabelId(filterCondition)),
+                isChecked = isChecked,
+                onCheckedChange = {
+                    val updated = if (it) {
+                        selectedFilterList.items + listOf(filterCondition)
+                    } else {
+                        selectedFilterList.items - setOf(filterCondition)
                     }
-                    MovieFilterChip(
-                        label = chipItem(),
-                        isChecked = isChecked,
-                        modifier = Modifier.ifElse(
-                            index == 0,
-                            focusRestorerModifiers.childModifier
-                        ),
-                        onCheckedChange = {
-                            when (chipItem) {
-                                ChipListItems.Movies -> {
-                                    isMovieFilterSelected = !isMovieFilterSelected
-                                }
-
-                                ChipListItems.TV_Shows -> {
-                                    isTvShowsFilterSelected = !isTvShowsFilterSelected
-                                }
-
-                                ChipListItems.Added_Last_Week -> {
-                                    isAddedLastWeekFilterSelected = !isAddedLastWeekFilterSelected
-                                }
-
-                                ChipListItems.Available_in_4K -> {
-                                    isAvailableIn4KFilterSelected = !isAvailableIn4KFilterSelected
-                                }
-                            }
-                        }
-                    )
+                    onSelectedFilterListUpdated(FilterList(updated))
+                },
+                modifier = if (index == 0) {
+                    focusRestorerModifiers.childModifier
+                } else {
+                    Modifier
                 }
-            }
+            )
         }
     }
+}
 
-    LaunchedEffect(isMovieFilterSelected) {
-        if (isMovieFilterSelected) {
-            movieListRange.addAll(movieFilterRange)
-        } else {
-            movieListRange.removeAll(movieFilterRange)
-        }
-    }
-
-    LaunchedEffect(isTvShowsFilterSelected) {
-        if (isTvShowsFilterSelected) {
-            movieListRange.addAll(tvShowsFilterRange)
-        } else {
-            movieListRange.removeAll(tvShowsFilterRange)
-        }
-    }
-
-    LaunchedEffect(isAddedLastWeekFilterSelected) {
-        if (isAddedLastWeekFilterSelected) {
-            movieListRange.addAll(addedLastWeekFilterRange)
-        } else {
-            movieListRange.removeAll(addedLastWeekFilterRange)
-        }
-    }
-
-    LaunchedEffect(isAvailableIn4KFilterSelected) {
-        if (isAvailableIn4KFilterSelected) {
-            movieListRange.addAll(availableIn4KFilterRange)
-        } else {
-            movieListRange.removeAll(availableIn4KFilterRange)
-        }
+fun filterLabelId(filterCondition: FilterCondition): Int {
+    return when (filterCondition) {
+        FilterCondition.Movies -> R.string.favorites_movies
+        FilterCondition.TvShows -> R.string.favorites_tv_shows
+        FilterCondition.AddedLastWeek -> R.string.favorites_added_last_week
+        FilterCondition.AvailableIn4K -> R.string.favorites_available_in_4k
+        else -> R.string.favorites_unknown
     }
 }

@@ -22,10 +22,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -33,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyGridState
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
-import androidx.tv.foundation.lazy.grid.itemsIndexed
+import androidx.tv.foundation.lazy.grid.items
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CardLayoutDefaults
@@ -42,7 +38,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
@@ -51,21 +47,9 @@ import com.google.jetstream.presentation.theme.JetStreamCardShape
 @Composable
 fun FilteredMoviesGrid(
     state: TvLazyGridState,
-    movies: List<Movie>,
-    movieListRange: SnapshotStateList<Int>,
+    movieList: MovieList,
     onMovieClick: (movieId: String) -> Unit,
 ) {
-    // TODO this shouldn't be directly in UI components.
-    val moviesFiltered by remember(movies, movieListRange) {
-        derivedStateOf {
-            if (movieListRange.isEmpty()) {
-                movies
-            } else {
-                movies.filterIndexed { index, _ -> index in movieListRange }
-            }
-        }
-    }
-
     TvLazyVerticalGrid(
         state = state,
         modifier = Modifier.fillMaxSize(),
@@ -73,43 +57,42 @@ fun FilteredMoviesGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(bottom = JetStreamBottomListPadding),
-        content = {
-            itemsIndexed(moviesFiltered, key = { _, movie -> movie.id }) { _, movie ->
-                StandardCardLayout(
-                    modifier = Modifier.aspectRatio(1 / 1.5f),
-                    imageCard = {
-                        CardLayoutDefaults.ImageCard(
-                            onClick = { onMovieClick(movie.id) },
-                            shape = CardDefaults.shape(shape = JetStreamCardShape),
-                            scale = CardDefaults.scale(focusedScale = 1f),
-                            border = CardDefaults.border(
-                                focusedBorder = Border(
-                                    border = BorderStroke(
-                                        width = 2.dp,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    ),
-                                    shape = JetStreamCardShape
-                                )
-                            ),
-                            interactionSource = it
-                        ) {
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(movie.posterUri)
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = StringConstants
-                                    .Composable
-                                    .ContentDescription
-                                    .moviePoster(movie.name),
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
+    ) {
+        items(movieList, key = { it.id }) { movie ->
+            StandardCardLayout(
+                modifier = Modifier.aspectRatio(1 / 1.5f),
+                imageCard = {
+                    CardLayoutDefaults.ImageCard(
+                        onClick = { onMovieClick(movie.id) },
+                        shape = CardDefaults.shape(shape = JetStreamCardShape),
+                        scale = CardDefaults.scale(focusedScale = 1f),
+                        border = CardDefaults.border(
+                            focusedBorder = Border(
+                                border = BorderStroke(
+                                    width = 2.dp,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                ),
+                                shape = JetStreamCardShape
                             )
-                        }
-                    },
-                    title = {}
-                )
-            }
+                        ),
+                        interactionSource = it
+                    ) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(movie.posterUri)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = StringConstants
+                                .Composable
+                                .ContentDescription
+                                .moviePoster(movie.name),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                },
+                title = {}
+            )
         }
-    )
+    }
 }

@@ -39,4 +39,9 @@ https://www.apache.org/licenses/LICENSE-2.0
     <string name="language_section_listItem_icon_content_description">%s language option</string>
     <string name="loading_text">Loading</string>
     <string name="movie_category_desc">movie category %s</string>
+    <string name="favorites_movies">Movies</string>
+    <string name="favorites_tv_shows">TV Shows</string>
+    <string name="favorites_added_last_week">Added Last Week</string>
+    <string name="favorites_available_in_4k">Available in 4K</string>
+    <string name="favorites_unknown">Unknown filter</string>
 </resources>
