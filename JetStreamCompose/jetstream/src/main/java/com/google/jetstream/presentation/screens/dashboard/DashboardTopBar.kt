@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -41,7 +43,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -67,7 +68,7 @@ val TopBarTabs = Screens.values().toList().filter { it.isTabItem }
 // +1 for ProfileTab
 val TopBarFocusRequesters = List(size = TopBarTabs.size + 1) { FocusRequester() }
 
-private const val ProfileScreenIndex = -1
+private const val PROFILE_SCREEN_INDEX = -1
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
@@ -88,7 +89,7 @@ fun DashboardTopBar(
                 .focusRestorer(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            key(ProfileScreenIndex) {
+            key(PROFILE_SCREEN_INDEX) {
                 UserAvatar(
                     modifier = Modifier
                         .focusRequester(focusRequesters[0])
@@ -96,7 +97,7 @@ fun DashboardTopBar(
                             contentDescription =
                                 StringConstants.Composable.ContentDescription.UserAvatar
                         },
-                    selected = selectedTabIndex == ProfileScreenIndex,
+                    selected = selectedTabIndex == PROFILE_SCREEN_INDEX,
                     onClick = {
                         onScreenSelection(Screens.Profile)
                     }
@@ -137,8 +138,8 @@ fun DashboardTopBar(
                             ) {
                                 if (screen.tabIcon != null) {
                                     Icon(
+                                        screen.tabIcon,
                                         modifier = Modifier.padding(horizontal = 4.dp),
-                                        painter = painterResource(id = screen.tabIcon),
                                         contentDescription = StringConstants.Composable
                                             .ContentDescription.DashboardSearchButton,
                                         tint = LocalContentColor.current
@@ -167,7 +168,7 @@ fun DashboardTopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_play_circle),
+                    Icons.Default.PlayCircle,
                     contentDescription = StringConstants.Composable
                         .ContentDescription.BrandLogoImage,
                     modifier = Modifier

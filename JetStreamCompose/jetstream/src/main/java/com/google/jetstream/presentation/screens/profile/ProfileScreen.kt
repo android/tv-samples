@@ -17,7 +17,6 @@
 package com.google.jetstream.presentation.screens.profile
 
 import androidx.annotation.FloatRange
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +51,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
@@ -74,7 +72,7 @@ import com.google.jetstream.presentation.theme.JetStreamTheme
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class, ExperimentalTvMaterial3Api::class
+    ExperimentalTvMaterial3Api::class
 )
 @Composable
 fun ProfileScreen(
@@ -116,11 +114,11 @@ fun ProfileScreen(
                     ListItem(
                         trailingContent = {
                             Icon(
+                                profileScreen.icon,
                                 modifier = Modifier
                                     .padding(vertical = 2.dp)
                                     .padding(start = 4.dp)
                                     .size(20.dp),
-                                painter = painterResource(id = profileScreen.icon),
                                 contentDescription = stringResource(
                                     id = R.string.profile_screen_listItem_icon_content_description,
                                     profileScreen.tabTitle

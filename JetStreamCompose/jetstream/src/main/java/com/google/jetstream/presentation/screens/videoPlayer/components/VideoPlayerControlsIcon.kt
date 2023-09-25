@@ -16,7 +16,6 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
@@ -43,7 +42,7 @@ fun VideoPlayerControlsIcon(
     modifier: Modifier = Modifier,
     state: VideoPlayerState,
     isPlaying: Boolean,
-    @DrawableRes icon: Int,
+    icon: ImageVector,
     contentDescription: String? = null,
     onClick: () -> Unit = {}
 ) {
@@ -67,10 +66,10 @@ fun VideoPlayerControlsIcon(
         interactionSource = interactionSource
     ) {
         Icon(
+            icon,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            painter = painterResource(id = icon),
             contentDescription = contentDescription,
             tint = LocalContentColor.current
         )
