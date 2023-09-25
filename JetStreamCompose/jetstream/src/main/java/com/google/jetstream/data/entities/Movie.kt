@@ -16,9 +16,31 @@
 
 package com.google.jetstream.data.entities
 
+import com.google.jetstream.data.models.MoviesResponseItem
+
 data class Movie(
     val id: String,
     val posterUri: String,
     val name: String,
     val description: String
-)
+) {
+    companion object {
+        fun fromMoviesResponseItem(responseItem: MoviesResponseItem): Movie {
+            return Movie(
+                responseItem.id,
+                responseItem.image_2_3,
+                responseItem.title,
+                responseItem.fullTitle
+            )
+        }
+
+        fun fromMovieResponseItemWithLongerThumbnail(responseItem: MoviesResponseItem): Movie {
+            return Movie(
+                responseItem.id,
+                responseItem.image_16_9,
+                responseItem.title,
+                responseItem.fullTitle
+            )
+        }
+    }
+}

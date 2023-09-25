@@ -33,132 +33,167 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultCoun
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultRating
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.FreshTomatoes
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerName
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
-class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : MovieRepository {
+class MovieRepositoryImpl @Inject constructor(
+    private val assetsReader: AssetsReader
+) : MovieRepository {
 
-    private val mostPopularMovies: List<MoviesResponseItem> =
-        assetsReader.getJsonDataFromAsset(StringConstants.Assets.MostPopularMovies).map {
-            Json.decodeFromString<List<MoviesResponseItem>>(it)
-        }.getOrDefault(emptyList())
-
-
-    private val inTheatersMovies =
-        assetsReader.getJsonDataFromAsset(StringConstants.Assets.InTheaters).map {
-            Json.decodeFromString<List<MoviesResponseItem>>(it)
-        }.getOrDefault(emptyList())
-
-    private val mostPopularTVShows =
-        assetsReader.getJsonDataFromAsset(StringConstants.Assets.MostPopularTVShows).map {
-            Json.decodeFromString<List<MoviesResponseItem>>(it)
-        }.getOrDefault(emptyList())
-
-    private val movieCastContainer =
-        assetsReader.getJsonDataFromAsset(StringConstants.Assets.MovieCast).map {
-            Json.decodeFromString<List<MovieCastResponseItem>>(it)
-        }.getOrDefault(emptyList())
-
-    private val top250Movies: MovieList
-    private val top250MoviesWithWideThumbnail: MovieList
-    private val categoryList: MovieCategoryList
-
-    init {
-        val movieList =
-            assetsReader.getJsonDataFromAsset(StringConstants.Assets.Top250Movies).map {
+    private val mostPopularMovies = flow {
+        val list = withContext(Dispatchers.IO) {
+            assetsReader.getJsonDataFromAsset(StringConstants.Assets.MostPopularMovies).map {
                 Json.decodeFromString<List<MoviesResponseItem>>(it)
             }.getOrDefault(emptyList())
+        }
+        emit(list)
+    }
 
-        top250Movies = MovieList(
-            value = movieList.map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_2_3,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
-        )
-        top250MoviesWithWideThumbnail = MovieList(
-            value = movieList.map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_16_9,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
-        )
-        val movieCategory =
-            assetsReader.getJsonDataFromAsset(StringConstants.Assets.MovieCategories).map {
-                Json.decodeFromString<List<MovieCategoriesResponseItem>>(it)
+    private val inTheatersMovies = flow {
+        val list = withContext(Dispatchers.IO) {
+            assetsReader.getJsonDataFromAsset(StringConstants.Assets.InTheaters).map {
+                Json.decodeFromString<List<MoviesResponseItem>>(it)
             }.getOrDefault(emptyList())
-
-        categoryList = MovieCategoryList(
-            value = movieCategory.map {
-                MovieCategory(
-                    id = it.id,
-                    name = it.name
-                )
-            }
-        )
-
+        }
+        emit(list)
     }
 
-    override fun getFeaturedMovies(): Flow<MovieList> = flow {
-        val list = top250MoviesWithWideThumbnail
-            .filterIndexed { index, _ -> listOf(1, 3, 5, 7, 9).contains(index) }
-        emit(MovieList(value = list))
+    private val mostPopularTVShows = flow {
+        val list = withContext(Dispatchers.IO) {
+            assetsReader.getJsonDataFromAsset(StringConstants.Assets.MostPopularTVShows).map {
+                Json.decodeFromString<List<MoviesResponseItem>>(it)
+            }.getOrDefault(emptyList())
+        }
+        emit(list)
     }
 
-    override fun getTrendingMovies(): Flow<MovieList> = flow {
-        val list = mostPopularMovies.subList(fromIndex = 0, toIndex = 10).map {
-            Movie(
+
+    private suspend fun readMovieCastList(): List<MovieCast> {
+        return withContext(Dispatchers.IO) {
+            assetsReader.getJsonDataFromAsset(StringConstants.Assets.MovieCast).map {
+                Json.decodeFromString<List<MovieCastResponseItem>>(it)
+            }.getOrDefault(emptyList())
+        }.map {
+            MovieCast(
                 id = it.id,
-                description = it.fullTitle,
-                name = it.title,
-                posterUri = it.image_2_3
+                characterName = it.characterName,
+                realName = it.realName,
+                avatarUrl = it.avatarUrl
             )
         }
-        emit(MovieList(value = list))
     }
 
-    override fun getTop10Movies(): Flow<MovieList> = flow {
-        val list = top250MoviesWithWideThumbnail.subList(fromIndex = 20, toIndex = 30)
-        emit(MovieList(value = list))
+    private val top250MoviesFlow = flow {
+        val list = readTop250MovieList()
+        emit(list)
     }
 
-    override fun getNowPlayingMovies(): Flow<MovieList> = flow {
-        val list = inTheatersMovies
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_2_3,
-                    name = it.title,
-                    description = it.fullTitle
-                )
+    private val mutexMovieListCache = Mutex()
+    private lateinit var movieListCache: List<MoviesResponseItem>
+
+    private suspend fun readTop250MovieList(): List<MoviesResponseItem> {
+        return mutexMovieListCache.withLock {
+            if (!::movieListCache.isInitialized) {
+                movieListCache = withContext(Dispatchers.IO) {
+                    assetsReader.getJsonDataFromAsset(StringConstants.Assets.Top250Movies).map {
+                        Json.decodeFromString<List<MoviesResponseItem>>(it)
+                    }.getOrDefault(emptyList())
+                }
             }
-            .subList(fromIndex = 0, toIndex = 10)
-        emit(MovieList(value = list))
+            movieListCache
+        }
     }
 
-    override fun getMovieCategories() = flowOf(categoryList)
+    private val top250Movies = top250MoviesFlow.map { movieList ->
+        movieList.map {
+            Movie.fromMoviesResponseItem(it)
+        }
+    }
+
+    private val top250MoviesWithWideThumbnail = top250MoviesFlow.map { movieList ->
+        movieList.map { Movie.fromMovieResponseItemWithLongerThumbnail(it) }
+    }
+
+    private val categoryList = flow {
+        emit(readCategoryList())
+    }
+
+    private val mutexCategoryListCache = Mutex()
+    private lateinit var movieCategoriesResponseItemCache: List<MovieCategoriesResponseItem>
+
+    private suspend fun readCategoryList(): MovieCategoryList {
+        return mutexCategoryListCache.withLock {
+            if (!::movieCategoriesResponseItemCache.isInitialized) {
+                movieCategoriesResponseItemCache = withContext(Dispatchers.IO) {
+                    assetsReader.getJsonDataFromAsset(StringConstants.Assets.MovieCategories).map {
+                        Json.decodeFromString<List<MovieCategoriesResponseItem>>(it)
+                    }.getOrDefault(emptyList())
+                }
+            }
+            MovieCategoryList(
+                movieCategoriesResponseItemCache.map {
+                    MovieCategory(it.id, it.name)
+                }
+            )
+        }
+    }
+
+    override fun getFeaturedMovies(): Flow<MovieList> = top250MoviesWithWideThumbnail.map {
+        val list = it.filterIndexed { index, _ -> listOf(1, 3, 5, 7, 9).contains(index) }
+        MovieList(list)
+    }
+
+    override fun getTrendingMovies(): Flow<MovieList> = mostPopularMovies.map { movieList ->
+        val list = movieList.subList(fromIndex = 0, toIndex = 10).map {
+            Movie.fromMoviesResponseItem(it)
+        }
+        MovieList(value = list)
+    }
+
+    override fun getTop10Movies(): Flow<MovieList> = top250MoviesWithWideThumbnail.map {
+        val list = it.subList(fromIndex = 20, toIndex = 30)
+        MovieList(list)
+    }
+
+    override fun getNowPlayingMovies(): Flow<MovieList> = inTheatersMovies.map { movieList ->
+        val list = movieList
+            .subList(fromIndex = 0, toIndex = 10)
+            .map {
+                Movie.fromMoviesResponseItem(it)
+            }
+        MovieList(value = list)
+    }
+
+    override fun getMovieCategories() = categoryList
 
     override suspend fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails {
-        val category = categoryList.find { it.id == categoryId } ?: categoryList.first()
-        val movieList = top250Movies.shuffled().subList(fromIndex = 0, toIndex = 20)
+        val categoryList = readCategoryList()
+        val movieList = readTop250MovieList()
+
+        val category = categoryList.find { categoryId == it.id } ?: categoryList.first()
+        val list = movieList.shuffled().subList(0, 20).map {
+            Movie.fromMoviesResponseItem(it)
+        }
         return MovieCategoryDetails(
             id = category.id,
             name = category.name,
-            movies = MovieList(movieList)
+            movies = MovieList(list)
         )
     }
 
     override suspend fun getMovieDetails(movieId: String): MovieDetails {
-        val movie = top250Movies.find { it.id == movieId } ?: top250Movies.first()
+        val movieList = readTop250MovieList()
+        val found = movieList.find { it.id == movieId } ?: movieList.first()
+        val movie = Movie.fromMoviesResponseItem(found)
+        val similarMovieList = (1..2).map { Movie.fromMoviesResponseItem(movieList.random()) }
+
         return MovieDetails(
             id = movie.id,
             posterUri = movie.posterUri,
@@ -171,19 +206,12 @@ class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : Movi
             director = "Larry Page",
             screenplay = "Sundai Pichai",
             music = "Sergey Brin",
-            castAndCrew = movieCastContainer.map {
-                MovieCast(
-                    id = it.id,
-                    characterName = it.characterName,
-                    realName = it.realName,
-                    avatarUrl = it.avatarUrl
-                )
-            },
+            castAndCrew = readMovieCastList(),
             status = "Released",
             originalLanguage = "English",
             budget = "$15M",
             revenue = "$40M",
-            similarMovies = (1..2).map { top250Movies.random() },
+            similarMovies = similarMovieList,
             reviewsAndRatings = listOf(
                 MovieReviewsAndRatings(
                     reviewerName = FreshTomatoes,
@@ -202,59 +230,43 @@ class MovieRepositoryImpl @Inject constructor(assetsReader: AssetsReader) : Movi
     }
 
     override suspend fun searchMovies(query: String): MovieList {
-        val list = top250Movies
-            .filter { it.name.contains(other = query, ignoreCase = true) }
-        return MovieList(value = list)
-    }
-
-    override fun getMoviesWithLongThumbnail() = flowOf(top250MoviesWithWideThumbnail)
-
-    override fun getMovies(): Flow<MovieList> = flowOf(top250Movies)
-
-    override fun getPopularFilmsThisWeek(): Flow<MovieList> = flow {
-        val list = mostPopularMovies.subList(fromIndex = 11, toIndex = 20).map {
-            Movie(
-                id = it.id,
-                posterUri = it.image_2_3,
-                name = it.title,
-                description = it.fullTitle
-            )
+        val responses = readTop250MovieList()
+        val filtered = mutexMovieListCache.withLock {
+            responses.filter {
+                it.title.contains(other = query, ignoreCase = true)
+            }
         }
-        emit(MovieList(value = list))
+        return MovieList(value = filtered.map { Movie.fromMoviesResponseItem(it) })
     }
 
-    override fun getTVShows(): Flow<MovieList> = flow {
-        val list = mostPopularTVShows
-            .subList(fromIndex = 0, toIndex = 5)
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_16_9,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
-        emit(MovieList(value = list))
+    override fun getMoviesWithLongThumbnail() = top250MoviesWithWideThumbnail.map {
+        MovieList(it)
     }
 
-    override fun getBingeWatchDramas(): Flow<MovieList> = flow {
-        val list = mostPopularTVShows
-            .subList(fromIndex = 6, toIndex = 15)
-            .map {
-                Movie(
-                    id = it.id,
-                    posterUri = it.image_2_3,
-                    name = it.title,
-                    description = it.fullTitle
-                )
-            }
-        emit(MovieList(value = list))
+    override fun getMovies(): Flow<MovieList> = top250Movies.map { MovieList(it) }
+
+    override fun getPopularFilmsThisWeek(): Flow<MovieList> =
+        mostPopularMovies.map { movieList ->
+            val list = movieList.subList(fromIndex = 11, toIndex = 20)
+                .map { Movie.fromMoviesResponseItem(it) }
+            MovieList(value = list)
+        }
+
+    override fun getTVShows(): Flow<MovieList> = mostPopularTVShows.map { movieList ->
+        val list = movieList.subList(fromIndex = 0, toIndex = 5)
+            .map { Movie.fromMovieResponseItemWithLongerThumbnail(it) }
+        MovieList(list)
     }
 
-    override fun getFavouriteMovies(): Flow<MovieList> = flow {
-        val list = top250Movies
-            .subList(fromIndex = 0, toIndex = 28)
-        emit(MovieList(value = list))
+    override fun getBingeWatchDramas(): Flow<MovieList> = mostPopularTVShows.map { movieList ->
+        val list = movieList.subList(fromIndex = 6, toIndex = 15)
+            .map { Movie.fromMoviesResponseItem(it) }
+        MovieList(value = list)
+    }
+
+    override fun getFavouriteMovies(): Flow<MovieList> = top250Movies.map {
+        val list = it.subList(fromIndex = 0, toIndex = 28)
+        MovieList(value = list)
     }
 
 }
