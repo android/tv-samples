@@ -113,7 +113,7 @@ fun DashboardTopBar(
                             isTabRowFocused = it.isFocused || it.hasFocus
                         },
                     selectedTabIndex = selectedTabIndex,
-                    indicator = { tabPositions ->
+                    indicator = { tabPositions, _ ->
                         if (selectedTabIndex >= 0) {
                             DashboardTopBarItemIndicator(
                                 currentTabPosition = tabPositions[selectedTabIndex],

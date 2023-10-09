@@ -23,6 +23,6 @@ plugins {
     alias(libs.plugins.hilt) apply(false)
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
