@@ -71,10 +71,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.tv.material3.ColorScheme
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.ProvideTextStyle
+import androidx.tv.material3.surfaceColorAtElevation
 import kotlin.math.max
 
 /**
@@ -912,4 +914,21 @@ object MotionTokens {
     val BrowseEasing = CubicBezierEasing(0.18f, 1f, 0.22f, 1f)
     val EnterEasing = CubicBezierEasing(0.12f, 1f, 0.4f, 1f)
     val ExitEasing = CubicBezierEasing(0.4f, 1f, 0.12f, 1f)
+}
+
+private object Elevation {
+    val Level0 = 0.0.dp
+    val Level1 = 1.0.dp
+    val Level2 = 3.0.dp
+    val Level3 = 6.0.dp
+    val Level4 = 8.0.dp
+    val Level5 = 12.0.dp
+}
+
+private fun ColorScheme.applyTonalElevation(backgroundColor: Color, elevation: Dp): Color {
+    return if (backgroundColor == surface) {
+        surfaceColorAtElevation(elevation)
+    } else {
+        backgroundColor
+    }
 }

@@ -32,7 +32,6 @@ import androidx.tv.material3.surfaceColorAtElevation
 import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamCardShape
-import com.google.jetstream.tvmaterial.IconSizeDense
 
 @Composable
 fun HelpAndSupportSection() {
