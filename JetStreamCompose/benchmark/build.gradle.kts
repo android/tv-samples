@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace 'com.google.jetstream.benchmark'
-    compileSdk 34
+    namespace = "com.google.jetstream.benchmark"
+    compileSdk = 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -33,19 +34,19 @@ android {
     }
 
     defaultConfig {
-        minSdk 28
+        minSdk = 28
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         // This benchmark buildType is used for benchmarking, and should function like your
         // release build (for example, with minification on). It's signed with a debug key
         // for easy local/CI testing.
-        benchmark {
-            debuggable = true
-            signingConfig = debug.signingConfig
-            matchingFallbacks = ["release"]
+        create("benchmark") {
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
         }
     }
 
@@ -63,7 +64,7 @@ dependencies {
 }
 
 androidComponents {
-    beforeVariants(selector().all()) {
-        enable = buildType == "benchmark"
+    beforeVariants(selector().withBuildType("benchmark").all()) {
+        it.enable = true
     }
 }

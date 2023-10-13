@@ -14,91 +14,83 @@
  * limitations under the License.
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    id 'kotlin-kapt'
+    kotlin("kapt")
     alias(libs.plugins.hilt)
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
-    namespace "com.google.jetstream"
+    namespace = "com.google.jetstream"
     // Needed for latest androidx snapshot build
-    compileSdk 34
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "com.google.jetstream"
-        minSdk 28
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        applicationId = "com.google.jetstream"
+        minSdk = 28
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            signingConfig signingConfigs.debug
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-rules.pro'
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
-        benchmark {
-            initWith release
-            signingConfig signingConfigs.debug
-            matchingFallbacks = ['release']
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-benchmark-rules.pro'
-            debuggable false
+        create("benchmark") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-benchmark-rules.pro"
+            )
+            isDebuggable = false
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
     }
     buildFeatures {
-        compose true
-        buildConfig true
+        compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.3"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
-    packagingOptions {
+    packaging {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
-    tasks.withType(KotlinCompile).configureEach {
-        kotlinOptions {
-            freeCompilerArgs += "-Xopt-in=androidx.tv.tvMaterial3.ExperimentalTvMaterial3Api"
-            freeCompilerArgs += "-Xopt-in=androidx.tv.material3.ExperimentalTvMaterial3Api"
-            freeCompilerArgs += "-Xopt-in=androidx.tv.foundation.ExperimentalTvFoundationApi"
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
 
 kapt {
-    correctErrorTypes true
+    correctErrorTypes = true
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation libs.androidx.lifecycle.runtime.compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
 
     // Compose UI libs (Using snapshot build for focus restoring APIs)
-    //implementation(libs.androidx.)
     implementation(libs.androidx.compose.ui.base)
     implementation(libs.androidx.compose.ui.tooling.preview)
 

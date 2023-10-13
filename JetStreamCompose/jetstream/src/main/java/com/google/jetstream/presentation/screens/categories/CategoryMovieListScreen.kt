@@ -42,6 +42,7 @@ import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CardLayoutDefaults
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
@@ -87,6 +88,7 @@ fun CategoryMovieListScreen(
 
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun CategoryDetails(
     categoryDetails: MovieCategoryDetails,
@@ -176,11 +178,13 @@ private fun CategoryDetails(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Loading(modifier: Modifier = Modifier) {
     Text(text = "Loading...", modifier = modifier)
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Error(modifier: Modifier = Modifier) {
     Text(text = "Wops, something went wrong...", modifier = modifier)

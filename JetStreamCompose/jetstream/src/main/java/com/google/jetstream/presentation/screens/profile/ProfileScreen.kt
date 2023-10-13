@@ -62,6 +62,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
@@ -73,7 +74,7 @@ import com.google.jetstream.presentation.theme.JetStreamTheme
 
 @OptIn(
     ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalTvMaterial3Api::class
 )
 @Composable
 fun ProfileScreen(
@@ -215,6 +216,7 @@ fun ProfileScreen(
 }
 
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(device = Devices.TV_1080p)
 @Composable
 fun ProfileScreenPreview() {

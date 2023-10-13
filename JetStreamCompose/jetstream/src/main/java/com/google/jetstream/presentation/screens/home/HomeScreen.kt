@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
@@ -148,11 +149,13 @@ private fun Catalog(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Loading(modifier: Modifier = Modifier) {
     Text(text = "Loading...", modifier = modifier)
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Error(modifier: Modifier = Modifier) {
     Text(text = "Wops, something went wrong.", modifier = modifier)

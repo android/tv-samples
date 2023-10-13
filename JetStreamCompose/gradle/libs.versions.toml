@@ -50,7 +50,7 @@ kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+android-test = { id = "com.android.test", version.ref = "android-test-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-android" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-android" }
-android-test = { id = "com.android.test", version.ref = "android-test-plugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }

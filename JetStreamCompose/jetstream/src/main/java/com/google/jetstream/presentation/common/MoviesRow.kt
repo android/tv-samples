@@ -19,7 +19,6 @@ package com.google.jetstream.presentation.common
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -83,9 +82,7 @@ enum class ItemDirection(val aspectRatio: Float) {
     Horizontal(16f / 9f);
 }
 
-@OptIn(
-    ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MoviesRow(
     modifier: Modifier = Modifier,
@@ -155,10 +152,7 @@ fun MoviesRow(
     }
 }
 
-@OptIn(
-    ExperimentalFoundationApi::class,
-    ExperimentalComposeUiApi::class
-)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 fun ImmersiveListScope.ImmersiveListMoviesRow(
     modifier: Modifier = Modifier,
@@ -291,6 +285,7 @@ private fun MoviesRowItem(
     )
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MoviesRowItemImage(
     modifier: Modifier = Modifier,
@@ -337,6 +332,7 @@ private fun MoviesRowItemImage(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MoviesRowItemText(
     showItemTitle: Boolean,

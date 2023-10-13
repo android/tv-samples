@@ -76,6 +76,7 @@ import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import com.google.jetstream.presentation.utils.Padding
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 val CarouselSaver = Saver<CarouselState, Int>(
     save = { it.activeItemIndex },
     restore = { CarouselState(it) }
@@ -215,6 +216,7 @@ fun FeaturedMoviesCarousel(
     )
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun WatchNowButton() {
     Button(

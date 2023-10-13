@@ -35,8 +35,10 @@ import androidx.compose.ui.unit.DpRect
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import androidx.compose.ui.zIndex
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun DashboardTopBarItemIndicator(
     currentTabPosition: DpRect,

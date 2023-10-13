@@ -42,6 +42,7 @@ import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.ClassicCard
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.R
@@ -51,7 +52,7 @@ import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.utils.ourColors
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 fun CastAndCrewList(castAndCrew: List<MovieCast>) {
     val childPadding = rememberChildPadding()
@@ -83,6 +84,7 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 
 private fun CastAndCrewItem(
