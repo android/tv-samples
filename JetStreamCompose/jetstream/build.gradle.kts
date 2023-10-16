@@ -19,8 +19,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -70,17 +70,13 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 dependencies {
@@ -123,7 +119,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Baseline profile installer
     implementation(libs.androidx.profileinstaller)
