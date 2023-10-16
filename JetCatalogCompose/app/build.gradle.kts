@@ -57,4 +57,6 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.tv.foundation)
     implementation(libs.tv.material)
+    implementation(libs.coil.compose)
+    implementation(libs.navigation.compose)
 }

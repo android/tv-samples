@@ -1,4 +1,3 @@
 <resources>
-
     <style name="Theme.JetCatalog" parent="Theme.AppCompat.DayNight.NoActionBar" />
 </resources>
