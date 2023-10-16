@@ -15,15 +15,20 @@
  */
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.android.application) apply(false)
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.kotlin.android) apply(false)
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.kotlin.serialization) apply(false)
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.android.test) apply(false)
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.hilt) apply(false)
 }
 
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+
+tasks.register("clean") {
+    delete(rootProject.buildDir)
 }
