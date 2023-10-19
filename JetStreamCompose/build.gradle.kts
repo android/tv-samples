@@ -15,18 +15,19 @@
  */
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+/*
+    Please refer to the following URL for the details of
+    "can't be called in this context by implicit receiver" errors,
+    which will be fixed with Gradle 8.1 or later.  
+
+    https://youtrack.jetbrains.com/issue/KTIJ-19369/
+ */
 plugins {
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.android.application) apply(false)
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.kotlin.android) apply(false)
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.kotlin.serialization) apply(false)
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.android.test) apply(false)
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.hilt) apply(false)
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.ksp) apply false
 }
 

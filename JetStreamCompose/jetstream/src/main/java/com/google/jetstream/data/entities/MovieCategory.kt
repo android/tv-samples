@@ -16,7 +16,16 @@
 
 package com.google.jetstream.data.entities
 
+import com.google.jetstream.data.models.MovieCategoriesResponseItem
+
 data class MovieCategory(
     val id: String,
     val name: String,
-)
+) {
+    companion object {
+        fun from(responseItem: MovieCategoriesResponseItem): MovieCategory =
+            MovieCategory(responseItem.id, responseItem.name)
+    }
+}
+
+

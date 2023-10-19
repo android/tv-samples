@@ -89,20 +89,18 @@ fun DashboardTopBar(
                 .focusRestorer(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            key(PROFILE_SCREEN_INDEX) {
-                UserAvatar(
-                    modifier = Modifier
-                        .focusRequester(focusRequesters[0])
-                        .semantics {
-                            contentDescription =
-                                StringConstants.Composable.ContentDescription.UserAvatar
-                        },
-                    selected = selectedTabIndex == PROFILE_SCREEN_INDEX,
-                    onClick = {
-                        onScreenSelection(Screens.Profile)
-                    }
-                )
-            }
+            UserAvatar(
+                modifier = Modifier
+                    .focusRequester(focusRequesters[0])
+                    .semantics {
+                        contentDescription =
+                            StringConstants.Composable.ContentDescription.UserAvatar
+                    },
+                selected = selectedTabIndex == PROFILE_SCREEN_INDEX,
+                onClick = {
+                    onScreenSelection(Screens.Profile)
+                }
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -139,7 +137,10 @@ fun DashboardTopBar(
                                 if (screen.tabIcon != null) {
                                     Icon(
                                         screen.tabIcon,
-                                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
+                                        modifier = Modifier.padding(
+                                            horizontal = 4.dp,
+                                            vertical = 4.dp
+                                        ),
                                         contentDescription = StringConstants.Composable
                                             .ContentDescription.DashboardSearchButton,
                                         tint = LocalContentColor.current

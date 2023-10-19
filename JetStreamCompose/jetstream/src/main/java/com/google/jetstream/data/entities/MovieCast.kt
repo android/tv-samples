@@ -16,9 +16,21 @@
 
 package com.google.jetstream.data.entities
 
+import com.google.jetstream.data.models.MovieCastResponseItem
+
 data class MovieCast(
     val id: String,
     val characterName: String,
     val realName: String,
     val avatarUrl: String
-)
+) {
+    companion object {
+        fun from(response: MovieCastResponseItem): MovieCast =
+            MovieCast(
+                response.id,
+                response.characterName,
+                response.realName,
+                response.avatarUrl
+            )
+    }
+}

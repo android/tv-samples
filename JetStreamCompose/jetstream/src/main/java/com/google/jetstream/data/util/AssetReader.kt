@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.jetstream.data.util // ktlint-disable filename
+package com.google.jetstream.data.util
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

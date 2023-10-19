@@ -22,11 +22,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.repositories.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,13 +33,8 @@ class FavouriteScreenViewModel @Inject constructor(
     movieRepository: MovieRepository
 ) : ViewModel() {
 
-    private val selectedFilterListFlow: MutableSharedFlow<FilterList> = MutableSharedFlow()
 
-    private val selectedFilterList = selectedFilterListFlow.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        FilterList()
-    )
+    private val selectedFilterList = MutableStateFlow(FilterList())
 
     val uiState = combine(
         selectedFilterList,
@@ -58,9 +52,7 @@ class FavouriteScreenViewModel @Inject constructor(
     )
 
     fun updateSelectedFilterList(filterList: FilterList) {
-        viewModelScope.launch {
-            selectedFilterListFlow.emit(filterList)
-        }
+        selectedFilterList.value = filterList
     }
 
     companion object {
@@ -76,8 +68,9 @@ class FavouriteScreenViewModel @Inject constructor(
 }
 
 sealed interface FavouriteScreenUiState {
-    object Loading : FavouriteScreenUiState
-    data class Ready(val favouriteMovieList: MovieList, val selectedFilterList: FilterList)
+    data object Loading : FavouriteScreenUiState
+    data class Ready(val favouriteMovieList: MovieList, val selectedFilterList: FilterList) :
+        FavouriteScreenUiState
 
 }
 

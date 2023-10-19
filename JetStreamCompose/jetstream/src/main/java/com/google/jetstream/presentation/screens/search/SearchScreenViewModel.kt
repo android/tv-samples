@@ -53,6 +53,6 @@ class SearchScreenViewModel @Inject constructor(
 }
 
 sealed interface SearchState {
-    object Searching : SearchState
+    data object Searching : SearchState
     data class Done(val movieList: MovieList) : SearchState
 }

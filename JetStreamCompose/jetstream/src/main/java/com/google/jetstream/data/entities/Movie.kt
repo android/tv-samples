@@ -25,22 +25,26 @@ data class Movie(
     val description: String
 ) {
     companion object {
-        fun fromMoviesResponseItem(responseItem: MoviesResponseItem): Movie {
+        fun from(
+            responseItem: MoviesResponseItem,
+            thumbnailType: ThumbnailType = ThumbnailType.Standard
+        ): Movie {
+            val thumbnail = when (thumbnailType) {
+                ThumbnailType.Standard -> responseItem.image_2_3
+                ThumbnailType.Long -> responseItem.image_16_9
+            }
             return Movie(
                 responseItem.id,
-                responseItem.image_2_3,
+                thumbnail,
                 responseItem.title,
                 responseItem.fullTitle
             )
         }
 
-        fun fromMovieResponseItemWithLongerThumbnail(responseItem: MoviesResponseItem): Movie {
-            return Movie(
-                responseItem.id,
-                responseItem.image_16_9,
-                responseItem.title,
-                responseItem.fullTitle
-            )
-        }
     }
+}
+
+enum class ThumbnailType {
+    Standard,
+    Long
 }
