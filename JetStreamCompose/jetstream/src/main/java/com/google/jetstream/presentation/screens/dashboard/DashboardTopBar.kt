@@ -137,10 +137,7 @@ fun DashboardTopBar(
                                 if (screen.tabIcon != null) {
                                     Icon(
                                         screen.tabIcon,
-                                        modifier = Modifier.padding(
-                                            horizontal = 4.dp,
-                                            vertical = 4.dp
-                                        ),
+                                        modifier = Modifier.padding(4.dp),
                                         contentDescription = StringConstants.Composable
                                             .ContentDescription.DashboardSearchButton,
                                         tint = LocalContentColor.current

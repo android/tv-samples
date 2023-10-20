@@ -16,158 +16,58 @@
 
 package com.google.jetstream.data.repositories
 
-import com.google.jetstream.data.entities.Movie
-import com.google.jetstream.data.entities.MovieCast
-import com.google.jetstream.data.entities.MovieCategory
 import com.google.jetstream.data.entities.MovieCategoryDetails
 import com.google.jetstream.data.entities.MovieCategoryList
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.entities.MovieReviewsAndRatings
 import com.google.jetstream.data.entities.ThumbnailType
-import com.google.jetstream.data.models.MovieCastResponseItem
-import com.google.jetstream.data.models.MovieCategoriesResponseItem
-import com.google.jetstream.data.models.MoviesResponseItem
-import com.google.jetstream.data.util.AssetsReader
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultCount
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultRating
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.FreshTomatoes
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerName
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
-    private val assetsReader: AssetsReader
+    private val movieDataSource: MovieDataSource,
+    private val tvDataSource: TvDataSource,
+    private val movieCastDataSource: MovieCastDataSource,
+    private val movieCategoryDataSource: MovieCategoryDataSource,
 ) : MovieRepository {
 
-    private val movieCastDataSource = CachedDataSource {
-        readMovieCastData(assetsReader, StringConstants.Assets.MovieCast).map {
-            MovieCast.from(it)
-        }
-    }
-
-    private val movieCategoryDataSource = CachedDataSource {
-        readMovieCategoryData(assetsReader, StringConstants.Assets.MovieCategories).map {
-            MovieCategory.from(it)
-        }
-    }
-
-    private var movieDataSource: MovieDataSource
-    private var movieWithLongThumbnailDataSource: MovieDataSource
-    private var featuredMovieDataSource: MovieDataSource
-    private var trendingMovieDataSource: MovieDataSource
-    private var top10MovieDataSource: MovieDataSource
-    private var nowPlayingMovieDataSource: MovieDataSource
-    private var popularFilmThisWeekDataSource: MovieDataSource
-    private var tvShowDataSource: MovieDataSource
-    private var bingeWatchDramaDatasource: MovieDataSource
-    private var favoriteMovieDataSource: MovieDataSource
-
-    init {
-        val top250MovieDataReader = CachedDataSource {
-            readMovieData(assetsReader, StringConstants.Assets.Top250Movies)
-        }
-        val mostPopularMovieDataSource = CachedDataSource {
-            readMovieData(assetsReader, StringConstants.Assets.MostPopularMovies).map {
-                Movie.from(it)
-            }
-        }
-
-        val mostPopularTvShowsDataSource = CachedDataSource {
-            readMovieData(assetsReader, StringConstants.Assets.MostPopularTVShows)
-        }
-
-        movieDataSource = CachedDataSource {
-            top250MovieDataReader.read().map {
-                Movie.from(it)
-            }
-        }
-
-        movieWithLongThumbnailDataSource = CachedDataSource {
-            top250MovieDataReader.read().map {
-                Movie.from(it, ThumbnailType.Long)
-            }
-        }
-
-        featuredMovieDataSource = MovieDataSource {
-            movieWithLongThumbnailDataSource.read().filterIndexed { index, _ ->
-                listOf(1, 3, 5, 7, 9).contains(index)
-            }
-        }
-
-        trendingMovieDataSource = MovieDataSource {
-            mostPopularMovieDataSource.read().subList(0, 10)
-        }
-
-        top10MovieDataSource = MovieDataSource {
-            movieWithLongThumbnailDataSource.read().subList(20, 30)
-        }
-
-        nowPlayingMovieDataSource = MovieDataSource {
-            readMovieData(assetsReader, StringConstants.Assets.InTheaters).subList(0, 10).map {
-                Movie.from(it)
-            }
-        }
-
-        popularFilmThisWeekDataSource = MovieDataSource {
-            mostPopularMovieDataSource.read().subList(11, 20)
-        }
-
-        tvShowDataSource = MovieDataSource {
-            mostPopularTvShowsDataSource.read().subList(0, 5).map {
-                Movie.from(it, ThumbnailType.Long)
-            }
-        }
-
-        bingeWatchDramaDatasource = MovieDataSource {
-            mostPopularTvShowsDataSource.read().subList(6, 15).map {
-                Movie.from(it)
-            }
-        }
-
-        favoriteMovieDataSource = MovieDataSource {
-            movieDataSource.read().subList(0, 28)
-        }
-
-    }
-
     override fun getFeaturedMovies() = flow {
-        val list = MovieList(featuredMovieDataSource.read())
+        val list = MovieList(movieDataSource.getFeaturedMovieList())
         emit(list)
     }
 
     override fun getTrendingMovies(): Flow<MovieList> = flow {
-        val list = MovieList(trendingMovieDataSource.read())
+        val list = MovieList(movieDataSource.getTrendingMovieList())
         emit(list)
     }
 
     override fun getTop10Movies(): Flow<MovieList> = flow {
-        val list = MovieList(top10MovieDataSource.read())
+        val list = MovieList(movieDataSource.getTop10MovieList())
         emit(list)
     }
 
     override fun getNowPlayingMovies(): Flow<MovieList> = flow {
-        val list = MovieList(nowPlayingMovieDataSource.read())
+        val list = MovieList(movieDataSource.getNowPlayingMovieList())
         emit(list)
     }
 
     override fun getMovieCategories() = flow {
-        val list = MovieCategoryList(movieCategoryDataSource.read())
+        val list = MovieCategoryList(movieCategoryDataSource.getMovieCategoryList())
         emit(list)
     }
 
     override suspend fun getMovieCategoryDetails(categoryId: String): MovieCategoryDetails {
-        val categoryList = movieCategoryDataSource.read()
+        val categoryList = movieCategoryDataSource.getMovieCategoryList()
         val category = categoryList.find { categoryId == it.id } ?: categoryList.first()
 
-        val movieList = movieDataSource.read().shuffled().subList(0, 20)
+        val movieList = movieDataSource.getMovieList().shuffled().subList(0, 20)
 
         return MovieCategoryDetails(
             id = category.id,
@@ -177,10 +77,10 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieDetails(movieId: String): MovieDetails {
-        val movieList = movieDataSource.read()
+        val movieList = movieDataSource.getMovieList()
         val movie = movieList.find { it.id == movieId } ?: movieList.first()
         val similarMovieList = movieList.shuffled().subList(0, 2)
-        val castList = movieCastDataSource.read()
+        val castList = movieCastDataSource.getMovieCastList()
 
         return MovieDetails(
             id = movie.id,
@@ -218,83 +118,41 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchMovies(query: String): MovieList {
-        val filtered = movieDataSource.read().filter {
+        val filtered = movieDataSource.getMovieList().filter {
             it.name.contains(other = query, ignoreCase = true)
         }
         return MovieList(filtered)
     }
 
     override fun getMoviesWithLongThumbnail() = flow {
-        val list = movieWithLongThumbnailDataSource.read()
+        val list = movieDataSource.getMovieList(ThumbnailType.Long)
         emit(MovieList(list))
     }
 
     override fun getMovies(): Flow<MovieList> = flow {
-        val list = movieDataSource.read()
+        val list = movieDataSource.getMovieList()
         emit(MovieList(list))
     }
 
     override fun getPopularFilmsThisWeek(): Flow<MovieList> = flow {
-        val list = popularFilmThisWeekDataSource.read()
+        val list = movieDataSource.getPopularFilmThisWeek()
         emit(MovieList(list))
     }
 
     override fun getTVShows(): Flow<MovieList> = flow {
-        val list = tvShowDataSource.read()
+        val list = tvDataSource.getTvShowList()
         emit(MovieList(list))
     }
 
     override fun getBingeWatchDramas(): Flow<MovieList> = flow {
-        val list = bingeWatchDramaDatasource.read()
+        val list = tvDataSource.getBingeWatchDramaList()
         emit(MovieList(list))
     }
 
     override fun getFavouriteMovies(): Flow<MovieList> = flow {
-        val list = favoriteMovieDataSource.read()
+        val list = movieDataSource.getFavoriteMovieList()
         emit(MovieList(list))
     }
 
 }
 
-private suspend fun readMovieData(
-    assetsReader: AssetsReader,
-    resourceId: String
-): List<MoviesResponseItem> = withContext(Dispatchers.IO) {
-    assetsReader.getJsonDataFromAsset(resourceId).map {
-        Json.decodeFromString<List<MoviesResponseItem>>(it)
-    }.getOrDefault(emptyList())
-}
-
-private suspend fun readMovieCastData(
-    assetsReader: AssetsReader,
-    resourceId: String
-): List<MovieCastResponseItem> = withContext(Dispatchers.IO) {
-    assetsReader.getJsonDataFromAsset(resourceId).map {
-        Json.decodeFromString<List<MovieCastResponseItem>>(it)
-    }.getOrDefault(emptyList())
-}
-
-private suspend fun readMovieCategoryData(
-    assetsReader: AssetsReader,
-    resourceId: String
-): List<MovieCategoriesResponseItem> = withContext(Dispatchers.IO) {
-    assetsReader.getJsonDataFromAsset(resourceId).map {
-        Json.decodeFromString<List<MovieCategoriesResponseItem>>(it)
-    }.getOrDefault(emptyList())
-}
-
-private class CachedDataSource<T>(private val reader: suspend () -> List<T>) {
-    private val mutex = Mutex()
-    private lateinit var cache: List<T>
-
-    suspend fun read(): List<T> {
-        mutex.withLock {
-            if (!::cache.isInitialized) {
-                cache = reader()
-            }
-        }
-        return cache
-    }
-}
-
-private typealias MovieDataSource = CachedDataSource<Movie>

@@ -40,7 +40,7 @@ import com.google.jetstream.data.util.StringConstants
 fun AboutSection() {
     val context = LocalContext.current
     val versionNumber = remember(context) {
-        getVersionNumber(context)
+        context.getVersionNumber()
     }
 
     with(StringConstants.Composable.Placeholders) {
@@ -80,8 +80,8 @@ fun AboutSection() {
     }
 }
 
-private fun getVersionNumber(context: Context): String {
-    val packageName = context.packageName
-    val metaData = context.packageManager.getPackageInfo(packageName,PackageManager.GET_META_DATA)
+private fun Context.getVersionNumber(): String {
+    val packageName = packageName
+    val metaData = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
     return metaData.versionName
 }

@@ -16,14 +16,17 @@
 
 package com.google.jetstream.presentation.screens.favourites
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.jetstream.R
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.repositories.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -36,13 +39,13 @@ class FavouriteScreenViewModel @Inject constructor(
 
     private val selectedFilterList = MutableStateFlow(FilterList())
 
-    val uiState = combine(
+    val uiState: StateFlow<FavouriteScreenUiState> = combine(
         selectedFilterList,
         movieRepository.getFavouriteMovies()
     ) { filterList, movieList ->
-        val condition = filterList.toFilterCondition()
+        val idList = filterList.toIdList()
         val filtered = movieList.filterIndexed { index, _ ->
-            condition.idList.contains(index)
+            idList.contains(index)
         }
         FavouriteScreenUiState.Ready(MovieList(filtered), filterList)
     }.stateIn(
@@ -76,32 +79,23 @@ sealed interface FavouriteScreenUiState {
 
 @Immutable
 data class FilterList(val items: List<FilterCondition> = emptyList()) {
-    fun toFilterCondition(): FilterCondition {
+    fun toIdList(): List<Int> {
         if (items.isEmpty()) {
-            return FilterCondition.None
+            return FilterCondition.None.idList
         }
-        val list: List<Int> = items.asSequence().map {
+        return items.asSequence().map {
             it.idList
         }.fold(emptyList()) { acc, ints ->
             acc + ints
         }
-        return FilterCondition(list)
     }
 }
 
 @Immutable
-data class FilterCondition(val idList: List<Int>) {
-
-    companion object {
-        val None = FilterCondition((0..28).toList())
-
-        val Movies = FilterCondition((0..9).toList())
-
-        val TvShows = FilterCondition((10..17).toList())
-
-        val AddedLastWeek = FilterCondition((18..23).toList())
-
-        val AvailableIn4K = FilterCondition((24..28).toList())
-    }
-
+enum class FilterCondition(val idList: List<Int>, @StringRes val labelId: Int) {
+    None((0..28).toList(), R.string.favorites_unknown),
+    Movies((0..9).toList(), R.string.favorites_movies),
+    TvShows((10..17).toList(), R.string.favorites_tv_shows),
+    AddedLastWeek((18..23).toList(), R.string.favorites_added_last_week),
+    AvailableIn4K((24..28).toList(), R.string.favorites_available_in_4k),
 }

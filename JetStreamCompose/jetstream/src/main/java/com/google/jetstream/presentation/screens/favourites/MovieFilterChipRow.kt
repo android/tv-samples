@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.jetstream.R
 import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
 
 @Composable
@@ -44,7 +43,7 @@ fun MovieFilterChipRow(
         filterList.items.forEachIndexed { index, filterCondition ->
             val isChecked = selectedFilterList.items.contains(filterCondition)
             MovieFilterChip(
-                label = stringResource(id = filterLabelId(filterCondition)),
+                label = stringResource(id = filterCondition.labelId),
                 isChecked = isChecked,
                 onCheckedChange = {
                     val updated = if (it) {
@@ -61,15 +60,5 @@ fun MovieFilterChipRow(
                 }
             )
         }
-    }
-}
-
-fun filterLabelId(filterCondition: FilterCondition): Int {
-    return when (filterCondition) {
-        FilterCondition.Movies -> R.string.favorites_movies
-        FilterCondition.TvShows -> R.string.favorites_tv_shows
-        FilterCondition.AddedLastWeek -> R.string.favorites_added_last_week
-        FilterCondition.AvailableIn4K -> R.string.favorites_available_in_4k
-        else -> R.string.favorites_unknown
     }
 }

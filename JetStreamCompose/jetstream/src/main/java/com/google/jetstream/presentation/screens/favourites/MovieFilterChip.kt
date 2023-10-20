@@ -69,7 +69,7 @@ fun MovieFilterChip(
                 else
                     Modifier
             ),
-        onClick = {onCheckedChange(!isChecked) },
+        onClick = { onCheckedChange(!isChecked) },
         selected = isChecked,
         leadingIcon = {
             AnimatedVisibility(visible = isChecked) {
