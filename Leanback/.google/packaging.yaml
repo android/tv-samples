@@ -37,7 +37,7 @@ level:        INTERMEDIATE
 icon: androidtv-Leanback/app/src/main/res/drawable/app_icon_quantum.png
 
 apiRefs:
-    - androidx.leanback:leanback
-    - androidx.recyclerview:recyclerview
+    - android:androidx.leanback.app
+    - android:androidx.recyclerview.widget.RecyclerView
 
 license: apache2

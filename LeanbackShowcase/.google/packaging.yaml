@@ -37,9 +37,9 @@ level:        INTERMEDIATE
 icon: androidtv-Leanback/app/src/main/res/drawable/app_icon_your_company.png
 
 apiRefs:
-    - androidx.leanback:leanback
-    - androidx.leanback:leanback-preference
-    - com.google.android.exoplayer:exoplayer
-    - androidx.tvprovider:tvprovider
+    - android:androidx.leanback.app
+    - android:androidx.leanback.preference.LeanbackPreferenceFragment
+    - android:androidx.tvprovider.media.tv
+    - github:google/exoplayer
 
 license: apache2
