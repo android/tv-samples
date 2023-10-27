@@ -17,40 +17,24 @@
 package com.google.jetstream
 
 import android.app.Application
-import com.google.jetstream.data.repositories.MovieCastDataSource
-import com.google.jetstream.data.repositories.MovieCategoryDataSource
-import com.google.jetstream.data.repositories.MovieDataSource
 import com.google.jetstream.data.repositories.MovieRepository
 import com.google.jetstream.data.repositories.MovieRepositoryImpl
-import com.google.jetstream.data.repositories.TvDataSource
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @HiltAndroidApp
 class JetStreamApplication : Application()
 
 @InstallIn(SingletonComponent::class)
 @Module
-object MovieRepositoryModule {
+abstract class MovieRepositoryModule {
 
-    @Singleton
-    @Provides
-    fun provideMovieRepository(
-        movieDataSource: MovieDataSource,
-        tvDataSource: TvDataSource,
-        movieCastDataSource: MovieCastDataSource,
-        movieCategoryDataSource: MovieCategoryDataSource,
-    ): MovieRepository {
-        return MovieRepositoryImpl(
-            movieDataSource,
-            tvDataSource,
-            movieCastDataSource,
-            movieCategoryDataSource
-        )
-    }
+    @Binds
+    abstract fun bindMovieRepository(
+        movieRepositoryImpl: MovieRepositoryImpl
+    ): MovieRepository
 
 }

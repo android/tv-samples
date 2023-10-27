@@ -30,7 +30,9 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerNam
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MovieRepositoryImpl @Inject constructor(
     private val movieDataSource: MovieDataSource,
     private val tvDataSource: TvDataSource,
