@@ -46,8 +46,8 @@ class HomeScreeViewModel @Inject constructor(movieRepository: MovieRepository): 
 }
 
 sealed interface HomeScreenUiState {
-    object Loading: HomeScreenUiState
-    object Error: HomeScreenUiState
+    data object Loading: HomeScreenUiState
+    data object Error: HomeScreenUiState
     data class Ready(
         val featuredMovieList: MovieList,
         val trendingMovieList: MovieList,

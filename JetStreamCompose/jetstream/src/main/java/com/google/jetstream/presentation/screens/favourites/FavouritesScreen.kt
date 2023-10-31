@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +54,10 @@ fun FavouritesScreen(
                 onMovieClick = onMovieClick,
                 onScroll = onScroll,
                 isTopBarVisible = isTopBarVisible,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                filterList = FavouriteScreenViewModel.filterList,
+                selectedFilterList = s.selectedFilterList,
+                onSelectedFilterListUpdated = favouriteScreenViewModel::updateSelectedFilterList
             )
         }
     }
@@ -70,8 +72,11 @@ private fun Loading(modifier: Modifier = Modifier) {
 @Composable
 private fun Catalog(
     favouriteMovieList: MovieList,
+    filterList: FilterList,
+    selectedFilterList: FilterList,
     onMovieClick: (movieId: String) -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
+    onSelectedFilterListUpdated: (FilterList) -> Unit,
     isTopBarVisible: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -99,27 +104,17 @@ private fun Catalog(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(horizontal = childPadding.start)
     ) {
-        Column {
-            val movieFilterRange = remember { (0..9).toList() }
-            val tvShowsFilterRange = remember { (10..17).toList() }
-            val addedLastWeekFilterRange = remember { (18..23).toList() }
-            val availableIn4KFilterRange = remember { (24..28).toList() }
-            val movieListRange = remember { mutableStateListOf<Int>() }
-
             MovieFilterChipRow(
+                filterList = filterList,
+                selectedFilterList = selectedFilterList,
                 modifier = Modifier.padding(top = chipRowTopPadding),
-                movieListRange = movieListRange,
-                movieFilterRange = movieFilterRange,
-                tvShowsFilterRange = tvShowsFilterRange,
-                addedLastWeekFilterRange = addedLastWeekFilterRange,
-                availableIn4KFilterRange = availableIn4KFilterRange
+                onSelectedFilterListUpdated = onSelectedFilterListUpdated
             )
             FilteredMoviesGrid(
                 state = filteredMoviesGridState,
-                movies = favouriteMovieList,
-                movieListRange = movieListRange,
+                movieList = favouriteMovieList,
                 onMovieClick = onMovieClick
             )
         }
-    }
+
 }

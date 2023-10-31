@@ -16,39 +16,9 @@
 
 package com.google.jetstream.tvmaterial
 
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Shapes
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-fun Shapes.fromToken(value: ShapeKeyTokens): Shape {
-    return when (value) {
-        ShapeKeyTokens.CornerExtraLarge -> extraLarge
-        ShapeKeyTokens.CornerExtraLargeTop -> extraLarge.top()
-        ShapeKeyTokens.CornerExtraSmall -> extraSmall
-        ShapeKeyTokens.CornerExtraSmallTop -> extraSmall.top()
-        ShapeKeyTokens.CornerFull -> CircleShape
-        ShapeKeyTokens.CornerLarge -> large
-        ShapeKeyTokens.CornerLargeEnd -> large.end()
-        ShapeKeyTokens.CornerLargeTop -> large.top()
-        ShapeKeyTokens.CornerMedium -> medium
-        ShapeKeyTokens.CornerNone -> RectangleShape
-        ShapeKeyTokens.CornerSmall -> small
-    }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-fun ShapeKeyTokens.toShape(): Shape {
-    return MaterialTheme.shapes.fromToken(this)
-}
 
 /** Helper function for component shape tokens. Used to grab the top values of a shape parameter. */
 internal fun CornerBasedShape.top(): CornerBasedShape {

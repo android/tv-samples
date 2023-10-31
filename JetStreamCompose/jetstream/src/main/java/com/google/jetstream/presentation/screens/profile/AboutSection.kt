@@ -16,6 +16,8 @@
 
 package com.google.jetstream.presentation.screens.profile
 
+import android.content.Context
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,18 +25,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
-import com.google.jetstream.BuildConfig
 import com.google.jetstream.data.util.StringConstants
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun AboutSection() {
+    val context = LocalContext.current
+    val versionNumber = remember(context) {
+        context.getVersionNumber()
+    }
+
     with(StringConstants.Composable.Placeholders) {
         Column(modifier = Modifier.padding(horizontal = 72.dp)) {
             Text(
@@ -65,9 +73,15 @@ fun AboutSection() {
             )
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = BuildConfig.VERSION_NAME,
+                text = versionNumber,
                 style = MaterialTheme.typography.labelLarge
             )
         }
     }
+}
+
+private fun Context.getVersionNumber(): String {
+    val packageName = packageName
+    val metaData = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
+    return metaData.versionName
 }

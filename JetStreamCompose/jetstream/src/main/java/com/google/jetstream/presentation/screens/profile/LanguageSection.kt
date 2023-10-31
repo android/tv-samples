@@ -17,9 +17,10 @@
 package com.google.jetstream.presentation.screens.profile
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
@@ -56,7 +57,7 @@ fun LanguageSection(
                     trailingContent = if (selectedIndex == index) {
                         {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_check),
+                                Icons.Default.Check,
                                 contentDescription = stringResource(
                                     id = R.string.language_section_listItem_icon_content_description,
                                     LanguageSectionItems[index]

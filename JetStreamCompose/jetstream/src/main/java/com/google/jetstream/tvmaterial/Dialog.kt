@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -60,7 +59,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.dismiss
@@ -331,122 +329,6 @@ fun FullScreenDialog(
                     )
                 ) {
                     ProvideTextStyle(value = FullScreenDialogDefaults.buttonsTextStyle) {
-                        confirmButton()
-                        dismissButton?.invoke()
-                    }
-                }
-            }
-        }
-    }
-}
-
-/**
- * TwoColumnDialog(s) are the preferred choice for displaying larger text since it has more room
- * to accommodate larger text. It is divided into two columns, the content block is on the left
- * that consists a title and a description, and the action buttons are on the right.
- *
- * @param onDismissRequest called when the user tries to dismiss the Dialog by pressing the back
- * button. This is not called when the dismiss button is clicked.
- * @param modifier the [Modifier] to be applied to this dialog
- * @param dismissButton button which is meant to dismiss the dialog. The dialog does not set up any
- * events for this button so they need to be set up by the caller.
- * @param confirmButton button which is meant to confirm a proposed action, thus resolving what
- * triggered the dialog. The dialog does not set up any events for this button so they need to be
- * set up by the caller.
- * @param title title which should specify the purpose of the dialog. The title is not mandatory,
- * because there may be sufficient information inside the [text].
- * @param text text which presents the details regarding the dialog's purpose.
- * @param backgroundColor [Color] to be applied behind the content on the whole dialog
- * @param titleContentColor the content color used for the title.
- * @param textContentColor content color used for [text].
- * @param properties typically platform specific properties to further configure the dialog.
- */
-@ExperimentalFoundationApi
-@ExperimentalComposeUiApi
-@ExperimentalTvMaterial3Api
-@Composable
-fun TwoColumnDialog(
-    showDialog: Boolean,
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-    dismissButton: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    text: @Composable (() -> Unit)? = null,
-    backgroundColor: Color = TwoColumnDialogDefaults.BackgroundColor,
-    titleContentColor: Color = TwoColumnDialogDefaults.TitleContentColor,
-    textContentColor: Color = TwoColumnDialogDefaults.DescriptionContentColor,
-    properties: DialogProperties = DialogProperties(),
-    confirmButton: @Composable () -> Unit
-) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-
-    Dialog(
-        showDialog = showDialog,
-        onDismissRequest = onDismissRequest,
-        properties = properties
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .drawBehind { drawRect(backgroundColor) }
-                .dialogFocusable(),
-            contentAlignment = Alignment.Center
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(TwoColumnDialogDefaults.DialogVerticalPadding)
-                    .then(modifier),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.Top
-            ) {
-                Column(
-                    modifier = Modifier
-                        .width(screenWidth.times(TwoColumnDialogDefaults.DetailsColumnWidthFactor))
-                ) {
-                    CompositionLocalProvider(
-                        LocalContentColor provides titleContentColor,
-                        content = {
-                            title?.let { nnTitle ->
-                                ProvideTextStyle(
-                                    value = TwoColumnDialogDefaults.TitleTextStyle,
-                                    content = nnTitle
-                                )
-                            }
-                        }
-                    )
-
-                    CompositionLocalProvider(
-                        LocalContentColor provides textContentColor,
-                        content = {
-                            text?.let { nnDescription ->
-                                Spacer(
-                                    modifier = Modifier
-                                        .padding(TwoColumnDialogDefaults.DescriptionPadding)
-                                )
-                                ProvideTextStyle(
-                                    value = TwoColumnDialogDefaults.DescriptionTextStyle,
-                                    content = nnDescription
-                                )
-                            }
-                        }
-                    )
-                }
-
-                Spacer(
-                    modifier = Modifier
-                        .width(screenWidth.times(TwoColumnDialogDefaults.SpacerWidthFactor))
-                )
-
-                Column(
-                    modifier = Modifier
-                        .width(screenWidth.times(TwoColumnDialogDefaults.ButtonColumnWidthFactor)),
-                    verticalArrangement = Arrangement.spacedBy(
-                        TwoColumnDialogDefaults.ButtonSpacing
-                    )
-                ) {
-                    ProvideTextStyle(
-                        value = TwoColumnDialogDefaults.ButtonsTextStyle
-                    ) {
                         confirmButton()
                         dismissButton?.invoke()
                     }
@@ -798,48 +680,6 @@ object FullScreenDialogDefaults {
         )
 }
 
-@ExperimentalTvMaterial3Api
-object TwoColumnDialogDefaults {
-    internal val ButtonSpacing = 16.dp
-    internal val DescriptionPadding = PaddingValues(top = 20.dp)
-    internal const val SpacerWidthFactor = 0.1f
-    internal const val DetailsColumnWidthFactor = 0.35f
-    internal const val ButtonColumnWidthFactor = 0.3f
-    private const val DescriptionColorOpacity = 0.8f
-    internal val DialogVerticalPadding = PaddingValues(top = 32.dp, bottom = 48.dp)
-
-    /** The default background color for TwoColumnDialog */
-    val BackgroundColor: Color
-        @ReadOnlyComposable
-        @Composable get() = MaterialTheme.colorScheme.background
-
-    /** The default title color for TwoColumnDialog */
-    val TitleContentColor: Color
-        @ReadOnlyComposable
-        @Composable get() = MaterialTheme.colorScheme.onSurface
-
-    /** The default title text style for TwoColumnDialog */
-    val TitleTextStyle
-        @ReadOnlyComposable
-        @Composable get() = MaterialTheme.typography.headlineMedium
-
-    /** The default buttons text style for TwoColumnDialog */
-    val ButtonsTextStyle
-        @ReadOnlyComposable
-        @Composable get() = MaterialTheme.typography.titleMedium
-
-    /** The default description text color for TwoColumnDialog */
-    val DescriptionContentColor: Color
-        @ReadOnlyComposable
-        @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
-
-    /** The default description text style for TwoColumnDialog */
-    val DescriptionTextStyle
-        @ReadOnlyComposable
-        @Composable get() = MaterialTheme.typography.bodyLarge
-            .copy(color = LocalContentColor.current.copy(alpha = DescriptionColorOpacity))
-}
-
 @Composable
 private fun animateDialogAlpha(
     alphaTransition: Transition<AnimationStage>,
@@ -910,8 +750,6 @@ private const val ENTER_DELAY = 250
 private const val EXIT_DELAY = 150
 
 object MotionTokens {
-    val StandardEasing = CubicBezierEasing(0.2f, 0.1f, 0f, 1f)
-    val BrowseEasing = CubicBezierEasing(0.18f, 1f, 0.22f, 1f)
     val EnterEasing = CubicBezierEasing(0.12f, 1f, 0.4f, 1f)
     val ExitEasing = CubicBezierEasing(0.4f, 1f, 0.12f, 1f)
 }
@@ -925,6 +763,7 @@ private object Elevation {
     val Level5 = 12.0.dp
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 private fun ColorScheme.applyTonalElevation(backgroundColor: Color, elevation: Dp): Color {
     return if (backgroundColor == surface) {
         surfaceColorAtElevation(elevation)

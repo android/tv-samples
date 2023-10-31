@@ -16,15 +16,16 @@
 
 package com.google.jetstream.presentation.screens
 
-import androidx.annotation.DrawableRes
-import com.google.jetstream.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.jetstream.presentation.screens.categories.CategoryMovieListScreen
 import com.google.jetstream.presentation.screens.movies.MovieDetailsScreen
 
 enum class Screens(
     private val args: List<String>? = null,
     val isTabItem: Boolean = false,
-    @DrawableRes val tabIcon: Int? = null,
+    val tabIcon: ImageVector? = null
 ) {
     Profile,
     Home(isTabItem = true),
@@ -32,7 +33,7 @@ enum class Screens(
     Movies(isTabItem = true),
     Shows(isTabItem = true),
     Favourites(isTabItem = true),
-    Search(isTabItem = true, tabIcon = R.drawable.ic_search),
+    Search(isTabItem = true, tabIcon = Icons.Default.Search),
     CategoryMovieList(listOf(CategoryMovieListScreen.CategoryIdBundleKey)),
     MovieDetails(listOf(MovieDetailsScreen.MovieIdBundleKey)),
     Dashboard,

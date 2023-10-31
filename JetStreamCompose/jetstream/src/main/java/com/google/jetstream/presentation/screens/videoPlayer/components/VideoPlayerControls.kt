@@ -23,6 +23,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesomeMotion
+import androidx.compose.material.icons.filled.ClosedCaption
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -35,7 +41,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
 
 @Composable
@@ -138,7 +143,7 @@ fun VideoPlayerControls(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 VideoPlayerControlsIcon(
-                    icon = R.drawable.ic_auto_awesome_motion,
+                    icon = Icons.Default.AutoAwesomeMotion,
                     state = state,
                     isPlaying = isPlaying,
                     contentDescription = StringConstants
@@ -147,7 +152,7 @@ fun VideoPlayerControls(
                 )
                 VideoPlayerControlsIcon(
                     modifier = Modifier.padding(start = 12.dp),
-                    icon = R.drawable.ic_closed_caption,
+                    icon = Icons.Default.ClosedCaption,
                     state = state,
                     isPlaying = isPlaying,
                     contentDescription = StringConstants
@@ -156,7 +161,7 @@ fun VideoPlayerControls(
                 )
                 VideoPlayerControlsIcon(
                     modifier = Modifier.padding(start = 12.dp),
-                    icon = R.drawable.ic_settings,
+                    icon = Icons.Default.Settings,
                     state = state,
                     isPlaying = isPlaying,
                     contentDescription = StringConstants
@@ -169,7 +174,7 @@ fun VideoPlayerControls(
             ) {
                 VideoPlayerControlsIcon(
                     modifier = Modifier.focusRequester(focusRequester),
-                    icon = if (!isPlaying) R.drawable.ic_play_arrow else R.drawable.ic_pause,
+                    icon = if (!isPlaying) Icons.Default.PlayArrow else Icons.Default.Pause,
                     onClick = { onPlayPauseToggle(!isPlaying) },
                     state = state,
                     isPlaying = isPlaying,

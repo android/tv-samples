@@ -16,19 +16,25 @@
 
 package com.google.jetstream.presentation.screens.profile
 
-import androidx.annotation.DrawableRes
-import com.google.jetstream.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Subtitles
+import androidx.compose.material.icons.filled.Support
+import androidx.compose.material.icons.filled.Translate
+import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class ProfileScreens(
+    val icon: ImageVector,
     private val title: String? = null,
-    @DrawableRes val icon: Int
 ) {
-    Accounts(icon = R.drawable.ic_profile_accounts),
-    About(icon = R.drawable.ic_profile_about),
-    Subtitles(icon = R.drawable.ic_profile_subtitles),
-    Language(icon = R.drawable.ic_profile_preferred_language),
-    SearchHistory(title = "Search history", icon = R.drawable.ic_search),
-    HelpAndSupport(title = "Help and Support", icon = R.drawable.ic_profile_support);
+    Accounts(Icons.Default.Person),
+    About(Icons.Default.Info),
+    Subtitles(Icons.Default.Subtitles),
+    Language(Icons.Default.Translate),
+    SearchHistory(title = "Search history", icon = Icons.Default.Search),
+    HelpAndSupport(title = "Help and Support", icon = Icons.Default.Support);
 
     operator fun invoke() = name
 

@@ -48,7 +48,7 @@ import com.google.jetstream.presentation.theme.JetStreamCardShape
 fun MovieFilterChip(
     label: String,
     isChecked: Boolean,
-    onCheckedChange: () -> Unit,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -69,7 +69,7 @@ fun MovieFilterChip(
                 else
                     Modifier
             ),
-        onClick = onCheckedChange,
+        onClick = { onCheckedChange(!isChecked) },
         selected = isChecked,
         leadingIcon = {
             AnimatedVisibility(visible = isChecked) {
