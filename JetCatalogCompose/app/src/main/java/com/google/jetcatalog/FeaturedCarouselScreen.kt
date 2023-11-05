@@ -45,6 +45,8 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.Carousel
+import androidx.tv.material3.CarouselDefaults
+import androidx.tv.material3.CarouselState
 import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ClickableSurfaceScale
@@ -59,13 +61,24 @@ import androidx.tv.material3.Text
 fun FeaturedCarouselScreen() {
     Column(
         Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(40.dp)
+        verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
+        val carouselState = remember { CarouselState(0) }
         Carousel(
             itemCount = slides.size,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(420.dp),
+            carouselState = carouselState,
+            carouselIndicator = {
+                CarouselDefaults.IndicatorRow(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 56.dp, end = 58.dp),
+                    activeItemIndex = carouselState.activeItemIndex,
+                    itemCount = slides.size
+                )
+            },
         ) { index ->
             val slide = slides[index]
 
@@ -224,7 +237,9 @@ fun BottomCards(modifier: Modifier) {
                 modifier = Modifier.width(268.dp).aspectRatio(16f / 9),
                 shape = ClickableSurfaceDefaults.shape(shape = RoundedCornerShape(20.dp)),
                 scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
-                colors = ClickableSurfaceDefaults.colors(containerColor = Color.White.copy(0.1f)),
+                colors = ClickableSurfaceDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.onSurface.copy(0.1f)
+                ),
                 border = ClickableSurfaceDefaults.border(
                     focusedBorder = Border(
                         border = BorderStroke(
