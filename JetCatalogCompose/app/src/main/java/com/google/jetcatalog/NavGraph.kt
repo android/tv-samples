@@ -68,7 +68,7 @@ enum class NavGraph(
         routeName = "lists",
         composable = { appBar ->
             appBar()
-            WorkInProgressScreen()
+            ListsScreen()
         }
     ),
     ImmersiveCluster(
