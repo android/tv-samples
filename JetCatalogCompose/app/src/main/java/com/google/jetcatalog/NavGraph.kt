@@ -10,13 +10,11 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun NavigationGraph() {
-    val navHostController = rememberNavController()
-    CompositionLocalProvider(LocalNavController provides navHostController) {
-        NavHost(navController = navHostController, startDestination = NavGraph.Buttons.routeName) {
-            destinations.forEach { destination ->
-                composable(destination.routeName) {
-                    destination.composable()
-                }
+    val navHostController = LocalNavController.current
+    NavHost(navController = navHostController, startDestination = NavGraph.Home.routeName) {
+        destinations.forEach { destination ->
+            composable(destination.routeName) {
+                destination.composable()
             }
         }
     }

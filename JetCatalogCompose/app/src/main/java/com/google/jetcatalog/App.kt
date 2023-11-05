@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
@@ -34,7 +35,7 @@ fun App() {
         themeMode = themeMode,
         layoutDirection = layoutDirection,
         fontScale = fontScale,
-        ) {
+    ) {
         MaterialTheme(
             colorScheme = if (themeMode == Mode.Dark) darkColorScheme() else lightColorScheme()
         ) {
@@ -55,8 +56,13 @@ fun App() {
                         shape = RectangleShape
                     ) {
                         Column(Modifier.fillMaxSize()) {
+                            val navHostController = LocalNavController.current
+                            val entry by navHostController.currentBackStackEntryAsState()
+                            val routeValue = entry?.destination?.route
+
                             AppBar(
-                                title = stringResource(R.string.tv_compose),
+                                title = if (routeValue == NavGraph.Home.routeName) stringResource(R.string.tv_compose) else components.find { it.routeValue == routeValue }?.title
+                                    ?: "",
                                 onThemeColorModeClick = {
                                     isThemeSelectorExpanded = true
                                 },

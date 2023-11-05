@@ -3,6 +3,7 @@ package com.google.jetcatalog
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,16 +16,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
@@ -33,9 +36,9 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import androidx.tv.material3.surfaceColorAtElevation
 import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalTvMaterial3Api::class)
+@OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ExamplesScreenWithDottedBackground(
     actions: List<ExampleAction>
@@ -44,7 +47,7 @@ fun ExamplesScreenWithDottedBackground(
     val firstItemFr = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
-        delay(1.seconds)
+        delay(250.milliseconds)
         firstItemFr.requestFocus()
     }
 
@@ -58,20 +61,25 @@ fun ExamplesScreenWithDottedBackground(
             Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(0.25f)
+                .focusRestorer { firstItemFr }
+                .focusGroup(),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             actions.forEachIndexed { index, action ->
-                ListItem(
-                    selected = activeAction == action,
-                    onClick = { },
-                    modifier = Modifier
-                        .ifElse(index == 0, Modifier.focusRequester(firstItemFr))
-                        .onFocusChanged {
-                            if (it.isFocused) {
-                                activeAction = action
+                key("list-item-$index") {
+                    ListItem(
+                        selected = activeAction == action,
+                        onClick = { },
+                        modifier = Modifier
+                            .ifElse(index == 0, Modifier.focusRequester(firstItemFr))
+                            .onFocusChanged {
+                                if (it.isFocused) {
+                                    activeAction = action
+                                }
                             }
-                        }
-                ) {
-                    Text(text = action.title)
+                    ) {
+                        Text(text = action.title)
+                    }
                 }
             }
         }

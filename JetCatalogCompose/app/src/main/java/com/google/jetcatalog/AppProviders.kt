@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun AppProviders(
@@ -15,6 +16,7 @@ fun AppProviders(
     fontScale: Float,
     content: @Composable () -> Unit
 ) {
+    val navHostController = rememberNavController()
     CompositionLocalProvider(
         LocalThemeSeedColor provides seedColor,
         LocalMode provides themeMode,
@@ -22,7 +24,8 @@ fun AppProviders(
         LocalDensity provides Density(
             density = LocalDensity.current.density,
             fontScale = fontScale,
-        )
+        ),
+        LocalNavController provides navHostController
     ) {
         content()
     }
