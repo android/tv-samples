@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
@@ -27,13 +29,21 @@ import androidx.tv.material3.Text
 
 @Composable
 fun AppBar(
-    title: String,
     onThemeColorModeClick: () -> Unit,
-    onFontScaleClick: () -> Unit,
-    description: String? =
-        if (title == stringResource(id = R.string.tv_compose)) "Component Catalog" else null,
-    isMainIconMagnified: Boolean = description != null,
+    onFontScaleClick: () -> Unit
 ) {
+    val navHostController = LocalNavController.current
+    val entry by navHostController.currentBackStackEntryAsState()
+    val routeValue = entry?.destination?.route
+
+    val title = if (routeValue == NavGraph.Home.routeName)
+        stringResource(R.string.tv_compose)
+    else
+        components.find { it.routeValue == routeValue }?.title ?: ""
+    val description =
+        if (title == stringResource(id = R.string.tv_compose)) "Component Catalog" else null
+    val isMainIconMagnified = description != null
+
     Row(
         modifier = Modifier
             .fillMaxWidth()

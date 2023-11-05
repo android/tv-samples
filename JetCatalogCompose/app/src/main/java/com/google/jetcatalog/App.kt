@@ -56,13 +56,7 @@ fun App() {
                         shape = RectangleShape
                     ) {
                         Column(Modifier.fillMaxSize()) {
-                            val navHostController = LocalNavController.current
-                            val entry by navHostController.currentBackStackEntryAsState()
-                            val routeValue = entry?.destination?.route
-
-                            AppBar(
-                                title = if (routeValue == NavGraph.Home.routeName) stringResource(R.string.tv_compose) else components.find { it.routeValue == routeValue }?.title
-                                    ?: "",
+                            NavigationGraph(
                                 onThemeColorModeClick = {
                                     isThemeSelectorExpanded = true
                                 },
@@ -70,8 +64,6 @@ fun App() {
                                     isFontScaleSelectorExpanded = true
                                 }
                             )
-
-                            NavigationGraph()
                         }
                     }
                 }

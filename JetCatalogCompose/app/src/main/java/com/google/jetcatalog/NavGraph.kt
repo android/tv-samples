@@ -1,5 +1,6 @@
 package com.google.jetcatalog
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -9,31 +10,109 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun NavigationGraph() {
+fun NavigationGraph(
+    onThemeColorModeClick: () -> Unit,
+    onFontScaleClick: () -> Unit
+) {
     val navHostController = LocalNavController.current
     NavHost(navController = navHostController, startDestination = NavGraph.Home.routeName) {
         destinations.forEach { destination ->
             composable(destination.routeName) {
-                destination.composable()
+                Column {
+                    destination.composable {
+                        AppBar(
+                            onThemeColorModeClick = onThemeColorModeClick,
+                            onFontScaleClick = onFontScaleClick
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-enum class NavGraph(val routeName: String, val composable: @Composable () -> Unit) {
-    Home("home", { ComponentsGrid() }),
+enum class NavGraph(
+    val routeName: String,
+    val composable: @Composable (appBar: @Composable () -> Unit) -> Unit
+) {
+    Home(
+        routeName = "home",
+        composable = { appBar ->
+            appBar()
+            ComponentsGrid()
+        }
+    ),
 
-    Buttons("buttons", { ButtonsScreen() }),
-    Cards("cards", { WorkInProgressScreen() }),
-    Chips("chips", { WorkInProgressScreen() }),
-    Lists("lists", { WorkInProgressScreen() }),
-    ImmersiveCluster("immersive-cluster", { WorkInProgressScreen() }),
-    FeaturedCarousel("featured-carousel", { WorkInProgressScreen() }),
-    NavigationDrawer("nav-drawer", { WorkInProgressScreen() }),
-    TabRow("tab-row", { WorkInProgressScreen() }),
-    ModalDrawer("modal-drawer", { WorkInProgressScreen() }),
-    TextFields("text-fields", { WorkInProgressScreen() }),
-    VideoPlayer("video-player", { WorkInProgressScreen() }),
+    Buttons(
+        routeName = "buttons",
+        composable = { appBar ->
+            appBar()
+            ButtonsScreen()
+        }
+    ),
+    Cards(
+        routeName = "cards",
+        composable = { appBar ->
+            appBar()
+            CardsScreen()
+        }
+    ),
+    Chips(
+        routeName = "chips",
+        composable = { appBar ->
+            appBar()
+            WorkInProgressScreen()
+        }
+    ),
+    Lists(
+        routeName = "lists",
+        composable = { appBar ->
+            appBar()
+            WorkInProgressScreen()
+        }
+    ),
+    ImmersiveCluster(
+        routeName = "immersive-cluster",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
+    FeaturedCarousel(
+        routeName = "featured-carousel",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
+    NavigationDrawer(
+        routeName = "nav-drawer",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
+    TabRow(
+        routeName = "tab-row",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
+    ModalDrawer(
+        routeName = "modal-drawer",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
+    TextFields(
+        routeName = "text-fields",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
+    VideoPlayer(
+        routeName = "video-player",
+        composable = {
+            WorkInProgressScreen()
+        }
+    ),
 }
 
 val destinations = listOf(
