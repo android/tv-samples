@@ -61,7 +61,7 @@ enum class NavGraph(
         routeName = "chips",
         composable = { appBar ->
             appBar()
-            WorkInProgressScreen()
+            ChipsScreen()
         }
     ),
     Lists(
