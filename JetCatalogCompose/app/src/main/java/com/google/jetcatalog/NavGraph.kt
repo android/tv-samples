@@ -80,8 +80,11 @@ enum class NavGraph(
     ),
     ImmersiveCluster(
         routeName = "immersive-cluster",
-        composable = {
-            WorkInProgressScreen()
+        composable = { appBar ->
+            Box {
+                ImmersiveListScreen()
+                appBar()
+            }
         }
     ),
     FeaturedCarousel(
