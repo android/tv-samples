@@ -1,13 +1,12 @@
 package com.google.jetcatalog
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun NavigationGraph(
@@ -18,13 +17,11 @@ fun NavigationGraph(
     NavHost(navController = navHostController, startDestination = NavGraph.Home.routeName) {
         destinations.forEach { destination ->
             composable(destination.routeName) {
-                Column {
-                    destination.composable {
-                        AppBar(
-                            onThemeColorModeClick = onThemeColorModeClick,
-                            onFontScaleClick = onFontScaleClick
-                        )
-                    }
+                destination.composable {
+                    AppBar(
+                        onThemeColorModeClick = onThemeColorModeClick,
+                        onFontScaleClick = onFontScaleClick
+                    )
                 }
             }
         }
@@ -38,37 +35,47 @@ enum class NavGraph(
     Home(
         routeName = "home",
         composable = { appBar ->
-            appBar()
-            ComponentsGrid()
+            Column {
+                appBar()
+                ComponentsGrid()
+            }
         }
     ),
 
     Buttons(
         routeName = "buttons",
         composable = { appBar ->
-            appBar()
-            ButtonsScreen()
+            Column {
+                appBar()
+                ButtonsScreen()
+            }
         }
     ),
     Cards(
         routeName = "cards",
         composable = { appBar ->
-            appBar()
-            CardsScreen()
+            Column {
+                appBar()
+                CardsScreen()
+            }
         }
     ),
     Chips(
         routeName = "chips",
         composable = { appBar ->
-            appBar()
-            ChipsScreen()
+            Column {
+                appBar()
+                ChipsScreen()
+            }
         }
     ),
     Lists(
         routeName = "lists",
         composable = { appBar ->
-            appBar()
-            ListsScreen()
+            Column {
+                appBar()
+                ListsScreen()
+            }
         }
     ),
     ImmersiveCluster(
@@ -79,8 +86,11 @@ enum class NavGraph(
     ),
     FeaturedCarousel(
         routeName = "featured-carousel",
-        composable = {
-            WorkInProgressScreen()
+        composable = { appBar ->
+            Box {
+                FeaturedCarouselScreen()
+                appBar()
+            }
         }
     ),
     NavigationDrawer(
@@ -95,8 +105,8 @@ enum class NavGraph(
             WorkInProgressScreen()
         }
     ),
-    ModalDrawer(
-        routeName = "modal-drawer",
+    ModalDialog(
+        routeName = "modal-dialog",
         composable = {
             WorkInProgressScreen()
         }
@@ -125,7 +135,7 @@ val destinations = listOf(
     NavGraph.FeaturedCarousel,
     NavGraph.NavigationDrawer,
     NavGraph.TabRow,
-    NavGraph.ModalDrawer,
+    NavGraph.ModalDialog,
     NavGraph.TextFields,
     NavGraph.VideoPlayer,
 )

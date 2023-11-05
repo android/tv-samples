@@ -9,7 +9,7 @@ val components = listOf(
     Component.FeaturedCarousel,
     Component.NavigationDrawer,
     Component.TabRow,
-    Component.ModalDrawer,
+    Component.ModalDialog,
     Component.TextField,
     Component.MediaPlayerOverlay,
 )
@@ -35,10 +35,10 @@ enum class Component(val title: String, val imageArg: String, val routeValue: St
         routeValue = NavGraph.NavigationDrawer.routeName
     ),
     TabRow(title = "Tab Row", imageArg = "tabs", routeValue = NavGraph.TabRow.routeName),
-    ModalDrawer(
-        title = "Modal Drawer",
+    ModalDialog(
+        title = "Modal Dialog",
         imageArg = "drawer",
-        routeValue = NavGraph.ModalDrawer.routeName
+        routeValue = NavGraph.ModalDialog.routeName
     ),
     TextField(title = "Text Field", imageArg = "input", routeValue = NavGraph.TextFields.routeName),
     MediaPlayerOverlay(
