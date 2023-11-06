@@ -27,7 +27,7 @@ fun HomeGrid() {
         Column(
             Modifier
                 .weight(1f)
-                .padding(start = 54.dp, top = 12.dp, end = 38.dp, bottom = 12.dp)
+                .padding(start = 54.dp, top = 0.dp, end = 38.dp, bottom = 12.dp)
         ) {
             val firstChildFr = remember { FocusRequester() }
 

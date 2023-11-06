@@ -48,7 +48,7 @@ enum class NavGraph(
         composable = { appBar ->
             Column {
                 appBar()
-                WorkInProgressScreen()
+                ColorsScreen()
             }
         }
     ),
@@ -169,6 +169,14 @@ enum class NavGraph(
 
 val destinations = listOf(
     NavGraph.Home,
+
+    // foundation
+    NavGraph.Color,
+    NavGraph.Typography,
+    NavGraph.Motion,
+    NavGraph.Interaction,
+
+    // components
     NavGraph.Buttons,
     NavGraph.Cards,
     NavGraph.Chips,

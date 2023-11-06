@@ -39,7 +39,8 @@ fun AppBar(
     val title = if (routeValue == NavGraph.Home.routeName)
         stringResource(R.string.tv_compose)
     else
-        components.find { it.routeValue == routeValue }?.title ?: ""
+        components.find { it.routeValue == routeValue }?.title
+            ?: foundations.find { it.routeValue == routeValue }?.title ?: ""
     val description =
         if (title == stringResource(id = R.string.tv_compose)) "Component Catalog" else null
     val isMainIconMagnified = description != null

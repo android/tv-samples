@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -18,6 +19,9 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.darkColorScheme
 import androidx.tv.material3.lightColorScheme
+import com.google.jetcatalog.colorutils.Scheme.Companion.dark
+import com.google.jetcatalog.colorutils.Scheme.Companion.light
+import com.google.jetcatalog.colorutils.toColorScheme
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -30,15 +34,16 @@ fun App() {
     var isThemeSelectorExpanded by remember { mutableStateOf(false) }
     var isFontScaleSelectorExpanded by remember { mutableStateOf(false) }
 
+    val argbColor = seedColor.color.toArgb()
+    val colorScheme = if (themeMode == Mode.Dark) dark(argbColor) else light(argbColor)
+
     AppProviders(
         seedColor = seedColor,
         themeMode = themeMode,
         layoutDirection = layoutDirection,
         fontScale = fontScale,
     ) {
-        MaterialTheme(
-            colorScheme = if (themeMode == Mode.Dark) darkColorScheme() else lightColorScheme()
-        ) {
+        MaterialTheme(colorScheme = colorScheme.toColorScheme()) {
             ThemeAndColorModeSelector(
                 isExpanded = isThemeSelectorExpanded,
                 onClose = { isThemeSelectorExpanded = false },
