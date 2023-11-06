@@ -57,7 +57,7 @@ enum class NavGraph(
         composable = { appBar ->
             Column {
                 appBar()
-                WorkInProgressScreen()
+                TypographyScreen()
             }
         }
     ),
