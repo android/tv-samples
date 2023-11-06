@@ -29,13 +29,9 @@ fun HomeGrid() {
                 .weight(1f)
                 .padding(start = 54.dp, top = 0.dp, end = 38.dp, bottom = 12.dp)
         ) {
-            val firstChildFr = remember { FocusRequester() }
-
             TvLazyVerticalGrid(
                 columns = TvGridCells.Fixed(4),
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .focusRestorer { firstChildFr },
+                modifier = Modifier.padding(top = 12.dp),
                 contentPadding = PaddingValues(vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -45,13 +41,7 @@ fun HomeGrid() {
                 }
 
                 itemsIndexed(foundations) { index, item ->
-                    FoundationsGridCard(
-                        foundation = item,
-                        modifier = Modifier.ifElse(
-                            index == 0,
-                            Modifier.focusRequester(firstChildFr)
-                        )
-                    )
+                    FoundationsGridCard(foundation = item)
                 }
 
                 item(span = { TvGridItemSpan(4) }) {
