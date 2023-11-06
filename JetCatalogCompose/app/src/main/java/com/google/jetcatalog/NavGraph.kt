@@ -37,11 +37,50 @@ enum class NavGraph(
         composable = { appBar ->
             Column {
                 appBar()
-                ComponentsGrid()
+                HomeGrid()
             }
         }
     ),
 
+    // foundations
+    Color(
+        routeName = "color",
+        composable = { appBar ->
+            Column {
+                appBar()
+                WorkInProgressScreen()
+            }
+        }
+    ),
+    Typography(
+        routeName = "typography",
+        composable = { appBar ->
+            Column {
+                appBar()
+                WorkInProgressScreen()
+            }
+        }
+    ),
+    Motion(
+        routeName = "motion",
+        composable = { appBar ->
+            Column {
+                appBar()
+                WorkInProgressScreen()
+            }
+        }
+    ),
+    Interaction(
+        routeName = "interaction",
+        composable = { appBar ->
+            Column {
+                appBar()
+                WorkInProgressScreen()
+            }
+        }
+    ),
+
+    // components
     Buttons(
         routeName = "buttons",
         composable = { appBar ->

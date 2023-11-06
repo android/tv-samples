@@ -41,7 +41,7 @@ val seedColors = listOf(
 )
 
 @Composable
-fun getComponentGridCardImage(
+fun getHomeGridCardImage(
     component: Component,
     mode: Mode = LocalMode.current,
     seedColor: Color = LocalThemeSeedColor.current.color,
@@ -49,6 +49,20 @@ fun getComponentGridCardImage(
     val colorIdentifier = seedColor.value.toString(16).slice(2 until 8)
     return LocalContext.current.resources.getIdentifier(
         "${component.imageArg}_${colorIdentifier}_${mode.value}",
+        "drawable",
+        "com.google.jetcatalog"
+    )
+}
+
+@Composable
+fun getHomeGridCardImage(
+    foundation: Foundation,
+    mode: Mode = LocalMode.current,
+    seedColor: Color = LocalThemeSeedColor.current.color,
+): Int {
+    val colorIdentifier = seedColor.value.toString(16).slice(2 until 8)
+    return LocalContext.current.resources.getIdentifier(
+        "${foundation.imageArg}_${colorIdentifier}_${mode.value}",
         "drawable",
         "com.google.jetcatalog"
     )

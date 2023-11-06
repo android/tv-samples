@@ -19,7 +19,7 @@ fun ComponentsGridCard(
     component: Component,
     modifier: Modifier = Modifier
 ) {
-    val image = getComponentGridCardImage(component)
+    val image = getHomeGridCardImage(component)
     val navHostController = LocalNavController.current
 
     StandardCardLayout(
@@ -36,6 +36,35 @@ fun ComponentsGridCard(
         title = {
             Text(
                 text = component.title,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+    )
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun FoundationsGridCard(
+    foundation: Foundation,
+    modifier: Modifier = Modifier
+) {
+    val image = getHomeGridCardImage(foundation)
+    val navHostController = LocalNavController.current
+
+    StandardCardLayout(
+        modifier = modifier,
+        imageCard = {
+            CardLayoutDefaults.ImageCard(
+                onClick = { navHostController.navigate(foundation.routeValue) },
+                interactionSource = it,
+                colors = CardDefaults.colors(containerColor = Color.Transparent)
+            ) {
+                Image(painter = painterResource(id = image), contentDescription = null)
+            }
+        },
+        title = {
+            Text(
+                text = foundation.title,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
