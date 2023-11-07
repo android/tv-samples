@@ -2,6 +2,7 @@ package com.google.jetcatalog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
@@ -46,12 +47,18 @@ fun getHomeGridCardImage(
     mode: Mode = LocalMode.current,
     seedColor: Color = LocalThemeSeedColor.current.color,
 ): Int {
-    val colorIdentifier = seedColor.value.toString(16).slice(2 until 8)
-    return LocalContext.current.resources.getIdentifier(
-        "${imageArg}_${colorIdentifier}_${mode.value}",
-        "drawable",
-        "com.google.jetcatalog"
-    )
+    val context = LocalContext.current
+    val colorIdentifier = remember(seedColor.value) {
+        seedColor.value.toString(16).slice(2 until 8)
+    }
+    val image = remember(imageArg, colorIdentifier, mode.value) {
+        context.resources.getIdentifier(
+            "${imageArg}_${colorIdentifier}_${mode.value}",
+            "drawable",
+            "com.google.jetcatalog"
+        )
+    }
+    return image
 }
 
 data class FontScale(
