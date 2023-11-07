@@ -1,4 +1,4 @@
-package com.google.jetcatalog
+package com.google.jetcatalog.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,8 @@ import androidx.tv.material3.Glow
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
+import com.google.jetcatalog.ExampleAction
+import com.google.jetcatalog.ExamplesScreenWithDottedBackground
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

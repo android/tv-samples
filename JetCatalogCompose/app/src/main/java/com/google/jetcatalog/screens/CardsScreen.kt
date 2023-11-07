@@ -1,4 +1,4 @@
-package com.google.jetcatalog
+package com.google.jetcatalog.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,6 +19,9 @@ import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideCardLayout
 import androidx.tv.material3.WideClassicCard
+import com.google.jetcatalog.ExampleAction
+import com.google.jetcatalog.ExamplesScreenWithDottedBackground
+import com.google.jetcatalog.R
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

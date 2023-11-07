@@ -1,4 +1,4 @@
-package com.google.jetcatalog
+package com.google.jetcatalog.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -31,7 +31,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.res.painterResource
@@ -42,19 +41,16 @@ import androidx.tv.foundation.lazy.list.TvLazyRow
 import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Card
-import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.Carousel
 import androidx.tv.material3.CarouselDefaults
 import androidx.tv.material3.CarouselState
-import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.ClickableSurfaceScale
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
+import com.google.jetcatalog.R
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

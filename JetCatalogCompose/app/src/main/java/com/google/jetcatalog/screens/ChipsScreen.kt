@@ -1,4 +1,4 @@
-package com.google.jetcatalog
+package com.google.jetcatalog.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,6 +20,8 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.InputChip
 import androidx.tv.material3.SuggestionChip
 import androidx.tv.material3.Text
+import com.google.jetcatalog.ExampleAction
+import com.google.jetcatalog.ExamplesScreenWithDottedBackground
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

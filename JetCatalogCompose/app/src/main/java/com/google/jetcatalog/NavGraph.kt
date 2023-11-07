@@ -7,6 +7,16 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.jetcatalog.screens.ButtonsScreen
+import com.google.jetcatalog.screens.CardsScreen
+import com.google.jetcatalog.screens.ChipsScreen
+import com.google.jetcatalog.screens.ColorsScreen
+import com.google.jetcatalog.screens.FeaturedCarouselScreen
+import com.google.jetcatalog.screens.ImmersiveListScreen
+import com.google.jetcatalog.screens.InteractionsScreen
+import com.google.jetcatalog.screens.ListsScreen
+import com.google.jetcatalog.screens.TypographyScreen
+import com.google.jetcatalog.screens.WorkInProgressScreen
 
 @Composable
 fun NavigationGraph(

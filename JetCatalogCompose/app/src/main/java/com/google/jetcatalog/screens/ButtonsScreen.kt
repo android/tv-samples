@@ -1,4 +1,4 @@
-package com.google.jetcatalog
+package com.google.jetcatalog.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +24,8 @@ import androidx.tv.material3.OutlinedIconButton
 import androidx.tv.material3.OutlinedIconButtonDefaults
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
+import com.google.jetcatalog.ExampleAction
+import com.google.jetcatalog.ExamplesScreenWithDottedBackground
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

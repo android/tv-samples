@@ -1,4 +1,4 @@
-package com.google.jetcatalog
+package com.google.jetcatalog.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,8 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.Text
+import com.google.jetcatalog.ExampleAction
+import com.google.jetcatalog.ExamplesScreenWithDottedBackground
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
