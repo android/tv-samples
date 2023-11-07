@@ -42,27 +42,13 @@ val seedColors = listOf(
 
 @Composable
 fun getHomeGridCardImage(
-    component: Component,
+    imageArg: String,
     mode: Mode = LocalMode.current,
     seedColor: Color = LocalThemeSeedColor.current.color,
 ): Int {
     val colorIdentifier = seedColor.value.toString(16).slice(2 until 8)
     return LocalContext.current.resources.getIdentifier(
-        "${component.imageArg}_${colorIdentifier}_${mode.value}",
-        "drawable",
-        "com.google.jetcatalog"
-    )
-}
-
-@Composable
-fun getHomeGridCardImage(
-    foundation: Foundation,
-    mode: Mode = LocalMode.current,
-    seedColor: Color = LocalThemeSeedColor.current.color,
-): Int {
-    val colorIdentifier = seedColor.value.toString(16).slice(2 until 8)
-    return LocalContext.current.resources.getIdentifier(
-        "${foundation.imageArg}_${colorIdentifier}_${mode.value}",
+        "${imageArg}_${colorIdentifier}_${mode.value}",
         "drawable",
         "com.google.jetcatalog"
     )

@@ -19,7 +19,7 @@ fun ComponentsGridCard(
     component: Component,
     modifier: Modifier = Modifier
 ) {
-    val image = getHomeGridCardImage(component)
+    val image = getHomeGridCardImage(imageArg = component.imageArg)
     val navHostController = LocalNavController.current
 
     StandardCardLayout(
@@ -48,7 +48,7 @@ fun FoundationsGridCard(
     foundation: Foundation,
     modifier: Modifier = Modifier
 ) {
-    val image = getHomeGridCardImage(foundation)
+    val image = getHomeGridCardImage(imageArg = foundation.imageArg)
     val navHostController = LocalNavController.current
 
     StandardCardLayout(
