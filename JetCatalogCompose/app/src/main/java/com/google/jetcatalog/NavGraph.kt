@@ -16,6 +16,7 @@ import com.google.jetcatalog.screens.ImmersiveListScreen
 import com.google.jetcatalog.screens.InteractionsScreen
 import com.google.jetcatalog.screens.ListsScreen
 import com.google.jetcatalog.screens.MotionScreen
+import com.google.jetcatalog.screens.TabRowScreen
 import com.google.jetcatalog.screens.TypographyScreen
 import com.google.jetcatalog.screens.WorkInProgressScreen
 
@@ -154,8 +155,11 @@ enum class NavGraph(
     ),
     TabRow(
         routeName = "tab-row",
-        composable = {
-            WorkInProgressScreen()
+        composable = { appBar ->
+            Column {
+                appBar()
+                TabRowScreen()
+            }
         }
     ),
     ModalDialog(
