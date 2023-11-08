@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvGridItemSpan
@@ -149,7 +150,10 @@ private fun ColorBg(
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(10.dp),
+            style = MaterialTheme.typography.bodySmall.copy(
+                if (color.luminance() < .25) Color.White else Color.Black
+            )
         )
     }
 }

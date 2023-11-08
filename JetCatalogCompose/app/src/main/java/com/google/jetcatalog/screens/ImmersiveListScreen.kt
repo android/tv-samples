@@ -139,40 +139,28 @@ private val description = "Lorem ipsum dolor sit amet, consectetur adipiscing el
 
 private val immersiveListItems = listOf(
     ImmersiveListSlide(
-        title = "White Mountains",
+        title = "Shadow Hunter",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_1,
     ),
     ImmersiveListSlide(
-        title = "Until the Sun Sets",
+        title = "Super Puppy",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_2,
     ),
     ImmersiveListSlide(
-        title = "Into the Forest",
+        title = "Man with a cape",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_3,
     ),
     ImmersiveListSlide(
-        title = "Fall Into Winter",
+        title = "Power Sisters",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_4,
-    ),
-    ImmersiveListSlide(
-        title = "The Pillars of Creation",
-        subtitle = "Secondary · text",
-        description = description,
-        image = R.drawable.fc_5,
-    ),
-    ImmersiveListSlide(
-        title = "Rivers of Life",
-        subtitle = "Secondary · text",
-        description = description,
-        image = R.drawable.fc_6,
     ),
 )
 

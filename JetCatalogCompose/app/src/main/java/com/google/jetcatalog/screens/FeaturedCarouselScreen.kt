@@ -260,40 +260,28 @@ private val description = "Lorem ipsum dolor sit amet, consectetur adipiscing el
 
 private val slides = listOf(
     Slide(
-        title = "White Mountains",
+        title = "Shadow Hunter",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_1,
     ),
     Slide(
-        title = "Until the Sun Sets",
+        title = "Super Puppy",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_2,
     ),
     Slide(
-        title = "Into the Forest",
+        title = "Man with a cape",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_3,
     ),
     Slide(
-        title = "Fall Into Winter",
+        title = "Power Sisters",
         subtitle = "Secondary · text",
         description = description,
         image = R.drawable.fc_4,
-    ),
-    Slide(
-        title = "The Pillars of Creation",
-        subtitle = "Secondary · text",
-        description = description,
-        image = R.drawable.fc_5,
-    ),
-    Slide(
-        title = "Rivers of Life",
-        subtitle = "Secondary · text",
-        description = description,
-        image = R.drawable.fc_6,
     ),
 )
 
