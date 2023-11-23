@@ -122,8 +122,10 @@ private fun MainActivity.App() {
                                         Screens.MovieDetails.withArgs(movieId)
                                     )
                                 },
-                                openVideoPlayer = {
-                                    navController.navigate(Screens.VideoPlayer())
+                                openVideoPlayer = { movieId ->
+                                    navController.navigate(
+                                        Screens.VideoPlayer.withArgs(movieId)
+                                    )
                                 },
                                 onBackPressed = onBackPressedDispatcher::onBackPressed,
                                 isComingBackFromDifferentScreen = isComingBackFromDifferentScreen,
@@ -132,7 +134,14 @@ private fun MainActivity.App() {
                                 }
                             )
                         }
-                        composable(route = Screens.VideoPlayer()) {
+                        composable(
+                            route = Screens.VideoPlayer(),
+                            arguments = listOf(
+                                navArgument(MovieDetailsScreen.MovieIdBundleKey) {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
                             VideoPlayerScreen(
                                 onBackPressed = {
                                     if (navController.navigateUp()) {

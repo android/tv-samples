@@ -81,7 +81,7 @@ fun rememberChildPadding(direction: LayoutDirection = LocalLayoutDirection.curre
 fun DashboardScreen(
     openCategoryMovieList: (categoryId: String) -> Unit,
     openMovieDetailsScreen: (movieId: String) -> Unit,
-    openVideoPlayer: () -> Unit,
+    openVideoPlayer: (movieId: String) -> Unit,
     isComingBackFromDifferentScreen: Boolean,
     resetIsComingBackFromDifferentScreen: () -> Unit,
     onBackPressed: () -> Unit
@@ -203,7 +203,9 @@ fun DashboardScreen(
                         onMovieClick = { selectedMovie ->
                             openMovieDetailsScreen(selectedMovie.id)
                         },
-                        goToVideoPlayer = openVideoPlayer,
+                        goToVideoPlayer = { selectedMovie ->
+                            openVideoPlayer(selectedMovie.id)
+                        },
                         onScroll = { isTopBarVisible = it },
                         isTopBarVisible = isTopBarVisible
                     )
