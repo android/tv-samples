@@ -35,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -90,7 +89,7 @@ fun VideoPlayerOverlay(
             ) {
                 Column(
                     modifier = Modifier
-                        .focusRequester(focusRequester)
+//                        .focusRequester(focusRequester)
                         .padding(horizontal = 56.dp)
                         .padding(bottom = 32.dp, top = 8.dp)
                 ) {
