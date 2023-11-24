@@ -124,7 +124,6 @@ object StringConstants {
         const val VideoPlayerControlClosedCaptionsButton = "Playlist Button"
         const val VideoPlayerControlSettingsButton = "Playlist Button"
         const val VideoPlayerControlPlayPauseButton = "Playlist Button"
-        const val SampleVideoUrl =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        const val VideoPlayerControlForward = "Fast forward 10 seconds"
     }
 }

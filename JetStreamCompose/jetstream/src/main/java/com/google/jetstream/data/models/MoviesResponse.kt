@@ -21,6 +21,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MoviesResponseItem(
     val id: String,
+    val videoUri: String,
+    val subtitleUri: String?,
     val rank: Int,
     val rankUpDown: String,
     val title: String,

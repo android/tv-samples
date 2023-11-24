@@ -20,6 +20,8 @@ import com.google.jetstream.data.models.MoviesResponseItem
 
 data class Movie(
     val id: String,
+    val videoUri: String,
+    val subtitleUri: String?,
     val posterUri: String,
     val name: String,
     val description: String
@@ -32,6 +34,8 @@ fun MoviesResponseItem.toMovie(thumbnailType: ThumbnailType = ThumbnailType.Stan
     }
     return Movie(
         id,
+        videoUri,
+        subtitleUri,
         thumbnail,
         title,
         fullTitle

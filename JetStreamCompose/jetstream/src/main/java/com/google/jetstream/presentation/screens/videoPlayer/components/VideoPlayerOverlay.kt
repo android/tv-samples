@@ -50,8 +50,9 @@ fun VideoPlayerOverlay(
     state: VideoPlayerState = rememberVideoPlayerState(),
     focusRequester: FocusRequester = remember { FocusRequester() },
     isPlaying: Boolean,
-    subtitles: @Composable () -> Unit,
-    controls: @Composable () -> Unit
+    centerButton: @Composable () -> Unit = {},
+    subtitles: @Composable () -> Unit = {},
+    controls: @Composable () -> Unit = {}
 ) {
     LaunchedEffect(state.controlsVisible) {
         if (state.controlsVisible) {
@@ -89,7 +90,6 @@ fun VideoPlayerOverlay(
             ) {
                 Column(
                     modifier = Modifier
-//                        .focusRequester(focusRequester)
                         .padding(horizontal = 56.dp)
                         .padding(bottom = 32.dp, top = 8.dp)
                 ) {
@@ -97,7 +97,7 @@ fun VideoPlayerOverlay(
                 }
             }
         }
-//        CenterButton()
+        centerButton()
     }
 }
 
