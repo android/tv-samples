@@ -50,6 +50,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaItem.SubtitleConfiguration
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
@@ -104,8 +105,19 @@ fun VideoPlayerScreen(
                             context,
                             defaultDataSourceFactory
                         )
+
+                        val mediaItem = MediaItem.Builder()
+                            .setUri(mediaUri)
+                            .setSubtitleConfigurations(listOf(
+                                SubtitleConfiguration.Builder(Uri.parse("https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml"))
+                                    .setMimeType("application/ttml+xml")
+                                    .setLanguage("en")
+                                    .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                                    .build()
+                            )).build()
+
                         val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-                            .createMediaSource(MediaItem.fromUri(mediaUri))
+                            .createMediaSource(mediaItem)
 
                         setMediaSource(source)
                         prepare()
@@ -129,20 +141,21 @@ fun VideoPlayerScreen(
                 }
             }
 
-            Box {
+            Box(Modifier
+                .then(if (!videoPlayerState.controlsVisible) Modifier.handleDPadKeyEvents(
+                    onLeft = { exoPlayer.seekBack() },
+                    onRight = { exoPlayer.seekForward() },
+                    onUp = { coroutineScope.launch { videoPlayerState.showControls() } },
+                    onDown = { coroutineScope.launch { videoPlayerState.showControls() } },
+                    onEnter = {
+                        exoPlayer.pause()
+                        coroutineScope.launch { videoPlayerState.showControls() }
+                    }
+                ) else Modifier)
+                .focusable()
+            ) {
                 DisposableEffect(
                     AndroidView(
-                        modifier = Modifier
-                            .handleDPadKeyEvents(
-                                onEnter = {
-                                    if (!videoPlayerState.isDisplayed) {
-                                        coroutineScope.launch {
-                                            videoPlayerState.showControls()
-                                        }
-                                    }
-                                }
-                            )
-                            .focusable(),
                         factory = {
                             PlayerView(context).apply {
                                 hideController()
@@ -163,7 +176,8 @@ fun VideoPlayerScreen(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     focusRequester = focusRequester,
                     state = videoPlayerState,
-                    isPlaying = exoPlayer.isPlaying
+                    isPlaying = exoPlayer.isPlaying,
+                    subtitles = { /* TODO Implement subtitles */ }
                 ) {
                     val onPlayPauseToggle = { shouldPlay: Boolean ->
                         if (shouldPlay) {

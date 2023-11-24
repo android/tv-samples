@@ -33,18 +33,18 @@ class VideoPlayerState internal constructor(
     @IntRange(from = 0)
     val hideSeconds: Int
 ) {
-    var isDisplayed by mutableStateOf(false)
+    var controlsVisible by mutableStateOf(true)
     private val countDownTimer = MutableStateFlow(value = hideSeconds)
 
     suspend fun observe() = coroutineScope {
         launch {
             countDownTimer.collectLatest { time ->
                 if (time > 0) {
-                    isDisplayed = true
+                    controlsVisible = true
                     delay(1000)
                     countDownTimer.emit(countDownTimer.value - 1)
                 } else {
-                    isDisplayed = false
+                    controlsVisible = false
                 }
             }
         }
