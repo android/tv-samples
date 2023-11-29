@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -48,7 +47,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -86,7 +84,6 @@ enum class ItemDirection(val aspectRatio: Float) {
 @Composable
 fun MoviesRow(
     modifier: Modifier = Modifier,
-    itemWidth: Dp = LocalConfiguration.current.screenWidthDp.dp.times(0.165f),
     itemDirection: ItemDirection = ItemDirection.Vertical,
     startPadding: Dp = rememberChildPadding().start,
     endPadding: Dp = rememberChildPadding().end,
@@ -133,13 +130,14 @@ fun MoviesRow(
             ) {
                 itemsIndexed(movieState, key = { _, movie -> movie.id }) { index, movie ->
                     MoviesRowItem(
-                        modifier = Modifier.ifElse(
-                            index == 0,
-                            focusRestorerModifiers.childModifier
-                        ),
+                        modifier = Modifier
+                            .ifElse(
+                                index == 0,
+                                focusRestorerModifiers.childModifier
+                            )
+                            .weight(1f),
                         focusedItemIndex = focusedItemIndex,
                         index = index,
-                        itemWidth = itemWidth,
                         itemDirection = itemDirection,
                         onMovieClick = onMovieClick,
                         movie = movie,
@@ -156,7 +154,6 @@ fun MoviesRow(
 @Composable
 fun ImmersiveListScope.ImmersiveListMoviesRow(
     modifier: Modifier = Modifier,
-    itemWidth: Dp = LocalConfiguration.current.screenWidthDp.dp.times(0.165f),
     itemDirection: ItemDirection = ItemDirection.Vertical,
     startPadding: Dp = rememberChildPadding().start,
     endPadding: Dp = rememberChildPadding().end,
@@ -200,10 +197,10 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
                         key(movie.id) {
                             MoviesRowItem(
                                 modifier = Modifier
+                                    .weight(1f)
                                     .immersiveListItem(index),
                                 focusedItemIndex = focusedItemIndex,
                                 index = index,
-                                itemWidth = itemWidth,
                                 itemDirection = itemDirection,
                                 onMovieClick = onMovieClick,
                                 movie = movie,
@@ -227,7 +224,6 @@ private fun MoviesRowItem(
     modifier: Modifier = Modifier,
     focusedItemIndex: (index: Int) -> Unit,
     index: Int,
-    itemWidth: Dp,
     itemDirection: ItemDirection,
     onMovieClick: (movie: Movie) -> Unit,
     movie: Movie,
@@ -238,7 +234,6 @@ private fun MoviesRowItem(
 
     StandardCardLayout(
         modifier = Modifier
-            .width(itemWidth)
             .onFocusChanged {
                 isItemFocused = it.isFocused
                 if (isItemFocused) {
@@ -288,10 +283,10 @@ private fun MoviesRowItem(
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MoviesRowItemImage(
-    modifier: Modifier = Modifier,
     showIndexOverImage: Boolean,
     movie: Movie,
-    index: Int
+    index: Int,
+    modifier: Modifier = Modifier,
 ) {
     Box(contentAlignment = Alignment.CenterStart) {
         AsyncImage(
@@ -337,7 +332,8 @@ private fun MoviesRowItemImage(
 private fun MoviesRowItemText(
     showItemTitle: Boolean,
     isItemFocused: Boolean,
-    movie: Movie
+    movie: Movie,
+    modifier: Modifier = Modifier
 ) {
     if (showItemTitle) {
         val movieNameAlpha by animateFloatAsState(
@@ -350,12 +346,12 @@ private fun MoviesRowItemText(
                 fontWeight = FontWeight.SemiBold
             ),
             textAlign = TextAlign.Center,
-            modifier = Modifier
+            modifier = modifier
                 .alpha(movieNameAlpha)
                 .fillMaxWidth()
                 .padding(top = 4.dp),
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

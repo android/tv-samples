@@ -20,6 +20,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,12 +39,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
+import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CompactCard
@@ -65,8 +66,6 @@ fun MoviesScreenMovieList(
     endPadding: Dp = rememberChildPadding().end,
     onMovieClick: (movie: Movie) -> Unit
 ) {
-    val itemWidth = LocalConfiguration.current.screenWidthDp.dp.times(0.45f)
-
     AnimatedContent(
         modifier = modifier,
         targetState = movieList,
@@ -74,19 +73,16 @@ fun MoviesScreenMovieList(
     ) { movieListTarget ->
         TvLazyRow(
             modifier = Modifier.focusRestorer(),
-            pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+            pivotOffsets = PivotOffsets(parentFraction = 0.07f),
+            contentPadding = PaddingValues(start = startPadding, end = endPadding)
         ) {
-            item { Spacer(modifier = Modifier.padding(start = startPadding)) }
-            movieListTarget.forEach { movie ->
-                item {
-                    MovieListItem(
-                        itemWidth = itemWidth,
-                        onMovieClick = onMovieClick,
-                        movie = movie
-                    )
-                }
+            items(movieListTarget) {
+                MovieListItem(
+                    itemWidth = 432.dp,
+                    onMovieClick = onMovieClick,
+                    movie = it,
+                )
             }
-            item { Spacer(modifier = Modifier.padding(start = endPadding)) }
         }
     }
 }

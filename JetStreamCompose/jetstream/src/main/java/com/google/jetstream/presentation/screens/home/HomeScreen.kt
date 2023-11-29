@@ -18,6 +18,8 @@ package com.google.jetstream.presentation.screens.home
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,6 +68,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize(),
             )
         }
+
         is HomeScreenUiState.Loading -> Loading()
         is HomeScreenUiState.Error -> Error()
     }
@@ -110,15 +112,21 @@ private fun Catalog(
         modifier = modifier,
         pivotOffsets = if (immersiveListHasFocus) pivotOffsetForImmersiveList else pivotOffset,
         state = tvLazyListState,
-        contentPadding = PaddingValues(
-            bottom = LocalConfiguration.current.screenHeightDp.dp.times(0.19f)
-        )
+        contentPadding = PaddingValues(bottom = 108.dp)
+        // Setting overscan margin to bottom to ensure the last row's visibility
     ) {
         item(contentType = "FeaturedMoviesCarousel") {
             FeaturedMoviesCarousel(
                 movies = featuredMovies,
                 padding = childPadding,
-                goToVideoPlayer = goToVideoPlayer
+                goToVideoPlayer = goToVideoPlayer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(324.dp)
+                /*
+                 Setting height for the FeaturedMovieCarousel to keep it rendered with same height,
+                 regardless of the top bar's visibility
+                 */
             )
         }
         item(contentType = "MoviesRow") {

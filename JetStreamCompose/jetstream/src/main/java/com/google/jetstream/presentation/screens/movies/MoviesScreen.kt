@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.movies
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -89,7 +89,8 @@ private fun Catalog(
 
     TvLazyColumn(
         modifier = modifier,
-        state = tvLazyListState
+        state = tvLazyListState,
+        contentPadding = PaddingValues(bottom = 104.dp)
     ) {
         item {
             Spacer(modifier = Modifier.padding(top = childPadding.top))
@@ -106,13 +107,6 @@ private fun Catalog(
                 title = StringConstants.Composable.PopularFilmsThisWeekTitle,
                 movies = popularFilmsThisWeek,
                 onMovieClick = onMovieClick
-            )
-        }
-        item {
-            Spacer(
-                modifier = Modifier.padding(
-                    bottom = LocalConfiguration.current.screenHeightDp.dp.times(0.19f)
-                )
             )
         }
     }

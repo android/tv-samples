@@ -18,6 +18,7 @@ package com.google.jetstream.presentation.screens.profile
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import com.google.jetstream.data.util.StringConstants
@@ -92,6 +94,7 @@ fun AccountsSection() {
 
     AccountsSectionDeleteDialog(
         showDialog = showDeleteDialog,
-        onDismissRequest = { showDeleteDialog = false }
+        onDismissRequest = { showDeleteDialog = false },
+        modifier = Modifier.width(428.dp)
     )
 }
