@@ -192,7 +192,7 @@ fun DashboardScreen(
             updateTopBarVisibility = { isTopBarVisible = it },
             isTopBarVisible = isTopBarVisible,
             navController = navController,
-            modifier = Modifier.padding(top = navHostTopPaddingDp),
+            modifier = Modifier.offset(y = navHostTopPaddingDp),
         )
     }
 }
