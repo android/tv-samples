@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.shows
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,10 +48,11 @@ fun ShowsScreen(
     showScreenViewModel: ShowScreenViewModel = hiltViewModel(),
 ) {
     val uiState = showScreenViewModel.uiState.collectAsStateWithLifecycle()
-    when(val currentState = uiState.value) {
+    when (val currentState = uiState.value) {
         is ShowScreenUiState.Loading -> {
             Loading()
         }
+
         is ShowScreenUiState.Ready -> {
             Catalog(
                 tvShowList = currentState.tvShowList,
@@ -92,7 +93,8 @@ private fun Catalog(
 
     TvLazyColumn(
         modifier = modifier,
-        state = tvLazyListState
+        state = tvLazyListState,
+        contentPadding = PaddingValues(bottom = 104.dp)
     ) {
         item {
             Spacer(modifier = Modifier.padding(top = childPadding.top))
@@ -109,13 +111,6 @@ private fun Catalog(
                 title = StringConstants.Composable.BingeWatchDramasTitle,
                 movies = bingeWatchDramaList,
                 onMovieClick = onTVShowClick
-            )
-        }
-        item {
-            Spacer(
-                modifier = Modifier.padding(
-                    bottom = LocalConfiguration.current.screenHeightDp.dp.times(0.19f)
-                )
             )
         }
     }

@@ -26,13 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Border
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.presentation.theme.JetStreamButtonShape
 
@@ -44,7 +43,6 @@ fun AccountsSectionDialogButton(
     shouldRequestFocus: Boolean,
     onClick: () -> Unit
 ) {
-    val screenWidthInDp = LocalConfiguration.current.screenWidthDp.dp
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -75,7 +73,7 @@ fun AccountsSectionDialogButton(
     ) {
         Text(
             modifier = Modifier
-                .widthIn(min = screenWidthInDp.times(0.12f))
+                .widthIn(min = 115.dp)
                 .wrapContentWidth(),
             text = text
         )

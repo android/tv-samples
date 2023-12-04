@@ -20,6 +20,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -30,6 +31,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -50,6 +52,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -100,20 +103,6 @@ fun DashboardScreen(
         }
     }
 
-    // 1. On user's first back press, bring focus to the current selected tab, if TopBar is not
-    //    visible, first make it visible, then focus the selected tab
-    // 2. On second back press, bring focus back to the first displayed tab
-    // 3. On third back press, exit the app
-    fun handleBackPress() {
-        if (!isTopBarVisible) {
-            isTopBarVisible = true
-            TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
-        } else if (currentTopBarSelectedTabIndex == 0) onBackPressed()
-        else if (!isTopBarFocused) {
-            TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
-        } else TopBarFocusRequesters[1].requestFocus()
-    }
-
     DisposableEffect(Unit) {
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
             currentDestination = destination.route
@@ -126,20 +115,26 @@ fun DashboardScreen(
         }
     }
 
-    Box(
-        modifier = Modifier.onPreviewKeyEvent {
-            if (it.key == Key.Back && it.type == KeyEventType.KeyUp) {
-                handleBackPress()
-                return@onPreviewKeyEvent true
-            }
-            false
+    BackPressHandledArea(
+        // 1. On user's first back press, bring focus to the current selected tab, if TopBar is not
+        //    visible, first make it visible, then focus the selected tab
+        // 2. On second back press, bring focus back to the first displayed tab
+        // 3. On third back press, exit the app
+        onBackPressed = {
+            if (!isTopBarVisible) {
+                isTopBarVisible = true
+                TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
+            } else if (currentTopBarSelectedTabIndex == 0) onBackPressed()
+            else if (!isTopBarFocused) {
+                TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
+            } else TopBarFocusRequesters[1].requestFocus()
         }
     ) {
         // We do not want to focus the TopBar everytime we come back from another screen e.g.
         // MovieDetails, CategoryMovieList or VideoPlayer screen
         var wasTopBarFocusRequestedBefore by rememberSaveable { mutableStateOf(false) }
 
-        var topBarHeightPx: Int by rememberSaveable { mutableStateOf(0) }
+        var topBarHeightPx: Int by rememberSaveable { mutableIntStateOf(0) }
 
         // Used to show/hide DashboardTopBar
         val topBarYOffsetPx by animateIntAsState(
@@ -190,58 +185,97 @@ fun DashboardScreen(
             }
         }
 
-        NavHost(
-            modifier = Modifier.padding(top = navHostTopPaddingDp),
+        Body(
+            openCategoryMovieList = openCategoryMovieList,
+            openMovieDetailsScreen = openMovieDetailsScreen,
+            openVideoPlayer = openVideoPlayer,
+            updateTopBarVisibility = { isTopBarVisible = it },
+            isTopBarVisible = isTopBarVisible,
             navController = navController,
-            startDestination = Screens.Home(),
-            builder = {
-                composable(Screens.Profile()) {
-                    ProfileScreen()
-                }
-                composable(Screens.Home()) {
-                    HomeScreen(
-                        onMovieClick = { selectedMovie ->
-                            openMovieDetailsScreen(selectedMovie.id)
-                        },
-                        goToVideoPlayer = openVideoPlayer,
-                        onScroll = { isTopBarVisible = it },
-                        isTopBarVisible = isTopBarVisible
-                    )
-                }
-                composable(Screens.Categories()) {
-                    CategoriesScreen(
-                        onCategoryClick = openCategoryMovieList,
-                        onScroll = { isTopBarVisible = it }
-                    )
-                }
-                composable(Screens.Movies()) {
-                    MoviesScreen(
-                        onMovieClick = { movie -> openMovieDetailsScreen(movie.id) },
-                        onScroll = { isTopBarVisible = it },
-                        isTopBarVisible = isTopBarVisible
-                    )
-                }
-                composable(Screens.Shows()) {
-                    ShowsScreen(
-                        onTVShowClick = { movie -> openMovieDetailsScreen(movie.id) },
-                        onScroll = { isTopBarVisible = it },
-                        isTopBarVisible = isTopBarVisible
-                    )
-                }
-                composable(Screens.Favourites()) {
-                    FavouritesScreen(
-                        onMovieClick = openMovieDetailsScreen,
-                        onScroll = { isTopBarVisible = it },
-                        isTopBarVisible = isTopBarVisible
-                    )
-                }
-                composable(Screens.Search()) {
-                    SearchScreen(
-                        onMovieClick = { movie -> openMovieDetailsScreen(movie.id) },
-                        onScroll = { isTopBarVisible = it }
-                    )
-                }
-            }
+            modifier = Modifier.offset(y = navHostTopPaddingDp),
         )
     }
 }
+
+@Composable
+private fun BackPressHandledArea(
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit,
+) =
+    Box(
+        modifier = Modifier
+            .onPreviewKeyEvent {
+                if (it.key == Key.Back && it.type == KeyEventType.KeyUp) {
+                    onBackPressed()
+                    true
+                } else {
+                    false
+                }
+            }
+            .then(modifier),
+        content = content
+    )
+
+@Composable
+private fun Body(
+    openCategoryMovieList: (categoryId: String) -> Unit,
+    openMovieDetailsScreen: (movieId: String) -> Unit,
+    openVideoPlayer: () -> Unit,
+    updateTopBarVisibility: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    isTopBarVisible: Boolean = true,
+) =
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Screens.Home(),
+    ) {
+        composable(Screens.Profile()) {
+            ProfileScreen()
+        }
+        composable(Screens.Home()) {
+            HomeScreen(
+                onMovieClick = { selectedMovie ->
+                    openMovieDetailsScreen(selectedMovie.id)
+                },
+                goToVideoPlayer = openVideoPlayer,
+                onScroll = updateTopBarVisibility,
+                isTopBarVisible = isTopBarVisible
+            )
+        }
+        composable(Screens.Categories()) {
+            CategoriesScreen(
+                onCategoryClick = openCategoryMovieList,
+                onScroll = updateTopBarVisibility
+            )
+        }
+        composable(Screens.Movies()) {
+            MoviesScreen(
+                onMovieClick = { movie -> openMovieDetailsScreen(movie.id) },
+                onScroll = updateTopBarVisibility,
+                isTopBarVisible = isTopBarVisible
+            )
+        }
+        composable(Screens.Shows()) {
+            ShowsScreen(
+                onTVShowClick = { movie -> openMovieDetailsScreen(movie.id) },
+                onScroll = updateTopBarVisibility,
+                isTopBarVisible = isTopBarVisible
+            )
+        }
+        composable(Screens.Favourites()) {
+            FavouritesScreen(
+                onMovieClick = openMovieDetailsScreen,
+                onScroll = updateTopBarVisibility,
+                isTopBarVisible = isTopBarVisible
+            )
+        }
+        composable(Screens.Search()) {
+            SearchScreen(
+                onMovieClick = { movie -> openMovieDetailsScreen(movie.id) },
+                onScroll = updateTopBarVisibility
+            )
+        }
+    }

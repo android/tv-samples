@@ -42,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.NativeKeyEvent
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,8 +56,8 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.jetstream.R
-import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.data.entities.MovieDetails
+import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import kotlinx.coroutines.launch
@@ -69,8 +68,6 @@ fun MovieDetails(
     movieDetails: MovieDetails,
     goToMoviePlayer: () -> Unit
 ) {
-    val screenConfiguration = LocalConfiguration.current
-    val screenHeight = screenConfiguration.screenHeightDp
     val childPadding = rememberChildPadding()
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
@@ -78,7 +75,7 @@ fun MovieDetails(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(screenHeight.dp.times(0.8f))
+            .height(432.dp)
     ) {
         MovieImageWithGradients(
             movieDetails = movieDetails,
@@ -86,8 +83,7 @@ fun MovieDetails(
         )
 
         Column(modifier = Modifier.fillMaxWidth(0.55f)) {
-            Spacer(modifier = Modifier.height(screenHeight.dp.times(0.2f)))
-
+            Spacer(modifier = Modifier.height(108.dp))
             Column(
                 modifier = Modifier.padding(start = childPadding.start)
             ) {
