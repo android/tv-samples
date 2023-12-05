@@ -125,5 +125,5 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
 
     // Compose Previews
-    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
