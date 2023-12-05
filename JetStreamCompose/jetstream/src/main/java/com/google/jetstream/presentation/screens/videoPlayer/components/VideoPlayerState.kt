@@ -23,35 +23,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.debounce
 
 class VideoPlayerState internal constructor(
     @IntRange(from = 0)
-    val hideSeconds: Int
+    private val hideSeconds: Int
 ) {
-    var controlsVisible by mutableStateOf(true)
-    private val countDownTimer = MutableStateFlow(value = hideSeconds)
+    private var _controlsVisible by mutableStateOf(true)
+    val controlsVisible get() = _controlsVisible
 
-    suspend fun observe() = coroutineScope {
-        launch {
-            countDownTimer.collectLatest { time ->
-                if (time > 0) {
-                    controlsVisible = true
-                    delay(1000)
-                    countDownTimer.emit(countDownTimer.value - 1)
-                } else {
-                    controlsVisible = false
-                }
-            }
-        }
+    fun showControls(seconds: Int = hideSeconds) {
+        _controlsVisible = true
+        channel.trySend(seconds)
     }
 
-    suspend fun showControls(seconds: Int = hideSeconds) {
-        countDownTimer.emit(seconds)
+    private val channel = Channel<Int>(CONFLATED)
+
+    suspend fun observe() {
+        channel.consumeAsFlow()
+            .debounce { it.toLong() * 1000 }
+            .collect { _controlsVisible = false }
     }
 }
 

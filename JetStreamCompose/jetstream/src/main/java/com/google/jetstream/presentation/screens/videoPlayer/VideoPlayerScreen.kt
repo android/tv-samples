@@ -30,9 +30,9 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +55,7 @@ import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitle
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitleType
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerOverlay
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse.Type.BACK
@@ -62,11 +63,11 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerSeeker
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerState
+import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -101,14 +102,33 @@ fun VideoPlayerScreen(
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Unit) {
-    val coroutineScope = rememberCoroutineScope()
-
     val context = LocalContext.current
     val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
 
-    val exoPlayer = rememberExoPlayer(context, movieDetails)
+    // TODO: Move to ViewModel for better reuse
+    val exoPlayer = rememberExoPlayer(context)
+    LaunchedEffect(exoPlayer, movieDetails) {
+        exoPlayer.setMediaItem(
+            MediaItem.Builder()
+                .setUri(movieDetails.videoUri)
+                .setSubtitleConfigurations(
+                    if (movieDetails.subtitleUri == null) {
+                        emptyList()
+                    } else {
+                        listOf(
+                            MediaItem.SubtitleConfiguration.Builder(Uri.parse(movieDetails.subtitleUri))
+                                .setMimeType("application/vtt")
+                                .setLanguage("en")
+                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                                .build()
+                        )
+                    }
+                ).build()
+        )
+        exoPlayer.prepare()
+    }
 
-    var contentCurrentPosition: Long by remember { mutableStateOf(0L) }
+    var contentCurrentPosition by remember { mutableLongStateOf(0L) }
     var isPlaying: Boolean by remember { mutableStateOf(exoPlayer.isPlaying) }
     // TODO: Update in a more thoughtful manner
     LaunchedEffect(Unit) {
@@ -121,13 +141,12 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
 
     BackHandler(onBack = onBackPressed)
 
-    val pulseState = remember { VideoPlayerPulseState() }
+    val pulseState = rememberVideoPlayerPulseState()
 
     Box(
         Modifier
-            .DPadEvents(
+            .dPadEvents(
                 exoPlayer,
-                coroutineScope,
                 videoPlayerState,
                 pulseState
             )
@@ -187,8 +206,7 @@ fun VideoPlayerControls(
                 title = movieDetails.name,
                 secondaryText = movieDetails.releaseDate,
                 tertiaryText = movieDetails.director,
-                isLive = false,
-                isAd = false
+                type = VideoPlayerMediaTitleType.DEFAULT
             )
         },
         mediaActions = {
@@ -231,8 +249,8 @@ fun VideoPlayerControls(
                 isPlaying,
                 onPlayPauseToggle,
                 onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
-                contentProgressInMillis = contentCurrentPosition,
-                contentDurationInMillis = exoPlayer.duration,
+                contentProgress = contentCurrentPosition.milliseconds,
+                contentDuration = exoPlayer.duration.milliseconds
             )
         },
         more = null
@@ -242,10 +260,7 @@ fun VideoPlayerControls(
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
-private fun rememberExoPlayer(
-    context: Context,
-    movieDetails: MovieDetails
-) = remember {
+private fun rememberExoPlayer(context: Context) = remember {
     ExoPlayer.Builder(context)
         .setSeekForwardIncrementMs(10)
         .setSeekBackIncrementMs(10)
@@ -257,49 +272,26 @@ private fun rememberExoPlayer(
         .apply {
             playWhenReady = true
             repeatMode = Player.REPEAT_MODE_ONE
-
-            setMediaItem(
-                MediaItem.Builder()
-                    .setUri(movieDetails.videoUri)
-                    .setSubtitleConfigurations(
-                        if (movieDetails.subtitleUri == null) {
-                            emptyList()
-                        } else {
-                            listOf(
-                                MediaItem.SubtitleConfiguration.Builder(Uri.parse(movieDetails.subtitleUri))
-                                    .setMimeType("application/vtt")
-                                    .setLanguage("en")
-                                    .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
-                                    .build()
-                            )
-                        }
-                    ).build()
-            )
-            prepare()
         }
 }
 
-private fun Modifier.DPadEvents(
+private fun Modifier.dPadEvents(
     exoPlayer: ExoPlayer,
-    coroutineScope: CoroutineScope,
     videoPlayerState: VideoPlayerState,
     pulseState: VideoPlayerPulseState
-): Modifier = this.then(
-
-    Modifier.handleDPadKeyEvents(
+): Modifier = this.handleDPadKeyEvents(
         onLeft = {
             exoPlayer.seekBack()
-            coroutineScope.launch { pulseState.setType(BACK) }
+            pulseState.setType(BACK)
         },
         onRight = {
             exoPlayer.seekForward()
-            coroutineScope.launch { pulseState.setType(FORWARD) }
+            pulseState.setType(FORWARD)
         },
-        onUp = { coroutineScope.launch { videoPlayerState.showControls() } },
-        onDown = { coroutineScope.launch { videoPlayerState.showControls() } },
+        onUp = { videoPlayerState.showControls() },
+        onDown = { videoPlayerState.showControls() },
         onEnter = {
             exoPlayer.pause()
-            coroutineScope.launch { videoPlayerState.showControls() }
+            videoPlayerState.showControls()
         }
-    )
 )

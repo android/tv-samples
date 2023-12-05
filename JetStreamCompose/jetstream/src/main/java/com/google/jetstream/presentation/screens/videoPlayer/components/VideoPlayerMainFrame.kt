@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun VideoPlayerMainFrame(
-    mediaTitle: @Composable () -> Unit = {},
+    mediaTitle: @Composable () -> Unit,
+    seeker: @Composable () -> Unit,
     mediaActions: @Composable () -> Unit = {},
-    seeker: @Composable () -> Unit = {},
     more: (@Composable () -> Unit)? = null
 ) {
     Column(Modifier.fillMaxWidth()) {

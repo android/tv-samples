@@ -5,14 +5,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import com.google.jetstream.data.util.StringConstants
+import kotlin.time.Duration
 
 @Composable
 fun VideoPlayerSeeker(
@@ -21,59 +19,27 @@ fun VideoPlayerSeeker(
     isPlaying: Boolean,
     onPlayPauseToggle: (Boolean) -> Unit,
     onSeek: (Float) -> Unit,
-    contentProgressInMillis: Long,
-    contentDurationInMillis: Long
+    contentProgress: Duration,
+    contentDuration: Duration
 ) {
-    val contentProgress by remember(
-        contentProgressInMillis,
-        contentDurationInMillis
-    ) {
-        derivedStateOf {
-            contentProgressInMillis.toFloat() / contentDurationInMillis
-        }
-    }
+    val contentProgressString =
+        contentProgress.toComponents { h, m, s, _ ->
+            if(h > 0) {
+                "$h:${m.padStartWith0()}:${s.padStartWith0()}"
+            } else {
+                ":${m.padStartWith0()}:${s.padStartWith0()}"
+            }
 
-    val contentProgressString by remember(contentProgressInMillis) {
-        derivedStateOf {
-            val contentProgressMinutes = (contentProgressInMillis / 1000) / 60
-            val contentProgressSeconds = (contentProgressInMillis / 1000) % 60
-            val contentProgressMinutesStr =
-                if (contentProgressMinutes < 10) {
-                    contentProgressMinutes.padStartWith0()
-                } else {
-                    contentProgressMinutes.toString()
-                }
-            val contentProgressSecondsStr =
-                if (contentProgressSeconds < 10) {
-                    contentProgressSeconds.padStartWith0()
-                } else {
-                    contentProgressSeconds.toString()
-                }
-            "$contentProgressMinutesStr:$contentProgressSecondsStr"
         }
-    }
+    val contentDurationString =
+        contentDuration.toComponents { h, m, s, _ ->
+            if(h > 0) {
+                "$h:${m.padStartWith0()}:${s.padStartWith0()}"
+            } else {
+                ":${m.padStartWith0()}:${s.padStartWith0()}"
+            }
 
-    val contentDurationString by remember(contentDurationInMillis) {
-        derivedStateOf {
-            val contentDurationMinutes =
-                (contentDurationInMillis / 1000 / 60).coerceAtLeast(minimumValue = 0)
-            val contentDurationSeconds =
-                (contentDurationInMillis / 1000 % 60).coerceAtLeast(minimumValue = 0)
-            val contentDurationMinutesStr =
-                if (contentDurationMinutes < 10) {
-                    contentDurationMinutes.padStartWith0()
-                } else {
-                    contentDurationMinutes.toString()
-                }
-            val contentDurationSecondsStr =
-                if (contentDurationSeconds < 10) {
-                    contentDurationSeconds.padStartWith0()
-                } else {
-                    contentDurationSeconds.toString()
-                }
-            "$contentDurationMinutesStr:$contentDurationSecondsStr"
         }
-    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -90,7 +56,7 @@ fun VideoPlayerSeeker(
         )
         VideoPlayerControllerText(text = contentProgressString)
         VideoPlayerControllerIndicator(
-            progress = contentProgress,
+            progress = (contentProgress / contentDuration).toFloat(),
             onSeek = onSeek,
             state = state
         )
@@ -98,4 +64,4 @@ fun VideoPlayerSeeker(
     }
 }
 
-private fun Long.padStartWith0() = this.toString().padStart(2, '0')
+private fun Number.padStartWith0() = this.toString().padStart(2, '0')

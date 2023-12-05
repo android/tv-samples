@@ -47,10 +47,10 @@ import com.google.jetstream.presentation.theme.JetStreamTheme
  */
 @Composable
 fun VideoPlayerOverlay(
+    isPlaying: Boolean,
     modifier: Modifier = Modifier,
     state: VideoPlayerState = rememberVideoPlayerState(),
     focusRequester: FocusRequester = remember { FocusRequester() },
-    isPlaying: Boolean,
     centerButton: @Composable () -> Unit = {},
     subtitles: @Composable () -> Unit = {},
     controls: @Composable () -> Unit = {}
@@ -73,7 +73,7 @@ fun VideoPlayerOverlay(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AnimatedVisibility(state.controlsVisible, modifier, fadeIn(), fadeOut()) {
+        AnimatedVisibility(state.controlsVisible, Modifier, fadeIn(), fadeOut()) {
             CinematicBackground(Modifier.fillMaxSize())
         }
 
@@ -85,7 +85,7 @@ fun VideoPlayerOverlay(
 
             AnimatedVisibility(
                 state.controlsVisible,
-                modifier,
+                Modifier,
                 slideInVertically { it },
                 slideOutVertically { it }
             ) {

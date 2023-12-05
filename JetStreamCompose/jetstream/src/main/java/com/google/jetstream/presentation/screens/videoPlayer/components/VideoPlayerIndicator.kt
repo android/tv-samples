@@ -87,14 +87,14 @@ fun RowScope.VideoPlayerControllerIndicator(
                 },
                 onLeft = {
                     if (isSelected) {
-                        seekProgress -= 0.1f.coerceAtLeast(0f)
+                        seekProgress = (seekProgress - 0.1f).coerceAtLeast(0f)
                     } else {
                         focusManager.moveFocus(FocusDirection.Left)
                     }
                 },
                 onRight = {
                     if (isSelected) {
-                        seekProgress += 0.1f.coerceAtMost(1f)
+                        seekProgress = (seekProgress + 0.1f).coerceAtMost(1f)
                     } else {
                         focusManager.moveFocus(FocusDirection.Right)
                     }
