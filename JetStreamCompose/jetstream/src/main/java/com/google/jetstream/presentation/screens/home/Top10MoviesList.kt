@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -77,7 +76,7 @@ fun Top10MoviesList(
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
                 modifier = Modifier
-                    .height(LocalConfiguration.current.screenHeightDp.times(0.8f).dp)
+                    .height(432.dp)
                     .gradientOverlay(gradientColor)
             ) {
                 val movie = remember(moviesState, currentItemIndex) {
@@ -91,9 +90,7 @@ fun Top10MoviesList(
                     AsyncImage(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(
-                                LocalConfiguration.current.screenHeightDp.times(0.8f).dp
-                            ),
+                            .height(432.dp),
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(posterUri)
                             .build(),
@@ -129,7 +126,6 @@ fun Top10MoviesList(
                     }
                 }
                 ImmersiveListMoviesRow(
-                    itemWidth = LocalConfiguration.current.screenWidthDp.dp.times(0.28f),
                     itemDirection = ItemDirection.Horizontal,
                     movies = moviesState,
                     title = if (isListFocused) null

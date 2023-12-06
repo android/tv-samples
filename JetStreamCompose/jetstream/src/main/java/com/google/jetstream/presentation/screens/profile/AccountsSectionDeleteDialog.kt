@@ -18,12 +18,9 @@ package com.google.jetstream.presentation.screens.profile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
@@ -33,20 +30,19 @@ import com.google.jetstream.R
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.tvmaterial.StandardDialog
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
     ExperimentalTvMaterial3Api::class
 )
 @Composable
 fun AccountsSectionDeleteDialog(
     showDialog: Boolean,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val dialogWidth = remember(screenWidth) { screenWidth.div(2.25f) }
-
     StandardDialog(
         showDialog = showDialog,
-        modifier = Modifier.width(dialogWidth),
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         confirmButton = {
             AccountsSectionDialogButton(

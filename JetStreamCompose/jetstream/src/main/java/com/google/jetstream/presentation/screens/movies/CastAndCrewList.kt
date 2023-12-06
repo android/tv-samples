@@ -31,7 +31,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusRestorer
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -78,7 +77,7 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
             item { Spacer(modifier = Modifier.padding(start = childPadding.start)) }
 
             items(castAndCrew, key = { it.id }) {
-                CastAndCrewItem(it)
+                CastAndCrewItem(it, modifier = Modifier.width(144.dp))
             }
         }
     }
@@ -91,10 +90,8 @@ private fun CastAndCrewItem(
     castMember: MovieCast,
     modifier: Modifier = Modifier,
 ) {
-    val cardWidth = LocalConfiguration.current.screenWidthDp.dp.times(0.15f)
     ClassicCard(
         modifier = modifier
-            .width(cardWidth)
             .padding(end = 20.dp, bottom = 16.dp)
             .aspectRatio(1 / 1.8f),
         shape = CardDefaults.shape(shape = JetStreamCardShape),
@@ -139,19 +136,6 @@ private fun CastAndCrewItem(
                     .fillMaxHeight(0.725f)
                     .background(ourColors.random())
             )
-//            AsyncImage(
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(castMember.avatarUrl)
-//                    .build(),
-//                contentDescription = StringConstants
-//                    .Composable
-//                    .ContentDescription
-//                    .image(castMember.realName),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .fillMaxHeight(0.725f),
-//                contentScale = ContentScale.Crop
-//            )
         },
         onClick = {}
     )

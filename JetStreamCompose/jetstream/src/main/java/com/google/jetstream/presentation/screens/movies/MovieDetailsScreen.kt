@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,9 +64,11 @@ fun MovieDetailsScreen(
         is MovieDetailsScreenUiState.Loading -> {
             Loading()
         }
+
         is MovieDetailsScreenUiState.Error -> {
             Error()
         }
+
         is MovieDetailsScreenUiState.Done -> {
             Details(
                 movieDetails = s.movieDetails,
@@ -93,11 +93,11 @@ private fun Details(
     modifier: Modifier = Modifier,
 ) {
     val childPadding = rememberChildPadding()
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     BackHandler(onBack = onBackPressed)
     TvLazyColumn(
-        modifier = modifier
+        contentPadding = PaddingValues(bottom = 135.dp),
+        modifier = modifier,
     ) {
         item {
             MovieDetails(
@@ -149,8 +149,7 @@ private fun Details(
                     .padding(horizontal = childPadding.start),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                val itemWidth = LocalConfiguration.current.screenWidthDp.dp.times(0.2f)
-                val itemModifier = Modifier.width(itemWidth)
+                val itemModifier = Modifier.width(192.dp)
 
                 TitleValueText(
                     modifier = itemModifier,
@@ -173,10 +172,6 @@ private fun Details(
                     value = movieDetails.revenue
                 )
             }
-        }
-
-        item {
-            Spacer(modifier = Modifier.padding(bottom = screenHeight.times(0.25f)))
         }
     }
 }

@@ -25,11 +25,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -52,7 +51,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -89,17 +87,15 @@ val CarouselSaver = Saver<CarouselState, Int>(
 fun FeaturedMoviesCarousel(
     movies: List<Movie>,
     padding: Padding,
-    goToVideoPlayer: (movie: Movie) -> Unit
+    goToVideoPlayer: (movie: Movie) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val carouselHeight = LocalConfiguration.current.screenHeightDp.dp.times(0.60f)
     val carouselState = rememberSaveable(saver = CarouselSaver) { CarouselState(0) }
     var isCarouselFocused by remember { mutableStateOf(false) }
 
     Carousel(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(start = padding.start, end = padding.start, top = padding.top)
-            .height(carouselHeight)
             .border(
                 width = JetStreamBorderWidth,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isCarouselFocused) 1f else 0f),
@@ -120,24 +116,10 @@ fun FeaturedMoviesCarousel(
         itemCount = movies.size,
         carouselState = carouselState,
         carouselIndicator = {
-            Box(
-                modifier = Modifier
-                    .padding(32.dp)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
-                    .graphicsLayer {
-                        clip = true
-                        shape = ShapeDefaults.ExtraSmall
-                    }
-                    .align(Alignment.BottomEnd)
-            ) {
-                CarouselDefaults.IndicatorRow(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(8.dp),
-                    itemCount = movies.size,
-                    activeItemIndex = carouselState.activeItemIndex,
-                )
-            }
+            CarouselIndicator(
+                itemCount = movies.size,
+                activeItemIndex = carouselState.activeItemIndex
+            )
         },
         contentTransformStartToEnd = fadeIn(tween(durationMillis = 1000))
             .togetherWith(fadeOut(tween(durationMillis = 1000))),
@@ -145,76 +127,119 @@ fun FeaturedMoviesCarousel(
             .togetherWith(fadeOut(tween(durationMillis = 1000))),
         content = { index ->
             val movie = movies[index]
-
             // background
-            AsyncImage(
-                model = movie.posterUri,
-                contentDescription = StringConstants
-                    .Composable
-                    .ContentDescription
-                    .moviePoster(movie.name),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.Black.copy(alpha = 0.5f)
-                                )
-                            )
-                        )
-                    },
-                contentScale = ContentScale.Crop
-            )
-
+            CarouselItemBackground(movie = movie, modifier = Modifier.fillMaxSize())
             // foreground
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.BottomStart
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(32.dp),
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    Text(
-                        text = movie.name,
-                        style = MaterialTheme.typography.displayMedium.copy(
-                            shadow = Shadow(
-                                color = Color.Black.copy(alpha = 0.5f),
-                                offset = Offset(x = 2f, y = 4f),
-                                blurRadius = 2f
-                            )
-                        ),
-                        maxLines = 1
-                    )
-                    Text(
-                        text = movie.description,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.onSurface.copy(
-                                alpha = 0.65f
-                            ),
-                            shadow = Shadow(
-                                color = Color.Black.copy(alpha = 0.5f),
-                                offset = Offset(x = 2f, y = 4f),
-                                blurRadius = 2f
-                            )
-                        ),
-                        maxLines = 1,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                    AnimatedVisibility(
-                        visible = isCarouselFocused,
-                        content = {
-                            WatchNowButton()
-                        }
-                    )
-                }
-            }
+            CarouselItemForeground(
+                movie = movie,
+                isCarouselFocused = isCarouselFocused,
+                modifier = Modifier.fillMaxSize()
+            )
         }
+    )
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+private fun BoxScope.CarouselIndicator(
+    itemCount: Int,
+    activeItemIndex: Int,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .padding(32.dp)
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+            .graphicsLayer {
+                clip = true
+                shape = ShapeDefaults.ExtraSmall
+            }
+            .align(Alignment.BottomEnd)
+    ) {
+        CarouselDefaults.IndicatorRow(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(8.dp),
+            itemCount = itemCount,
+            activeItemIndex = activeItemIndex,
+        )
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+private fun CarouselItemForeground(
+    movie: Movie,
+    modifier: Modifier = Modifier,
+    isCarouselFocused: Boolean = false
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.BottomStart
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Text(
+                text = movie.name,
+                style = MaterialTheme.typography.displayMedium.copy(
+                    shadow = Shadow(
+                        color = Color.Black.copy(alpha = 0.5f),
+                        offset = Offset(x = 2f, y = 4f),
+                        blurRadius = 2f
+                    )
+                ),
+                maxLines = 1
+            )
+            Text(
+                text = movie.description,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = 0.65f
+                    ),
+                    shadow = Shadow(
+                        color = Color.Black.copy(alpha = 0.5f),
+                        offset = Offset(x = 2f, y = 4f),
+                        blurRadius = 2f
+                    )
+                ),
+                maxLines = 1,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+            AnimatedVisibility(
+                visible = isCarouselFocused,
+                content = {
+                    WatchNowButton()
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CarouselItemBackground(movie: Movie, modifier: Modifier = Modifier) {
+    AsyncImage(
+        model = movie.posterUri,
+        contentDescription = StringConstants
+            .Composable
+            .ContentDescription
+            .moviePoster(movie.name),
+        modifier = modifier
+            .drawWithContent {
+                drawContent()
+                drawRect(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.Black.copy(alpha = 0.5f)
+                        )
+                    )
+                )
+            },
+        contentScale = ContentScale.Crop
     )
 }
 
@@ -236,7 +261,6 @@ private fun WatchNowButton() {
         Icon(
             imageVector = Icons.Outlined.PlayArrow,
             contentDescription = null,
-//            modifier = Modifier.size(FilledButtonDefaults.IconSize)
         )
         Spacer(Modifier.size(8.dp))
         Text(
