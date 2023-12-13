@@ -47,7 +47,7 @@ import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 @Composable
 fun HomeScreen(
     onMovieClick: (movie: Movie) -> Unit,
-    goToVideoPlayer: () -> Unit,
+    goToVideoPlayer: (movie: Movie) -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
     isTopBarVisible: Boolean,
     homeScreeViewModel: HomeScreeViewModel = hiltViewModel(),
@@ -83,7 +83,7 @@ private fun Catalog(
     nowPlayingMovies: MovieList,
     onMovieClick: (movie: Movie) -> Unit,
     onScroll: (isTopBarVisible: Boolean) -> Unit,
-    goToVideoPlayer: () -> Unit,
+    goToVideoPlayer: (movie: Movie) -> Unit,
     modifier: Modifier = Modifier,
     isTopBarVisible: Boolean = true,
 ) {

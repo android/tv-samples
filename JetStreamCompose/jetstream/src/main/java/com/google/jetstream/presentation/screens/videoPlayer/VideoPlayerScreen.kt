@@ -16,129 +16,282 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer
 
+import android.content.Context
 import android.net.Uri
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesomeMotion
+import androidx.compose.material.icons.filled.ClosedCaption
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.datasource.DataSource
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControls
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitle
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitleType
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerOverlay
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse.Type.BACK
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse.Type.FORWARD
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulseState
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerSeeker
+import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerState
+import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
-@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+object VideoPlayerScreen {
+    const val MovieIdBundleKey = "movieId"
+}
+
+/**
+ * [Work in progress] A composable screen for playing a video.
+ *
+ * @param onBackPressed The callback to invoke when the user presses the back button.
+ * @param videoPlayerScreenViewModel The view model for the video player screen.
+ */
 @Composable
 fun VideoPlayerScreen(
-    mediaUri: Uri = Uri.parse(StringConstants.Composable.SampleVideoUrl),
     onBackPressed: () -> Unit,
+    videoPlayerScreenViewModel: VideoPlayerScreenViewModel = hiltViewModel()
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val uiState by videoPlayerScreenViewModel.uiState.collectAsStateWithLifecycle()
+
+    // TODO: Handle Loading & Error states
+    when (val s = uiState) {
+        is VideoPlayerScreenUiState.Loading -> {}
+        is VideoPlayerScreenUiState.Error -> {}
+        is VideoPlayerScreenUiState.Done -> {
+            VideoPlayerScreenContent(
+                movieDetails = s.movieDetails,
+                onBackPressed = onBackPressed
+            )
+        }
+    }
+}
+
+@androidx.annotation.OptIn(UnstableApi::class)
+@Composable
+fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Unit) {
     val context = LocalContext.current
-    var contentCurrentPosition: Long by remember { mutableStateOf(0L) }
     val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
 
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context)
-            .build()
-            .apply {
-                val defaultDataSourceFactory = DefaultDataSource.Factory(context)
-                val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
-                    context,
-                    defaultDataSourceFactory
-                )
-                val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(MediaItem.fromUri(mediaUri))
-
-                setMediaSource(source)
-                prepare()
-            }
+    // TODO: Move to ViewModel for better reuse
+    val exoPlayer = rememberExoPlayer(context)
+    LaunchedEffect(exoPlayer, movieDetails) {
+        exoPlayer.setMediaItem(
+            MediaItem.Builder()
+                .setUri(movieDetails.videoUri)
+                .setSubtitleConfigurations(
+                    if (movieDetails.subtitleUri == null) {
+                        emptyList()
+                    } else {
+                        listOf(
+                            MediaItem.SubtitleConfiguration.Builder(Uri.parse(movieDetails.subtitleUri))
+                                .setMimeType("application/vtt")
+                                .setLanguage("en")
+                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                                .build()
+                        )
+                    }
+                ).build()
+        )
+        exoPlayer.prepare()
     }
 
-    BackHandler(onBack = onBackPressed)
-
+    var contentCurrentPosition by remember { mutableLongStateOf(0L) }
+    var isPlaying: Boolean by remember { mutableStateOf(exoPlayer.isPlaying) }
+    // TODO: Update in a more thoughtful manner
     LaunchedEffect(Unit) {
         while (true) {
             delay(300)
             contentCurrentPosition = exoPlayer.currentPosition
+            isPlaying = exoPlayer.isPlaying
         }
     }
 
-    LaunchedEffect(Unit) {
-        with(exoPlayer) {
-            playWhenReady = true
-            videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-            repeatMode = Player.REPEAT_MODE_ONE
-        }
-    }
+    BackHandler(onBack = onBackPressed)
 
-    Box {
-        DisposableEffect(
-            AndroidView(
-                modifier = Modifier
-                    .handleDPadKeyEvents(
-                        onEnter = {
-                            if (!videoPlayerState.isDisplayed) {
-                                coroutineScope.launch {
-                                    videoPlayerState.showControls()
-                                }
-                            }
-                        }
-                    )
-                    .focusable(),
-                factory = {
-                    PlayerView(context).apply {
-                        hideController()
-                        useController = false
-                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+    val pulseState = rememberVideoPlayerPulseState()
 
-                        player = exoPlayer
-                        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                    }
-                }
+    Box(
+        Modifier
+            .dPadEvents(
+                exoPlayer,
+                videoPlayerState,
+                pulseState
             )
-        ) {
-            onDispose { exoPlayer.release() }
-        }
-        VideoPlayerControls(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            isPlaying = exoPlayer.isPlaying,
-            onPlayPauseToggle = { shouldPlay ->
-                if (shouldPlay) {
-                    exoPlayer.play()
-                } else {
-                    exoPlayer.pause()
-                }
+            .focusable()
+    ) {
+        AndroidView(
+            factory = {
+                PlayerView(context).apply { useController = false }
             },
-            contentProgressInMillis = contentCurrentPosition,
-            contentDurationInMillis = exoPlayer.duration,
+            update = { it.player = exoPlayer },
+            onRelease = { exoPlayer.release() }
+        )
+
+        val focusRequester = remember { FocusRequester() }
+        VideoPlayerOverlay(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            focusRequester = focusRequester,
             state = videoPlayerState,
-            onSeek = { seekProgress ->
-                exoPlayer.seekTo(exoPlayer.duration.times(seekProgress).toLong())
+            isPlaying = isPlaying,
+            centerButton = { VideoPlayerPulse(pulseState) },
+            subtitles = { /* TODO Implement subtitles */ },
+            controls = {
+                VideoPlayerControls(
+                    movieDetails,
+                    isPlaying,
+                    contentCurrentPosition,
+                    exoPlayer,
+                    videoPlayerState,
+                    focusRequester
+                )
             }
         )
     }
 }
+
+@Composable
+fun VideoPlayerControls(
+    movieDetails: MovieDetails,
+    isPlaying: Boolean,
+    contentCurrentPosition: Long,
+    exoPlayer: ExoPlayer,
+    state: VideoPlayerState,
+    focusRequester: FocusRequester
+) {
+    val onPlayPauseToggle = { shouldPlay: Boolean ->
+        if (shouldPlay) {
+            exoPlayer.play()
+        } else {
+            exoPlayer.pause()
+        }
+    }
+
+
+    VideoPlayerMainFrame(
+        mediaTitle = {
+            VideoPlayerMediaTitle(
+                title = movieDetails.name,
+                secondaryText = movieDetails.releaseDate,
+                tertiaryText = movieDetails.director,
+                type = VideoPlayerMediaTitleType.DEFAULT
+            )
+        },
+        mediaActions = {
+            Row(
+                modifier = Modifier.padding(bottom = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                VideoPlayerControlsIcon(
+                    icon = Icons.Default.AutoAwesomeMotion,
+                    state = state,
+                    isPlaying = isPlaying,
+                    contentDescription = StringConstants
+                        .Composable
+                        .VideoPlayerControlPlaylistButton
+                )
+                VideoPlayerControlsIcon(
+                    modifier = Modifier.padding(start = 12.dp),
+                    icon = Icons.Default.ClosedCaption,
+                    state = state,
+                    isPlaying = isPlaying,
+                    contentDescription = StringConstants
+                        .Composable
+                        .VideoPlayerControlClosedCaptionsButton
+                )
+                VideoPlayerControlsIcon(
+                    modifier = Modifier.padding(start = 12.dp),
+                    icon = Icons.Default.Settings,
+                    state = state,
+                    isPlaying = isPlaying,
+                    contentDescription = StringConstants
+                        .Composable
+                        .VideoPlayerControlSettingsButton
+                )
+            }
+        },
+        seeker = {
+            VideoPlayerSeeker(
+                focusRequester,
+                state,
+                isPlaying,
+                onPlayPauseToggle,
+                onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
+                contentProgress = contentCurrentPosition.milliseconds,
+                contentDuration = exoPlayer.duration.milliseconds
+            )
+        },
+        more = null
+    )
+}
+
+
+@androidx.annotation.OptIn(UnstableApi::class)
+@Composable
+private fun rememberExoPlayer(context: Context) = remember {
+    ExoPlayer.Builder(context)
+        .setSeekForwardIncrementMs(10)
+        .setSeekBackIncrementMs(10)
+        .setMediaSourceFactory(
+            ProgressiveMediaSource.Factory(DefaultDataSource.Factory(context))
+        )
+        .setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
+        .build()
+        .apply {
+            playWhenReady = true
+            repeatMode = Player.REPEAT_MODE_ONE
+        }
+}
+
+private fun Modifier.dPadEvents(
+    exoPlayer: ExoPlayer,
+    videoPlayerState: VideoPlayerState,
+    pulseState: VideoPlayerPulseState
+): Modifier = this.handleDPadKeyEvents(
+        onLeft = {
+            exoPlayer.seekBack()
+            pulseState.setType(BACK)
+        },
+        onRight = {
+            exoPlayer.seekForward()
+            pulseState.setType(FORWARD)
+        },
+        onUp = { videoPlayerState.showControls() },
+        onDown = { videoPlayerState.showControls() },
+        onEnter = {
+            exoPlayer.pause()
+            videoPlayerState.showControls()
+        }
+)

@@ -44,4 +44,6 @@ https://www.apache.org/licenses/LICENSE-2.0
     <string name="favorites_added_last_week">Added Last Week</string>
     <string name="favorites_available_in_4k">Available in 4K</string>
     <string name="favorites_unknown">Unknown filter</string>
+    <string name="ad">Ad</string>
+    <string name="live">Live</string>
 </resources>

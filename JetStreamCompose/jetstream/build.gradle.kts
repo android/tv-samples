@@ -123,4 +123,7 @@ dependencies {
 
     // Baseline profile installer
     implementation(libs.androidx.profileinstaller)
+
+    // Compose Previews
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }

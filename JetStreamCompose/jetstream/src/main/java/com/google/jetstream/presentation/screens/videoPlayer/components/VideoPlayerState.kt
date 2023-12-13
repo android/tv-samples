@@ -18,48 +18,44 @@ package com.google.jetstream.presentation.screens.videoPlayer.components
 
 import androidx.annotation.IntRange
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.debounce
 
 class VideoPlayerState internal constructor(
     @IntRange(from = 0)
-    val hideSeconds: Int
+    private val hideSeconds: Int
 ) {
-    var isDisplayed by mutableStateOf(false)
-    private val countDownTimer = MutableStateFlow(value = hideSeconds)
+    private var _controlsVisible by mutableStateOf(true)
+    val controlsVisible get() = _controlsVisible
 
-    init {
-        MainScope().launch {
-            countDownTimer.collectLatest { time ->
-                if (time > 0) {
-                    isDisplayed = true
-                    delay(1000)
-                    countDownTimer.emit(countDownTimer.value - 1)
-                } else {
-                    isDisplayed = false
-                }
-            }
-        }
+    fun showControls(seconds: Int = hideSeconds) {
+        _controlsVisible = true
+        channel.trySend(seconds)
     }
 
-    suspend fun showControls(seconds: Int = hideSeconds) {
-        countDownTimer.emit(seconds)
+    private val channel = Channel<Int>(CONFLATED)
+
+    suspend fun observe() {
+        channel.consumeAsFlow()
+            .debounce { it.toLong() * 1000 }
+            .collect { _controlsVisible = false }
     }
 }
 
 /**
  * Create and remember a [VideoPlayerState] instance. Useful when trying to control the state of
- * the [VideoPlayerControls]-related composable.
+ * the [VideoPlayerOverlay]-related composable.
  * @return A remembered instance of [VideoPlayerState].
  * @param hideSeconds How many seconds should the controls be visible before being hidden.
  * */
 @Composable
 fun rememberVideoPlayerState(@IntRange(from = 0) hideSeconds: Int = 2) =
     remember { VideoPlayerState(hideSeconds = hideSeconds) }
+        .also { LaunchedEffect(it) { it.observe() } }

@@ -87,7 +87,7 @@ val CarouselSaver = Saver<CarouselState, Int>(
 fun FeaturedMoviesCarousel(
     movies: List<Movie>,
     padding: Padding,
-    goToVideoPlayer: () -> Unit,
+    goToVideoPlayer: (movie: Movie) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val carouselState = rememberSaveable(saver = CarouselSaver) { CarouselState(0) }
@@ -110,7 +110,9 @@ fun FeaturedMoviesCarousel(
                 contentDescription =
                     StringConstants.Composable.ContentDescription.MoviesCarousel
             }
-            .handleDPadKeyEvents(onEnter = goToVideoPlayer),
+            .handleDPadKeyEvents(onEnter = {
+                goToVideoPlayer(movies[carouselState.activeItemIndex])
+            }),
         itemCount = movies.size,
         carouselState = carouselState,
         carouselIndicator = {

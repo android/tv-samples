@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.jetstream.presentation.screens.categories.CategoryMovieListScreen
 import com.google.jetstream.presentation.screens.movies.MovieDetailsScreen
+import com.google.jetstream.presentation.screens.videoPlayer.VideoPlayerScreen
 
 enum class Screens(
     private val args: List<String>? = null,
@@ -37,7 +38,7 @@ enum class Screens(
     CategoryMovieList(listOf(CategoryMovieListScreen.CategoryIdBundleKey)),
     MovieDetails(listOf(MovieDetailsScreen.MovieIdBundleKey)),
     Dashboard,
-    VideoPlayer;
+    VideoPlayer(listOf(VideoPlayerScreen.MovieIdBundleKey));
 
     operator fun invoke(): String {
         val argList = StringBuilder()
