@@ -40,6 +40,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url("/tmp/engage_m2/") }
     }
 }
 
