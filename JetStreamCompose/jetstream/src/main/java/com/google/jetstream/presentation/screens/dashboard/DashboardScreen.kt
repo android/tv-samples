@@ -56,6 +56,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.screens.categories.CategoriesScreen
 import com.google.jetstream.presentation.screens.favourites.FavouritesScreen
@@ -84,7 +85,7 @@ fun rememberChildPadding(direction: LayoutDirection = LocalLayoutDirection.curre
 fun DashboardScreen(
     openCategoryMovieList: (categoryId: String) -> Unit,
     openMovieDetailsScreen: (movieId: String) -> Unit,
-    openVideoPlayer: () -> Unit,
+    openVideoPlayer: (Movie) -> Unit,
     isComingBackFromDifferentScreen: Boolean,
     resetIsComingBackFromDifferentScreen: () -> Unit,
     onBackPressed: () -> Unit
@@ -221,7 +222,7 @@ private fun BackPressHandledArea(
 private fun Body(
     openCategoryMovieList: (categoryId: String) -> Unit,
     openMovieDetailsScreen: (movieId: String) -> Unit,
-    openVideoPlayer: () -> Unit,
+    openVideoPlayer: (Movie) -> Unit,
     updateTopBarVisibility: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
