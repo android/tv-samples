@@ -15,13 +15,16 @@
  */
 package com.android.tv.reference.watchnext
 
+import android.media.tv.TvContentRating
 import android.net.Uri
 import androidx.tvprovider.media.tv.TvContractCompat.WatchNextPrograms
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
 import com.android.tv.reference.watchnext.EngageWatchNextService.Companion.WatchNextVideo
+import com.google.android.engage.common.datamodel.ContentAvailability
 import com.google.android.engage.common.datamodel.Image
 import com.google.android.engage.video.datamodel.MovieEntity
+import com.google.android.engage.video.datamodel.RatingSystem
 import com.google.android.engage.video.datamodel.TvEpisodeEntity
 import com.google.android.engage.video.datamodel.VideoEntity
 import com.google.android.engage.video.datamodel.WatchNextType
@@ -65,12 +68,34 @@ object VideoToEngageEntityConverter {
             .setLastPlayBackPositionTimeMillis(watchPosition.toLong())
             .setLastEngagementTimeMillis(System.currentTimeMillis())
             .setName(video.name)
-            .setDurationMillis(video.duration.toLong())
-            .addPosterImage(Image.Builder().setImageUri(Uri.parse(video.thumbnailUri)).build())
+            .setDurationMillis(convertDurationStringToMillis(video.duration))
+            .addPosterImage(
+                Image
+                    .Builder()
+                    .setImageWidthInPixel(200)
+                    .setImageHeightInPixel(200)
+                    .setImageUri(Uri.parse(video.thumbnailUri))
+                    .build()
+            )
+            .setAvailability(ContentAvailability.AVAILABILITY_AVAILABLE)
+            .setAirDateEpochMillis(System.currentTimeMillis() - FIVE_YEARS_MILLIS)
             .setPlayBackUri(Uri.parse(video.uri))
             .setEntityId(video.id)
             .setSeasonNumber(video.seasonNumber)
             .setSeasonTitle("${video.category} Season ${video.seasonNumber}")
+            .addContentRating(
+                RatingSystem
+                    .Builder()
+                    .setAgencyName("Agency")
+                    .setRating(
+                        TvContentRating
+                            .createRating("com.android.tv", "US_TV", "US_TV_PG")
+                            .flattenToString()
+                    )
+                    .build()
+            )
+            // TODO: check why this is needed
+            .addContentRating("bla")
             .setEpisodeDisplayNumber(video.name)
             .build()
     }
@@ -86,8 +111,23 @@ object VideoToEngageEntityConverter {
             .setLastPlayBackPositionTimeMillis(watchPosition.toLong())
             .setLastEngagementTimeMillis(System.currentTimeMillis())
             .setName(video.name)
-            .setDurationMillis(video.duration.toLong())
-            .addPosterImage(Image.Builder().setImageUri(Uri.parse(video.thumbnailUri)).build())
+            .setDurationMillis(convertDurationStringToMillis(video.duration))
+            .addPosterImage(
+                Image
+                    .Builder()
+                    .setImageWidthInPixel(200)
+                    .setImageHeightInPixel(200)
+                    .setImageUri(Uri.parse(video.thumbnailUri))
+                    .build()
+            )
+            .setAvailability(ContentAvailability.AVAILABILITY_AVAILABLE)
+            .addContentRating(
+                RatingSystem
+                    .Builder()
+                    .setAgencyName("Agency")
+                    .setRating("PG-13")
+                    .build()
+            )
             .setPlayBackUri(Uri.parse(video.uri))
             .setEntityId(video.id)
             .build()
@@ -101,4 +141,16 @@ object VideoToEngageEntityConverter {
             else -> WatchNextType.TYPE_UNKNOWN
         }
     }
+
+    // This method is specific to "PT00H25M" format of duration
+    private fun convertDurationStringToMillis(duration: String): Long {
+        val time = duration.split("PT")[1]
+        val hours = time.split("H")[0].toLong()
+        val minutes = time.split("H")[1].split("M")[0].toLong()
+        return (hours * 60 + minutes) * 60 * 1000
+    }
+
+    private const val ONE_DAY_MILLIS = (86400 * 1000).toLong()
+    private const val ONE_YEAR_MILLIS = ONE_DAY_MILLIS * 365
+    private const val FIVE_YEARS_MILLIS = ONE_YEAR_MILLIS * 5
 }

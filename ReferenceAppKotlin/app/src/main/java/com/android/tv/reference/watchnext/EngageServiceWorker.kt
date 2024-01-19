@@ -121,8 +121,8 @@ class EngageServiceWorker(
             // An AppEngageException may occur while publishing, so we may not be able to await the
             // result.
             Tasks.await(publishTask)
-        } catch (publishException: Exception) {
-            Publisher.logPublishing(publishException as AppEngageException)
+        } catch (publishException: AppEngageException) {
+            Publisher.logPublishing(publishException)
             // Some errors are recoverable, such as a threading issue, some are unrecoverable
             // such as a cluster not containing all necessary fields. If an error is recoverable, we
             // should attempt to publish again. Setting the  result to retry means WorkManager will
@@ -132,6 +132,9 @@ class EngageServiceWorker(
                     Result.retry()
                 else
                     Result.failure()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            result = Result.failure()
         }
         // This result is returned back to doWork.
         return result
