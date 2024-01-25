@@ -30,8 +30,3 @@ plugins {
     alias(libs.plugins.hilt) apply(false)
     alias(libs.plugins.ksp) apply false
 }
-
-
-tasks.register("clean") {
-    delete(rootProject.buildDir)
-}
