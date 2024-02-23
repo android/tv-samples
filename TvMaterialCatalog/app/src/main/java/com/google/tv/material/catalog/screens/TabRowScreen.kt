@@ -130,12 +130,8 @@ private fun UnderlinedIndicatorTabRow() {
 
 @Composable
 private fun TabPanels(selectedTabIndex: Int) {
-    var value = 0
-
     AnimatedContent(targetState = selectedTabIndex, label = "") {
-        value = it
-
-        when (selectedTabIndex) {
+        when (it) {
             getTabIndex("Search") -> {
                 Column(
                     modifier = Modifier
