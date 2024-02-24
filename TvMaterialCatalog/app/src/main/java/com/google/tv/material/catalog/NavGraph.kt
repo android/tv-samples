@@ -147,12 +147,6 @@ enum class NavGraph(
             }
         }
     ),
-    NavigationDrawer(
-        routeName = "nav-drawer",
-        composable = {
-            WorkInProgressScreen()
-        }
-    ),
     TabRow(
         routeName = "tab-row",
         composable = { appBar ->
@@ -160,6 +154,12 @@ enum class NavGraph(
                 appBar()
                 TabRowScreen()
             }
+        }
+    ),
+    NavigationDrawer(
+        routeName = "nav-drawer",
+        composable = {
+            WorkInProgressScreen()
         }
     ),
     ModalDialog(

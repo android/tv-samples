@@ -37,7 +37,7 @@ fun HomeGrid() {
                 }
 
                 itemsIndexed(foundations) { index, item ->
-                    FoundationsGridCard(foundation = item)
+                    ComponentsGridCard(component = item)
                 }
 
                 item(span = { TvGridItemSpan(4) }) {
@@ -45,6 +45,14 @@ fun HomeGrid() {
                 }
 
                 itemsIndexed(components) { index, item ->
+                    ComponentsGridCard(component = item)
+                }
+
+                item(span = { TvGridItemSpan(4) }) {
+                    Text(text = "Components (planned)")
+                }
+
+                itemsIndexed(componentsPlanned) { index, item ->
                     ComponentsGridCard(component = item)
                 }
             }
