@@ -1,4 +1,4 @@
-package com.google.jetfit.ui.theme
+package com.google.jetfit.presentation.theme
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily

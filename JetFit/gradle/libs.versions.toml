@@ -8,8 +8,31 @@ tv-foundation = "1.0.0-alpha07"
 tv-material = "1.0.0-alpha07"
 lifecycle-runtime-ktx = "2.7.0"
 activity-compose = "1.8.2"
+hilt-navigation-compose = "1.1.0"
+hilt-android = "2.48.1"
+kotlin-android = "1.9.0"
+kotlinx-serialization = "1.6.0"
+ksp = "1.9.0-1.0.13"
+kotlinx-coroutines = "1.6.0"
+navigation-compose = "2.7.6"
+core-splashscreen = "1.0.1"
+benchmark-macro-junit4 = "1.2.2"
+coil-compose = "2.5.0"
 
 [libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark-macro-junit4" }
+androidx-hilt-android = { module = "androidx.hilt:hilt-android", version.ref = "hilt-android" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt-android" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
@@ -25,4 +48,7 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-android" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

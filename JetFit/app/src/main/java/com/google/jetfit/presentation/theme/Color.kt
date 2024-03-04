@@ -1,4 +1,4 @@
-package com.google.jetfit.ui.theme
+package com.google.jetfit.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

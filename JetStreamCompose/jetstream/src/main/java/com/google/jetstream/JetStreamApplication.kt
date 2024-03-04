@@ -31,7 +31,6 @@ class JetStreamApplication : Application()
 @InstallIn(SingletonComponent::class)
 @Module
 abstract class MovieRepositoryModule {
-
     @Binds
     abstract fun bindMovieRepository(
         movieRepositoryImpl: MovieRepositoryImpl
