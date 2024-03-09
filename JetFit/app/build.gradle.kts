@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.model.Kapt
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
@@ -74,7 +76,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // ViewModel in Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
