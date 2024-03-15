@@ -6,4 +6,5 @@ data class Workout(
     val videoUrl: String,
     val instructor: String,
     val subtitles: String?,
+    val subtitleUri: String?,
 )

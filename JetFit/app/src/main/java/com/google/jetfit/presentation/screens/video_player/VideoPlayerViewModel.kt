@@ -34,7 +34,9 @@ class VideoPlayerViewModel @Inject constructor(
                             title = workout.title,
                             instructor = workout.instructor,
                             videoUrl = workout.videoUrl,
-                            id = workout.id
+                            id = workout.id,
+                            subtitles = workout.subtitles,
+                            subtitleUri = workout.subtitleUri,
                         )
                     )
                 }

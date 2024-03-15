@@ -15,4 +15,6 @@ data class WorkoutUiState(
     val videoUrl: String = "",
     val title: String = "",
     val instructor: String = "",
+    val subtitles: String? = null,
+    val subtitleUri: String? = null,
 )
