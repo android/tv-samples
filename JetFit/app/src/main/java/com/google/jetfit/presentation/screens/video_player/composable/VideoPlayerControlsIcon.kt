@@ -17,10 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.IconButtonDefaults
+import androidx.tv.material3.MaterialTheme
 import com.google.jetfit.R
 import com.google.jetfit.components.CustomFillIconButton
 import com.google.jetfit.presentation.theme.JetFitTheme
-import com.google.jetfit.presentation.theme.outline
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -47,7 +47,7 @@ internal fun VideoPlayerControlsIcon(
         buttonColor = Color.Transparent,
         border = IconButtonDefaults.border(
             border = Border(
-                border = BorderStroke(1.dp, outline),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.border),
                 shape = CircleShape
             )
         )
