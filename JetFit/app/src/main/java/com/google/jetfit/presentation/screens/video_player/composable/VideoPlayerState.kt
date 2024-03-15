@@ -41,7 +41,7 @@ class VideoPlayerState internal constructor(
 
 
 @Composable
-fun rememberVideoPlayerState(@IntRange(from = 0L) hideSeconds: Int = 3): VideoPlayerState =
+fun rememberVideoPlayerState(@IntRange(from = 0L) hideSeconds: Int = 4): VideoPlayerState =
     remember { VideoPlayerState(hideSeconds = hideSeconds) }
         .also {
             LaunchedEffect(it) {
