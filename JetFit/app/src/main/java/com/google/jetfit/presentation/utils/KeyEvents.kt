@@ -1,9 +1,12 @@
 package com.google.jetfit.presentation.utils
 
 import android.view.KeyEvent
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.media3.exoplayer.ExoPlayer
+import com.google.jetfit.presentation.screens.video_player.composable.VideoPlayerState
 
 private val DPadEventsKeyCodes = listOf(
     KeyEvent.KEYCODE_DPAD_LEFT,
@@ -20,6 +23,7 @@ private val DPadEventsKeyCodes = listOf(
 )
 
 
+@Stable
 fun Modifier.handleDPadKeyEvents(
     onLeft: (() -> Unit)? = null,
     onRight: (() -> Unit)? = null,
@@ -37,12 +41,14 @@ fun Modifier.handleDPadKeyEvents(
                     return@onPreviewKeyEvent true
                 }
             }
+
             KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_SYSTEM_NAVIGATION_RIGHT -> {
                 onRight?.apply {
                     onActionUp(::invoke)
                     return@onPreviewKeyEvent true
                 }
             }
+
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
                 onEnter?.apply {
                     onActionUp(::invoke)
@@ -55,6 +61,7 @@ fun Modifier.handleDPadKeyEvents(
 }
 
 
+@Stable
 fun Modifier.handleDPadKeyEvents(
     onLeft: (() -> Unit)? = null,
     onRight: (() -> Unit)? = null,
@@ -68,15 +75,19 @@ fun Modifier.handleDPadKeyEvents(
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT -> {
                 onLeft?.invoke().also { return@onKeyEvent true }
             }
+
             KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_SYSTEM_NAVIGATION_RIGHT -> {
                 onRight?.invoke().also { return@onKeyEvent true }
             }
+
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP -> {
                 onUp?.invoke().also { return@onKeyEvent true }
             }
+
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN -> {
                 onDown?.invoke().also { return@onKeyEvent true }
             }
+
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
                 onEnter?.invoke().also { return@onKeyEvent true }
             }
@@ -84,3 +95,24 @@ fun Modifier.handleDPadKeyEvents(
     }
     false
 }
+
+
+@Stable
+fun Modifier.dPadEvents(
+    exoPlayer: ExoPlayer,
+    videoPlayerState: VideoPlayerState,
+): Modifier = this.handleDPadKeyEvents(onLeft = {
+//        exoPlayer.seekBack()
+//        pulseState.setType(BACK)
+},
+    onRight = {
+//        exoPlayer.seekForward()
+//        pulseState.setType(FORWARD)
+    },
+    onUp = { videoPlayerState.showControls() },
+    onDown = { videoPlayerState.showControls() },
+    onEnter = {
+        exoPlayer.pause()
+        videoPlayerState.showControls()
+    }
+)
