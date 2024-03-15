@@ -20,32 +20,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
-import com.google.jetfit.R
 import com.google.jetfit.presentation.theme.JetFitTheme
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun VideoPlayerDurationText(
     text: String,
     modifier: Modifier = Modifier,
-    fontWeight: FontWeight = FontWeight(500),
-    color: Color = Color.White.copy(alpha = 0.87f)
+    color: Color = MaterialTheme.colorScheme.onSurface
 ) {
     Text(
         modifier = modifier,
         text = text,
         color = color,
-        fontWeight = fontWeight,
-        fontFamily = FontFamily(Font(R.font.ibm_plex_sans_medium))
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(device = Devices.TV_1080p)
 @Composable
 fun PreviewVideoPlayerControllerText() {
@@ -54,8 +52,7 @@ fun PreviewVideoPlayerControllerText() {
             VideoPlayerDurationText(text = "19:00")
             VideoPlayerDurationText(
                 text = "/20:35",
-                fontWeight = FontWeight(400),
-                color = Color.White.copy(alpha = 0.60f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.60f)
             )
         }
     }
