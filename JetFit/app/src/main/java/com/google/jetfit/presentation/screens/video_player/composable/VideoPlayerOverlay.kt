@@ -61,7 +61,14 @@ fun VideoPlayerOverlay(
         ) {
             OverlayBackground(modifier = Modifier.fillMaxSize())
         }
-        centerButton()
+
+        AnimatedVisibility(
+            visible = state.controlsVisibility,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            centerButton()
+        }
     }
 
     Column {
