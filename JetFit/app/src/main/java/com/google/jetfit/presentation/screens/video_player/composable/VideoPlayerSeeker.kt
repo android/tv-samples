@@ -43,7 +43,7 @@ fun VideoPlayerSeeker(
         )
         VideoPlayerDurationText(
             modifier = Modifier.padding(
-                horizontal = 8.dp
+                horizontal = 12.dp
             ), textProgress = textProgress, textDuration = textDuration
         )
     }

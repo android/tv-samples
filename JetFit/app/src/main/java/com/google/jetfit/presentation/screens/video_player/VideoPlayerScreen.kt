@@ -1,16 +1,16 @@
 package com.google.jetfit.presentation.screens.video_player
 
-import android.content.Context
+import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,24 +20,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Text
+import androidx.tv.material3.MaterialTheme
 import com.google.jetfit.R
+import com.google.jetfit.components.CustomFillButton
 import com.google.jetfit.presentation.screens.video_player.composable.VideoPlayerControlsIcon
 import com.google.jetfit.presentation.screens.video_player.composable.VideoPlayerFrame
 import com.google.jetfit.presentation.screens.video_player.composable.VideoPlayerOverlay
@@ -45,40 +42,49 @@ import com.google.jetfit.presentation.screens.video_player.composable.VideoPlaye
 import com.google.jetfit.presentation.screens.video_player.composable.VideoPlayerState
 import com.google.jetfit.presentation.screens.video_player.composable.VideoPlayerTitle
 import com.google.jetfit.presentation.screens.video_player.composable.rememberVideoPlayerState
-import com.google.jetfit.presentation.utils.handleDPadKeyEvents
+import com.google.jetfit.presentation.theme.JetFitTheme
+import com.google.jetfit.presentation.utils.dPadEvents
+import com.google.jetfit.presentation.utils.rememberExoPlayer
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun VideoPlayerScreen(viewModel: VideoPlayerViewModel = hiltViewModel()) {
-    VideoPlayerContent {
-
+fun VideoPlayerScreen(
+    onBackPressed: () -> Unit,
+    viewModel: VideoPlayerViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsState()
+    AnimatedVisibility(visible = !state.isLoading && state.error != null) {
+        VideoPlayerContent(state = state, onBackPressed = onBackPressed)
     }
 }
 
 @Composable
-private fun VideoPlayerContent(onBackPressed: () -> Unit) {
+private fun VideoPlayerContent(
+    state: VideoPlayerUiState,
+    onBackPressed: () -> Unit
+) {
     val context = LocalContext.current
-    val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
+    val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4000)
     val exoPlayer = rememberExoPlayer(context)
-    LaunchedEffect(exoPlayer, "") {
+    LaunchedEffect(exoPlayer, state.workoutUiState) {
         exoPlayer.setMediaItem(
             MediaItem.Builder()
-                .setUri("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-//                .setSubtitleConfigurations(
-//                    if (movieDetails.subtitleUri == null) {
-//                        emptyList()
-//                    } else {
-//                        listOf(
-//                            MediaItem.SubtitleConfiguration.Builder(Uri.parse(movieDetails.subtitleUri))
-//                                .setMimeType("application/vtt")
-//                                .setLanguage("en")
-//                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
-//                                .build()
-//                        )
-//                    }
-                // )
-                .build()
+                .setUri(state.workoutUiState.videoUrl)
+                .setSubtitleConfigurations(
+                    if (state.workoutUiState.subtitles == null) {
+                        emptyList()
+                    } else {
+                        listOf(
+                            MediaItem.SubtitleConfiguration
+                                .Builder(Uri.parse(state.workoutUiState.subtitleUri))
+                                .setMimeType("application/vtt")
+                                .setLanguage("en")
+                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                                .build()
+                        )
+                    }
+                ).build()
         )
         exoPlayer.prepare()
     }
@@ -95,7 +101,14 @@ private fun VideoPlayerContent(onBackPressed: () -> Unit) {
 
     BackHandler(onBack = onBackPressed)
 
-    Box(Modifier.focusable()) {
+    Box(
+        Modifier
+            .dPadEvents(
+                exoPlayer,
+                videoPlayerState,
+            )
+            .focusable()
+    ) {
         AndroidView(
             factory = {
                 PlayerView(context).apply { useController = false }
@@ -103,6 +116,7 @@ private fun VideoPlayerContent(onBackPressed: () -> Unit) {
             update = { it.player = exoPlayer },
             onRelease = { exoPlayer.release() }
         )
+
         val onPlayPauseToggle = { shouldPlay: Boolean ->
             if (shouldPlay) {
                 exoPlayer.play()
@@ -112,8 +126,7 @@ private fun VideoPlayerContent(onBackPressed: () -> Unit) {
         }
 
         val focusRequester = remember { FocusRequester() }
-        VideoPlayerOverlay(
-            modifier = Modifier.align(Alignment.BottomCenter),
+        VideoPlayerOverlay(modifier = Modifier.align(Alignment.BottomCenter),
             focusRequester = focusRequester,
             state = videoPlayerState,
             isPlaying = isPlaying,
@@ -129,10 +142,12 @@ private fun VideoPlayerContent(onBackPressed: () -> Unit) {
             subtitles = { /* TODO Implement subtitles */ },
             controls = {
                 VideoPlayerControls(
-                    isPlaying,
-                    contentCurrentPosition,
-                    exoPlayer,
-                    videoPlayerState,
+                    isPlaying = isPlaying,
+                    contentCurrentPosition = contentCurrentPosition,
+                    exoPlayer = exoPlayer,
+                    state = videoPlayerState,
+                    title = state.workoutUiState.title,
+                    instructor = state.workoutUiState.instructor,
                 )
             }
         )
@@ -146,18 +161,21 @@ fun VideoPlayerControls(
     contentCurrentPosition: Long,
     exoPlayer: ExoPlayer,
     state: VideoPlayerState,
+    title: String,
+    instructor: String,
 ) {
     VideoPlayerFrame(
         videoTitle = {
             VideoPlayerTitle(
-                title = "Battle ropes HIIT",
-                secondaryText = "Hugo Wright",
+                title = title,
+                secondaryText = instructor,
             )
         },
         videoActions = {
             Row(
                 modifier = Modifier.padding(bottom = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 VideoPlayerControlsIcon(
                     icon = R.drawable.subtitles,
@@ -165,29 +183,21 @@ fun VideoPlayerControls(
                     isPlaying = isPlaying,
                 ) {}
                 VideoPlayerControlsIcon(
-                    modifier = Modifier.padding(start = 12.dp),
                     icon = R.drawable.audio,
                     state = state,
                     isPlaying = isPlaying,
                 ) {}
                 VideoPlayerControlsIcon(
-                    modifier = Modifier.padding(start = 12.dp),
                     icon = R.drawable.settings,
                     state = state,
                     isPlaying = isPlaying,
                 ) {}
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.colors(
-                        containerColor = Color.White
-                    ),
-                    shape = ButtonDefaults.shape(RoundedCornerShape(44.dp)),
-                    modifier = Modifier
-                        .height(44.dp)
-                        .width(126.2.dp)
-                ) {
-                    Text(text = "End workout")
-                }
+                CustomFillButton(
+                    text = stringResource(R.string.end_workout),
+                    textStyle = MaterialTheme.typography.titleMedium
+                        .copy(color = MaterialTheme.colorScheme.surface),
+                    onClick = {}
+                )
             }
         },
         videoSeeker = {
@@ -202,40 +212,16 @@ fun VideoPlayerControls(
 }
 
 
-@androidx.annotation.OptIn(UnstableApi::class)
+@Preview(device = Devices.TV_1080p)
 @Composable
-private fun rememberExoPlayer(context: Context) = remember {
-    ExoPlayer.Builder(context)
-        .setSeekForwardIncrementMs(10)
-        .setSeekBackIncrementMs(10)
-        .setMediaSourceFactory(
-            ProgressiveMediaSource.Factory(DefaultDataSource.Factory(context))
-        )
-        .setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
-        .build()
-        .apply {
-            playWhenReady = true
-            repeatMode = Player.REPEAT_MODE_ONE
-        }
-}
-
-
-private fun Modifier.dPadEvents(
-    exoPlayer: ExoPlayer,
-    videoPlayerState: VideoPlayerState,
-): Modifier = this.handleDPadKeyEvents(
-    onLeft = {
-//        exoPlayer.seekBack()
-//        pulseState.setType(BACK)
-    },
-    onRight = {
-//        exoPlayer.seekForward()
-//        pulseState.setType(FORWARD)
-    },
-    onUp = { videoPlayerState.showControls() },
-    onDown = { videoPlayerState.showControls() },
-    onEnter = {
-        exoPlayer.pause()
-        videoPlayerState.showControls()
+fun PreviewVideoPlayerScreen() {
+    JetFitTheme {
+        VideoPlayerContent(
+            state = VideoPlayerUiState(
+                isLoading = false,
+                error = null,
+                workoutUiState = WorkoutUiState()
+            )
+        ) {}
     }
-)
+}
