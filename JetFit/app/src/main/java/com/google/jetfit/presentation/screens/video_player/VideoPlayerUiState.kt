@@ -11,6 +11,7 @@ data class VideoPlayerUiState(
 
 @Immutable
 data class WorkoutUiState(
+    val id: String = "",
     val videoUrl: String = "",
     val title: String = "",
     val instructor: String = "",
