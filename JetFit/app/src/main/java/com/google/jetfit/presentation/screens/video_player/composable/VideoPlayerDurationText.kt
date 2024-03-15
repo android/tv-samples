@@ -37,7 +37,7 @@ fun VideoPlayerDurationText(
 ) {
     Row(modifier = modifier) {
         Text(
-            text = textProgress,
+            text = "$textProgress / ",
             color = color,
             style = MaterialTheme.typography.bodySmall
         )
