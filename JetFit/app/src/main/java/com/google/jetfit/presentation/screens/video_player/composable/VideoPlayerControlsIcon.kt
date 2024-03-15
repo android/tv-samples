@@ -47,7 +47,7 @@ internal fun VideoPlayerControlsIcon(
         buttonColor = Color.Transparent,
         border = IconButtonDefaults.border(
             border = Border(
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.border),
+                border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.border),
                 shape = CircleShape
             )
         )
