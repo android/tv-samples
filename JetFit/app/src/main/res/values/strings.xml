@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JetFit</string>
+    <string name="end_workout">End workout</string>
 </resources>
