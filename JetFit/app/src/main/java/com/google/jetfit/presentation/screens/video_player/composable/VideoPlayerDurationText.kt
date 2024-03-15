@@ -30,30 +30,30 @@ import com.google.jetfit.presentation.theme.JetFitTheme
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun VideoPlayerDurationText(
-    text: String,
+    textProgress: String,
+    textDuration: String,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onSurface
 ) {
-    Text(
-        modifier = modifier,
-        text = text,
-        color = color,
-        style = MaterialTheme.typography.bodySmall
-    )
+    Row(modifier = modifier) {
+        Text(
+            text = textProgress,
+            color = color,
+            style = MaterialTheme.typography.bodySmall
+        )
+        Text(
+            text = textDuration,
+            color = color.copy(alpha = 0.60f),
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
 }
 
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(device = Devices.TV_1080p)
 @Composable
 fun PreviewVideoPlayerControllerText() {
     JetFitTheme {
-        Row {
-            VideoPlayerDurationText(text = "19:00")
-            VideoPlayerDurationText(
-                text = "/20:35",
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.60f)
-            )
-        }
+        VideoPlayerDurationText(textProgress = "19:00", textDuration = "/20:35")
     }
 }
