@@ -1,13 +1,10 @@
 package com.google.jetfit.presentation.screens
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.graphics.vector.ImageVector
-
 enum class Screens(
     private val args: List<String>? = null,
 ) {
-    Home;
+    Home, VideoPlayer;
+
     operator fun invoke(): String {
         val argList = StringBuilder()
         args?.let { nnArgs ->

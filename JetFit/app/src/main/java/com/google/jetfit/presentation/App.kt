@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.jetfit.presentation.screens.Screens
+import com.google.jetfit.presentation.screens.video_player.VideoPlayerScreen
 
 @Composable
 fun App(
@@ -32,6 +33,16 @@ fun App(
                 )
             ) {
 
+            }
+            composable(
+                route = Screens.VideoPlayer(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                VideoPlayerScreen(onBackPressed)
             }
         }
     )
