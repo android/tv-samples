@@ -101,12 +101,11 @@ fun Modifier.handleDPadKeyEvents(
 fun Modifier.dPadEvents(
     exoPlayer: ExoPlayer,
     videoPlayerState: VideoPlayerState,
-): Modifier = this.handleDPadKeyEvents(onLeft = {
-    exoPlayer.seekBack()
-    videoPlayerState.showControls()
-},
+): Modifier = this.handleDPadKeyEvents(
+    onLeft = {
+        videoPlayerState.showControls()
+    },
     onRight = {
-        exoPlayer.seekForward()
         videoPlayerState.showControls()
     },
     onUp = {

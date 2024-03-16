@@ -36,17 +36,17 @@ fun VideoPlayerOverlay(
     controls: @Composable () -> Unit = {},
     centerButton: @Composable () -> Unit = {},
 ) {
+    LaunchedEffect(state.controlsVisibility) {
+        if (state.controlsVisibility) {
+            focusRequester.requestFocus()
+        }
+    }
+
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
             state.showControls()
         } else {
             state.showControls(seconds = Int.MAX_VALUE)
-        }
-    }
-
-    LaunchedEffect(state.controlsVisibility) {
-        if (state.controlsVisibility) {
-            focusRequester.requestFocus()
         }
     }
 
@@ -81,8 +81,8 @@ fun VideoPlayerOverlay(
 
         AnimatedVisibility(
             visible = state.controlsVisibility,
-            enter = slideInVertically { -it },
-            exit = slideOutVertically { it }
+            enter = slideInVertically { it } + fadeIn(),
+            exit = slideOutVertically { it } + fadeOut()
         ) {
             Column(
                 modifier = Modifier

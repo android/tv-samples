@@ -2,7 +2,6 @@ package com.google.jetfit.presentation.screens.video_player
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +28,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
@@ -44,7 +47,6 @@ import com.google.jetfit.presentation.screens.video_player.composable.VideoPlaye
 import com.google.jetfit.presentation.screens.video_player.composable.rememberVideoPlayerState
 import com.google.jetfit.presentation.theme.JetFitTheme
 import com.google.jetfit.presentation.utils.dPadEvents
-import com.google.jetfit.presentation.utils.rememberExoPlayer
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -54,33 +56,43 @@ fun VideoPlayerScreen(
     viewModel: VideoPlayerViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    AnimatedVisibility(visible = !state.isLoading && state.error != null) {
-        VideoPlayerContent(state = state, onBackPressed = onBackPressed)
-    }
+    VideoPlayerContent(state = state.workoutUiState, onBackPressed = onBackPressed)
 }
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 private fun VideoPlayerContent(
-    state: VideoPlayerUiState,
+    state: WorkoutUiState,
     onBackPressed: () -> Unit
 ) {
     val context = LocalContext.current
-    val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4000)
-    val exoPlayer = rememberExoPlayer(context)
-    LaunchedEffect(exoPlayer, state.workoutUiState) {
+    val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
+
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context)
+            .setMediaSourceFactory(ProgressiveMediaSource.Factory(DefaultDataSource.Factory(context)))
+            .setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT)
+            .build()
+            .apply {
+                playWhenReady = true
+                repeatMode = Player.REPEAT_MODE_ONE
+            }
+    }
+
+    LaunchedEffect(exoPlayer, state) {
         exoPlayer.setMediaItem(
             MediaItem.Builder()
-                .setUri(state.workoutUiState.videoUrl)
+                .setUri(state.videoUrl)
                 .setSubtitleConfigurations(
-                    if (state.workoutUiState.subtitles == null) {
+                    if (state.subtitles == null) {
                         emptyList()
                     } else {
                         listOf(
                             MediaItem.SubtitleConfiguration
-                                .Builder(Uri.parse(state.workoutUiState.subtitleUri))
+                                .Builder(Uri.parse(state.subtitleUri))
                                 .setMimeType("application/vtt")
                                 .setLanguage("en")
-                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                                .setSelectionFlags(C.SELECTION_FLAG_AUTOSELECT)
                                 .build()
                         )
                     }
@@ -126,7 +138,9 @@ private fun VideoPlayerContent(
         }
 
         val focusRequester = remember { FocusRequester() }
-        VideoPlayerOverlay(modifier = Modifier.align(Alignment.BottomCenter),
+
+        VideoPlayerOverlay(
+            modifier = Modifier.align(Alignment.BottomCenter),
             focusRequester = focusRequester,
             state = videoPlayerState,
             isPlaying = isPlaying,
@@ -139,20 +153,21 @@ private fun VideoPlayerContent(
                     isPlaying = isPlaying,
                 )
             },
-            subtitles = { /* TODO Implement subtitles */ },
+            subtitles = { },
             controls = {
                 VideoPlayerControls(
                     isPlaying = isPlaying,
                     contentCurrentPosition = contentCurrentPosition,
                     exoPlayer = exoPlayer,
                     state = videoPlayerState,
-                    title = state.workoutUiState.title,
-                    instructor = state.workoutUiState.instructor,
+                    title = state.title,
+                    instructor = state.instructor,
                 )
             }
         )
     }
 }
+
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -217,11 +232,7 @@ fun VideoPlayerControls(
 fun PreviewVideoPlayerScreen() {
     JetFitTheme {
         VideoPlayerContent(
-            state = VideoPlayerUiState(
-                isLoading = false,
-                error = null,
-                workoutUiState = WorkoutUiState()
-            )
+            state = WorkoutUiState()
         ) {}
     }
 }

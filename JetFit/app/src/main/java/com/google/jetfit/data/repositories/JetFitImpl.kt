@@ -13,7 +13,9 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             id = "123456sdasdsa",
             title = "Battle ropes HIIT",
             instructor = "Hugo Wright",
-            videoUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            videoUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            subtitles = null,
+            subtitleUri = null
         )
     }
 }
