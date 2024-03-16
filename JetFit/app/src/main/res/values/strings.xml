@@ -4,4 +4,6 @@
     <string name="categories">Categories</string>
     <string name="recommended_for_you">Recommended for you</string>
     <string name="image">Image %1$s</string>
+    <string name="end_workout">End workout</string>
+    <string name="song_image">Song image</string>
 </resources>
