@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.jetfit.presentation.screens.Screens
+import com.google.jetfit.presentation.screens.home.HomeScreen
 
 @Composable
 fun App(
@@ -31,7 +32,7 @@ fun App(
                     }
                 )
             ) {
-
+                HomeScreen()
             }
         }
     )
