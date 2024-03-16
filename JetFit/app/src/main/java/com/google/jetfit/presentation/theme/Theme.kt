@@ -2,17 +2,25 @@ package com.google.jetfit.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.darkColorScheme
 import androidx.tv.material3.lightColorScheme
 
+val LocalNavigationProvider = staticCompositionLocalOf<NavHostController> {
+    error("No navigation host controller provided.")
+}
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun JetFitTheme(
     isInDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+
 
     val colorScheme = if (isInDarkTheme) lightColorScheme(
         primary = primary,
@@ -38,14 +46,18 @@ fun JetFitTheme(
         surfaceVariant = surfaceVariant,
         onSurfaceVariant = onSurfaceVariant,
         border = outline,
-        inverseSurface = inverseSurface,
-        inverseOnSurface = inverseOnSurface
+        inverseOnSurface = inverseOnSurface,
+            inverseSurface = inverseSurface
     ) else darkColorScheme()
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content,
-        shapes = Shapes
-    )
+    CompositionLocalProvider(
+            LocalNavigationProvider provides rememberNavController(),
+    ) {
+        MaterialTheme(
+                colorScheme = colorScheme,
+                typography = Typography,
+            content = content,
+            shapes = Shapes
+        )
+    }
 }
