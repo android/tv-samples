@@ -14,5 +14,5 @@ data class Workout(
     val intensity: Intensity,
     val releasedDate: Date,
     val language: Language,
-    val subtitleLanguage: SubtitleLanguage
-)
+    val subtitleLanguage: SubtitleLanguage,
+    val subtitleUri: String?)
