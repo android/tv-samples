@@ -74,7 +74,7 @@ fun ImageWithGradient(
     device = "spec:parent=tv_1080p"
 )
 @Composable
-private fun CinematicBackgroundPreview() {
+private fun ImageWithGradientPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         ImageWithGradient(
             Modifier.align(Alignment.TopEnd),
