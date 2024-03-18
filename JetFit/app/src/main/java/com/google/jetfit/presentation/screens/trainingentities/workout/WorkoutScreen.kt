@@ -24,7 +24,7 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetfit.R
-import com.google.jetfit.components.ImageWithGradient
+import com.google.jetfit.components.ImageWithRadialGradient
 import com.google.jetfit.presentation.screens.trainingentities.composables.MetricItem
 import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenDescription
 import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenSubtitle
@@ -44,7 +44,7 @@ fun WorkoutScreenContent(
     state: WorkoutUiState
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-        ImageWithGradient(
+        ImageWithRadialGradient(
             Modifier.align(Alignment.TopEnd),
             state.imageUrl,
             "Workout image"

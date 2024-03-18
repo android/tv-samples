@@ -3,6 +3,7 @@ package com.google.jetfit.presentation.screens.trainingentities.challenge
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.VerticalPager
@@ -14,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.jetfit.components.ImageWithGradient
+import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.MaterialTheme
+import com.google.jetfit.components.ImageWithRadialGradient
 import com.google.jetfit.presentation.screens.trainingentities.composables.bringIntoViewIfChildrenAreFocused
 import com.google.jetfit.presentation.theme.JetFitTheme
 
@@ -25,7 +28,7 @@ fun ChallengeScreen() {
     ChallengeScreenContent(state)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 fun ChallengeScreenContent(
     state: ChallengeUiState,
@@ -35,8 +38,8 @@ fun ChallengeScreenContent(
         if (pagerState.currentPage == 0) 1f else 0.2f,
         label = "alpha effect"
     )
-    Box(modifier = Modifier.fillMaxSize()) {
-        ImageWithGradient(
+    Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background).fillMaxSize()) {
+        ImageWithRadialGradient(
             Modifier.align(Alignment.TopEnd),
             state.imageUrl,
             "Challenge Image",
