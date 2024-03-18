@@ -25,17 +25,17 @@ class VideoPlayerViewModel @Inject constructor(
     private fun getWorkoutById() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val workout = jetFitRepository.getWorkoutById("123456sdasdsa")
+                val workout = jetFitRepository.getWorkoutById("1")
                 _state.update {
                     it.copy(
                         isLoading = false,
                         error = null,
                         workoutUiState = WorkoutUiState(
-                            title = workout.title,
-                            instructor = workout.instructor,
+                            title = workout.name,
+                            instructor = workout.instructorName,
                             videoUrl = workout.videoUrl,
                             id = workout.id,
-                            subtitles = workout.subtitles,
+                            subtitles = null,
                             subtitleUri = workout.subtitleUri,
                         )
                     )

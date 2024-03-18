@@ -21,7 +21,6 @@ interface JetFitRepository {
     fun getChallenges(): List<Challenge>
     fun getChallengeById(id: String): Challenge
     fun getSongById(id: String): Song
-    fun getWorkoutById()
     suspend fun getSessions(): List<Session>
     suspend fun getCategories(): List<Category>
     suspend fun getTrainingsRecommended(): List<Training>

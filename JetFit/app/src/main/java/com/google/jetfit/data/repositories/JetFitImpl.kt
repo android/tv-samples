@@ -13,7 +13,6 @@ import com.google.jetfit.data.entities.Category
 import com.google.jetfit.data.entities.Session
 import com.google.jetfit.data.entities.Training
 import com.google.jetfit.data.entities.Song
-import com.google.jetfit.data.entities.Workout
 import javax.inject.Inject
 
 class JetFitImpl @Inject constructor() : JetFitRepository {
@@ -26,11 +25,12 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             WorkoutType.STRENGTH,
             "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
             30L,
-            "https://example.com/video.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             Intensity.HARD,
             Date(),
             Language.ENGLISH,
-            SubtitleLanguage.ENGLISH
+            SubtitleLanguage.ENGLISH,
+            null
         ),
         Workout(
             "2",
@@ -40,11 +40,12 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             WorkoutType.YOGA,
             "https://s3-alpha-sig.figma.com/img/aad6/dfa7/e5a9a9dd732084d30328dceec998666f?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Sr8NN2cvX3Bc~OmscqwR6VnQhe0Fri9~rM-D~i39wva-lyN6xG1ai7iNXYYa5Kn~uuDhyZ-0BvYVIM~Z2GciW~YMsZzPKyvfnMk92MZ3aVc1ik2fJmOG2SknBSxBuBO0lNRS0HNq-Zx~qe7JFfHC0gadAzzvCH4bB7sI01~HYYQzRjb9EYJdzkd9GkLXD9PaN0iN7in6QRDHSZdgrhT22J96TC3wxRH2mpfFsm3LYA0iSvdZgt6Zj11xrrLlfIvnGVST-SqYnpiv5ixoCHoS18N6Q0KALn7IBH3xk8MSWRnpdfwfjE-CtITEKfOc3YKOCkciHbuhasbdEYyNMHGGcg__",
             30L,
-            "https://example.com/video.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             Intensity.EASY,
             Date(),
             Language.ENGLISH,
-            SubtitleLanguage.ENGLISH
+            SubtitleLanguage.ENGLISH,
+            null
         ),
         Workout(
             "3",
@@ -54,11 +55,12 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             WorkoutType.CARDIO,
             "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
             45L,
-            "https://example.com/video.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             Intensity.HARD,
             Date(),
             Language.ENGLISH,
-            SubtitleLanguage.ENGLISH
+            SubtitleLanguage.ENGLISH,
+            null
         ),
         Workout(
             "4",
@@ -66,13 +68,14 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Discover the fundamentals of strength training with this beginner-friendly workout. Learn proper form and technique for key exercises to build a strong foundation for future progress.",
             "Maria Garcia",
             WorkoutType.STRENGTH,
-            "https://example.com/strength_training.jpg",
+            "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
             40L,
-            "https://example.com/video.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             Intensity.MEDIUM,
             Date(),
             Language.ENGLISH,
-            SubtitleLanguage.SPANISH
+            SubtitleLanguage.SPANISH,
+            null
         ),
         Workout(
             "5",
@@ -80,13 +83,14 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Unwind and release tension with this gentle evening stretch routine. Focus on deep breathing and gentle stretches to soothe tired muscles and promote relaxation, preparing you for a restful night's sleep.",
             "David Lee",
             WorkoutType.YOGA,
-            "https://example.com/evening_stretch.jpg",
+            "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
             20L,
-            "https://example.com/video.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             Intensity.EASY,
             Date(),
             Language.ENGLISH,
-            SubtitleLanguage.ENGLISH
+            SubtitleLanguage.ENGLISH,
+            null
         )
     )
 
@@ -99,7 +103,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Maximize your workouts with split training! Increase strength and build muscle in this 1-week guided program using heavier weights and targeting specific areas of the body in each workout. Repeat and track your progress!",
             "Andrew Trace",
             WorkoutType.SESSIONS,
-            "https://figmage.com/images/FbgDhnXP05yKpdsLJfTQo.png",
+            "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
             1L,
             5,
             30,
@@ -458,22 +462,9 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Week 3: Expand your style" to shuffledWorkouts.shuffled(),
             "Week 4: Challenge yourself" to shuffledWorkouts.shuffled()
         )
-    override fun getWorkoutById(id: String): Workout {
-        return Workout(
-            id = "123456sdasdsa",
-            title = "Battle ropes HIIT",
-            instructor = "Hugo Wright",
-            videoUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            subtitles = null,
-            subtitleUri = null
-        )
     }
 
-    override fun getWorkoutById() {
-        TODO("Not yet implemented")
-    }
-
-    override fun getChallengeById(id: String): Challenge = getChallenges().first { it.id == id}
+    override fun getChallengeById(id: String): Challenge = getChallenges().first { it.id == id }
 
     override fun getSongById(id: String): Song {
         return Song(
