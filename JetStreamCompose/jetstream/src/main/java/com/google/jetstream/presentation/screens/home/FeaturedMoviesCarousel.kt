@@ -121,10 +121,16 @@ fun FeaturedMoviesCarousel(
                 activeItemIndex = carouselState.activeItemIndex
             )
         },
-        contentTransformStartToEnd = fadeIn(tween(durationMillis = 1000))
-            .togetherWith(fadeOut(tween(durationMillis = 1000))),
-        contentTransformEndToStart = fadeIn(tween(durationMillis = 1000))
-            .togetherWith(fadeOut(tween(durationMillis = 1000))),
+        contentTransformStartToEnd = slideIn(tween(100, easing = LinearOutSlowInEasing)) {
+            IntOffset(it.width, 0)
+        }.togetherWith(slideOut(tween(100, easing = FastOutSlowInEasing)) {
+            IntOffset(0, 0)
+        }),
+        contentTransformEndToStart = slideIn(tween(100, easing = LinearOutSlowInEasing)) {
+            IntOffset(it.width, 0)
+        }.togetherWith(slideOut(tween(100, easing = FastOutSlowInEasing)) {
+            IntOffset(0, 0)
+        }),
         content = { index ->
             val movie = movies[index]
             // background
