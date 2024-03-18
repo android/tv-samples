@@ -1,4 +1,4 @@
-package com.google.jetfit.components
+package com.google.jetfit.presentation.screens.trainingentities.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

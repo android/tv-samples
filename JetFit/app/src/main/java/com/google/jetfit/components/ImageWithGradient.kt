@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun CinematicBackground(
+fun ImageWithGradient(
     modifier: Modifier = Modifier,
     imageUrl: String,
     contentDescription: String,
@@ -41,13 +41,15 @@ fun CinematicBackground(
             .clipToBounds()
     ) {
         AsyncImage(
-            modifier = Modifier.fillMaxSize().alpha(imagePassThrough),
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(imagePassThrough),
             model = imageUrl,
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop
         )
         Canvas(
-            modifier = Modifier.size(DpSize(width = 758.dp, height = 426.38.dp))
+            modifier = Modifier.size(DpSize(width = width, height = height))
         ) {
             scale(
                 scaleY = 1f,
@@ -63,6 +65,7 @@ fun CinematicBackground(
                 )
             }
         }
+
     }
 }
 
@@ -73,7 +76,7 @@ fun CinematicBackground(
 @Composable
 private fun CinematicBackgroundPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
-        CinematicBackground(
+        ImageWithGradient(
             Modifier.align(Alignment.TopEnd),
             "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
             "poster",
