@@ -40,6 +40,46 @@ fun App(
 
             }
             composable(
+                route = Screens.Workout(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+
+            }
+            composable(
+                route = Screens.Series(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+
+            }
+            composable(
+                route = Screens.Challenge(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+
+            }
+            composable(
+                route = Screens.Routine(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+
+            }
+            composable(
                 route = Screens.VideoPlayer(),
                 arguments = listOf(
                     navArgument("") {
