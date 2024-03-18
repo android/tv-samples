@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.challenge
+package com.google.jetfit.presentation.screens.trainingentities.challenge
 
 import com.google.jetfit.data.entities.Workout
 
