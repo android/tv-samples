@@ -71,6 +71,7 @@ fun InteractionsScreen() {
                     modifier = Modifier
                         .width(280.dp)
                         .aspectRatio(16f / 9),
+                    scale = ClickableSurfaceScale.None,
                     border = ClickableSurfaceDefaults.border(
                         focusedBorder = border,
                         pressedBorder = border,
@@ -91,6 +92,7 @@ fun InteractionsScreen() {
                     modifier = Modifier
                         .width(280.dp)
                         .aspectRatio(16f / 9),
+                    scale = ClickableSurfaceScale.None,
                     border = ClickableSurfaceDefaults.border(
                         focusedBorder = border,
                         pressedBorder = border,

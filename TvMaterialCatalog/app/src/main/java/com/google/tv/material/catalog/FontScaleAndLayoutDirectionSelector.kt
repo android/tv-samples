@@ -138,7 +138,7 @@ fun FontScaleAndLayoutDirectionSelector(
                         item {
                             Column {
                                 Text(
-                                    text = "COLOR MODE",
+                                    text = "FONT SCALE",
                                     modifier = Modifier.padding(
                                         horizontal = 16.dp,
                                         vertical = 12.dp
