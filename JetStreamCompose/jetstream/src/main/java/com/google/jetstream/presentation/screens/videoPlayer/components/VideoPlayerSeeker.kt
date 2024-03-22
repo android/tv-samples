@@ -27,7 +27,7 @@ fun VideoPlayerSeeker(
             if(h > 0) {
                 "$h:${m.padStartWith0()}:${s.padStartWith0()}"
             } else {
-                ":${m.padStartWith0()}:${s.padStartWith0()}"
+                "${m.padStartWith0()}:${s.padStartWith0()}"
             }
 
         }
@@ -36,7 +36,7 @@ fun VideoPlayerSeeker(
             if(h > 0) {
                 "$h:${m.padStartWith0()}:${s.padStartWith0()}"
             } else {
-                ":${m.padStartWith0()}:${s.padStartWith0()}"
+                "${m.padStartWith0()}:${s.padStartWith0()}"
             }
 
         }
