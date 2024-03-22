@@ -19,7 +19,7 @@ package com.google.jetstream.presentation.screens.categories
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvGridItemSpan
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
@@ -73,9 +72,11 @@ fun CategoryMovieListScreen(
         is CategoryMovieListScreenUiState.Loading -> {
             Loading()
         }
+
         is CategoryMovieListScreenUiState.Error -> {
             Error()
         }
+
         is CategoryMovieListScreenUiState.Done -> {
             val categoryDetails = s.movieCategoryDetails
             CategoryDetails(
@@ -115,7 +116,8 @@ private fun CategoryDetails(
             )
         )
         TvLazyVerticalGrid(
-            columns = TvGridCells.Fixed(6)
+            columns = TvGridCells.Fixed(6),
+            contentPadding = PaddingValues(bottom = JetStreamBottomListPadding)
         ) {
             categoryDetails.movies.forEachIndexed { index, movie ->
                 item {
@@ -170,9 +172,6 @@ private fun CategoryDetails(
                         )
                     }
                 }
-            }
-            item(span = { TvGridItemSpan(currentLineSpan = 6) }) {
-                Spacer(modifier = Modifier.padding(bottom = JetStreamBottomListPadding))
             }
         }
     }

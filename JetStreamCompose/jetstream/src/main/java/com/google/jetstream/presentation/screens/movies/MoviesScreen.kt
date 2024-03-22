@@ -17,7 +17,6 @@
 package com.google.jetstream.presentation.screens.movies
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -90,11 +89,8 @@ private fun Catalog(
     TvLazyColumn(
         modifier = modifier,
         state = tvLazyListState,
-        contentPadding = PaddingValues(bottom = 104.dp)
+        contentPadding = PaddingValues(top = childPadding.top, bottom = 104.dp)
     ) {
-        item {
-            Spacer(modifier = Modifier.padding(top = childPadding.top))
-        }
         item {
             MoviesScreenMovieList(
                 movieList = movieList,
