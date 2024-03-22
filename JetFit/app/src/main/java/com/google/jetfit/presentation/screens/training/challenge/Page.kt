@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.challenge
+package com.google.jetfit.presentation.screens.training.challenge
 
 sealed class Page {
     data object Details : Page()

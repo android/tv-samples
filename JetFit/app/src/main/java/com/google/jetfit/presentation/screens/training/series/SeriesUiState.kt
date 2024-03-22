@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.series
+package com.google.jetfit.presentation.screens.training.series
 
 data class SeriesUiState(
     val isLoading: Boolean = true,

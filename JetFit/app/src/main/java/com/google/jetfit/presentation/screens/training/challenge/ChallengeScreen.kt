@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.challenge
+package com.google.jetfit.presentation.screens.training.challenge
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import com.google.jetfit.components.ImageWithRadialGradient
-import com.google.jetfit.presentation.screens.trainingentities.composables.bringIntoViewIfChildrenAreFocused
+import com.google.jetfit.presentation.screens.training.composables.bringIntoViewIfChildrenAreFocused
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable

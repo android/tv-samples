@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.series
+package com.google.jetfit.presentation.screens.training.routine
 
 import androidx.lifecycle.ViewModel
 import com.google.jetfit.data.repositories.JetFitRepository
@@ -9,33 +9,31 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class SeriesViewModel @Inject constructor(
+class RoutineViewModel @Inject constructor(
     repository: JetFitRepository
 ) : ViewModel() {
     val id: String = "1"
 
-    private val _state: MutableStateFlow<SeriesUiState> by lazy {
+    private val _state: MutableStateFlow<RoutineUiState> by lazy {
         MutableStateFlow(
-            SeriesUiState()
+            RoutineUiState()
         )
     }
     val state = _state.asStateFlow()
 
     init {
         try {
-            repository.getSeriesById(id).also { series ->
+            repository.getRoutineById(id).also { routine ->
                 _state.update {
                     it.copy(
                         isLoading = false,
                         error = null,
-                        subtitle = "${series.instructorName}  |  ${series.intensity.value}",
-                        title = series.name,
-                        description = series.description,
-                        intensity = series.intensity.value,
-                        numberOfClasses = series.numberOfClasses.toString(),
-                        numberOfWeeks = series.numberOfWeeks.toString(),
-                        minutesPerDay = series.minutesPerDay.toString(),
-                        imageUrl = series.imageUrl
+                        subtitle = "${routine.instructorName}  |  ${routine.workoutType.value}",
+                        title = routine.name,
+                        description = routine.description,
+                        duration = "${routine.duration} min",
+                        intensity = routine.intensity.value,
+                        imageUrl = routine.imageUrl
                     )
                 }
             }

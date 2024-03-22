@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.composables
+package com.google.jetfit.presentation.screens.training.composables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,11 +8,11 @@ import androidx.tv.material3.Text
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun RegimenTitle(title: String, modifier: Modifier = Modifier) {
+fun RegimenSubtitle(subtitle: String, modifier: Modifier = Modifier) {
     Text(
+        text = subtitle,
         modifier = modifier,
-        text = title,
-        style = MaterialTheme.typography.headlineLarge,
-        color = MaterialTheme.colorScheme.onSurface
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }

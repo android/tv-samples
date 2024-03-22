@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.composables
+package com.google.jetfit.presentation.screens.training.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

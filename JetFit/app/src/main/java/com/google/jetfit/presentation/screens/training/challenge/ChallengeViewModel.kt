@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.challenge
+package com.google.jetfit.presentation.screens.training.challenge
 
 import androidx.lifecycle.ViewModel
 import com.google.jetfit.data.repositories.JetFitRepository

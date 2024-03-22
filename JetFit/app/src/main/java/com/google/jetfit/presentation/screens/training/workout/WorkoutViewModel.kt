@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.workout
+package com.google.jetfit.presentation.screens.training.workout
 
 import androidx.lifecycle.ViewModel
 import com.google.jetfit.data.repositories.JetFitRepository

@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.routine
+package com.google.jetfit.presentation.screens.training.series
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -23,33 +23,32 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.OutlinedButton
-import androidx.tv.material3.OutlinedIconButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.ImageWithRadialGradient
-import com.google.jetfit.presentation.screens.trainingentities.composables.MetricItem
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenDescription
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenSubtitle
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenTitle
+import com.google.jetfit.presentation.screens.training.composables.MetricItem
+import com.google.jetfit.presentation.screens.training.composables.RegimenDescription
+import com.google.jetfit.presentation.screens.training.composables.RegimenSubtitle
+import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun RoutineScreen() {
-    val viewModel: RoutineViewModel = hiltViewModel()
-    val state by viewModel.state.collectAsState()
-    RoutineScreenContent(state)
+fun SeriesScreen() {
+    val seriesViewModel: SeriesViewModel = hiltViewModel()
+    val state by seriesViewModel.state.collectAsState()
+    SeriesScreenContent(state)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun RoutineScreenContent(
-    state: RoutineUiState,
+fun SeriesScreenContent(
+    state: SeriesUiState,
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
         ImageWithRadialGradient(
             modifier = Modifier.align(Alignment.TopEnd),
             imageUrl = state.imageUrl,
-            contentDescription = "Series Image"
+            contentDescription = "Series poster"
         )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -64,36 +63,35 @@ fun RoutineScreenContent(
                     modifier = Modifier.padding(top = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
-                    MetricItem(state.duration, "Duration")
+                    MetricItem(state.numberOfWeeks, "Weeks")
+                    MetricItem(state.numberOfClasses, "Classes")
                     MetricItem(state.intensity, "Intensity")
+                    MetricItem(state.minutesPerDay, "Minutes per day")
                 }
                 Row(
                     modifier = Modifier.padding(top = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Button(onClick = { }) {
+                    Button(onClick = {}) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 painter = painterResource(id = R.drawable.play_icon),
                                 contentDescription = "Play icon"
                             )
-                            Text(text = "Start routine", modifier = Modifier.padding(start = 6.dp))
+                            Text(text = "Start program", modifier = Modifier.padding(start = 6.dp))
                         }
                     }
                     OutlinedButton(onClick = { }) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                painter = painterResource(id = R.drawable.bell_icon),
-                                contentDescription = "Bell icon"
+                                painter = painterResource(id = R.drawable.message_icon),
+                                contentDescription = "favorite icon",
                             )
-                            Text(text = "Setup a daily reminder", modifier = Modifier.padding(start = 6.dp))
+                            Text(
+                                text = "Recommend schedule",
+                                modifier = Modifier.padding(start = 6.dp)
+                            )
                         }
-                    }
-                    OutlinedIconButton(onClick = { }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.fav_icon),
-                            contentDescription = "Favorite icon",
-                        )
                     }
                 }
             }
@@ -106,8 +104,8 @@ fun RoutineScreenContent(
     device = "id:tv_1080p"
 )
 @Composable
-fun RoutineScreenPreview() {
+fun SeriesScreenPreview() {
     JetFitTheme {
-        RoutineScreen()
+        SeriesScreen()
     }
 }

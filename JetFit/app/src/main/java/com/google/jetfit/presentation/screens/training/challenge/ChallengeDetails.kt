@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.challenge
+package com.google.jetfit.presentation.screens.training.challenge
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,10 +19,10 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
-import com.google.jetfit.presentation.screens.trainingentities.composables.MetricItem
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenDescription
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenSubtitle
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenTitle
+import com.google.jetfit.presentation.screens.training.composables.MetricItem
+import com.google.jetfit.presentation.screens.training.composables.RegimenDescription
+import com.google.jetfit.presentation.screens.training.composables.RegimenSubtitle
+import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

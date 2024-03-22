@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.series
+package com.google.jetfit.presentation.screens.training.workout
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -22,38 +22,37 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.ImageWithRadialGradient
-import com.google.jetfit.presentation.screens.trainingentities.composables.MetricItem
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenDescription
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenSubtitle
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenTitle
+import com.google.jetfit.presentation.screens.training.composables.MetricItem
+import com.google.jetfit.presentation.screens.training.composables.RegimenDescription
+import com.google.jetfit.presentation.screens.training.composables.RegimenSubtitle
+import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun SeriesScreen() {
-    val seriesViewModel: SeriesViewModel = hiltViewModel()
-    val state by seriesViewModel.state.collectAsState()
-    SeriesScreenContent(state)
+fun WorkoutScreen() {
+    val viewmodel: WorkoutViewModel = hiltViewModel()
+    val state: WorkoutUiState by viewmodel.state.collectAsState()
+    WorkoutScreenContent(state)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun SeriesScreenContent(
-    state: SeriesUiState,
+fun WorkoutScreenContent(
+    state: WorkoutUiState
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
         ImageWithRadialGradient(
-            modifier = Modifier.align(Alignment.TopEnd),
-            imageUrl = state.imageUrl,
-            contentDescription = "Series poster"
+            Modifier.align(Alignment.TopEnd),
+            state.imageUrl,
+            "Workout image"
         )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
-                    .padding(top = 200.dp, start = 48.dp)
+                    .padding(top = 196.dp, start = 48.dp)
                     .width(484.dp),
             ) {
                 RegimenSubtitle(subtitle = state.subtitle)
@@ -61,36 +60,24 @@ fun SeriesScreenContent(
                 RegimenDescription(state.description, Modifier.padding(top = 20.dp))
                 Row(
                     modifier = Modifier.padding(top = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(40.dp)
+                    horizontalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    MetricItem(state.numberOfWeeks, "Weeks")
-                    MetricItem(state.numberOfClasses, "Classes")
+                    MetricItem(state.duration, "Duration")
                     MetricItem(state.intensity, "Intensity")
-                    MetricItem(state.minutesPerDay, "Minutes per day")
                 }
                 Row(
                     modifier = Modifier.padding(top = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Button(onClick = {}) {
+                    Button(
+                        onClick = { }
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 painter = painterResource(id = R.drawable.play_icon),
                                 contentDescription = "Play icon"
                             )
-                            Text(text = "Start program", modifier = Modifier.padding(start = 6.dp))
-                        }
-                    }
-                    OutlinedButton(onClick = { }) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.message_icon),
-                                contentDescription = "favorite icon",
-                            )
-                            Text(
-                                text = "Recommend schedule",
-                                modifier = Modifier.padding(start = 6.dp)
-                            )
+                            Text(text = "Start workout", modifier = Modifier.padding(start = 6.dp))
                         }
                     }
                 }
@@ -104,8 +91,8 @@ fun SeriesScreenContent(
     device = "id:tv_1080p"
 )
 @Composable
-fun SeriesScreenPreview() {
+fun WorkoutScreenPreview() {
     JetFitTheme {
-        SeriesScreen()
+        WorkoutScreen()
     }
 }

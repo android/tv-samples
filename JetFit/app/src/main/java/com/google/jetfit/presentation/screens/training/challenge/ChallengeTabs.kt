@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.challenge
+package com.google.jetfit.presentation.screens.training.challenge
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +36,7 @@ import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
 import com.google.jetfit.components.UnderlinedIndicator
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenCardItem
+import com.google.jetfit.presentation.screens.training.composables.RegimenCardItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)

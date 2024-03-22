@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.trainingentities.workout
+package com.google.jetfit.presentation.screens.training.routine
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -22,37 +22,39 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.OutlinedButton
+import androidx.tv.material3.OutlinedIconButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.ImageWithRadialGradient
-import com.google.jetfit.presentation.screens.trainingentities.composables.MetricItem
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenDescription
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenSubtitle
-import com.google.jetfit.presentation.screens.trainingentities.composables.RegimenTitle
+import com.google.jetfit.presentation.screens.training.composables.MetricItem
+import com.google.jetfit.presentation.screens.training.composables.RegimenDescription
+import com.google.jetfit.presentation.screens.training.composables.RegimenSubtitle
+import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun WorkoutScreen() {
-    val viewmodel: WorkoutViewModel = hiltViewModel()
-    val state: WorkoutUiState by viewmodel.state.collectAsState()
-    WorkoutScreenContent(state)
+fun RoutineScreen() {
+    val viewModel: RoutineViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsState()
+    RoutineScreenContent(state)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun WorkoutScreenContent(
-    state: WorkoutUiState
+fun RoutineScreenContent(
+    state: RoutineUiState,
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
         ImageWithRadialGradient(
-            Modifier.align(Alignment.TopEnd),
-            state.imageUrl,
-            "Workout image"
+            modifier = Modifier.align(Alignment.TopEnd),
+            imageUrl = state.imageUrl,
+            contentDescription = "Series Image"
         )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
-                    .padding(top = 196.dp, start = 48.dp)
+                    .padding(top = 200.dp, start = 48.dp)
                     .width(484.dp),
             ) {
                 RegimenSubtitle(subtitle = state.subtitle)
@@ -60,7 +62,7 @@ fun WorkoutScreenContent(
                 RegimenDescription(state.description, Modifier.padding(top = 20.dp))
                 Row(
                     modifier = Modifier.padding(top = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    horizontalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
                     MetricItem(state.duration, "Duration")
                     MetricItem(state.intensity, "Intensity")
@@ -69,16 +71,29 @@ fun WorkoutScreenContent(
                     modifier = Modifier.padding(top = 28.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Button(
-                        onClick = { }
-                    ) {
+                    Button(onClick = { }) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 painter = painterResource(id = R.drawable.play_icon),
                                 contentDescription = "Play icon"
                             )
-                            Text(text = "Start workout", modifier = Modifier.padding(start = 6.dp))
+                            Text(text = "Start routine", modifier = Modifier.padding(start = 6.dp))
                         }
+                    }
+                    OutlinedButton(onClick = { }) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.bell_icon),
+                                contentDescription = "Bell icon"
+                            )
+                            Text(text = "Setup a daily reminder", modifier = Modifier.padding(start = 6.dp))
+                        }
+                    }
+                    OutlinedIconButton(onClick = { }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.fav_icon),
+                            contentDescription = "Favorite icon",
+                        )
                     }
                 }
             }
@@ -91,8 +106,8 @@ fun WorkoutScreenContent(
     device = "id:tv_1080p"
 )
 @Composable
-fun WorkoutScreenPreview() {
+fun RoutineScreenPreview() {
     JetFitTheme {
-        WorkoutScreen()
+        RoutineScreen()
     }
 }

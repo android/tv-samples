@@ -1,6 +1,6 @@
-package com.google.jetfit.presentation.screens.trainingentities.workout
+package com.google.jetfit.presentation.screens.training.routine
 
-data class WorkoutUiState(
+data class RoutineUiState(
     val isLoading: Boolean = true,
     val error: String? = null,
     val subtitle: String = "",
