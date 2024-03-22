@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.tv.material3.ButtonDefaults
@@ -54,8 +56,8 @@ import com.google.jetfit.data.entities.Session
 import com.google.jetfit.presentation.screens.home.carouselSaver
 import com.google.jetfit.presentation.theme.JetFitTheme
 import com.google.jetfit.presentation.theme.shadowCarouselColor
-import com.google.jetfit.presentation.utils.Shadow
-import com.google.jetfit.presentation.utils.withShadow
+import com.google.jetfit.presentation.utils.conditional
+import com.google.jetfit.presentation.utils.shadowBox
 
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -74,14 +76,16 @@ fun Sessions(
         modifier = modifier
             .fillMaxSize()
             .padding(padding)
-            .withShadow(
-                shadow = Shadow(
-                    offsetY = 8.dp,
-                    radius = 44.dp,
-                    color = shadowCarouselColor
-                ),
-                shape = MaterialTheme.shapes.extraLarge,
-                showShadow = isCarouselFocused
+            .conditional(
+                isCarouselFocused,
+                ifTrue = {
+                    shadowBox(
+                        color = shadowCarouselColor,
+                        blurRadius = 40.dp,
+                        offset = DpOffset(0.dp, 8.dp),
+                        shape = MaterialTheme.shapes.extraLarge,
+                    )
+                }
             )
             .border(
                 width = 3.dp,

@@ -28,9 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.screens.categories.CategoryMovieListScreen
-import com.google.jetstream.presentation.screens.dashboard.DashboardScreen
-import com.google.jetstream.presentation.screens.movies.MovieDetailsScreen
-import com.google.jetstream.presentation.screens.videoPlayer.VideoPlayerScreen
+import com.google.jetstream.presentation.screens.profile.AccountsSection
 
 @Composable
 fun App(
@@ -52,77 +50,7 @@ fun App(
                     }
                 )
             ) {
-                CategoryMovieListScreen(
-                    onBackPressed = {
-                        if (navController.navigateUp()) {
-                            isComingBackFromDifferentScreen = true
-                        }
-                    },
-                    onMovieSelected = { movie ->
-                        navController.navigate(
-                            Screens.MovieDetails.withArgs(movie.id)
-                        )
-                    }
-                )
-            }
-            composable(
-                route = Screens.MovieDetails(),
-                arguments = listOf(
-                    navArgument(MovieDetailsScreen.MovieIdBundleKey) {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-                MovieDetailsScreen(
-                    goToMoviePlayer = {
-                        navController.navigate(Screens.VideoPlayer())
-                    },
-                    refreshScreenWithNewMovie = { movie ->
-                        navController.navigate(
-                            Screens.MovieDetails.withArgs(movie.id)
-                        ) {
-                            popUpTo(Screens.MovieDetails()) {
-                                inclusive = true
-                            }
-                        }
-                    },
-                    onBackPressed = {
-                        if (navController.navigateUp()) {
-                            isComingBackFromDifferentScreen = true
-                        }
-                    }
-                )
-            }
-            composable(route = Screens.Dashboard()) {
-                DashboardScreen(
-                    openCategoryMovieList = { categoryId ->
-                        navController.navigate(
-                            Screens.CategoryMovieList.withArgs(categoryId)
-                        )
-                    },
-                    openMovieDetailsScreen = { movieId ->
-                        navController.navigate(
-                            Screens.MovieDetails.withArgs(movieId)
-                        )
-                    },
-                    openVideoPlayer = {
-                        navController.navigate(Screens.VideoPlayer())
-                    },
-                    onBackPressed = onBackPressed,
-                    isComingBackFromDifferentScreen = isComingBackFromDifferentScreen,
-                    resetIsComingBackFromDifferentScreen = {
-                        isComingBackFromDifferentScreen = false
-                    }
-                )
-            }
-            composable(route = Screens.VideoPlayer()) {
-                VideoPlayerScreen(
-                    onBackPressed = {
-                        if (navController.navigateUp()) {
-                            isComingBackFromDifferentScreen = true
-                        }
-                    }
-                )
+                AccountsSection()
             }
         }
     )
