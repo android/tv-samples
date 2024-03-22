@@ -34,15 +34,14 @@ import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun RoutineScreen() {
-    val viewModel: RoutineViewModel = hiltViewModel()
+fun RoutineScreen(viewModel: RoutineViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
     RoutineScreenContent(state)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun RoutineScreenContent(
+private fun RoutineScreenContent(
     state: RoutineUiState,
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {

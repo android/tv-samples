@@ -32,15 +32,14 @@ import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun WorkoutScreen() {
-    val viewmodel: WorkoutViewModel = hiltViewModel()
+fun WorkoutScreen(viewmodel: WorkoutViewModel = hiltViewModel()) {
     val state: WorkoutUiState by viewmodel.state.collectAsState()
     WorkoutScreenContent(state)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun WorkoutScreenContent(
+private fun WorkoutScreenContent(
     state: WorkoutUiState
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {

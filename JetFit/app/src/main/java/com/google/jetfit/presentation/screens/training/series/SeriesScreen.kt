@@ -33,15 +33,14 @@ import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun SeriesScreen() {
-    val seriesViewModel: SeriesViewModel = hiltViewModel()
+fun SeriesScreen(seriesViewModel: SeriesViewModel = hiltViewModel()) {
     val state by seriesViewModel.state.collectAsState()
     SeriesScreenContent(state)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun SeriesScreenContent(
+private fun SeriesScreenContent(
     state: SeriesUiState,
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {

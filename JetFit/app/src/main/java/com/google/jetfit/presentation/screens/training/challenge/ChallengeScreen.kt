@@ -22,15 +22,14 @@ import com.google.jetfit.presentation.screens.training.composables.bringIntoView
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
-fun ChallengeScreen() {
-    val challengeViewModel: ChallengeViewModel = hiltViewModel()
+fun ChallengeScreen(challengeViewModel: ChallengeViewModel = hiltViewModel()) {
     val state by challengeViewModel.state.collectAsState()
     ChallengeScreenContent(state)
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
-fun ChallengeScreenContent(
+private fun ChallengeScreenContent(
     state: ChallengeUiState,
 ) {
     val pagerState = rememberPagerState { state.pages.size }
