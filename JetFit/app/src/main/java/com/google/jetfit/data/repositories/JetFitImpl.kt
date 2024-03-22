@@ -12,6 +12,10 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getInstructors(): List<String> {
+        return getSessions().map { it.instructor }
+    }
+
     override fun getWorkoutById(id: String): Workout {
         return Workout(
             id = "123456sdasdsa",

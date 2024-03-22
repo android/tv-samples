@@ -26,7 +26,7 @@ fun CustomFillButton(
     textStyle: TextStyle = TextStyle(),
     onClick: () -> Unit,
     icon: Int? = null,
-    buttonColor: ButtonColors = ButtonDefaults.colors(Color.White),
+    buttonColor: ButtonColors = ButtonDefaults.colors(),
     iconPadding: Dp = 4.dp,
     iconTint: Color = Color.White
 ) {

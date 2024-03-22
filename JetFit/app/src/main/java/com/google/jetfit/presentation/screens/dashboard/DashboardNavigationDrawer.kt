@@ -1,5 +1,6 @@
 package com.google.jetfit.presentation.screens.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -91,8 +92,10 @@ fun DashboardNavigationDrawer(
         },
         modifier = Modifier
     ) {
-        Box(modifier = modifier.padding(start = closeDrawerWidth + backgroundContentPadding)) {
-            content()
-        }
+        Box(modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(start = closeDrawerWidth + backgroundContentPadding),
+            content = {content()}
+        )
     }
 }

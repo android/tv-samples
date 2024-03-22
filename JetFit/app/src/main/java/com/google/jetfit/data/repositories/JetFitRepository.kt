@@ -9,6 +9,7 @@ import com.google.jetfit.data.entities.Training
 
 interface JetFitRepository {
     fun getWorkouts()
+    suspend fun getInstructors():List<String>
     fun getWorkoutById(id: String): Workout
     fun getSongById(id: String): Song
     fun getWorkoutById()

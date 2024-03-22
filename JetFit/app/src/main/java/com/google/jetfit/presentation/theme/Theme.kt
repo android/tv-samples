@@ -22,7 +22,7 @@ fun JetFitTheme(
 ) {
 
 
-    val colorScheme = if (isInDarkTheme) lightColorScheme(
+    val colorScheme = if (isInDarkTheme) darkColorScheme() else lightColorScheme(
         primary = primary,
         onPrimary = onPrimary,
         primaryContainer = primaryContainer,
@@ -47,15 +47,16 @@ fun JetFitTheme(
         onSurfaceVariant = onSurfaceVariant,
         border = outline,
         inverseOnSurface = inverseOnSurface,
-            inverseSurface = inverseSurface
-    ) else darkColorScheme()
+        inverseSurface = inverseSurface,
+        inversePrimary = inversePrimary
+    )
 
     CompositionLocalProvider(
             LocalNavigationProvider provides rememberNavController(),
     ) {
         MaterialTheme(
-                colorScheme = colorScheme,
-                typography = Typography,
+            colorScheme = colorScheme,
+            typography = Typography,
             content = content,
             shapes = Shapes
         )

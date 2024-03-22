@@ -30,16 +30,6 @@ fun App(
                     onBackPressed = onBackPressed
             )
             composable(
-                route = Screens.Home(),
-                arguments = listOf(
-                    navArgument("") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-
-            }
-            composable(
                 route = Screens.VideoPlayer(),
                 arguments = listOf(
                     navArgument("") {
