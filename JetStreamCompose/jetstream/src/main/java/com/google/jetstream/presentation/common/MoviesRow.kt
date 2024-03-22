@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -188,10 +187,10 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
         ) { movieState ->
             TvLazyRow(
                 modifier = Modifier.focusRestorer(),
-                pivotOffsets = PivotOffsets(parentFraction = 0.07f)
+                pivotOffsets = PivotOffsets(parentFraction = 0.07f),
+                contentPadding = PaddingValues(start = startPadding, end = endPadding),
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                item { Spacer(modifier = Modifier.padding(start = startPadding)) }
-
                 movieState.forEachIndexed { index, movie ->
                     item {
                         key(movie.id) {
@@ -209,10 +208,7 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
                             )
                         }
                     }
-                    item { Spacer(modifier = Modifier.padding(end = 20.dp)) }
                 }
-
-                item { Spacer(modifier = Modifier.padding(start = endPadding)) }
             }
         }
     }

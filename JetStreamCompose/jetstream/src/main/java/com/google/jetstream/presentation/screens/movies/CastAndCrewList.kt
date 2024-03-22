@@ -20,7 +20,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,7 +57,7 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
     val childPadding = rememberChildPadding()
 
     Column(
-        modifier = Modifier.padding(top = childPadding.top)
+        modifier = Modifier.padding(top = childPadding.top),
     ) {
         Text(
             text = stringResource(R.string.cast_and_crew),
@@ -72,10 +72,9 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
                 .focusRestorer(),
             pivotOffsets = PivotOffsets(
                 parentFraction = 0.07f
-            )
+            ),
+            contentPadding = PaddingValues(start = childPadding.start)
         ) {
-            item { Spacer(modifier = Modifier.padding(start = childPadding.start)) }
-
             items(castAndCrew, key = { it.id }) {
                 CastAndCrewItem(it, modifier = Modifier.width(144.dp))
             }
