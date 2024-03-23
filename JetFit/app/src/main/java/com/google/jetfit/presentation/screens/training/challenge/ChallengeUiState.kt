@@ -11,8 +11,15 @@ data class ChallengeUiState(
     val numberOfDays: String = "",
     val minutesPerDay: String = "",
     val tabs: List<String> = listOf(),
-    val weaklyPlans: List<Map<String, List<WorkoutItemUiState>>> = listOf(),
+    val weaklyPlans: List<Map<String, List<ChallengeWorkoutItemUiState>>> = listOf(),
     val shouldShowDetails: Boolean = true,
     val isFavorite: Boolean = false,
     val pages: List<Page> = listOf(Page.Details, Page.Tabs)
+)
+
+data class ChallengeWorkoutItemUiState(
+    val id: String,
+    val imageUrl: String,
+    val title: String,
+    val subtitle: String
 )

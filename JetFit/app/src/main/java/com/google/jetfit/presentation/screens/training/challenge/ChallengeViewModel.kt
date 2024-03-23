@@ -40,7 +40,14 @@ class ChallengeViewModel @Inject constructor(
                             mapOf(
                                 Pair(
                                     weaklyPlan.first,
-                                    weaklyPlan.second.map { workout -> workout.toItemUiState() })
+                                    weaklyPlan.second.map { workout ->
+                                        ChallengeWorkoutItemUiState(
+                                            id = workout.id,
+                                            imageUrl = workout.imageUrl,
+                                            title = workout.name,
+                                            subtitle = "${workout.duration} min  |  ${workout.intensity.level}",
+                                        )
+                                    })
                             )
                         }
                     )
