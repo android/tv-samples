@@ -21,7 +21,7 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
-import com.google.jetfit.presentation.screens.training.composables.MetricItem
+import com.google.jetfit.presentation.screens.training.composables.TrainingInfoColumnItem
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -57,9 +57,9 @@ fun ChallengeDetails(
                 Modifier.padding(top = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(48.dp)
             ) {
-                MetricItem(state.numberOfDays, "Days")
-                MetricItem(state.intensity, "Intensity")
-                MetricItem(state.minutesPerDay, "Minutes per day")
+                TrainingInfoColumnItem(state.numberOfDays, "Days")
+                TrainingInfoColumnItem(state.intensity, "Intensity")
+                TrainingInfoColumnItem(state.minutesPerDay, "Minutes per day")
             }
             Row(
                 modifier = Modifier.padding(top = 28.dp),

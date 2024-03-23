@@ -17,8 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import com.google.jetfit.components.ImageWithRadialGradient
-import com.google.jetfit.presentation.screens.training.composables.bringIntoViewIfChildrenAreFocused
+import com.google.jetfit.presentation.screens.training.composables.TrainingImageWithGradient
+import com.google.jetfit.presentation.screens.training.composables.showFullscreenIfChildrenAreFocused
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
@@ -38,14 +38,14 @@ private fun ChallengeScreenContent(
         label = "alpha effect"
     )
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background).fillMaxSize()) {
-        ImageWithRadialGradient(
+        TrainingImageWithGradient(
             Modifier.align(Alignment.TopEnd),
             state.imageUrl,
             "Challenge Image",
             imagePassThrough = alpha
         )
         VerticalPager(state = pagerState, beyondBoundsPageCount = 2) { pageIndex ->
-            Box(modifier = Modifier.fillMaxSize().bringIntoViewIfChildrenAreFocused()) {
+            Box(modifier = Modifier.fillMaxSize().showFullscreenIfChildrenAreFocused()) {
                 when (state.challengePages[pageIndex]) {
                     ChallengePages.ChallengeDetails -> {
                         ChallengeDetails(state)

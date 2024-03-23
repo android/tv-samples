@@ -1,5 +1,6 @@
 package com.google.jetfit.presentation.screens.training.composables
 
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,9 +25,13 @@ fun RegimenCardItem(
     StandardCardLayout(
         imageCard = { interactionSource ->
             CardLayoutDefaults.ImageCard(
-                onClick = { onclick() }, interactionSource = interactionSource
+                onClick = { onclick() }, interactionSource = interactionSource,
             ) {
-                AsyncImage(model = imageUrl, contentDescription = "Training image")
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = "Training image",
+                    modifier = Modifier.aspectRatio(16f / 9f)
+                )
             }
         },
         modifier = Modifier.width(196.dp),
@@ -41,8 +46,6 @@ fun RegimenCardItem(
         subtitle = { Text(text = subtitle, modifier = Modifier.fillMaxWidth()) }
     )
 }
-
-
 
 @Preview
 @Composable

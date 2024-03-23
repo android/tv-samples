@@ -35,7 +35,7 @@ import androidx.tv.material3.TabRow
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
-import com.google.jetfit.components.UnderlinedIndicator
+import com.google.jetfit.components.ChallengeTabsUnderlinedIndicator
 import com.google.jetfit.presentation.screens.training.composables.RegimenCardItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
@@ -68,7 +68,7 @@ fun ChallengeTabs(
                 selectedTabIndex = selectedTabIndex,
                 separator = { Spacer(modifier = Modifier.width(16.dp)) },
                 indicator = { tabPositions, doesTabRowHaveFocus ->
-                    UnderlinedIndicator(
+                    ChallengeTabsUnderlinedIndicator(
                         currentTabPosition = tabPositions[selectedTabIndex],
                         doesTabRowHaveFocus = doesTabRowHaveFocus,
                         activeColor = MaterialTheme.colorScheme.secondary,

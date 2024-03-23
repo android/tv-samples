@@ -12,13 +12,13 @@ import androidx.tv.material3.Text
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun MetricItem(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun TrainingInfoColumnItem(value: String, label: String, modifier: Modifier = Modifier) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally,) {
         Text(
             modifier = Modifier.padding(bottom = 8.dp),
             text = value,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = label,

@@ -23,7 +23,7 @@ import androidx.tv.material3.MaterialTheme
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun UnderlinedIndicator(
+fun ChallengeTabsUnderlinedIndicator(
     currentTabPosition: DpRect,
     doesTabRowHaveFocus: Boolean,
     modifier: Modifier = Modifier,
