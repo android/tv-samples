@@ -32,7 +32,7 @@ fun ChallengeScreen(challengeViewModel: ChallengeViewModel = hiltViewModel()) {
 private fun ChallengeScreenContent(
     state: ChallengeUiState,
 ) {
-    val pagerState = rememberPagerState { state.pages.size }
+    val pagerState = rememberPagerState { state.challengePages.size }
     val alpha: Float by animateFloatAsState(
         if (pagerState.currentPage == 0) 1f else 0.2f,
         label = "alpha effect"
@@ -44,20 +44,14 @@ private fun ChallengeScreenContent(
             "Challenge Image",
             imagePassThrough = alpha
         )
-        VerticalPager(state = pagerState, beyondBoundsPageCount = 1) { pageIndex->
-            when(state.pages[pageIndex]) {
-                Page.Details -> {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .bringIntoViewIfChildrenAreFocused()
-                    ) {
+        VerticalPager(state = pagerState, beyondBoundsPageCount = 2) { pageIndex ->
+            Box(modifier = Modifier.fillMaxSize().bringIntoViewIfChildrenAreFocused()) {
+                when (state.challengePages[pageIndex]) {
+                    ChallengePages.ChallengeDetails -> {
                         ChallengeDetails(state)
                     }
-                }
-                Page.Tabs -> {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .bringIntoViewIfChildrenAreFocused()) {
+
+                    ChallengePages.ChallengeTabs -> {
                         ChallengeTabs(state)
                     }
                 }

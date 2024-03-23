@@ -14,7 +14,7 @@ data class ChallengeUiState(
     val weaklyPlans: List<Map<String, List<ChallengeWorkoutItemUiState>>> = listOf(),
     val shouldShowDetails: Boolean = true,
     val isFavorite: Boolean = false,
-    val pages: List<Page> = listOf(Page.Details, Page.Tabs)
+    val challengePages: List<ChallengePages> = listOf(ChallengePages.ChallengeDetails, ChallengePages.ChallengeTabs)
 )
 
 data class ChallengeWorkoutItemUiState(
