@@ -11,18 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
 import com.google.jetfit.presentation.screens.training.composables.MetricItem
-import com.google.jetfit.presentation.screens.training.composables.RegimenDescription
-import com.google.jetfit.presentation.screens.training.composables.RegimenSubtitle
-import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -35,11 +34,24 @@ fun ChallengeDetails(
                 .padding(top = 196.dp, start = 48.dp)
                 .width(484.dp),
         ) {
-            RegimenSubtitle(subtitle = state.subtitle)
-            RegimenTitle(title = state.title, modifier = Modifier.padding(top = 4.dp))
-            RegimenDescription(
-                description = state.description,
-                modifier = Modifier.padding(top = 20.dp)
+            Text(
+                text = state.subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                modifier = Modifier.padding(top = 4.dp),
+                text = state.title,
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = state.description,
+                modifier = Modifier.padding(top = 20.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
             Row(
                 Modifier.padding(top = 20.dp),

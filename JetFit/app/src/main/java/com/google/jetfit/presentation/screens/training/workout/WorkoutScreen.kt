@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,9 +27,6 @@ import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.ImageWithRadialGradient
 import com.google.jetfit.presentation.screens.training.composables.MetricItem
-import com.google.jetfit.presentation.screens.training.composables.RegimenDescription
-import com.google.jetfit.presentation.screens.training.composables.RegimenSubtitle
-import com.google.jetfit.presentation.screens.training.composables.RegimenTitle
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
@@ -54,9 +52,26 @@ private fun WorkoutScreenContent(
                     .padding(top = 196.dp, start = 48.dp)
                     .width(484.dp),
             ) {
-                RegimenSubtitle(subtitle = state.subtitle)
-                RegimenTitle(title = state.title, modifier = Modifier.padding(top = 4.dp))
-                RegimenDescription(state.description, Modifier.padding(top = 20.dp))
+                Text(
+                    text = state.subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    modifier = Modifier.padding(top = 4.dp),
+                    text = state.title,
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    modifier = Modifier.padding(top = 20.dp),
+                    text = state.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
                 Row(
                     modifier = Modifier.padding(top = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)
