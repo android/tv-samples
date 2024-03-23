@@ -6,4 +6,17 @@
     <string name="image">Image %1$s</string>
     <string name="end_workout">End workout</string>
     <string name="song_image">Song image</string>
+    <string name="whos_working_out_today">Who’s working out today?</string>
+    <string name="sign_in_with_a_different_user">Sign in with a different user</string>
+    <string name="length">Length</string>
+    <string name="_15_30_mins">15-30 mins</string>
+    <string name="instructor">Instructor</string>
+    <string name="class_type">Class type</string>
+    <string name="class_language">Class language</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="subtitles">Subtitles</string>
+    <string name="sort_by">Sort by</string>
+    <string name="reset">Reset</string>
+    <string name="clear">Clear</string>
+    <string name="filters">Filters</string>
 </resources>

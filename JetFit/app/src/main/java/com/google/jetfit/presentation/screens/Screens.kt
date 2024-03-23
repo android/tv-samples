@@ -12,6 +12,7 @@ enum class Screens(
     VideoPlayer,
     AudioPlayer,
     Dashboard,
+    ProfileSelector,
     Workout,
     Challenge,
     Series,

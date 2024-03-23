@@ -3,28 +3,71 @@ package com.google.jetfit.presentation.screens.training
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
+import com.google.jetfit.components.CustomOutlineButton
+import com.google.jetfit.presentation.screens.training.composable.FilterSideMenu
+import com.google.jetfit.presentation.screens.training.composable.SideMenu
+import com.google.jetfit.presentation.screens.training.composable.SortSideMenu
+
+@Composable
+fun TrainingScreen(
+    viewModel: TrainingViewModel = hiltViewModel()
+) {
+
+    val state by viewModel.state.collectAsState()
+
+    TrainingContent(
+            state = state,
+            onClickFilter = viewModel::onFilterClicked,
+            onDismissSideMenu = viewModel::onDismissSideMenu,
+            onSelectedItem = viewModel::onSelectedSortedItem,
+            onClickSortBy = viewModel::onSortedClicked
+    )
+
+}
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun TrainingScreen() {
+private fun TrainingContent(
+    state: TrainingUiState,
+    onClickFilter: () -> Unit,
+    onClickSortBy: () -> Unit,
+    onDismissSideMenu: () -> Unit,
+    onSelectedItem: (currentIndex: Int) -> Unit
+) {
+    SideMenu(onDismissSideMenu = onDismissSideMenu, isSideMenuExpended = state.isFilterExpended) {
+        FilterSideMenu(
+                onDismissSideMenu = onDismissSideMenu,
+                filtrationFields = state.filterItems
+        )
+    }
+    SideMenu(onDismissSideMenu = onDismissSideMenu, isSideMenuExpended = state.isSortExpended) {
+        SortSideMenu(
+                onDismissSideMenu = onDismissSideMenu,
+                selectedIndex = state.selectedSortItem,
+                onSelectedItem = onSelectedItem
+        )
+    }
     Column(
             Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Color.Yellow),
-            verticalArrangement = Arrangement.Center,
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Training Screen", fontSize = 24.sp)
+        CustomOutlineButton(text = "Filters", onClick = onClickFilter)
+        CustomOutlineButton(
+                text = "Sort by: ${TrainingUiState.SortItem.entries[state.selectedSortItem]}",
+                onClick = onClickSortBy
+        )
     }
 }
