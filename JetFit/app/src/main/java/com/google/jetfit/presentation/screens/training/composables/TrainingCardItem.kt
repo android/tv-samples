@@ -16,11 +16,12 @@ import coil.compose.AsyncImage
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun RegimenCardItem(
+fun TrainingCardItem(
     onclick: () -> Unit,
     imageUrl: String,
     title: String,
-    subtitle: String
+    subtitle: String,
+    modifier: Modifier = Modifier
 ) {
     StandardCardLayout(
         imageCard = { interactionSource ->
@@ -34,7 +35,7 @@ fun RegimenCardItem(
                 )
             }
         },
-        modifier = Modifier.width(196.dp),
+        modifier = modifier.width(196.dp),
         title = {
             Text(
                 text = title,
@@ -50,7 +51,7 @@ fun RegimenCardItem(
 @Preview
 @Composable
 fun CardItemPreview() {
-    RegimenCardItem(
+    TrainingCardItem(
         {},
         "https://figmage.com/images/FbgDhnXP05yKpdsLJfTQo.png",
         "Upper-body basics",

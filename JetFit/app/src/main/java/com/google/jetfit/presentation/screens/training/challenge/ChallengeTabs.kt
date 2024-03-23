@@ -36,7 +36,7 @@ import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
 import com.google.jetfit.components.ChallengeTabsUnderlinedIndicator
-import com.google.jetfit.presentation.screens.training.composables.RegimenCardItem
+import com.google.jetfit.presentation.screens.training.composables.TrainingCardItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -99,7 +99,7 @@ fun ChallengeTabs(
                 }
             }
             TvLazyRow(
-                modifier = Modifier.padding(top = 40.dp),
+                modifier = Modifier.padding(top = 40.dp).focusRestorer(),
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(horizontal = 48.dp)
             ) {
@@ -109,7 +109,7 @@ fun ChallengeTabs(
                         listOf()
                     )
                 ) { workoutItemUiState ->
-                    RegimenCardItem(
+                    TrainingCardItem(
                         onclick = { },
                         imageUrl = workoutItemUiState.imageUrl,
                         title = workoutItemUiState.title,
