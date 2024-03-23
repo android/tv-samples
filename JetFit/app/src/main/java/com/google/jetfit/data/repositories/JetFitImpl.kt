@@ -6,7 +6,6 @@ import com.google.jetfit.data.entities.Language
 import com.google.jetfit.data.entities.Routine
 import com.google.jetfit.data.entities.Series
 import com.google.jetfit.data.entities.SubtitleLanguage
-import com.google.jetfit.data.entities.Workout
 import com.google.jetfit.data.entities.WorkoutType
 import java.util.Date
 import com.google.jetfit.data.entities.Category
@@ -97,7 +96,6 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
     )
 
     override fun getWorkoutById(id: String): Workout = getWorkouts().first { it.id == id }
-
     override fun getSeries(): List<Series> = listOf(
         Series(
             "1",
@@ -242,20 +240,12 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             Date(),
             Language.ENGLISH,
             SubtitleLanguage.ENGLISH
+        )
+    )
+
     override suspend fun getInstructors(): List<String> {
         return getSessions().map { it.instructor }
     }
-
-    override fun getWorkoutById(id: String): Workout {
-        return Workout(
-            id = "123456sdasdsa",
-            title = "Battle ropes HIIT",
-            instructor = "Hugo Wright",
-            videoUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            subtitles = null,
-            subtitleUri = null
-        )
-    )
 
     override fun getSeriesById(id: String): Series = getSeries().first { it.id == id }
 
