@@ -35,8 +35,8 @@ import androidx.tv.material3.TabRow
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
-import com.google.jetfit.components.ChallengeTabsUnderlinedIndicator
-import com.google.jetfit.presentation.screens.training.composables.TrainingCardItem
+import com.google.jetfit.presentation.screens.training.composable.ChallengeTabsUnderlinedIndicator
+import com.google.jetfit.presentation.screens.training.composable.TrainingCardItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)

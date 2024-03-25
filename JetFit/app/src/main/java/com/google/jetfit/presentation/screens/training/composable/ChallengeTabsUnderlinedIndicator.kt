@@ -1,4 +1,4 @@
-package com.google.jetfit.components
+package com.google.jetfit.presentation.screens.training.composable
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState

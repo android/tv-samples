@@ -25,8 +25,8 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetfit.R
-import com.google.jetfit.presentation.screens.training.composables.TrainingImageWithGradient
-import com.google.jetfit.presentation.screens.training.composables.TrainingInfoColumnItem
+import com.google.jetfit.presentation.screens.training.composable.TrainingImageWithGradient
+import com.google.jetfit.presentation.screens.training.composable.TrainingInfoColumnItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable

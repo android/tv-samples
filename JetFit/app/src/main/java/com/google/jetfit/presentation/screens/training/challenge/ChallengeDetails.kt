@@ -21,7 +21,7 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
 import com.google.jetfit.components.PlanTextWithIcon
-import com.google.jetfit.presentation.screens.training.composables.TrainingInfoColumnItem
+import com.google.jetfit.presentation.screens.training.composable.TrainingInfoColumnItem
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

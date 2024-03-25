@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.training.composables
+package com.google.jetfit.presentation.screens.training.composable
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas

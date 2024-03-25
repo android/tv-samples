@@ -17,8 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import com.google.jetfit.presentation.screens.training.composables.TrainingImageWithGradient
-import com.google.jetfit.presentation.screens.training.composables.showFullscreenIfChildrenAreFocused
+import com.google.jetfit.presentation.screens.training.composable.TrainingImageWithGradient
+import com.google.jetfit.presentation.screens.training.composable.showFullscreenIfChildrenAreFocused
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
