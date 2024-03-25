@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.jetfit.presentation.screens.Screens
+import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
 import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
 import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
@@ -55,6 +56,17 @@ fun App(
                 route = Screens.ProfileSelector()
             ) {
                 ProfileSelectorScreen(onBackPressed = onBackPressed)
+            }
+
+            composable(
+                route = Screens.MoreOptions(),
+                arguments = listOf(
+                    navArgument(""){
+                        type = NavType.StringType
+                    }
+                )
+            ){
+                MoreOptionsScreen(onBackPressed = onBackPressed)
             }
             composable(
                 route = Screens.Favorite()

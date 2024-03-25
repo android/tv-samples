@@ -9,6 +9,7 @@ enum class Screens(
     val isNavigationDrawerItem: Boolean = false,
     val navigationDrawerIcon: Int? = null
 ) {
+    MoreOptions,
     VideoPlayer,
     AudioPlayer,
     Dashboard,

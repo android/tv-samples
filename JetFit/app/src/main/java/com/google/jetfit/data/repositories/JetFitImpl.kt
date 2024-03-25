@@ -9,7 +9,10 @@ import com.google.jetfit.data.entities.Profile
 import com.google.jetfit.data.entities.Session
 import com.google.jetfit.data.entities.Song
 import com.google.jetfit.data.entities.Training
+import com.google.jetfit.data.entities.TrainingE
 import com.google.jetfit.data.entities.Workout
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
@@ -191,5 +194,21 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                 avatar = "https://s3-alpha-sig.figma.com/img/3c0b/7630/a6c58e76e1e55007c4ef8859cacb4398?Expires=1711929600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AlCz1j9iK0OhpkYbrtd1MGytk-1Q9lp51IiF5bkM6ri9Hilgke9REJCZj3eYESxoQLlJEE9LfYmdCPwKHuL5ttaKNjI9Y7R1U88049F8Quy4BIAHo8hV1ZLVp2CoKk9JP7ydMHwicJSwqAyfKokI3GNN1A~GBOoSPX-skdmLx3VK5nleWjtZl4dyxQ77ffnUHLC4lVW55m0Bj5t~3vh6-ZZ6Veu-aOO~r9I9EA4aIiwCLu0HbIN5mal98MXyO2eRqZpvgRffmLHcJPblCWjUhunugwtIaBXbv8GEFM7y0w5F60VhDumHZkhu-ASESrs-3nDCLnV7268z-ifqCat~6Q__"
             ),
         )
+    }
+
+    override fun getTrainingById(id: Int): Flow<TrainingE> {
+        return flow {
+            emit(
+                TrainingE(
+                    id = "1",
+                    instructor = "Danielle Orlando",
+                    type = "Intensity",
+                    title = "Total-body balance pilates",
+                    time = "34 Min",
+                    description = "Andrea's signature low-impact, total-body class in just 30 minutes. Hit every muscle group with barre and Pilates moves that leave you feeling strong, refreshed, and energized",
+                    imageUrl = "https://s3-alpha-sig.figma.com/img/4a55/976b/4326c161fb1a8e1619b6b935a7d72898?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FrisEgVcxRsPdV5~7TFJuogCRC1DGQncvd7W3eEWrE3raW3WU-NFGMg9-G3rrUAanAM8doc5Ce842G-vEyVzC~eQyY8Sl2X9RJW199oajHOcVq4QBhjWmJBbSiQiJjEm5sqGgyPSUvpWd2D-5b1d7GeSFvRPAnmR-nfnHTlmtGkc3c1y4awXIyWPvzRAxqEwJN~3lsPxAOA~4c7YM5h9tJbM7GbBru~NOdU1cP5tRF52~~H0xgebbcOU1hst5UHvDph-7zsViDPCOWvAJrAwKLF8Jzd1Ts-1BiHsVqFVROTu6eA4pj9t7u7omBGcc0XplFfJobo7YG8pFKJSwKPOrQ__"
+                )
+            )
+        }
     }
 }

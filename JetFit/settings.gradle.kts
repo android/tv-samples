@@ -30,3 +30,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "JetFit"
 include(":app")
+include(":benchmark")
