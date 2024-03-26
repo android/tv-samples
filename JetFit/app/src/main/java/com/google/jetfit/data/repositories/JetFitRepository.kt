@@ -11,9 +11,7 @@ import com.google.jetfit.data.entities.Training
 import com.google.jetfit.data.entities.TrainingE
 import kotlinx.coroutines.flow.Flow
 import com.google.jetfit.data.entities.Workout
-
 import com.google.jetfit.data.entities.FavList
-import kotlinx.coroutines.flow.Flow
 
 interface JetFitRepository {
     fun getWorkouts(): List<Workout>

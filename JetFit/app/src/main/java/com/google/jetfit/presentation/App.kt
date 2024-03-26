@@ -11,9 +11,14 @@ import androidx.navigation.navArgument
 import com.google.jetfit.presentation.screens.Screens
 import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
+import com.google.jetfit.presentation.screens.home.HomeScreen
 import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
 import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.profileSelector.ProfileSelectorScreen
+import com.google.jetfit.presentation.screens.training.challenge.ChallengeScreen
+import com.google.jetfit.presentation.screens.training.routine.RoutineScreen
+import com.google.jetfit.presentation.screens.training.series.SeriesScreen
+import com.google.jetfit.presentation.screens.training.workout.WorkoutScreen
 import com.google.jetfit.presentation.utils.navigateTo
 import com.google.jetfit.presentation.utils.navigationDrawerGraph
 
@@ -72,6 +77,56 @@ fun App(
                 route = Screens.Favorite()
             ){
                 FavoritesScreen(onBackPressed = onBackPressed)
+            }
+            composable(
+                route = Screens.Home(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                HomeScreen()
+            }
+            composable(
+                route = Screens.Workout(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                WorkoutScreen()
+            }
+            composable(
+                route = Screens.Series(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                SeriesScreen()
+            }
+            composable(
+                route = Screens.Challenge(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                ChallengeScreen()
+            }
+            composable(
+                route = Screens.Routine(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                RoutineScreen()
             }
         }
     )
