@@ -20,6 +20,7 @@ benchmark-macro-junit4 = "1.2.2"
 coil-compose = "2.5.0"
 media3-ui = "1.3.0"
 media3-exoplayer = "1.3.0"
+constraint-layout = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
@@ -48,6 +49,7 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3-ui" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3-exoplayer" }
+constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraint-layout" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
