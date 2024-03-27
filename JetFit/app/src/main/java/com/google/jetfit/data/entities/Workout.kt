@@ -9,7 +9,7 @@ data class Workout(
     val instructorName: String,
     val workoutType: WorkoutType,
     val imageUrl: String,
-    val duration: Long,
+    val duration: String,
     val videoUrl: String,
     val intensity: Intensity,
     val releasedDate: Date,
