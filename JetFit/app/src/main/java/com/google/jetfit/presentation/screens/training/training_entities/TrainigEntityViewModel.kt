@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.training.challenge
+package com.google.jetfit.presentation.screens.training.training_entities
 
 import androidx.lifecycle.ViewModel
 import com.google.jetfit.data.repositories.JetFitRepository
@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class ChallengeViewModel @Inject constructor(
+class TrainigEntityViewModel @Inject constructor(
     repository: JetFitRepository
-) : ViewModel() {
+) : ViewModel(), TrainingEntityInteractions {
     val id: String = "1"
 
-    private val _state: MutableStateFlow<ChallengeUiState> by lazy {
+    private val _state: MutableStateFlow<TrainingEntityUiState> by lazy {
         MutableStateFlow(
-            ChallengeUiState()
+            TrainingEntityUiState()
         )
     }
     val state = _state.asStateFlow()
@@ -26,15 +26,10 @@ class ChallengeViewModel @Inject constructor(
             repository.getChallengeById(id).also { challenge ->
                 _state.update {
                     it.copy(
-                        isLoading = false,
-                        error = null,
                         subtitle = "${challenge.instructorName}  |  ${challenge.workoutType.value}",
                         title = challenge.name,
                         description = challenge.description,
-                        intensity = challenge.intensity.value,
                         imageUrl = challenge.imageUrl,
-                        numberOfDays = challenge.numberOfDays.toString(),
-                        minutesPerDay = challenge.minutesPerDay.toString(),
                         tabs = challenge.weaklyPlans.map { weaklyPlan -> weaklyPlan.first },
                         weaklyPlans = challenge.weaklyPlans.map { weaklyPlan ->
                             mapOf(
@@ -45,7 +40,8 @@ class ChallengeViewModel @Inject constructor(
                                             id = workout.id,
                                             imageUrl = workout.imageUrl,
                                             title = workout.name,
-                                            subtitle = "${workout.duration} min  |  ${workout.intensity.level}",
+                                            time = workout.duration,
+                                            typeText = workout.intensity.level
                                         )
                                     })
                             )
@@ -53,10 +49,16 @@ class ChallengeViewModel @Inject constructor(
                     )
                 }
             }
-        } catch (e: Throwable) {
-            _state.update {
-                it.copy(isLoading = false, error = e.message.toString())
-            }
+        } catch (_: Throwable) {
+
+        }
+    }
+
+    override fun onClickShowChallengeTabs() {
+        _state.update { value ->
+            value.copy(
+                isChallengeTabsVisible = !value.isChallengeTabsVisible
+            )
         }
     }
 }

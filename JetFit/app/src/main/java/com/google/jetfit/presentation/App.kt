@@ -15,7 +15,7 @@ import com.google.jetfit.presentation.screens.home.HomeScreen
 import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
 import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.profileSelector.ProfileSelectorScreen
-import com.google.jetfit.presentation.screens.training.challenge.ChallengeScreen
+import com.google.jetfit.presentation.screens.training.training_entities.TrainingEntityScreen
 import com.google.jetfit.presentation.screens.training.routine.RoutineScreen
 import com.google.jetfit.presentation.screens.training.series.SeriesScreen
 import com.google.jetfit.presentation.screens.training.workout.WorkoutScreen
@@ -31,7 +31,7 @@ fun App(
     NavHost(
         navController = navController,
         route = "root_host",
-        startDestination = Screens.ProfileSelector(),
+        startDestination = Screens.Challenge(),
         builder = {
             navigationDrawerGraph(
                     onNavigateToRoot = navController::navigateTo,
@@ -116,7 +116,7 @@ fun App(
                     }
                 )
             ) {
-                ChallengeScreen()
+                TrainingEntityScreen()
             }
             composable(
                 route = Screens.Routine(),
