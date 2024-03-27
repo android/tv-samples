@@ -26,8 +26,6 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
-import com.google.jetfit.presentation.screens.training.composable.TrainingImageWithGradient
-import com.google.jetfit.presentation.screens.training.composable.TrainingInfoColumnItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
@@ -42,11 +40,9 @@ private fun SeriesScreenContent(
     state: SeriesUiState,
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-        TrainingImageWithGradient(
-            modifier = Modifier.align(Alignment.TopEnd),
-            imageUrl = state.imageUrl,
-            contentDescription = "Series poster"
-        )
+//        TrainingContent(
+//            imageUrl = state.imageUrl,
+//        )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
@@ -76,10 +72,18 @@ private fun SeriesScreenContent(
                     modifier = Modifier.padding(top = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
-                    TrainingInfoColumnItem(state.numberOfWeeks, "Weeks")
-                    TrainingInfoColumnItem(state.numberOfClasses, "Classes")
-                    TrainingInfoColumnItem(state.intensity, "Intensity")
-                    TrainingInfoColumnItem(state.minutesPerDay, "Minutes per day")
+//                    TrainingInfo(
+//                        value =   state.numberOfWeeks,
+//                        label = "Weeks")
+//                    TrainingInfo(
+//                        value =   state.numberOfClasses,
+//                        "Classes")
+//                    TrainingInfo(
+//                        value =  state.intensity,
+//                        "Intensity")
+//                    TrainingInfo(
+//                        value =  state.minutesPerDay,
+//                        "Minutes per day")
                 }
                 Row(
                     modifier = Modifier.padding(top = 28.dp),

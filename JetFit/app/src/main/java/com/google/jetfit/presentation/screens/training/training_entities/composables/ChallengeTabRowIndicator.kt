@@ -1,4 +1,4 @@
-package com.google.jetfit.presentation.screens.training.composable
+package com.google.jetfit.presentation.screens.training.training_entities.composables
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -23,7 +23,7 @@ import androidx.tv.material3.MaterialTheme
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun ChallengeTabsUnderlinedIndicator(
+fun ChallengeTabRowIndicator(
     currentTabPosition: DpRect,
     doesTabRowHaveFocus: Boolean,
     modifier: Modifier = Modifier,

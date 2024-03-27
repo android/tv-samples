@@ -27,8 +27,6 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.OutlinedIconButton
 import androidx.tv.material3.Text
 import com.google.jetfit.R
-import com.google.jetfit.presentation.screens.training.composable.TrainingImageWithGradient
-import com.google.jetfit.presentation.screens.training.composable.TrainingInfoColumnItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
@@ -43,11 +41,9 @@ private fun RoutineScreenContent(
     state: RoutineUiState,
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-        TrainingImageWithGradient(
-            modifier = Modifier.align(Alignment.TopEnd),
-            imageUrl = state.imageUrl,
-            contentDescription = "Series Image"
-        )
+//        TrainingContent(
+//            imageUrl = state.imageUrl
+//        )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
@@ -77,8 +73,14 @@ private fun RoutineScreenContent(
                     modifier = Modifier.padding(top = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
-                    TrainingInfoColumnItem(state.duration, "Duration")
-                    TrainingInfoColumnItem(state.intensity, "Intensity")
+//                    TrainingInfo(
+//                        info = state.duration,
+//                        label = "Duration"
+//                    )
+//                    TrainingInfo(
+//                        info = state.intensity,
+//                        label = "Intensity"
+//                    )
                 }
                 Row(
                     modifier = Modifier.padding(top = 28.dp),

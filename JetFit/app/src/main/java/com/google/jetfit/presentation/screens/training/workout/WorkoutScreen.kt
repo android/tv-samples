@@ -25,8 +25,6 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetfit.R
-import com.google.jetfit.presentation.screens.training.composable.TrainingImageWithGradient
-import com.google.jetfit.presentation.screens.training.composable.TrainingInfoColumnItem
 import com.google.jetfit.presentation.theme.JetFitTheme
 
 @Composable
@@ -41,11 +39,9 @@ private fun WorkoutScreenContent(
     state: WorkoutUiState
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-        TrainingImageWithGradient(
-            Modifier.align(Alignment.TopEnd),
-            state.imageUrl,
-            "Workout image"
-        )
+//        TrainingContent(
+//            state.imageUrl,
+//        )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
@@ -76,8 +72,8 @@ private fun WorkoutScreenContent(
                     modifier = Modifier.padding(top = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    TrainingInfoColumnItem(state.duration, "Duration")
-                    TrainingInfoColumnItem(state.intensity, "Intensity")
+//                    TrainingInfo(state.duration, "Duration")
+//                    TrainingInfo(state.intensity, "Intensity")
                 }
                 Row(
                     modifier = Modifier.padding(top = 28.dp),
