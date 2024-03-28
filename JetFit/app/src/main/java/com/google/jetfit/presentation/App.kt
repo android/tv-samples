@@ -16,9 +16,6 @@ import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
 import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.profileSelector.ProfileSelectorScreen
 import com.google.jetfit.presentation.screens.training.training_entities.TrainingEntityScreen
-import com.google.jetfit.presentation.screens.training.routine.RoutineScreen
-import com.google.jetfit.presentation.screens.training.series.SeriesScreen
-import com.google.jetfit.presentation.screens.training.workout.WorkoutScreen
 import com.google.jetfit.presentation.utils.navigateTo
 import com.google.jetfit.presentation.utils.navigationDrawerGraph
 
@@ -31,7 +28,7 @@ fun App(
     NavHost(
         navController = navController,
         route = "root_host",
-        startDestination = Screens.Challenge(),
+        startDestination = Screens.TrainingEntity(),
         builder = {
             navigationDrawerGraph(
                     onNavigateToRoot = navController::navigateTo,
@@ -89,27 +86,7 @@ fun App(
                 HomeScreen()
             }
             composable(
-                route = Screens.Workout(),
-                arguments = listOf(
-                    navArgument("") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-                WorkoutScreen()
-            }
-            composable(
-                route = Screens.Series(),
-                arguments = listOf(
-                    navArgument("") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-                SeriesScreen()
-            }
-            composable(
-                route = Screens.Challenge(),
+                route = Screens.TrainingEntity(),
                 arguments = listOf(
                     navArgument("") {
                         type = NavType.StringType
@@ -117,16 +94,6 @@ fun App(
                 )
             ) {
                 TrainingEntityScreen()
-            }
-            composable(
-                route = Screens.Routine(),
-                arguments = listOf(
-                    navArgument("") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {
-                RoutineScreen()
             }
         }
     )
