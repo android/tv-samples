@@ -40,7 +40,7 @@ fun TrainingEntityDetails(
     onClickRoutineFavourite: () -> Unit,
     onClickChallengesPlan: () -> Unit
 ) {
-    val descriptionWidth = (LocalConfiguration.current.screenWidthDp * 2 / 3).dp
+    val descriptionWidth = (LocalConfiguration.current.screenWidthDp / 2).dp
     val isChallenges = state.contentType == CHALLENGES
     val isRoutine = state.contentType == ROUTINE
     val paddingBottom = when (state.contentType) {
