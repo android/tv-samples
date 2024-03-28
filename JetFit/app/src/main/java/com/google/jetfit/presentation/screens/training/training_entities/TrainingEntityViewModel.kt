@@ -1,17 +1,19 @@
 package com.google.jetfit.presentation.screens.training.training_entities
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.jetfit.data.repositories.JetFitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TrainigEntityViewModel @Inject constructor(
-    repository: JetFitRepository
-) : ViewModel(), TrainingEntityInteractions {
+class TrainingEntityViewModel @Inject constructor(
+    private val repository: JetFitRepository
+) : ViewModel() {
     val id: String = "1"
 
     private val _state: MutableStateFlow<TrainingEntityUiState> by lazy {
@@ -22,7 +24,11 @@ class TrainigEntityViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        try {
+        challengesById()
+    }
+
+    private fun challengesById() {
+        viewModelScope.launch {
             repository.getChallengeById(id).also { challenge ->
                 _state.update {
                     it.copy(
@@ -49,16 +55,6 @@ class TrainigEntityViewModel @Inject constructor(
                     )
                 }
             }
-        } catch (_: Throwable) {
-
-        }
-    }
-
-    override fun onClickShowChallengeTabs() {
-        _state.update { value ->
-            value.copy(
-                isChallengeTabsVisible = !value.isChallengeTabsVisible
-            )
         }
     }
 }

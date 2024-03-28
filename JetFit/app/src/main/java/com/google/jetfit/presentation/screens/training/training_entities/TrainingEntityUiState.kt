@@ -12,13 +12,19 @@ data class TrainingEntityUiState(
     val itemsInfo: List<TrainingInfoItem> = listOf(),
     val tabs: List<String> = listOf(),
     val weaklyPlans: List<Map<String, List<ChallengeWorkoutItemUiState>>> = listOf(),
-    val isChallengeTabsVisible: Boolean = false,
     val isFavorite: Boolean = false,
     val challengePages: List<TrainingEntityPages> = listOf(
         TrainingEntityPages.EntityDetails,
         TrainingEntityPages.EntityTabs
     )
 ) {
+    data class ChallengeWorkoutItemUiState(
+        val id: String,
+        val imageUrl: String,
+        val title: String,
+        val time: String,
+        val typeText: String,
+    )
     data class TrainingInfoItem(
         val info: String = "",
         val label: String = ""
@@ -32,14 +38,6 @@ data class TrainingEntityUiState(
     }
 
 }
-
-data class ChallengeWorkoutItemUiState(
-    val id: String,
-    val imageUrl: String,
-    val title: String,
-    val time: String,
-    val typeText: String,
-)
 
 
 fun TrainingEntityUiState.ContentType.getStartButtonID() = when (this) {
