@@ -40,8 +40,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // TODO: Remove this once EngageSDK 1.4.0 is published
-        maven { url("/tmp/engage_m2/") }
     }
 }
 
