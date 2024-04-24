@@ -26,7 +26,10 @@ fun ComponentsGridCard(
         modifier = modifier,
         imageCard = {
             CardLayoutDefaults.ImageCard(
-                onClick = { navHostController.navigate(component.routeValue) },
+                onClick = {
+                    onClick?.invoke()
+                    navHostController.navigate(component.routeValue)
+                },
                 interactionSource = it,
                 colors = CardDefaults.colors(containerColor = Color.Transparent)
             ) {

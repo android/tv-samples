@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,13 @@ import androidx.tv.material3.Text
 @OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomeGrid() {
+    val focusRequester = remember { FocusRequester() }
+    val itemClick = {
+        focusRequester.saveFocusedChild()
+    }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
     Column(Modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -27,7 +36,10 @@ fun HomeGrid() {
         ) {
             TvLazyVerticalGrid(
                 columns = TvGridCells.Fixed(4),
-                modifier = Modifier.padding(top = 12.dp),
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .focusRequester(focusRequester)
+                    .focusRestorer(),
                 contentPadding = PaddingValues(vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -37,7 +49,7 @@ fun HomeGrid() {
                 }
 
                 itemsIndexed(foundations) { index, item ->
-                    ComponentsGridCard(component = item)
+                    ComponentsGridCard(component = item, onClick = itemClick)
                 }
 
                 item(span = { TvGridItemSpan(4) }) {
@@ -45,7 +57,7 @@ fun HomeGrid() {
                 }
 
                 itemsIndexed(components) { index, item ->
-                    ComponentsGridCard(component = item)
+                    ComponentsGridCard(component = item, onClick = itemClick)
                 }
 
                 item(span = { TvGridItemSpan(4) }) {
@@ -53,7 +65,7 @@ fun HomeGrid() {
                 }
 
                 itemsIndexed(componentsPlanned) { index, item ->
-                    ComponentsGridCard(component = item)
+                    ComponentsGridCard(component = item, onClick = itemClick)
                 }
             }
         }
