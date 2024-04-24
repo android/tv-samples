@@ -17,7 +17,8 @@ import androidx.tv.material3.Text
 @Composable
 fun ComponentsGridCard(
     component: Component,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Any)? = null
 ) {
     val image = getHomeGridCardImage(imageArg = component.imageArg)
     val navHostController = LocalNavController.current
