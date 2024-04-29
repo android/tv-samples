@@ -133,7 +133,7 @@ private fun Actions(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.windowInsetsPadding(WindowInsets(0.dp, 0.dp, 8.dp, 0.dp))
+        modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp)
     ) {
         actions.forEach {
             Button(onClick = it.onClick) {
