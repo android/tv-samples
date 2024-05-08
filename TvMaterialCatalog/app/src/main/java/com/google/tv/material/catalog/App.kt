@@ -12,14 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import com.google.tv.material.catalog.colorutils.Scheme.Companion.dark
 import com.google.tv.material.catalog.colorutils.Scheme.Companion.light
 import com.google.tv.material.catalog.colorutils.toColorScheme
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun App() {
     var themeMode by remember { mutableStateOf(Mode.Dark) }
