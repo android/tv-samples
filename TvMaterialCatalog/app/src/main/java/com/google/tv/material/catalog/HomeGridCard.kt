@@ -16,7 +16,7 @@ import androidx.tv.material3.Text
 fun ComponentsGridCard(
     component: Component,
     modifier: Modifier = Modifier,
-    onClick: (() -> Any)? = null
+    onClick: () -> Any = {}
 ) {
     val image = getHomeGridCardImage(imageArg = component.imageArg)
     val navHostController = LocalNavController.current
@@ -26,8 +26,9 @@ fun ComponentsGridCard(
         imageCard = {
             Card(
                 onClick = {
-                    onClick?.invoke()
-                    navHostController.navigate(component.routeValue)
+                    onClick().also {
+                        navHostController.navigate(component.routeValue)
+                    }
                 },
                 interactionSource = it,
                 colors = CardDefaults.colors(containerColor = Color.Transparent)
