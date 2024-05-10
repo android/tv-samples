@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -70,6 +71,7 @@ private fun HeadlineContent(
     isMainIconMagnified: Boolean,
 ) {
     Row(
+        modifier = Modifier.height(64.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -128,7 +130,7 @@ private fun Actions(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp)
+        modifier = Modifier.padding(end = 8.dp)
     ) {
         actions.forEach {
             Button(onClick = it.onClick) {
