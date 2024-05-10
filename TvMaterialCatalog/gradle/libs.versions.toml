@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.2"
+agp = "8.4.0"
 coil-compose = "2.5.0"
 kotlin = "1.9.0"
 core-ktx = "1.12.0"
@@ -25,4 +25,3 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
