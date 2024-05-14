@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,6 @@ package com.google.jetstream.presentation.common
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,13 +38,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,20 +52,11 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyRow
 import androidx.tv.foundation.lazy.list.itemsIndexed
-import androidx.tv.material3.Border
-import androidx.tv.material3.CardDefaults
-import androidx.tv.material3.CardLayoutDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.ImmersiveListScope
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.google.jetstream.data.entities.Movie
+import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
-import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.utils.createInitialFocusRestorerModifiers
 import com.google.jetstream.presentation.utils.ifElse
 
@@ -79,9 +65,9 @@ enum class ItemDirection(val aspectRatio: Float) {
     Horizontal(16f / 9f);
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MoviesRow(
+    movieList: MovieList,
     modifier: Modifier = Modifier,
     itemDirection: ItemDirection = ItemDirection.Vertical,
     startPadding: Dp = rememberChildPadding().start,
@@ -93,26 +79,22 @@ fun MoviesRow(
     ),
     showItemTitle: Boolean = true,
     showIndexOverImage: Boolean = false,
-    focusedItemIndex: (index: Int) -> Unit = {},
-    movies: List<Movie>,
-    onMovieClick: (movie: Movie) -> Unit = {}
+    onMovieSelected: (movie: Movie) -> Unit = {}
 ) {
     Column(
         modifier = modifier.focusGroup()
     ) {
-        title?.let { nnTitle ->
+        if (title != null) {
             Text(
-                text = nnTitle,
+                text = title,
                 style = titleStyle,
                 modifier = Modifier
                     .alpha(1f)
-                    .padding(start = startPadding)
-                    .padding(vertical = 16.dp)
+                    .padding(start = startPadding, top = 16.dp, bottom = 16.dp)
             )
         }
-
         AnimatedContent(
-            targetState = movies,
+            targetState = movieList,
             label = "",
         ) { movieState ->
             val focusRestorerModifiers = createInitialFocusRestorerModifiers()
@@ -135,10 +117,9 @@ fun MoviesRow(
                                 focusRestorerModifiers.childModifier
                             )
                             .weight(1f),
-                        focusedItemIndex = focusedItemIndex,
                         index = index,
                         itemDirection = itemDirection,
-                        onMovieClick = onMovieClick,
+                        onMovieSelected = onMovieSelected,
                         movie = movie,
                         showItemTitle = showItemTitle,
                         showIndexOverImage = showIndexOverImage
@@ -149,9 +130,10 @@ fun MoviesRow(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ImmersiveListScope.ImmersiveListMoviesRow(
+fun ImmersiveListMoviesRow(
+    movieList: MovieList,
     modifier: Modifier = Modifier,
     itemDirection: ItemDirection = ItemDirection.Vertical,
     startPadding: Dp = rememberChildPadding().start,
@@ -163,16 +145,15 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
     ),
     showItemTitle: Boolean = true,
     showIndexOverImage: Boolean = false,
-    focusedItemIndex: (index: Int) -> Unit = {},
-    movies: List<Movie>,
-    onMovieClick: (movie: Movie) -> Unit = {}
+    onMovieSelected: (Movie) -> Unit = {},
+    onMovieFocused: (Movie) -> Unit = {}
 ) {
     Column(
         modifier = modifier.focusGroup()
     ) {
-        title?.let { nnTitle ->
+        if (title != null) {
             Text(
-                text = nnTitle,
+                text = title,
                 style = titleStyle,
                 modifier = Modifier
                     .alpha(1f)
@@ -180,34 +161,32 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
                     .padding(vertical = 16.dp)
             )
         }
-
         AnimatedContent(
-            targetState = movies,
+            targetState = movieList,
             label = "",
         ) { movieState ->
             TvLazyRow(
-                modifier = Modifier.focusRestorer(),
+                // modifier = Modifier.focusRestorer(),
                 pivotOffsets = PivotOffsets(parentFraction = 0.07f),
                 contentPadding = PaddingValues(start = startPadding, end = endPadding),
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                movieState.forEachIndexed { index, movie ->
-                    item {
-                        key(movie.id) {
-                            MoviesRowItem(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .immersiveListItem(index),
-                                focusedItemIndex = focusedItemIndex,
-                                index = index,
-                                itemDirection = itemDirection,
-                                onMovieClick = onMovieClick,
-                                movie = movie,
-                                showItemTitle = showItemTitle,
-                                showIndexOverImage = showIndexOverImage
-                            )
-                        }
+                itemsIndexed(
+                    movieState,
+                    key = { _, movie ->
+                        movie.id
                     }
+                ) { index, movie ->
+                    MoviesRowItem(
+                        modifier = Modifier.weight(1f),
+                        index = index,
+                        itemDirection = itemDirection,
+                        onMovieSelected = onMovieSelected,
+                        onMovieFocused = onMovieFocused,
+                        movie = movie,
+                        showItemTitle = showItemTitle,
+                        showIndexOverImage = showIndexOverImage
+                    )
                 }
             }
         }
@@ -215,77 +194,63 @@ fun ImmersiveListScope.ImmersiveListMoviesRow(
 }
 
 @Composable
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 private fun MoviesRowItem(
-    modifier: Modifier = Modifier,
-    focusedItemIndex: (index: Int) -> Unit,
     index: Int,
-    itemDirection: ItemDirection,
-    onMovieClick: (movie: Movie) -> Unit,
     movie: Movie,
+    onMovieSelected: (Movie) -> Unit,
     showItemTitle: Boolean,
-    showIndexOverImage: Boolean
+    showIndexOverImage: Boolean,
+    modifier: Modifier = Modifier,
+    itemDirection: ItemDirection = ItemDirection.Vertical,
+    onMovieFocused: (Movie) -> Unit = {},
 ) {
-    var isItemFocused by remember { mutableStateOf(false) }
+    var isFocused by remember { mutableStateOf(false) }
 
-    StandardCardLayout(
-        modifier = Modifier
-            .onFocusChanged {
-                isItemFocused = it.isFocused
-                if (isItemFocused) {
-                    focusedItemIndex(index)
-                }
-            }
-            .focusProperties {
-                if (index == 0) {
-                    left = FocusRequester.Cancel
-                }
-            }
-            .then(modifier),
+    MovieCard(
+        onClick = { onMovieSelected(movie) },
         title = {
             MoviesRowItemText(
                 showItemTitle = showItemTitle,
-                isItemFocused = isItemFocused,
+                isItemFocused = isFocused,
                 movie = movie
             )
         },
-        imageCard = {
-            CardLayoutDefaults.ImageCard(
-                onClick = { onMovieClick(movie) },
-                shape = CardDefaults.shape(JetStreamCardShape),
-                border = CardDefaults.border(
-                    focusedBorder = Border(
-                        border = BorderStroke(
-                            width = JetStreamBorderWidth,
-                            color = MaterialTheme.colorScheme.onSurface
-                        ),
-                        shape = JetStreamCardShape
-                    )
-                ),
-                scale = CardDefaults.scale(focusedScale = 1f),
-                interactionSource = it
-            ) {
-                MoviesRowItemImage(
-                    modifier = Modifier.aspectRatio(itemDirection.aspectRatio),
-                    showIndexOverImage = showIndexOverImage,
-                    movie = movie,
-                    index = index
-                )
+        modifier = Modifier
+            .onFocusChanged {
+                isFocused = it.isFocused
+                if (it.isFocused) {
+                    onMovieFocused(movie)
+                }
             }
-        },
-    )
+            .focusProperties {
+                left = if (index == 0) {
+                    FocusRequester.Cancel
+                } else {
+                    FocusRequester.Default
+                }
+            }
+            .then(modifier)
+    ) {
+        MoviesRowItemImage(
+            modifier = Modifier.aspectRatio(itemDirection.aspectRatio),
+            showIndexOverImage = showIndexOverImage,
+            movie = movie,
+            index = index
+        )
+    }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MoviesRowItemImage(
-    showIndexOverImage: Boolean,
     movie: Movie,
+    showIndexOverImage: Boolean,
     index: Int,
     modifier: Modifier = Modifier,
 ) {
     Box(contentAlignment = Alignment.CenterStart) {
-        AsyncImage(
+        PosterImage(
+            movie = movie,
             modifier = modifier
                 .fillMaxWidth()
                 .drawWithContent {
@@ -298,12 +263,6 @@ private fun MoviesRowItemImage(
                         )
                     }
                 },
-            model = ImageRequest.Builder(LocalContext.current)
-                .crossfade(true)
-                .data(movie.posterUri)
-                .build(),
-            contentDescription = "movie poster of ${movie.name}",
-            contentScale = ContentScale.Crop
         )
         if (showIndexOverImage) {
             Text(
@@ -323,7 +282,6 @@ private fun MoviesRowItemImage(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MoviesRowItemText(
     showItemTitle: Boolean,

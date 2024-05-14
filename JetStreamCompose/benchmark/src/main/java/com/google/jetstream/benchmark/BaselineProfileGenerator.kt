@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -69,7 +69,6 @@ class BaselineProfileGenerator {
             waitForIdle()
             repeat(2) { pressDPadRight(); waitForIdle() }
 
-
             // Navigate to Movies tab
             pressDPadUp()
             waitForIdle()
@@ -126,7 +125,6 @@ class BaselineProfileGenerator {
             repeat(2) { pressDPadDown(); waitForIdle() }
             pressDPadRight()
             waitForIdle()
-
 
             // Navigate to Search tab
             repeat(3) { pressDPadUp(); waitForIdle() }
@@ -187,7 +185,6 @@ class BaselineProfileGenerator {
         }
     }
 }
-
 
 private const val JETSTREAM_PACKAGE_NAME = "com.google.jetstream"
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright $YEAR Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,3 @@
  * limitations under the License.
  */
 
-package com.google.jetstream.presentation.utils
-
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.unit.Dp
-
-@Immutable
-data class Padding(
-    val start: Dp,
-    val top: Dp,
-    val end: Dp,
-    val bottom: Dp,
-)

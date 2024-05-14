@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,6 @@ package com.google.jetstream.presentation.screens.categories
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,17 +44,12 @@ import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.foundation.lazy.grid.itemsIndexed
 import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
-import androidx.tv.material3.Border
-import androidx.tv.material3.CardDefaults
-import androidx.tv.material3.CardLayoutDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.MovieCategoryList
+import com.google.jetstream.presentation.common.Loading
+import com.google.jetstream.presentation.common.MovieCard
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
-import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.utils.GradientBg
 
 @Composable
@@ -69,9 +63,10 @@ fun CategoriesScreen(
     val uiState by categoriesScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     when (val s = uiState) {
-        is CategoriesScreenUiState.Loading -> {
+        CategoriesScreenUiState.Loading -> {
             Loading()
         }
+
         is CategoriesScreenUiState.Ready -> {
             Catalog(
                 gridColumns = gridColumns,
@@ -82,10 +77,9 @@ fun CategoriesScreen(
             )
         }
     }
-
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Catalog(
     movieCategories: MovieCategoryList,
@@ -99,7 +93,7 @@ private fun Catalog(
     val shouldShowTopBar by remember {
         derivedStateOf {
             tvLazyGridState.firstVisibleItemIndex == 0 &&
-                    tvLazyGridState.firstVisibleItemScrollOffset < 100
+                tvLazyGridState.firstVisibleItemScrollOffset < 100
         }
     }
     LaunchedEffect(shouldShowTopBar) {
@@ -117,73 +111,44 @@ private fun Catalog(
             state = tvLazyGridState,
             modifier = modifier,
             columns = TvGridCells.Fixed(gridColumns),
-            content = {
-                itemsIndexed(it) { index, movieCategory ->
-                    var isFocused by remember { mutableStateOf(false) }
-                    StandardCardLayout(
-                        imageCard = {
-                            CardLayoutDefaults.ImageCard(
-                                shape = CardDefaults.shape(shape = JetStreamCardShape),
-                                border = CardDefaults.border(
-                                    focusedBorder = Border(
-                                        border = BorderStroke(
-                                            width = JetStreamBorderWidth,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        ),
-                                        shape = JetStreamCardShape
-                                    ),
-                                    pressedBorder = Border(
-                                        border = BorderStroke(
-                                            width = JetStreamBorderWidth,
-                                            color = MaterialTheme.colorScheme.border
-                                        ),
-                                        shape = JetStreamCardShape
-                                    )
-                                ),
-                                scale = CardDefaults.scale(focusedScale = 1f),
-                                onClick = { onCategoryClick(movieCategory.id) },
-                                interactionSource = it
-                            ) {
-                                val itemAlpha by animateFloatAsState(
-                                    targetValue = if (isFocused) .6f else 0.2f,
-                                    label = ""
-                                )
-                                val textColor = if (isFocused) Color.White else Color.White
-
-                                Box(contentAlignment = Alignment.Center) {
-                                    Box(modifier = Modifier.alpha(itemAlpha)) {
-                                        GradientBg()
-                                    }
-                                    Text(
-                                        text = movieCategory.name,
-                                        style = MaterialTheme.typography.titleMedium.copy(
-                                            color = textColor,
-                                        )
-                                    )
-                                }
+        ) {
+            itemsIndexed(it) { index, movieCategory ->
+                var isFocused by remember { mutableStateOf(false) }
+                MovieCard(
+                    onClick = {
+                        onCategoryClick(movieCategory.id)
+                    },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .aspectRatio(16 / 9f)
+                        .onFocusChanged {
+                            isFocused = it.isFocused || it.hasFocus
+                        }
+                        .focusProperties {
+                            if (index % gridColumns == 0) {
+                                left = FocusRequester.Cancel
                             }
-                        },
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .aspectRatio(16 / 9f)
-                            .onFocusChanged {
-                                isFocused = it.isFocused || it.hasFocus
-                            }
-                            .focusProperties {
-                                if (index % gridColumns == 0) {
-                                    left = FocusRequester.Cancel
-                                }
-                            },
-                        title = {}
+                        }
+                ) {
+                    val itemAlpha by animateFloatAsState(
+                        targetValue = if (isFocused) .6f else 0.2f,
+                        label = ""
                     )
+                    val textColor = if (isFocused) Color.White else Color.White
+
+                    Box(contentAlignment = Alignment.Center) {
+                        Box(modifier = Modifier.alpha(itemAlpha)) {
+                            GradientBg()
+                        }
+                        Text(
+                            text = movieCategory.name,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = textColor,
+                            )
+                        )
+                    }
                 }
             }
-        )
+        }
     }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Loading(modifier: Modifier = Modifier) {
-    Text(text = "Loading...", modifier = modifier)
 }
