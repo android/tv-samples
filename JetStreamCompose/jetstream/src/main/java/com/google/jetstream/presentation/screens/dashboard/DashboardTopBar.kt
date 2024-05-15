@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -48,7 +48,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
@@ -63,14 +62,14 @@ import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.theme.LexendExa
 import com.google.jetstream.presentation.utils.occupyScreenSize
 
-val TopBarTabs = Screens.values().toList().filter { it.isTabItem }
+val TopBarTabs = Screens.entries.toList().filter { it.isTabItem }
 
 // +1 for ProfileTab
 val TopBarFocusRequesters = List(size = TopBarTabs.size + 1) { FocusRequester() }
 
 private const val PROFILE_SCREEN_INDEX = -1
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DashboardTopBar(
     modifier: Modifier = Modifier,
@@ -91,6 +90,7 @@ fun DashboardTopBar(
         ) {
             UserAvatar(
                 modifier = Modifier
+                    .size(32.dp)
                     .focusRequester(focusRequesters[0])
                     .semantics {
                         contentDescription =
@@ -159,27 +159,36 @@ fun DashboardTopBar(
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            Row(
+            JetStreamLogo(
                 modifier = Modifier
                     .alpha(0.75f)
                     .padding(end = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.PlayCircle,
-                    contentDescription = StringConstants.Composable
-                        .ContentDescription.BrandLogoImage,
-                    modifier = Modifier
-                        .padding(end = 4.dp)
-                        .size(IconSize)
-                )
-                Text(
-                    text = stringResource(R.string.brand_logo_text),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = LexendExa
-                )
-            }
+            )
         }
+    }
+}
+
+@Composable
+private fun JetStreamLogo(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            Icons.Default.PlayCircle,
+            contentDescription = StringConstants.Composable
+                .ContentDescription.BrandLogoImage,
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .size(IconSize)
+        )
+        Text(
+            text = stringResource(R.string.brand_logo_text),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Medium,
+            fontFamily = LexendExa
+        )
     }
 }
