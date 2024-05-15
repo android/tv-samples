@@ -64,7 +64,7 @@ fun CategoriesScreen(
 
     when (val s = uiState) {
         CategoriesScreenUiState.Loading -> {
-            Loading()
+            Loading(modifier = Modifier.fillMaxSize())
         }
 
         is CategoriesScreenUiState.Ready -> {

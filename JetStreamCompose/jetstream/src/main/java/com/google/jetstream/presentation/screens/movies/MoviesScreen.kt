@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,11 +30,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.rememberTvLazyListState
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.common.Loading
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -75,7 +74,7 @@ private fun Catalog(
     val shouldShowTopBar by remember {
         derivedStateOf {
             tvLazyListState.firstVisibleItemIndex == 0 &&
-                    tvLazyListState.firstVisibleItemScrollOffset == 0
+                tvLazyListState.firstVisibleItemScrollOffset == 0
         }
     }
 
@@ -101,15 +100,9 @@ private fun Catalog(
             MoviesRow(
                 modifier = Modifier.padding(top = childPadding.top),
                 title = StringConstants.Composable.PopularFilmsThisWeekTitle,
-                movies = popularFilmsThisWeek,
-                onMovieClick = onMovieClick
+                movieList = popularFilmsThisWeek,
+                onMovieSelected = onMovieClick
             )
         }
     }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Loading(modifier: Modifier = Modifier) {
-    Text(text = "Loading...", modifier = modifier)
 }

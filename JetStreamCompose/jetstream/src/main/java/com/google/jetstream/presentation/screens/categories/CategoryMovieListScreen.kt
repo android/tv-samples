@@ -61,11 +61,11 @@ fun CategoryMovieListScreen(
 
     when (val s = uiState) {
         CategoryMovieListScreenUiState.Loading -> {
-            Loading()
+            Loading(modifier = Modifier.fillMaxSize())
         }
 
         CategoryMovieListScreenUiState.Error -> {
-            Error()
+            Error(modifier = Modifier.fillMaxSize())
         }
 
         is CategoryMovieListScreenUiState.Done -> {
