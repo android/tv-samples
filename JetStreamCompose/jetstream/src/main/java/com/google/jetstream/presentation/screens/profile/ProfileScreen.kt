@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -60,7 +61,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
@@ -70,10 +70,7 @@ import com.google.jetstream.R
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamTheme
 
-@OptIn(
-    ExperimentalComposeUiApi::class,
-    ExperimentalTvMaterial3Api::class
-)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileScreen(
     @FloatRange(from = 0.0, to = 1.0)
@@ -108,7 +105,7 @@ fun ProfileScreen(
                 .focusGroup(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ProfileScreens.values().forEachIndexed { index, profileScreen ->
+            ProfileScreens.entries.forEachIndexed { index, profileScreen ->
                 // TODO: make this dense list item
                 key(index) {
                     ListItem(
@@ -165,7 +162,7 @@ fun ProfileScreen(
             }
         }
 
-        var selectedLanguageIndex by rememberSaveable { mutableStateOf(0) }
+        var selectedLanguageIndex by rememberSaveable { mutableIntStateOf(0) }
         var isSubtitlesChecked by rememberSaveable { mutableStateOf(true) }
         NavHost(
             modifier = Modifier
@@ -213,7 +210,6 @@ fun ProfileScreen(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(device = Devices.TV_1080p)
 @Composable
 fun ProfileScreenPreview() {
