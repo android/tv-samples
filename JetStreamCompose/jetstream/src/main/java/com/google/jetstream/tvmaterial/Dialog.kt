@@ -20,8 +20,8 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
@@ -385,13 +385,13 @@ fun Dialog(
     var alphaTransitionState by remember {
         mutableStateOf(MutableTransitionState(AnimationStage.Intro))
     }
-    val alphaTransition = updateTransition(alphaTransitionState, label = "alphaTransition")
+    val alphaTransition = rememberTransition(alphaTransitionState, label = "alphaTransition")
 
     // Transitions for dialog content scaling.
     var scaleTransitionState by remember {
         mutableStateOf(MutableTransitionState(AnimationStage.Intro))
     }
-    val scaleTransition = updateTransition(scaleTransitionState, label = "scaleTransition")
+    val scaleTransition = rememberTransition(scaleTransitionState, label = "scaleTransition")
 
     if (showDialog || alphaTransitionState.targetState != AnimationStage.Intro ||
         scaleTransitionState.targetState != AnimationStage.Intro

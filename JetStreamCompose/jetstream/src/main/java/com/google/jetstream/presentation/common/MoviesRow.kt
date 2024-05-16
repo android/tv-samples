@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +40,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -49,9 +52,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.foundation.PivotOffsets
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.itemsIndexed
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
@@ -99,10 +99,9 @@ fun MoviesRow(
         ) { movieState ->
             val focusRestorerModifiers = createInitialFocusRestorerModifiers()
 
-            TvLazyRow(
+            LazyRow(
                 modifier = Modifier
                     .then(focusRestorerModifiers.parentModifier),
-                pivotOffsets = PivotOffsets(parentFraction = 0.07f),
                 contentPadding = PaddingValues(
                     start = startPadding,
                     end = endPadding,
@@ -165,9 +164,8 @@ fun ImmersiveListMoviesRow(
             targetState = movieList,
             label = "",
         ) { movieState ->
-            TvLazyRow(
-                // modifier = Modifier.focusRestorer(),
-                pivotOffsets = PivotOffsets(parentFraction = 0.07f),
+            LazyRow(
+                modifier = Modifier.focusRestorer(),
                 contentPadding = PaddingValues(start = startPadding, end = endPadding),
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
@@ -194,7 +192,6 @@ fun ImmersiveListMoviesRow(
 }
 
 @Composable
-@OptIn(ExperimentalComposeUiApi::class)
 private fun MoviesRowItem(
     index: Int,
     movie: Movie,

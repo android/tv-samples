@@ -22,6 +22,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -40,10 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
-import androidx.tv.foundation.lazy.grid.itemsIndexed
-import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.MovieCategoryList
@@ -89,11 +89,11 @@ private fun Catalog(
     onScroll: (isTopBarVisible: Boolean) -> Unit,
 ) {
     val childPadding = rememberChildPadding()
-    val tvLazyGridState = rememberTvLazyGridState()
+    val lazyGridState = rememberLazyGridState()
     val shouldShowTopBar by remember {
         derivedStateOf {
-            tvLazyGridState.firstVisibleItemIndex == 0 &&
-                tvLazyGridState.firstVisibleItemScrollOffset < 100
+            lazyGridState.firstVisibleItemIndex == 0 &&
+                lazyGridState.firstVisibleItemScrollOffset < 100
         }
     }
     LaunchedEffect(shouldShowTopBar) {
@@ -107,10 +107,10 @@ private fun Catalog(
             .padding(top = childPadding.top),
         label = "",
     ) { it ->
-        TvLazyVerticalGrid(
-            state = tvLazyGridState,
+        LazyVerticalGrid(
+            state = lazyGridState,
             modifier = modifier,
-            columns = TvGridCells.Fixed(gridColumns),
+            columns = GridCells.Fixed(gridColumns),
         ) {
             itemsIndexed(it) { index, movieCategory ->
                 var isFocused by remember { mutableStateOf(false) }

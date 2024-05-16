@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,9 +44,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.PivotOffsets
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CompactCard
@@ -71,9 +70,9 @@ fun MoviesScreenMovieList(
         targetState = movieList,
         label = "",
     ) { movieListTarget ->
-        TvLazyRow(
+        // ToDo: specify the pivot offset to 0.07f
+        LazyRow(
             modifier = Modifier.focusRestorer(),
-            pivotOffsets = PivotOffsets(parentFraction = 0.07f),
             contentPadding = PaddingValues(start = startPadding, end = endPadding)
         ) {
             items(movieListTarget) {

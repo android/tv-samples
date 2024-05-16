@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.MaterialTheme
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
@@ -94,7 +94,7 @@ private fun Details(
     val childPadding = rememberChildPadding()
 
     BackHandler(onBack = onBackPressed)
-    TvLazyColumn(
+    LazyColumn(
         contentPadding = PaddingValues(bottom = 135.dp),
         modifier = modifier,
     ) {

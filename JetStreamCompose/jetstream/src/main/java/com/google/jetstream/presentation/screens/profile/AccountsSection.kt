@@ -19,6 +19,8 @@ package com.google.jetstream.presentation.screens.profile
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -29,8 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -76,11 +76,11 @@ fun AccountsSection() {
         )
     }
 
-    TvLazyVerticalGrid(
+    LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = childPadding.start),
-        columns = TvGridCells.Fixed(2),
+        columns = GridCells.Fixed(2),
         content = {
             items(accountsSectionListItems.size) { index ->
                 AccountsSelectionItem(

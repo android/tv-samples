@@ -25,6 +25,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -49,9 +52,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyListState
-import androidx.tv.foundation.lazy.list.rememberTvLazyListState
 import androidx.tv.material3.Border
 import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
@@ -73,11 +73,11 @@ fun SearchScreen(
     onScroll: (isTopBarVisible: Boolean) -> Unit,
     searchScreenViewModel: SearchScreenViewModel = hiltViewModel(),
 ) {
-    val tvLazyColumnState = rememberTvLazyListState()
+    val lazyColumnState = rememberLazyListState()
     val shouldShowTopBar by remember {
         derivedStateOf {
-            tvLazyColumnState.firstVisibleItemIndex == 0 &&
-                tvLazyColumnState.firstVisibleItemScrollOffset < 100
+            lazyColumnState.firstVisibleItemIndex == 0 &&
+                lazyColumnState.firstVisibleItemScrollOffset < 100
         }
     }
 
@@ -110,7 +110,7 @@ fun SearchResult(
     searchMovies: (queryString: String) -> Unit,
     onMovieClick: (movie: Movie) -> Unit,
     modifier: Modifier = Modifier,
-    tvLazyColumnState: TvLazyListState = rememberTvLazyListState(),
+    lazyColumnState: LazyListState = rememberLazyListState(),
 ) {
     val childPadding = rememberChildPadding()
     var searchQuery by remember { mutableStateOf("") }
@@ -119,9 +119,9 @@ fun SearchResult(
     val tfInteractionSource = remember { MutableInteractionSource() }
 
     val isTfFocused by tfInteractionSource.collectIsFocusedAsState()
-    TvLazyColumn(
+    LazyColumn(
         modifier = modifier,
-        state = tvLazyColumnState
+        state = lazyColumnState
     ) {
         item {
             Surface(
@@ -204,7 +204,7 @@ fun SearchResult(
                         )
                     ),
                     keyboardOptions = KeyboardOptions(
-                        autoCorrect = false,
+                        autoCorrectEnabled = false,
                         imeAction = ImeAction.Search
                     ),
                     keyboardActions = KeyboardActions(

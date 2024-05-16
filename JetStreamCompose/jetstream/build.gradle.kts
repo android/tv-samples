@@ -70,7 +70,7 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -90,11 +90,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.base)
     implementation(libs.androidx.compose.ui.tooling.preview)
 
+    // Compose foundation library to replace tv-foundation
+    implementation(libs.androidx.compose.foundation.base)
+
     // extra material icons
     implementation(libs.androidx.material.icons.extended)
 
-    // TV Compose
-    implementation(libs.androidx.tv.foundation)
+    // Material components optimized for TV apps
     implementation(libs.androidx.tv.material)
 
     // ViewModel in Compose

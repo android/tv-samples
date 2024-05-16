@@ -20,12 +20,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.Button
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.MaterialTheme
@@ -33,11 +32,10 @@ import androidx.tv.material3.Text
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun SearchHistorySection() {
     with(StringConstants.Composable.Placeholders) {
-        TvLazyColumn(modifier = Modifier.padding(horizontal = 72.dp)) {
+        LazyColumn(modifier = Modifier.padding(horizontal = 72.dp)) {
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
