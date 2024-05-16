@@ -36,6 +36,7 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse.Type.NONE
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
@@ -73,6 +74,7 @@ class VideoPlayerPulseState {
 
     private val channel = Channel<Unit>(Channel.CONFLATED)
 
+    @OptIn(FlowPreview::class)
     suspend fun observe() {
         channel.consumeAsFlow()
             .debounce(2.seconds)

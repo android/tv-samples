@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -42,6 +43,7 @@ class VideoPlayerState internal constructor(
 
     private val channel = Channel<Int>(CONFLATED)
 
+    @OptIn(FlowPreview::class)
     suspend fun observe() {
         channel.consumeAsFlow()
             .debounce { it.toLong() * 1000 }
