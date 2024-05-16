@@ -127,7 +127,7 @@ private fun Background(
             targetState = movie,
             label = "posterUriCrossfade",
 
-            ) {
+        ) {
             PosterImage(movie = it, modifier = Modifier.fillMaxSize())
         }
     }
