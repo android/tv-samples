@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -69,8 +69,8 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -123,7 +123,8 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
                         emptyList()
                     } else {
                         listOf(
-                            MediaItem.SubtitleConfiguration.Builder(Uri.parse(movieDetails.subtitleUri))
+                            MediaItem.SubtitleConfiguration
+                                .Builder(Uri.parse(movieDetails.subtitleUri))
                                 .setMimeType("application/vtt")
                                 .setLanguage("en")
                                 .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
@@ -206,7 +207,6 @@ fun VideoPlayerControls(
         }
     }
 
-
     VideoPlayerMainFrame(
         mediaTitle = {
             VideoPlayerMediaTitle(
@@ -264,7 +264,6 @@ fun VideoPlayerControls(
     )
 }
 
-
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 private fun rememberExoPlayer(context: Context) = remember {
@@ -287,22 +286,22 @@ private fun Modifier.dPadEvents(
     videoPlayerState: VideoPlayerState,
     pulseState: VideoPlayerPulseState
 ): Modifier = this.handleDPadKeyEvents(
-        onLeft = {
-            if (!videoPlayerState.controlsVisible) {
-                exoPlayer.seekBack()
-                pulseState.setType(BACK)
-            }
-        },
-        onRight = {
-            if (!videoPlayerState.controlsVisible) {
-                exoPlayer.seekForward()
-                pulseState.setType(FORWARD)
-            }
-        },
-        onUp = { videoPlayerState.showControls() },
-        onDown = { videoPlayerState.showControls() },
-        onEnter = {
-            exoPlayer.pause()
-            videoPlayerState.showControls()
+    onLeft = {
+        if (!videoPlayerState.controlsVisible) {
+            exoPlayer.seekBack()
+            pulseState.setType(BACK)
         }
+    },
+    onRight = {
+        if (!videoPlayerState.controlsVisible) {
+            exoPlayer.seekForward()
+            pulseState.setType(FORWARD)
+        }
+    },
+    onUp = { videoPlayerState.showControls() },
+    onDown = { videoPlayerState.showControls() },
+    onEnter = {
+        exoPlayer.pause()
+        videoPlayerState.showControls()
+    }
 )
