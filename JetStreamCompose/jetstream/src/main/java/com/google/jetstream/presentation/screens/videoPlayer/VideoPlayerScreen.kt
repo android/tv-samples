@@ -22,6 +22,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMotion
@@ -52,6 +53,8 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.common.Error
+import com.google.jetstream.presentation.common.Loading
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitle
@@ -66,8 +69,8 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -88,8 +91,12 @@ fun VideoPlayerScreen(
 
     // TODO: Handle Loading & Error states
     when (val s = uiState) {
-        is VideoPlayerScreenUiState.Loading -> {}
-        is VideoPlayerScreenUiState.Error -> {}
+        is VideoPlayerScreenUiState.Loading -> {
+            Loading(modifier = Modifier.fillMaxSize())
+        }
+        is VideoPlayerScreenUiState.Error -> {
+            Error(modifier = Modifier.fillMaxSize())
+        }
         is VideoPlayerScreenUiState.Done -> {
             VideoPlayerScreenContent(
                 movieDetails = s.movieDetails,
@@ -116,7 +123,8 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
                         emptyList()
                     } else {
                         listOf(
-                            MediaItem.SubtitleConfiguration.Builder(Uri.parse(movieDetails.subtitleUri))
+                            MediaItem.SubtitleConfiguration
+                                .Builder(Uri.parse(movieDetails.subtitleUri))
                                 .setMimeType("application/vtt")
                                 .setLanguage("en")
                                 .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
@@ -199,7 +207,6 @@ fun VideoPlayerControls(
         }
     }
 
-
     VideoPlayerMainFrame(
         mediaTitle = {
             VideoPlayerMediaTitle(
@@ -257,7 +264,6 @@ fun VideoPlayerControls(
     )
 }
 
-
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 private fun rememberExoPlayer(context: Context) = remember {
@@ -280,22 +286,22 @@ private fun Modifier.dPadEvents(
     videoPlayerState: VideoPlayerState,
     pulseState: VideoPlayerPulseState
 ): Modifier = this.handleDPadKeyEvents(
-        onLeft = {
-            if (!videoPlayerState.controlsVisible) {
-                exoPlayer.seekBack()
-                pulseState.setType(BACK)
-            }
-        },
-        onRight = {
-            if (!videoPlayerState.controlsVisible) {
-                exoPlayer.seekForward()
-                pulseState.setType(FORWARD)
-            }
-        },
-        onUp = { videoPlayerState.showControls() },
-        onDown = { videoPlayerState.showControls() },
-        onEnter = {
-            exoPlayer.pause()
-            videoPlayerState.showControls()
+    onLeft = {
+        if (!videoPlayerState.controlsVisible) {
+            exoPlayer.seekBack()
+            pulseState.setType(BACK)
         }
+    },
+    onRight = {
+        if (!videoPlayerState.controlsVisible) {
+            exoPlayer.seekForward()
+            pulseState.setType(FORWARD)
+        }
+    },
+    onUp = { videoPlayerState.showControls() },
+    onDown = { videoPlayerState.showControls() },
+    onEnter = {
+        exoPlayer.pause()
+        videoPlayerState.showControls()
+    }
 )

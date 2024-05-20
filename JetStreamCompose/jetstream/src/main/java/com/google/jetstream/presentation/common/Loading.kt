@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-package com.google.jetstream.presentation.screens.videoPlayer.components
+package com.google.jetstream.presentation.common
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.google.jetstream.R
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun VideoPlayerControllerText(text: String) {
-    Text(
-        modifier = Modifier.padding(horizontal = 12.dp),
-        text = text,
-        color = MaterialTheme.colorScheme.onSurface,
-        fontWeight = FontWeight.SemiBold
-    )
+fun Loading(
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.displayMedium
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Text(
+            text = stringResource(id = R.string.message_loading),
+            style = style
+        )
+    }
 }

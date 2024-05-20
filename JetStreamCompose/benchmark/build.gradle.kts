@@ -18,6 +18,7 @@
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -51,7 +52,6 @@ android {
     }
 
     targetProjectPath = ":jetstream"
-    experimentalProperties["android.experimental.self-instrumenting"] = true
 }
 
 dependencies {

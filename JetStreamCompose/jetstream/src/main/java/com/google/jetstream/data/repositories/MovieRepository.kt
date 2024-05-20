@@ -38,4 +38,3 @@ interface MovieRepository {
     fun getBingeWatchDramas(): Flow<MovieList>
     fun getFavouriteMovies(): Flow<MovieList>
 }
-

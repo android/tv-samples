@@ -32,5 +32,4 @@ class AssetsReader @Inject constructor(
             Result.failure(e)
         }
     }
-
 }

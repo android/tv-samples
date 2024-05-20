@@ -20,6 +20,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -30,10 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.MovieList
+import com.google.jetstream.presentation.common.Loading
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
 @Composable
@@ -46,7 +45,7 @@ fun FavouritesScreen(
     val uiState by favouriteScreenViewModel.uiState.collectAsStateWithLifecycle()
     when (val s = uiState) {
         is FavouriteScreenUiState.Loading -> {
-            Loading()
+            Loading(modifier = Modifier.fillMaxSize())
         }
         is FavouriteScreenUiState.Ready -> {
             Catalog(
@@ -63,12 +62,6 @@ fun FavouritesScreen(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Loading(modifier: Modifier = Modifier) {
-    Text(text = "Loading...", modifier = modifier)
-}
-
 @Composable
 private fun Catalog(
     favouriteMovieList: MovieList,
@@ -81,11 +74,11 @@ private fun Catalog(
     modifier: Modifier = Modifier,
 ) {
     val childPadding = rememberChildPadding()
-    val filteredMoviesGridState = rememberTvLazyGridState()
+    val filteredMoviesGridState = rememberLazyGridState()
     val shouldShowTopBar by remember {
         derivedStateOf {
             filteredMoviesGridState.firstVisibleItemIndex == 0 &&
-                    filteredMoviesGridState.firstVisibleItemScrollOffset < 100
+                filteredMoviesGridState.firstVisibleItemScrollOffset < 100
         }
     }
 
@@ -104,17 +97,16 @@ private fun Catalog(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(horizontal = childPadding.start)
     ) {
-            MovieFilterChipRow(
-                filterList = filterList,
-                selectedFilterList = selectedFilterList,
-                modifier = Modifier.padding(top = chipRowTopPadding),
-                onSelectedFilterListUpdated = onSelectedFilterListUpdated
-            )
-            FilteredMoviesGrid(
-                state = filteredMoviesGridState,
-                movieList = favouriteMovieList,
-                onMovieClick = onMovieClick
-            )
-        }
-
+        MovieFilterChipRow(
+            filterList = filterList,
+            selectedFilterList = selectedFilterList,
+            modifier = Modifier.padding(top = chipRowTopPadding),
+            onSelectedFilterListUpdated = onSelectedFilterListUpdated
+        )
+        FilteredMoviesGrid(
+            state = filteredMoviesGridState,
+            movieList = favouriteMovieList,
+            onMovieClick = onMovieClick
+        )
+    }
 }
