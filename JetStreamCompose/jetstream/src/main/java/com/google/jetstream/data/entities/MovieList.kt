@@ -18,6 +18,7 @@ package com.google.jetstream.data.entities
 
 import androidx.compose.runtime.Immutable
 
+@Deprecated("This data class is deprecated as strong skip mode is enabled.")
 @Immutable
 data class MovieList(
     val value: List<Movie> = emptyList()
