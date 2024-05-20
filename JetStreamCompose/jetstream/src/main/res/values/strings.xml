@@ -37,7 +37,6 @@ https://www.apache.org/licenses/LICENSE-2.0
     <string name="top_10_movies_title">Top 10 in the US</string>
     <string name="profile_screen_listItem_icon_content_description">%s icon</string>
     <string name="language_section_listItem_icon_content_description">%s language option</string>
-    <string name="loading_text">Loading</string>
     <string name="movie_category_desc">movie category %s</string>
     <string name="favorites_movies">Movies</string>
     <string name="favorites_tv_shows">TV Shows</string>
@@ -46,4 +45,6 @@ https://www.apache.org/licenses/LICENSE-2.0
     <string name="favorites_unknown">Unknown filter</string>
     <string name="ad">Ad</string>
     <string name="live">Live</string>
+    <string name="message_loading">Loading…</string>
+    <string name="message_error">Wops, something went wrong…</string>
 </resources>
