@@ -1,6 +1,5 @@
 package com.google.jetfit.presentation.screens.training
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.jetfit.data.repositories.JetFitRepository

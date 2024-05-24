@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.darkColorScheme
-import androidx.tv.material3.lightColorScheme
 
 val LocalNavigationProvider = staticCompositionLocalOf<NavHostController> {
     error("No navigation host controller provided.")

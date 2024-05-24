@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.jetfit.R
-import com.google.jetfit.data.entities.TrainingE
+import com.google.jetfit.data.entities.TrainingDetails
 import com.google.jetfit.presentation.screens.more_options.composable.BackRowSchema
 import com.google.jetfit.presentation.screens.more_options.composable.MoreOptionsButton
 import com.google.jetfit.presentation.screens.more_options.composable.TrainingDetails
@@ -123,7 +123,7 @@ private fun MoreOptionsContentPreview() {
         MoreOptionsContent(
             onBackPressed = {},
             state = MoreOptionsUiState.Ready(
-                trainingDetails = TrainingE(
+                trainingDetails = TrainingDetails(
                     id = "1",
                     instructor = "Danielle Orlando",
                     type = "Intensity",

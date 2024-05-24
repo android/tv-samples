@@ -20,20 +20,13 @@ fun NavController.navigateTo(screen: Screens) {
 
         Log.d("navigation", "findStartDestination: ${graph.findStartDestination()}")
 
-        // Pop up to the start destination of the graph to
-        // avoid building up a large stack of destinations
-        // on the back stack as users select items
         popUpTo(graph.findStartDestination().id) {
             saveState = true
         }
 
-        // Avoid multiple copies of the same destination when
-        // reselecting the same item
         launchSingleTop = true
-        // Restore state when reselecting a previously selected item
         restoreState = true
 
-        //Clearing back stack up to certain screen if required
         if (screen.clearBackStack && !currentRoute.isNullOrEmpty()) {
             popUpTo(currentRoute) {
                 inclusive = false

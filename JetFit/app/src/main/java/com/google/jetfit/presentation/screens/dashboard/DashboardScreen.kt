@@ -15,10 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.jetfit.presentation.screens.Screens
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
-import com.google.jetfit.presentation.screens.training.TrainingScreen
 import com.google.jetfit.presentation.screens.home.HomeScreen
 import com.google.jetfit.presentation.screens.search.SearchScreen
 import com.google.jetfit.presentation.screens.settings.SettingsScreen
+import com.google.jetfit.presentation.screens.training.TrainingScreen
 
 
 @Composable

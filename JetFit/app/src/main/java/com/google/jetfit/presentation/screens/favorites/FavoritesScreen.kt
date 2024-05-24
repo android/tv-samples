@@ -61,8 +61,6 @@ fun FavoritesScreen(
 
     val favoritesViewModel: FavoritesViewModel = hiltViewModel()
     val uiState by favoritesViewModel.uiState.collectAsStateWithLifecycle()
-
-    val workoutFocusRequester = remember { FocusRequester() }
     val selectedItem by favoritesViewModel.selectedWorkout.collectAsStateWithLifecycle()
 
     when (val value = uiState) {
