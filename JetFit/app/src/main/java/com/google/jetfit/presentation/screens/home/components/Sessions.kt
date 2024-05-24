@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,7 +65,7 @@ fun Sessions(
     sessions: List<Session>,
     padding: PaddingValues,
     carouselState: CarouselState,
-    onCLickStartSession: () -> Unit,
+    onStartSessionCLick: (id: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -124,7 +123,7 @@ fun Sessions(
             CarouselItemForeground(
                 session = session,
                 isCarouselFocused = isCarouselFocused,
-                onCLickStartSession = onCLickStartSession,
+                onCLickStartSession = { onStartSessionCLick(session.id) },
                 modifier = Modifier
                     .align(Alignment.BottomStart)
             )
@@ -289,7 +288,7 @@ private fun SessionsPreview() {
             ),
             padding = PaddingValues(),
             carouselState = carouselState,
-            onCLickStartSession = {}
+            onStartSessionCLick = {}
         )
     }
 }

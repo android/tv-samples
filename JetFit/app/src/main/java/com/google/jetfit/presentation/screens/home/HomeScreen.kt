@@ -37,6 +37,15 @@ fun HomeScreen() {
     HomeContent(
         state = state,
         carouselState = carouselState,
+        onStartSessionCLick = { id ->
+
+        },
+        onCategoryCLick = { id ->
+
+        },
+        onTrainingCLick = { id ->
+
+        },
     )
 }
 
@@ -44,6 +53,9 @@ fun HomeScreen() {
 @Composable
 private fun HomeContent(
     state: HomeUiState,
+    onStartSessionCLick: (id: String) -> Unit,
+    onCategoryCLick: (id: String) -> Unit,
+    onTrainingCLick: (id: String) -> Unit,
     carouselState: CarouselState,
 ) {
     TvLazyColumn(
@@ -57,7 +69,7 @@ private fun HomeContent(
             Sessions(
                 sessions = state.sessions,
                 padding = PaddingValues(horizontal = 32.dp),
-                onCLickStartSession = { },
+                onStartSessionCLick = onStartSessionCLick,
                 carouselState = carouselState,
                 modifier = Modifier
                     .height(340.dp)
@@ -67,13 +79,13 @@ private fun HomeContent(
         item {
             Categories(
                 categories = state.categories,
-                onClick = {}
+                onClick = onCategoryCLick
             )
         }
         item {
             TrainingsRecommended(
                 state = state.recommended,
-                onClick = {}
+                onClick = onTrainingCLick
             )
         }
     }

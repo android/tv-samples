@@ -36,7 +36,7 @@ import com.google.jetfit.presentation.theme.JetFitTheme
 @Composable
 fun Categories(
     categories: List<Category>,
-    onClick: (String) -> Unit,
+    onClick: (id: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {

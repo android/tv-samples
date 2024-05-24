@@ -57,8 +57,8 @@ fun ProfileSelectorScreen(
     ProfileSelectorContent(
         state = state,
         profileFocusRequester = profileFocusRequester,
-        interaction = viewModel,
-        onClickProfileSelected = {
+        onSignInClick = {},
+        onProfileSelectedClick = {
             navController.navigateTo(Screens.Dashboard)
         },
         onBackPressed = onBackPressed
@@ -70,8 +70,8 @@ fun ProfileSelectorScreen(
 private fun ProfileSelectorContent(
     state: ProfileSelectorUiState,
     profileFocusRequester: FocusRequester,
-    interaction: ProfileSelectorInteraction,
-    onClickProfileSelected: () -> Unit,
+    onSignInClick: () -> Unit,
+    onProfileSelectedClick: (idProfile: String) -> Unit,
     onBackPressed: () -> Unit,
 ) {
     BackHandler(onBack = onBackPressed)
@@ -99,10 +99,7 @@ private fun ProfileSelectorContent(
             items(state.profiles) { profile ->
                 ItemProfile(
                     profile,
-                    onClick = { idProfile ->
-                        onClickProfileSelected()
-                        interaction.onClickProfileSelected(idProfile)
-                    },
+                    onClick = onProfileSelectedClick,
                 )
             }
         }
@@ -110,7 +107,7 @@ private fun ProfileSelectorContent(
         CustomOutlineButton(
             text = stringResource(id = R.string.sign_in_with_a_different_user),
             textStyle = MaterialTheme.typography.labelLarge,
-            onClick = interaction::onClickSignIn
+            onClick = onSignInClick
         )
 
 

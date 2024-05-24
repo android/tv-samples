@@ -71,7 +71,8 @@ fun FavoritesScreen(
                 modifier = Modifier,
                 workoutsList = value.favoritesWorkouts,
                 onWorkoutSelect = favoritesViewModel::onWorkoutSelect,
-                interaction = favoritesViewModel,
+                onStartWorkout = favoritesViewModel::onStartWorkout,
+                onRemoveWorkout = favoritesViewModel::onRemoveWorkout,
                 selectedItem = selectedItem,
                 onBackPressed = onBackPressed
             )
@@ -94,7 +95,8 @@ private fun FavoritesScreenContent(
     modifier: Modifier = Modifier,
     workoutsList: List<FavWorkout>,
     selectedItem: FavWorkout? = null,
-    interaction: FavoritesInteraction,
+    onStartWorkout: (id: String) -> Unit,
+    onRemoveWorkout: (id: String) -> Unit,
     onWorkoutSelect: (FavWorkout) -> Unit,
     onBackPressed: () -> Unit,
 ) {
@@ -141,7 +143,8 @@ private fun FavoritesScreenContent(
             selectedItem?.let {
                 WorkoutDetailsPopup(
                     workout = it,
-                    interaction = interaction,
+                    onStartWorkout = onStartWorkout,
+                    onRemoveWorkout = onRemoveWorkout,
                     onBackPressed = onBackPressed
                 )
             }
@@ -153,7 +156,8 @@ private fun FavoritesScreenContent(
 @Composable
 fun WorkoutDetailsPopup(
     workout: FavWorkout,
-    interaction: FavoritesInteraction,
+    onStartWorkout: (id: String) -> Unit,
+    onRemoveWorkout: (id: String) -> Unit,
     onBackPressed: () -> Unit
 ) {
     Dialog(onDismissRequest = onBackPressed) {
@@ -228,7 +232,7 @@ fun WorkoutDetailsPopup(
                         .fillMaxWidth()
                         .padding(bottom = 12.dp)
                 ) {
-                    interaction.onStartWorkout(workout.id)
+                    onStartWorkout(workout.id)
                 }
                 CustomOutLinedButtonWithLeadingIcon(
                     text = "Remove from favorites",
@@ -237,7 +241,7 @@ fun WorkoutDetailsPopup(
                         .fillMaxWidth()
                         .padding(bottom = 24.dp)
                 ) {
-                    interaction.onRemoveWorkout(workout.id)
+                    onRemoveWorkout(workout.id)
                 }
             }
         }

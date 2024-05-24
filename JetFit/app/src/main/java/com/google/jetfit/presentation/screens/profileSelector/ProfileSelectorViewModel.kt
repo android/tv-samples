@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileSelectorViewModel @Inject constructor(
     private val jetFitRepository: JetFitRepository
-) : ViewModel(), ProfileSelectorInteraction {
+) : ViewModel() {
 
     private val _state: MutableStateFlow<ProfileSelectorUiState> by lazy {
         MutableStateFlow(ProfileSelectorUiState())
@@ -45,11 +45,4 @@ class ProfileSelectorViewModel @Inject constructor(
     )
 
 
-    override fun onClickProfileSelected(id: String) {
-        //TODO("Not yet implemented")
-    }
-
-    override fun onClickSignIn() {
-        //TODO("Not yet implemented")
-    }
 }

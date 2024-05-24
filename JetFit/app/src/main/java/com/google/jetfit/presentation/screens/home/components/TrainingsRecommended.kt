@@ -26,7 +26,7 @@ import com.google.jetfit.data.entities.Training
 fun TrainingsRecommended(
     modifier: Modifier = Modifier,
     state: List<Training>,
-    onClick: (String) -> Unit
+    onClick: (id: String) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Text(

@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
     jetFitRepository: JetFitRepository
-): ViewModel(), FavoritesInteraction {
+) : ViewModel() {
 
     private val selectedWorkoutItem: MutableStateFlow<FavWorkout?> = MutableStateFlow(null)
     val selectedWorkout = selectedWorkoutItem.asStateFlow()
@@ -37,11 +37,11 @@ class FavoritesViewModel @Inject constructor(
         this.selectedWorkoutItem.update {favWorkout}
     }
 
-    override fun onStartWorkout(id: String){
+    fun onStartWorkout(id: String) {
         this.selectedWorkoutItem.update {null}
     }
 
-    override fun onRemoveWorkout(id: String){
+    fun onRemoveWorkout(id: String) {
         this.selectedWorkoutItem.update {null}
     }
 
