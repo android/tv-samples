@@ -37,14 +37,13 @@ android {
             initWith(buildTypes.getByName("release"))
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-benchmark-rules.pro"
+            )
             isDebuggable = false
         }
-        create("benchmark1") {
-            initWith(buildTypes.getByName("release"))
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
-            isDebuggable = false
-        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -111,4 +110,8 @@ dependencies {
     implementation(libs.androidx.media3.ui)
 
     implementation(libs.constraint.layout)
+
+    // Baseline profile installer
+    implementation(libs.androidx.profileinstaller)
+
 }

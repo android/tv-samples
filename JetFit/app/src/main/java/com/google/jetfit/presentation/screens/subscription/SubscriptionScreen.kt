@@ -23,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
@@ -67,7 +69,8 @@ private fun SubscriptionContent(
         is SubscriptionUiState.Ready -> {
             Row(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .semantics { contentDescription = "Subscription Screen" },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {

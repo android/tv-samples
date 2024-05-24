@@ -21,6 +21,13 @@ coil-compose = "2.5.0"
 media3-ui = "1.3.0"
 media3-exoplayer = "1.3.0"
 constraint-layout = "1.0.1"
+junit = "1.1.5"
+espresso-core = "3.5.1"
+uiautomator = "2.3.0"
+profileinstaller = "1.3.1"
+benchmark = "1.2.3"
+
+
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
@@ -50,6 +57,11 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3-ui" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3-exoplayer" }
 constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraint-layout" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -57,4 +69,7 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-android" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidTest = { id = "com.android.test", version.ref = "agp" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
+
 

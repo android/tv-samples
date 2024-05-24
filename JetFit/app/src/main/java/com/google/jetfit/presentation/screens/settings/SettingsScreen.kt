@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.foundation.lazy.list.TvLazyColumn
@@ -63,7 +65,7 @@ private fun SettingsContent(
     selectedItem: MutableState<SettingsItemUIState?>,
     updateSetting: (SettingsItemUIState) -> Unit = {}
 ) {
-    Row(Modifier.fillMaxSize()) {
+    Row(Modifier.fillMaxSize().semantics { contentDescription = "Settings Screen" }) {
         Column(
             Modifier
                 .weight(1f)

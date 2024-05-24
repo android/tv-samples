@@ -1,11 +1,18 @@
 package com.example.benchmark
 
 import android.os.Build
+import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
     @RequiresApi(Build.VERSION_CODES.P)
     @get:Rule
@@ -13,24 +20,87 @@ class BaselineProfileGenerator {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @Test
-    fun generateBaselineProfile() {
-        baselineProfileRule.collect(packageName = JETSTREAM_PACKAGE_NAME) {
+    fun generateBaseLineProfile() = baselineProfileRule.collect(
+        packageName = "com.google.jetfit"
+    ){
+        startActivityAndWait()
 
-            startActivityAndWait()
+        device.waitForIdle()
 
-            // Wait for the UI to stabilize
-            device.waitForIdle()
+        device.run {
+            // Home screen navigation
+            wait(Until.findObject(By.descContains(HOME_SCREEN_DESCRIPTION).focused(true)), INITIAL_WAIT_TIMEOUT)
+            exploreHomeScreen()
 
-            // Here you would simulate user interactions specific to your app
-            // For example, navigating through menus, clicking buttons, etc.
-            // Use device.findObject, device.click, etc., to interact with the UI.
+            // Navigate to Profile Selector screen
+            navigateToProfileSelector()
+            exploreProfileSelectorScreen()
 
-            // Placeholder for UI interaction
-            // device.findObject(By.desc("Your UI Element Description")).click()
+            // Navigate to Settings screen
+            navigateToSettingsScreen()
+            exploreSettingsScreen()
 
-            // Ensure you wait for the UI to respond after each interaction
-            // device.waitForIdle()
+            // Navigate to Subscription screen
+            navigateToSubscriptionScreen()
+            exploreSubscriptionScreen()
         }
     }
+
+    private fun UiDevice.exploreHomeScreen() {
+        // Interactions on the Home screen
+        repeat(2) { pressDPadRight(); waitForIdle(WAIT_TIMEOUT) }
+        repeat(2) { pressDPadLeft(); waitForIdle(WAIT_TIMEOUT) }
+        pressDPadDown(); waitForIdle(WAIT_TIMEOUT)
+        repeat(4) { pressDPadRight(); waitForIdle(WAIT_TIMEOUT) }
+        repeat(4) { pressDPadLeft(); waitForIdle(WAIT_TIMEOUT) }
+    }
+
+    private fun UiDevice.navigateToProfileSelector() {
+        // Navigate to Profile Selector screen
+        pressDPadUp(); waitForIdle(WAIT_TIMEOUT)
+        pressDPadRight(); waitForIdle(WAIT_TIMEOUT)
+        wait(Until.findObject(By.descContains(PROFILE_SELECTOR_SCREEN_DESCRIPTION).focused(true)), WAIT_TIMEOUT)
+    }
+
+    private fun UiDevice.exploreProfileSelectorScreen() {
+        // Interactions on the Profile Selector screen
+        pressDPadRight(); waitForIdle(WAIT_TIMEOUT)
+        pressDPadCenter(); waitForIdle(WAIT_TIMEOUT)
+    }
+
+    private fun UiDevice.navigateToSettingsScreen() {
+        // Navigate to Settings screen
+        pressDPadLeft(); waitForIdle(WAIT_TIMEOUT)
+        pressDPadDown(); waitForIdle(WAIT_TIMEOUT)
+        wait(Until.findObject(By.descContains(SETTINGS_SCREEN_DESCRIPTION).focused(true)), WAIT_TIMEOUT)
+    }
+
+    private fun UiDevice.exploreSettingsScreen() {
+        // Interactions on the Settings screen
+        pressDPadDown(); waitForIdle(WAIT_TIMEOUT)
+        repeat(4) { pressDPadRight(); waitForIdle(WAIT_TIMEOUT) }
+        repeat(4) { pressDPadLeft(); waitForIdle(WAIT_TIMEOUT) }
+    }
+
+    private fun UiDevice.navigateToSubscriptionScreen() {
+        // Navigate to Subscription screen
+        pressDPadUp(); waitForIdle(WAIT_TIMEOUT)
+        pressDPadRight(); waitForIdle(WAIT_TIMEOUT)
+        wait(Until.findObject(By.descContains(SUBSCRIPTION_SCREEN_DESCRIPTION).focused(true)), WAIT_TIMEOUT)
+    }
+
+    private fun UiDevice.exploreSubscriptionScreen() {
+        // Interactions on the Subscription screen
+        pressDPadRight(); waitForIdle(WAIT_TIMEOUT)
+        pressDPadCenter(); waitForIdle(WAIT_TIMEOUT)
+        repeat(4) { pressDPadDown(); waitForIdle(WAIT_TIMEOUT) }
+    }
 }
-private const val JETSTREAM_PACKAGE_NAME = "com.google.jetfit"
+
+private const val INITIAL_WAIT_TIMEOUT = 2000L
+private const val WAIT_TIMEOUT = 1000L
+
+private const val HOME_SCREEN_DESCRIPTION = "Home Screen"
+private const val PROFILE_SELECTOR_SCREEN_DESCRIPTION = "Profile Selector"
+private const val SETTINGS_SCREEN_DESCRIPTION = "Settings Screen"
+private const val SUBSCRIPTION_SCREEN_DESCRIPTION = "Subscription Screen"
