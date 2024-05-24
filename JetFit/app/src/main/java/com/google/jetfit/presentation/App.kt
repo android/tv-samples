@@ -9,14 +9,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.jetfit.presentation.screens.Screens
+import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
-import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
 import com.google.jetfit.presentation.screens.home.HomeScreen
-import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
 import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
 import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.profileSelector.ProfileSelectorScreen
 import com.google.jetfit.presentation.screens.subscription.SubscriptionScreen
+import com.google.jetfit.presentation.screens.training.TrainingScreen
 import com.google.jetfit.presentation.screens.training.training_entities.TrainingEntityScreen
 import com.google.jetfit.presentation.utils.navigateTo
 import com.google.jetfit.presentation.utils.navigationDrawerGraph
@@ -38,23 +38,13 @@ fun App(
             )
             composable(
                 route = Screens.VideoPlayer(),
-                arguments = listOf(
-                    navArgument("") {
-                        type = NavType.StringType
-                    }
-                )
             ) {
-                VideoPlayerScreen(onBackPressed = onBackPressed)
+                VideoPlayerScreen()
             }
             composable(
                 route = Screens.AudioPlayer(),
-                arguments = listOf(
-                    navArgument("") {
-                        type = NavType.StringType
-                    }
-                )
             ) {
-                AudioPlayerScreen(onBackPressed = onBackPressed)
+                AudioPlayerScreen()
             }
             composable(
                 route = Screens.ProfileSelector()
@@ -70,12 +60,17 @@ fun App(
                     }
                 )
             ){
-                MoreOptionsScreen(onBackPressed = onBackPressed)
+                MoreOptionsScreen(
+                    onBackPressed = onBackPressed,
+                    onStartClick = { navController.navigate(Screens.AudioPlayer()) },
+                    onFavouriteClick = { navController.navigate(Screens.Favorite()) }
+                    )
             }
             composable(
                 route = Screens.Favorite()
             ){
-                FavoritesScreen(onBackPressed = onBackPressed)
+                FavoritesScreen(onBackPressed = onBackPressed,
+                    onStartWorkout = { navController.navigate(Screens.VideoPlayer()) })
             }
             composable(
                 route = Screens.Home(),
@@ -85,17 +80,24 @@ fun App(
                     }
                 )
             ) {
-                HomeScreen()
+                HomeScreen(
+                    onStartSessionCLick = {
+                        navController.navigate(Screens.TrainingEntity())
+                    },
+                    onCardClick = {
+                        navController.navigate(Screens.MoreOptions())
+                    }
+                )
             }
             composable(
-                route = Screens.TrainingEntity(),
+                route = Screens.Training(),
                 arguments = listOf(
                     navArgument("") {
                         type = NavType.StringType
                     }
                 )
             ) {
-                TrainingEntityScreen()
+                TrainingScreen()
             }
 
             composable(
@@ -107,6 +109,20 @@ fun App(
                 )
             ) {
                 SubscriptionScreen(onBackPressed = onBackPressed)
+            }
+            composable(
+                route = Screens.TrainingEntity(),
+                arguments = listOf(
+                    navArgument("") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                TrainingEntityScreen(
+                    onClickStart = {
+                        navController.navigate(Screens.VideoPlayer())
+                    }
+                )
             }
         }
     )

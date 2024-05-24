@@ -16,9 +16,13 @@ import androidx.navigation.compose.composable
 import com.google.jetfit.presentation.screens.Screens
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
 import com.google.jetfit.presentation.screens.home.HomeScreen
+import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
+import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
+import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.search.SearchScreen
 import com.google.jetfit.presentation.screens.settings.SettingsScreen
 import com.google.jetfit.presentation.screens.training.TrainingScreen
+import com.google.jetfit.presentation.screens.training.training_entities.TrainingEntityScreen
 
 
 @Composable
@@ -42,16 +46,52 @@ fun DashboardScreen(
                     SearchScreen()
                 }
                 composable(Screens.Home()) {
-                    HomeScreen()
+                    HomeScreen(
+                        onStartSessionCLick = {
+                            navController.navigate(Screens.TrainingEntity())
+                        },
+                        onCardClick = {
+                            navController.navigate(Screens.MoreOptions())
+                        }
+                    )
                 }
                 composable(Screens.Training()) {
                     TrainingScreen()
                 }
                 composable(Screens.Favorite()) {
-                    FavoritesScreen {}
+                    FavoritesScreen(
+                        onBackPressed = onBackPressed,
+                        onStartWorkout = {
+                            navController.navigate(Screens.VideoPlayer())
+                        }
+                    )
                 }
                 composable(Screens.Settings()) {
                     SettingsScreen()
+                }
+                composable(Screens.AudioPlayer()) {
+                    AudioPlayerScreen()
+                }
+                composable(Screens.VideoPlayer()) {
+                    VideoPlayerScreen()
+                }
+                composable(Screens.TrainingEntity()){
+                    TrainingEntityScreen(
+                        onClickStart = {
+                            navController.navigate(Screens.VideoPlayer())
+                        }
+                    )
+                }
+                composable(Screens.MoreOptions()){
+                    MoreOptionsScreen(
+                        onStartClick = {
+                            navController.navigate(Screens.AudioPlayer())
+                        },
+                        onBackPressed = onBackPressed,
+                        onFavouriteClick = {
+                            navController.navigate(Screens.Favorite())
+                        }
+                    )
                 }
             }
         }

@@ -1,7 +1,7 @@
 package com.google.jetfit.presentation.screens.player.video
 
 import android.net.Uri
-import androidx.activity.compose.BackHandler
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -56,10 +56,9 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun VideoPlayerScreen(
     viewModel: VideoPlayerViewModel = hiltViewModel(),
-    onBackPressed: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
-    VideoPlayerContent(state = state.workoutUiState, onBackPressed = onBackPressed)
+    VideoPlayerContent(state = state.workoutUiState)
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -67,9 +66,7 @@ fun VideoPlayerScreen(
 @Composable
 private fun VideoPlayerContent(
     state: WorkoutUiState,
-    onBackPressed: () -> Unit
 ) {
-    BackHandler(onBack = onBackPressed)
 
     val context = LocalContext.current
     val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
@@ -117,60 +114,62 @@ private fun VideoPlayerContent(
         }
     }
 
-    Box(
-        Modifier
-            .dPadVideoEvents(
-                exoPlayer,
-                videoPlayerState,
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        Box(
+            Modifier
+                .dPadVideoEvents(
+                    exoPlayer,
+                    videoPlayerState,
+                )
+                .focusable()
+        ) {
+            AndroidView(
+                factory = {
+                    PlayerView(context).apply { useController = false }
+                },
+                update = { it.player = exoPlayer },
+                onRelease = { exoPlayer.release() }
             )
-            .focusable()
-    ) {
-        AndroidView(
-            factory = {
-                PlayerView(context).apply { useController = false }
-            },
-            update = { it.player = exoPlayer },
-            onRelease = { exoPlayer.release() }
-        )
 
-        val focusRequester = remember { FocusRequester() }
+            val focusRequester = remember { FocusRequester() }
 
-        VideoPlayerOverlay(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            focusRequester = focusRequester,
-            state = videoPlayerState,
-            isPlaying = isPlaying,
-            centerButton = {
-                VideoPlayerControlsIcon(
-                    modifier = Modifier.focusRequester(focusRequester),
-                    icon = if (!isPlaying) R.drawable.play_icon else R.drawable.pause,
-                    onClick = {
-                        if (isPlaying) {
-                            exoPlayer.play()
-                        } else {
-                            exoPlayer.pause()
-                        }
-                    },
-                    state = videoPlayerState,
-                    isPlaying = isPlaying,
-                )
-            },
-            subtitles = {
-                AnimatedVisibility(visible = state.subtitles != null) {
-                    Text(text = state.subtitles.toString())
+            VideoPlayerOverlay(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                focusRequester = focusRequester,
+                state = videoPlayerState,
+                isPlaying = isPlaying,
+                centerButton = {
+                    VideoPlayerControlsIcon(
+                        modifier = Modifier.focusRequester(focusRequester),
+                        icon = if (!isPlaying) R.drawable.play_icon else R.drawable.pause,
+                        onClick = {
+                            if (isPlaying) {
+                                exoPlayer.play()
+                            } else {
+                                exoPlayer.pause()
+                            }
+                        },
+                        state = videoPlayerState,
+                        isPlaying = isPlaying,
+                    )
+                },
+                subtitles = {
+                    AnimatedVisibility(visible = state.subtitles != null) {
+                        Text(text = state.subtitles.toString())
+                    }
+                },
+                controls = {
+                    VideoPlayerControls(
+                        isPlaying = isPlaying,
+                        contentCurrentPosition = contentCurrentPosition,
+                        exoPlayer = exoPlayer,
+                        state = videoPlayerState,
+                        title = state.title,
+                        instructor = state.instructor,
+                    )
                 }
-            },
-            controls = {
-                VideoPlayerControls(
-                    isPlaying = isPlaying,
-                    contentCurrentPosition = contentCurrentPosition,
-                    exoPlayer = exoPlayer,
-                    state = videoPlayerState,
-                    title = state.title,
-                    instructor = state.instructor,
-                )
-            }
-        )
+            )
+        }
     }
 }
 
@@ -240,6 +239,6 @@ fun PreviewVideoPlayerScreen() {
     JetFitTheme {
         VideoPlayerContent(
             state = WorkoutUiState()
-        ) {}
+        )
     }
 }

@@ -1,6 +1,6 @@
 package com.google.jetfit.presentation.screens.player.audio
 
-import androidx.activity.compose.BackHandler
+import android.os.Build
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -53,10 +53,9 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun AudioPlayerScreen(
     viewModel: AudioPlayerViewModel = hiltViewModel(),
-    onBackPressed: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
-    AudioPlayerContent(state = state.songUiState, onBackPressed = onBackPressed)
+    AudioPlayerContent(state = state.songUiState)
 }
 
 @androidx.annotation.OptIn(UnstableApi::class)
@@ -64,9 +63,7 @@ fun AudioPlayerScreen(
 @Composable
 private fun AudioPlayerContent(
     state: SongUiState,
-    onBackPressed: () -> Unit,
 ) {
-    BackHandler(onBack = onBackPressed)
 
     val context = LocalContext.current
     val exoPlayer = remember {
@@ -108,48 +105,50 @@ private fun AudioPlayerContent(
         ),
         label = ""
     )
-    Column(
-        modifier = Modifier
-            .dPadAudioEvents(exoPlayer = exoPlayer)
-            .focusable()
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AsyncImage(
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        Column(
             modifier = Modifier
-                .size(196.dp)
-                .scale(scale)
-                .clip(RoundedCornerShape(16.dp)),
-            model = state.imageUrl,
-            contentDescription = stringResource(R.string.song_image),
-            contentScale = ContentScale.Crop,
-        )
+                .dPadAudioEvents(exoPlayer = exoPlayer)
+                .focusable()
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .size(196.dp)
+                    .scale(scale)
+                    .clip(RoundedCornerShape(16.dp)),
+                model = state.imageUrl,
+                contentDescription = stringResource(R.string.song_image),
+                contentScale = ContentScale.Crop,
+            )
 
-        PlayerTitle(
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            descriptionModifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            title = state.title,
-            description = "${state.author} • ${state.date}",
-            titleStyle = MaterialTheme.typography.headlineMedium,
-            descriptionTextStyle = MaterialTheme.typography.bodyMedium,
-        )
+            PlayerTitle(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                descriptionModifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                title = state.title,
+                description = "${state.author} • ${state.date}",
+                titleStyle = MaterialTheme.typography.headlineMedium,
+                descriptionTextStyle = MaterialTheme.typography.bodyMedium,
+            )
 
-        AudioPlayerSeeker(
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .align(alignment = Alignment.CenterHorizontally),
-            onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
-            contentProgress = contentCurrentPosition.milliseconds,
-            contentDuration = exoPlayer.duration.milliseconds
-        )
+            AudioPlayerSeeker(
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .align(alignment = Alignment.CenterHorizontally),
+                onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
+                contentProgress = contentCurrentPosition.milliseconds,
+                contentDuration = exoPlayer.duration.milliseconds
+            )
 
-        AudioPlayerControls(
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            exoPlayer = exoPlayer,
-            isPlaying = isPlaying,
-        )
+            AudioPlayerControls(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                exoPlayer = exoPlayer,
+                isPlaying = isPlaying,
+            )
+        }
     }
 }
 
@@ -197,6 +196,6 @@ private fun AudioPlayerControls(
 @Composable
 fun PreviewVideoPlayerScreen() {
     JetFitTheme {
-        AudioPlayerContent(SongUiState()) {}
+        AudioPlayerContent(SongUiState())
     }
 }

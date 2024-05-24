@@ -28,7 +28,10 @@ val carouselSaver =
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onStartSessionCLick: (id: String) -> Unit,
+    onCardClick: (id: String) -> Unit,
+) {
     val viewModel: HomeViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 
@@ -37,15 +40,14 @@ fun HomeScreen() {
     HomeContent(
         state = state,
         carouselState = carouselState,
-        onStartSessionCLick = { id ->
-
+        onClick = { id ->
+            onStartSessionCLick(id)
         },
-        onCategoryCLick = { id ->
+        onCardClick = { id ->
+            onCardClick(id)
 
-        },
-        onTrainingCLick = { id ->
+        }
 
-        },
     )
 }
 
@@ -53,10 +55,9 @@ fun HomeScreen() {
 @Composable
 private fun HomeContent(
     state: HomeUiState,
-    onStartSessionCLick: (id: String) -> Unit,
-    onCategoryCLick: (id: String) -> Unit,
-    onTrainingCLick: (id: String) -> Unit,
+    onClick: (id: String) -> Unit,
     carouselState: CarouselState,
+    onCardClick: (id: String) -> Unit,
 ) {
     TvLazyColumn(
         modifier = Modifier
@@ -69,7 +70,7 @@ private fun HomeContent(
             Sessions(
                 sessions = state.sessions,
                 padding = PaddingValues(horizontal = 32.dp),
-                onStartSessionCLick = onStartSessionCLick,
+                onStartSessionCLick = onClick,
                 carouselState = carouselState,
                 modifier = Modifier
                     .height(340.dp)
@@ -79,13 +80,13 @@ private fun HomeContent(
         item {
             Categories(
                 categories = state.categories,
-                onClick = onCategoryCLick
+                onClick = onCardClick
             )
         }
         item {
             TrainingsRecommended(
                 state = state.recommended,
-                onClick = onTrainingCLick
+                onClick = onCardClick
             )
         }
     }

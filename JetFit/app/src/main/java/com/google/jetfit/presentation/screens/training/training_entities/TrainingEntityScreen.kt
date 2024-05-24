@@ -18,13 +18,21 @@ import com.google.jetfit.presentation.screens.training.training_entities.composa
 import com.google.jetfit.presentation.screens.training.training_entities.composables.TrainingEntityDetails
 
 @Composable
-fun TrainingEntityScreen(viewModel: TrainingEntityViewModel = hiltViewModel()) {
+fun TrainingEntityScreen(
+    viewModel: TrainingEntityViewModel = hiltViewModel(),
+    onClickStart: () -> Unit,
+) {
     val state by viewModel.state.collectAsState()
-    TrainingEntityContent(state = state)
+    TrainingEntityContent(state = state
+    , onClickStart = onClickStart)
+
 }
 
 @Composable
-private fun TrainingEntityContent(state: TrainingEntityUiState) {
+private fun TrainingEntityContent(
+    state: TrainingEntityUiState,
+    onClickStart: () -> Unit,
+) {
     var isChallengeTabsVisible by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(visible = !isChallengeTabsVisible) {
@@ -32,7 +40,7 @@ private fun TrainingEntityContent(state: TrainingEntityUiState) {
                 RoundedGradientImage(imageUrl = state.imageUrl)
                 TrainingEntityDetails(
                     state = state,
-                    onClickStart = {},
+                    onClickStart = onClickStart,
                     onClickSecondaryButton = {},
                     onClickChallengesPlan = { isChallengeTabsVisible = true },
                     onClickRoutineFavourite = {}
