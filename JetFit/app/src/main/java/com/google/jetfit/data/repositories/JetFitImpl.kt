@@ -12,7 +12,7 @@ import com.google.jetfit.data.entities.Session
 import com.google.jetfit.data.entities.Song
 import com.google.jetfit.data.entities.SubtitleLanguage
 import com.google.jetfit.data.entities.Training
-import com.google.jetfit.data.entities.TrainingE
+import com.google.jetfit.data.entities.TrainingDetails
 import com.google.jetfit.data.entities.Workout
 import com.google.jetfit.data.entities.WorkoutType
 import kotlinx.coroutines.flow.Flow
@@ -632,10 +632,10 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
         )
     }
 
-    override fun getTrainingById(id: Int): Flow<TrainingE> {
+    override fun getTrainingById(id: Int): Flow<TrainingDetails> {
         return flow {
             emit(
-                TrainingE(
+                TrainingDetails(
                     id = "1",
                     instructor = "Danielle Orlando",
                     type = "Intensity",

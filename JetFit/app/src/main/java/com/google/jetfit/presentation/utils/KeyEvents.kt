@@ -1,6 +1,8 @@
 package com.google.jetfit.presentation.utils
 
+import android.os.Build
 import android.view.KeyEvent
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
@@ -8,6 +10,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.media3.exoplayer.ExoPlayer
 import com.google.jetfit.presentation.screens.player.video.composable.VideoPlayerState
 
+@RequiresApi(Build.VERSION_CODES.N_MR1)
 private val DPadEventsKeyCodes = listOf(
     KeyEvent.KEYCODE_DPAD_LEFT,
     KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT,
@@ -23,6 +26,7 @@ private val DPadEventsKeyCodes = listOf(
 )
 
 
+@RequiresApi(Build.VERSION_CODES.N_MR1)
 @Stable
 fun Modifier.handleDPadKeyEvents(
     onLeft: (() -> Unit)? = null,
@@ -61,6 +65,7 @@ fun Modifier.handleDPadKeyEvents(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.N_MR1)
 @Stable
 fun Modifier.handleDPadKeyEvents(
     onLeft: (() -> Unit)? = null,
@@ -97,6 +102,7 @@ fun Modifier.handleDPadKeyEvents(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.N_MR1)
 @Stable
 fun Modifier.dPadVideoEvents(
     exoPlayer: ExoPlayer,
@@ -121,6 +127,7 @@ fun Modifier.dPadVideoEvents(
 )
 
 
+@RequiresApi(Build.VERSION_CODES.N_MR1)
 @Stable
 fun Modifier.dPadAudioEvents(
     exoPlayer: ExoPlayer,

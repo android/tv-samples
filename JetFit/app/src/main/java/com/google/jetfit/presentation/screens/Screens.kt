@@ -15,7 +15,7 @@ enum class Screens(
     Dashboard,
     ProfileSelector,
     TrainingEntity,
-    Search( isNavigationDrawerItem =true, navigationDrawerIcon = R.drawable.search_),
+    Search(isNavigationDrawerItem = true, navigationDrawerIcon = R.drawable.search_),
     Home( isNavigationDrawerItem = true, navigationDrawerIcon = R.drawable.home),
     Training( isNavigationDrawerItem = true, navigationDrawerIcon = R.drawable.fitness_center),
     Favorite( isNavigationDrawerItem = true, navigationDrawerIcon = R.drawable.favorite),
