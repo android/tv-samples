@@ -2,7 +2,6 @@ package com.google.jetfit
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -25,7 +24,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Log.e("TAG", "onCreate: main activity")
             JetFitTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
