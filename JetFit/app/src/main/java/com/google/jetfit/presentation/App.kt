@@ -28,7 +28,7 @@ fun App(
     NavHost(
         navController = navController,
         route = "root_host",
-        startDestination = Screens.TrainingEntity(),
+        startDestination = Screens.ProfileSelector(),
         builder = {
             navigationDrawerGraph(
                     onNavigateToRoot = navController::navigateTo,

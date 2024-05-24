@@ -38,4 +38,10 @@
     <string name="minutes_per_day">Minutes per day</string>
     <string name="weekly_plan">Weekly plan</string>
     <string name="challenge_details">Challenge details</string>
+
+
+    <!-- settings -->
+    <string name="settings">Settings</string>
+    <string name="app_settings">App Settings</string>
+    <string name="personal_settings">Personal</string>
 </resources>
