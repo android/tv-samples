@@ -44,4 +44,16 @@
     <string name="settings">Settings</string>
     <string name="app_settings">App Settings</string>
     <string name="personal_settings">Personal</string>
+
+    //Subscription
+    <string name="month">month</string>
+    <string name="months">months</string>
+    <string name="month_subscription">Month Subscription</string>
+    <string name="subscribe_now">Subscribe now</string>
+    <string name="restore_purchases">Restore purchases</string>
+    <string name="subscribe_to_premium">Subscribe to Premium</string>
+    <string name="subscribe_brief">Subscribe to our services to start your fitness journey</string>
+    <string name="our_plans">Our plans</string>
+    <string name="free_trail">Start your 7-day free trial then</string>
+    <string name="subscription_cancelled">Subscription continues until cancelled</string>
 </resources>

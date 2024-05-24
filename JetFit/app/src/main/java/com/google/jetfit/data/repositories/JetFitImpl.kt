@@ -10,6 +10,7 @@ import com.google.jetfit.data.entities.Routine
 import com.google.jetfit.data.entities.Series
 import com.google.jetfit.data.entities.Session
 import com.google.jetfit.data.entities.Song
+import com.google.jetfit.data.entities.Subscription
 import com.google.jetfit.data.entities.SubtitleLanguage
 import com.google.jetfit.data.entities.Training
 import com.google.jetfit.data.entities.TrainingDetails
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.Date
 import javax.inject.Inject
-
 
 class JetFitImpl @Inject constructor() : JetFitRepository {
 
@@ -648,4 +648,28 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
         }
     }
 
+    override fun getSubscriptionOptionsByInstructorId(instructorId: String): Flow<List<Subscription>> {
+        return flow {
+            emit(
+                listOf(
+                    Subscription(
+                        periodTime = "1",
+                        price = "$7.99",
+                    ),
+                    Subscription(
+                        periodTime = "3",
+                        price = "$19.99",
+                    ),
+                    Subscription(
+                        periodTime = "12",
+                        price = "$79.99",
+                    ),
+                )
+            )
+        }
+    }
+
+    override suspend fun getInstructorImageById(instructorId: String): String {
+        return "https://s3-alpha-sig.figma.com/img/4a55/976b/4326c161fb1a8e1619b6b935a7d72898?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FrisEgVcxRsPdV5~7TFJuogCRC1DGQncvd7W3eEWrE3raW3WU-NFGMg9-G3rrUAanAM8doc5Ce842G-vEyVzC~eQyY8Sl2X9RJW199oajHOcVq4QBhjWmJBbSiQiJjEm5sqGgyPSUvpWd2D-5b1d7GeSFvRPAnmR-nfnHTlmtGkc3c1y4awXIyWPvzRAxqEwJN~3lsPxAOA~4c7YM5h9tJbM7GbBru~NOdU1cP5tRF52~~H0xgebbcOU1hst5UHvDph-7zsViDPCOWvAJrAwKLF8Jzd1Ts-1BiHsVqFVROTu6eA4pj9t7u7omBGcc0XplFfJobo7YG8pFKJSwKPOrQ__"
+    }
 }

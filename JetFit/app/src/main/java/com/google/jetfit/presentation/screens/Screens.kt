@@ -13,6 +13,7 @@ enum class Screens(
     VideoPlayer,
     AudioPlayer,
     Dashboard,
+    Subscription,
     ProfileSelector,
     TrainingEntity,
     Search(isNavigationDrawerItem = true, navigationDrawerIcon = R.drawable.search_),
