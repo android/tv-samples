@@ -1,9 +1,14 @@
 package com.google.jetfit.presentation.screens.training
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,8 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.tv.foundation.lazy.grid.TvGridCells
+import androidx.tv.foundation.lazy.grid.TvLazyHorizontalGrid
+import androidx.tv.foundation.lazy.grid.items
+import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
+import com.google.jetfit.components.CustomCard
 import com.google.jetfit.components.CustomOutlineButton
 import com.google.jetfit.presentation.screens.training.composable.FilterSideMenu
 import com.google.jetfit.presentation.screens.training.composable.SideMenu
@@ -34,7 +44,10 @@ fun TrainingScreen(
     )
 
 }
-
+data class SectionTab(
+    val id: Int,
+    val title: String,
+)
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun TrainingContent(
@@ -57,17 +70,54 @@ private fun TrainingContent(
                 onSelectedItem = onSelectedItem
         )
     }
-    Column(
-            Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background),
+
+    TvLazyColumn(
+        Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CustomOutlineButton(text = "Filters", onClick = onClickFilter)
-        CustomOutlineButton(
-                text = "Sort by: ${TrainingUiState.SortItem.entries[state.selectedSortItem]}",
-                onClick = onClickSortBy
-        )
+        item {
+            Row(
+                modifier = Modifier.padding(top = 50.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Spacer(modifier = Modifier.weight(1F))
+                CustomOutlineButton(text = "Filters", onClick = onClickFilter)
+                CustomOutlineButton(
+                    text = "Sort by: ${TrainingUiState.SortItem.entries[state.selectedSortItem]}",
+                    onClick = onClickSortBy
+                )
+                Spacer(modifier = Modifier.width(58.dp))
+
+            }
+        }
+
+        item {
+            TvLazyHorizontalGrid(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height((544.75).dp),
+                rows = TvGridCells.Fixed(3),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(32.dp)
+            ) {
+                items(state.workouts) { training ->
+                    CustomCard(
+                        imageUrl = training.imageUrl,
+                        title = training.name,
+                        timeText = training.duration,
+                        typeText = training.intensity.toString(),
+                        onClick = { },
+                        titleTextStyle = MaterialTheme.typography.titleMedium,
+                        timeTextStyle = MaterialTheme.typography.labelMedium,
+                        typeTextStyle = MaterialTheme.typography.labelMedium,
+                    )
+                }
+            }
+        }
     }
 }
