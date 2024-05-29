@@ -127,7 +127,7 @@ private fun TrainingContent(
                         imageUrl = training.imageUrl,
                         title = training.name,
                         timeText = training.duration,
-                        typeText = training.intensity.toString(),
+                        typeText = training.intensity.level,
                         onClick = { },
                         titleTextStyle = MaterialTheme.typography.titleMedium,
                         timeTextStyle = MaterialTheme.typography.labelMedium,
