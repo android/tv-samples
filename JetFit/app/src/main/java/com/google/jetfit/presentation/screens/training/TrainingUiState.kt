@@ -12,6 +12,7 @@ data class TrainingUiState(
     val workouts: List<Workout> = emptyList(),
     val selectedSortItem: Int = 0,
     val selectedTab: Int = 0,
+    val focusTabIndex: Int = 0,
 ){
     enum class SortItem {
         Newest,Relevance, Oldest

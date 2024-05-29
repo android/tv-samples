@@ -2,7 +2,6 @@ package com.google.jetfit.presentation.screens.training
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.jetfit.data.repositories.DummyWorkoutData
 import com.google.jetfit.data.repositories.JetFitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,5 +55,13 @@ class TrainingViewModel  @Inject constructor(
 
     fun onSelectedSortedItem(sortItemIndex: Int) {
         _state.update { it.copy(selectedSortItem = sortItemIndex)}
+    }
+
+    fun onChangeSelectedTab(index: Int) {
+        _state.update { it.copy(selectedTab = index) }
+    }
+
+    fun onChangeFocusTab(index: Int) {
+        _state.update { it.copy(focusTabIndex = index) }
     }
 }
