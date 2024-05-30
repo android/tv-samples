@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 kotlin {
@@ -52,22 +53,12 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }
-        create("benchmark") {
-            initWith(getByName("release"))
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-benchmark-rules.pro"
-            )
-            isDebuggable = false
         }
     }
     buildFeatures {
@@ -131,4 +122,7 @@ dependencies {
 
     // Compose Previews
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // For baseline profile generation
+    "baselineProfile"(project(mapOf("path" to ":benchmark")))
 }

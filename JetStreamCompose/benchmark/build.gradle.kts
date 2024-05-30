@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 /*
  * Copyright 2023 Google LLC
  *
@@ -14,53 +16,66 @@
  * limitations under the License.
  */
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.androidx.baselineprofile)
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+composeCompiler {
+    enableStrongSkippingMode = true
 }
 
 android {
     namespace = "com.google.jetstream.benchmark"
     compileSdk = 34
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     defaultConfig {
         minSdk = 28
+        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
     }
 
-    buildTypes {
-        // This benchmark buildType is used for benchmarking, and should function like your
-        // release build (for example, with minification on). It's signed with a debug key
-        // for easy local/CI testing.
-        create("benchmark") {
-            isDebuggable = true
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    testOptions.managedDevices.devices {
+        create<ManagedVirtualDevice>("tvApi34") {
+            device = "Television (1080p)"
+            apiLevel = 34
+            systemImageSource = "aosp"
         }
     }
 
     targetProjectPath = ":jetstream"
 }
 
+baselineProfile {
+    managedDevices += "tvApi34"
+    useConnectedDevices = false
+}
+
+
 dependencies {
+    implementation(libs.androidx.compose.runtime.base)
+
     implementation(libs.androidx.junit)
     implementation(libs.androidx.uiautomator)
 
     // Support for TV activities with LEANBACK_LAUNCHER intent was added in 1.2.0-alpha03 release
     // Use 1.2.0-alpha03 or above versions for benchmarking TV apps
     implementation(libs.androidx.benchmark.macro.junit4)
+    implementation(libs.androidx.rules)
 }
 
 androidComponents {
