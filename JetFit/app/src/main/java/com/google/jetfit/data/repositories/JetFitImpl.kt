@@ -265,7 +265,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Don’t let mornings put you in a bad mood! Make your day so much better by launching yourself off your bed and getting in to a full-on workout mode.",
             "Rachel Wright",
             WorkoutType.YOGA,
-            "https://figmage.com/images/FbgDhnXP05yKpdsLJfTQo.png",
+            "https://github.com/TheChance101/tv-samples/assets/45900975/c8b28144-06b2-42c6-b87f-464e78d3e706",
             10L,
             "https://example.com/morning_stretch_video.mp4",
             Intensity.MEDIUM,
@@ -279,7 +279,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Start your day with this gentle stretching routine designed to awaken your body and improve flexibility. Led by instructor Sarah Johnson, this routine will leave you feeling refreshed and ready for the day ahead.",
             "Sarah Johnson",
             WorkoutType.STRENGTH,
-            "https://example.com/morning_stretch.jpg",
+            "https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/w_403,c_limit/d081550e-586a-4567-9a82-6c96243d27b1/how-to-create-a-morning-stretch-routine-at-home.jpg",
             20L,
             "https://example.com/morning_stretch_video.mp4",
             Intensity.EASY,
@@ -293,7 +293,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Get a complete workout in just 30 minutes with this full-body circuit training routine. Led by trainer Alex Rodriguez, this high-intensity workout combines strength exercises with cardio intervals to maximize results.",
             "Alex Rodriguez",
             WorkoutType.STRENGTH,
-            "https://example.com/full_body_circuit.jpg",
+            "https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2019/07/Male-Bodybuilder-Standing-Bench-Barbell.jpg?quality=86&strip=all",
             30L,
             "https://example.com/full_body_circuit_video.mp4",
             Intensity.MEDIUM,
@@ -307,7 +307,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Wind down and release tension with this evening yoga relaxation routine. Led by instructor Emily White, this gentle practice focuses on deep breathing and restorative poses to promote relaxation and stress relief.",
             "Emily White",
             WorkoutType.YOGA,
-            "https://example.com/evening_yoga_relaxation.jpg",
+            "https://surfershype.com/wp-content/uploads/2021/03/surfershealth.jpg",
             25L,
             "https://example.com/evening_yoga_relaxation_video.mp4",
             Intensity.EASY,
@@ -321,7 +321,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Develop a strong and stable core with this core strengthening workout routine. Led by instructor Mike Smith, this series of exercises targets your abdominal muscles to improve strength and posture.",
             "Mike Smith",
             WorkoutType.STRENGTH,
-            "https://example.com/core_strengthening.jpg",
+            "https://blog.fitbit.com/wp-content/uploads/2019/03/0305_QuickWorkouts_BLOG-730x485.jpg",
             40L,
             "https://example.com/core_strengthening_video.mp4",
             Intensity.MEDIUM,
@@ -335,7 +335,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Boost your cardiovascular fitness with this intense cardio blast routine. Led by instructor Jessica Miller, this high-energy workout includes dynamic movements to elevate your heart rate and burn calories.",
             "Jessica Miller",
             WorkoutType.CARDIO,
-            "https://example.com/cardio_blast.jpg",
+            "https://www.afcfitness.com/wp-content/uploads/2018/11/cardio-blast.jpg",
             35L,
             "https://example.com/cardio_blast_video.mp4",
             Intensity.HARD,
@@ -349,7 +349,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Get ready to feel the burn with this quick abs workout routine. Led by instructor David Lee, this intense session targets your abdominal muscles to help sculpt and define your midsection.",
             "David Lee",
             WorkoutType.STRENGTH,
-            "https://example.com/quick_abs_burn.jpg",
+            "https://www.eatthis.com/wp-content/uploads/sites/4/2024/02/muscular-man-medicine-ball-slam.jpeg?quality=82&strip=1",
             15L,
             "https://example.com/quick_abs_burn_video.mp4",
             Intensity.HARD,
@@ -363,7 +363,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Release tension and improve flexibility with this total body stretch routine. Led by instructor Maria Garcia, this gentle sequence of stretches targets all major muscle groups to help you feel relaxed and rejuvenated.",
             "Maria Garcia",
             WorkoutType.STRENGTH,
-            "https://example.com/total_body_stretch.jpg",
+            "https://res.cloudinary.com/peloton-cycle/image/fetch/dpr_1.0,f_auto,q_auto:good,w_1800/https://s3.amazonaws.com/peloton-ride-images/50abeae651ede2a69fcea4946abaca291f34176d/img_1690575454_940b757cd2d8475a9151ad5b219e381e.png",
             25L,
             "https://example.com/total_body_stretch_video.mp4",
             Intensity.EASY,
@@ -377,7 +377,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Ignite your inner strength with this power yoga flow routine. Led by instructor Rachel Adams, this dynamic sequence of poses focuses on building strength, flexibility, and balance.",
             "Rachel Adams",
             WorkoutType.YOGA,
-            "https://example.com/power_yoga_flow.jpg",
+            "https://vesselpilates.com/wp-content/uploads/sites/5225/2022/07/DSC9154-1024x684.jpg",
             40L,
             "https://example.com/power_yoga_flow_video.mp4",
             Intensity.MEDIUM,
@@ -391,7 +391,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             "Push your limits with this interval training challenge routine. Led by trainer Chris Johnson, this high-intensity workout alternates between bursts of intense exercise and brief recovery periods to maximize calorie burn and improve fitness.",
             "Chris Johnson",
             WorkoutType.CARDIO,
-            "https://example.com/interval_training_challenge.jpg",
+            "https://image.boxrox.com/2022/10/Elderly-workout-822x466.jpg",
             50L,
             "https://example.com/interval_training_challenge_video.mp4",
             Intensity.HARD,
@@ -411,7 +411,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                 "Build your full body endurance with high-intensity training drills, kick boxing and more. Quick workouts to warm up before or cool down after your run.",
                 "Hugo Wright",
                 WorkoutType.CHALLENGE,
-                "https://figmage.com/images/FbgDhnXP05yKpdsLJfTQo.png",
+                "https://github.com/TheChance101/tv-samples/assets/45900975/9b03ce65-ffbd-40d9-876b-9764f3121905",
                 30,
                 15,
                 generateWeeklyPlans(getWorkouts()),
@@ -426,7 +426,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                 "Join our 30-day cardio challenge and boost your fitness level with high-intensity cardio workouts. Led by expert trainer Alex Rodriguez, this challenge will push your limits and help you achieve your fitness goals.",
                 "Alex Rodriguez",
                 WorkoutType.CARDIO,
-                "https://example.com/cardio_challenge.jpg",
+                "https://github.com/TheChance101/tv-samples/assets/45900975/87419c7f-3a7e-4cba-bc50-75c6a4365103",
                 45,
                 30,
                 generateWeeklyPlans(getWorkouts()),
@@ -441,7 +441,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                 "Embark on a transformative 21-day yoga journey to cultivate inner peace and physical strength. Led by renowned instructor Sarah Johnson, this challenge includes daily yoga practices designed to rejuvenate your mind, body, and soul.",
                 "Sarah Johnson",
                 WorkoutType.YOGA,
-                "https://example.com/yoga_journey.jpg",
+                "https://github.com/TheChance101/tv-samples/assets/45900975/902b57c7-9417-4ba3-a63a-2fbe1326e2f9",
                 30,
                 21,
                 generateWeeklyPlans(getWorkouts()),
@@ -456,7 +456,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                 "Build muscle and increase strength with our 14-day strength training challenge. Led by fitness expert Mike Smith, this challenge includes daily workouts targeting different muscle groups to help you sculpt your ideal physique.",
                 "Mike Smith",
                 WorkoutType.STRENGTH,
-                "https://example.com/strength_training_challenge.jpg",
+                "https://github.com/TheChance101/tv-samples/assets/45900975/c6a47503-0946-45d5-891a-7b1b3578d0f9",
                 40,
                 14,
                 generateWeeklyPlans(getWorkouts()),
@@ -532,19 +532,19 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
         return listOf(
             Category(
                 id = "1",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/5b76/28da/51c6b4c0076ea7b92c70d82dc1828425?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M1NOL3tptpUBJ4qM0QbqmkCQBAKjWpNw3llpK70HUmcVyUPF9StrimFkFA32ziyk-X8GQz8VJHrT42ovbtj3ROiDwLBbLfpCbkuNaThYT5D0BAVkRZtSjkp~w3yDLQKdRSWp~1pn242mMj5ASFpYjL9udDM4JBHn9gjvzST7QGzvOHes9ZABFtimxVBC0Ot-eQDpDV7mbU9Pf5ROC2JTEd2LK-QG85N0Vv8cIFpUcPJGSFgR1tbHxMDv1GpKAx33eSGnH02~ow3R6sZm88wznn0AaPJoKwGGvU2ZJUVl6wbUD4JRt9gcs3q9FVFFEhSeoOpYbJSdqgWdzhPM-Lv-7Q__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/2cf237b8-8a2e-4887-a037-6c6b45c5e46d",
                 title = "Yoga & Pilates",
                 description = "There are many benefits to yoga and Pilates, including increased..."
             ),
             Category(
                 id = "2",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/9e9e/d62b/548d491bf82b615ac52bb7b20d5370e4?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=WkhebeHHgGiGxNoLU1V2VpriPOZagVf52bfaK~tadSr-C8DmUe5N~lcK8-cN~v2fwO2Y4pcekzf8EsIR72q1KQaOzYe~qcfUpb2VO8PD-vff-jJG2MQxQcOnQfZShjx4K9ttiOg2AfWYwMfMClsxrKHmk0gVDZl1owjwqKzRILlWC8zNZyLjzGijaOo0gHFRmpYMtXOcCn~IQhDkVo-X6lRx-4jb45AiMKLWLxjU3zjCFf1VLW1MbnaSNoyoPj4~4lIsXoTFcrAdQFrGhcjhArEgC7LgEMnJDJDigxipLJ3-wN5uuYNS7bz5CfsD1QzlYnjnp-ZsNbmT9kuEnVx-Dg__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/d40c6512-0f49-4912-892f-33768f66733f",
                 title = "Strength training",
                 description = "Strength training makes you stronger, helps you control your..."
             ),
             Category(
                 id = "3",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/c823/37df/f97a3d198ca7a463a530cdf43275e329?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=k9CLo2xpsEn07zCJElLridjmm4QdPO~oGTfQmSV1upDJZUteGoeHO~nvz8Jx7ZfZUiSyfg2rxMAWQPPgHncj9I-gHWgy9UTYWbiWuYq7ynct-4jdFdgPr1ltdoFsBRJR1~I05Js~YQi8rOUTdZy--9saib9eF~zGz10kC274EI2VT3V3xsF7XWErz2IDQ5LyDaO5rC1cS4S5H3tvzu20QlW8Kh73VaMMW70HydqB-rPrBEwljC9l3nIx8PK7BUHXxoNj0xPHOizXd6DN-JlHspxoU6N40wz4OfZc9oar-ZLGbT3mwHZrRdM0pUoHoIMr1flai50tU1t6jl-qw2QVPw__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/ca924680-2e28-49db-95ff-bc1a9e04a079",
                 title = "Aerobic & Cardio",
                 description = "Get your blood pumping and build up your endurance with some..."
             ),
@@ -558,56 +558,56 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                 instructor = "Intensity",
                 title = "Full body strength",
                 time = "26 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/c823/37df/f97a3d198ca7a463a530cdf43275e329?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=k9CLo2xpsEn07zCJElLridjmm4QdPO~oGTfQmSV1upDJZUteGoeHO~nvz8Jx7ZfZUiSyfg2rxMAWQPPgHncj9I-gHWgy9UTYWbiWuYq7ynct-4jdFdgPr1ltdoFsBRJR1~I05Js~YQi8rOUTdZy--9saib9eF~zGz10kC274EI2VT3V3xsF7XWErz2IDQ5LyDaO5rC1cS4S5H3tvzu20QlW8Kh73VaMMW70HydqB-rPrBEwljC9l3nIx8PK7BUHXxoNj0xPHOizXd6DN-JlHspxoU6N40wz4OfZc9oar-ZLGbT3mwHZrRdM0pUoHoIMr1flai50tU1t6jl-qw2QVPw__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/e3d5daad-5620-4486-b231-a220e23f5bd9"
             ),
             Training(
-                id = "1",
+                id = "2",
                 instructor = "Intensity",
                 title = "Total-body balance pilates",
                 time = "24 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/4a55/976b/4326c161fb1a8e1619b6b935a7d72898?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FrisEgVcxRsPdV5~7TFJuogCRC1DGQncvd7W3eEWrE3raW3WU-NFGMg9-G3rrUAanAM8doc5Ce842G-vEyVzC~eQyY8Sl2X9RJW199oajHOcVq4QBhjWmJBbSiQiJjEm5sqGgyPSUvpWd2D-5b1d7GeSFvRPAnmR-nfnHTlmtGkc3c1y4awXIyWPvzRAxqEwJN~3lsPxAOA~4c7YM5h9tJbM7GbBru~NOdU1cP5tRF52~~H0xgebbcOU1hst5UHvDph-7zsViDPCOWvAJrAwKLF8Jzd1Ts-1BiHsVqFVROTu6eA4pj9t7u7omBGcc0XplFfJobo7YG8pFKJSwKPOrQ__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/4f8b6fd6-55a3-4dfa-a642-a4370b66e253"
             ),
             Training(
-                id = "1",
+                id = "3",
                 instructor = "Intensity",
                 title = "Circuit training",
                 time = "13 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/d345/131c/29f5dc5fd473cadbe52d66e9e6a86716?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M2CrOifodD92DDgx1V8n59yfLeTSMsCd6RuyEqn7YbB2bKrBqUuEUbHPmGSRuNOPMD1F1ZdvAifFhi6sQDIx430o4J1CgRao3UZ67pkdTer3xFtmHT4bLyb3H1n2BzHh9qx002v-JI-DJSVycS7AlHqCsAdyfYJNhT0DUKfugg0yK62JzjNcrm8Yy0t4qNY79xOXXq~zeprTLam4x7bk1iRCChkxK~QE1kqcfKNjOIwS0VBLPXUPobI4dVev61nJ9yOohr~RV6xEPtzWeJ7vDe0xBBMlKzhYTG75Q82IkWGkTR9RG3LFeZ1uJuGmPjhmRFyZwwyz5OV1qui0CPw87A__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/c7d8dadc-258e-4c09-a8b6-3d1d68c42d75"
             ),
             Training(
-                id = "1",
+                id = "4",
                 instructor = "Intensity",
                 title = "Morning stretch",
                 time = "15 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/5770/d9c0/ad221ffb0e1f7d281b01c5e69c87d26b?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=oOGROXkxgMXk07pdG8lTRFGZiCFBTETFD3JZmw3XgFOvsBxnWsVS~sbZ3Kqh-1mJXkwhgEE~eVqH4W~UJ6~j9E5n2cNGOeC811xXjdqg2CImK37P9Cjq-866RGUP9cxFMRGObkxLLWcreu00XA~gCyqArwSyzyW9PW86kHrW4l-mpTrevJxejMc3EP5GWsFOoQ5N7fSxBLAbbhT-4chUZvSIGSachv4ZdXUmDFpB0xR4kXRaxifgXzXmlWR-3qQl-2ctW-3t4j-IxnUa-zOfLrtSrGjd0jvkHCOC6o68WT-GDGUhI87Sm6z6Q6O~vkm0lKy9M8qeeeKGX2edz5~-lA__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/43d2477f-c498-465e-8923-23fc9226d83b"
             ),
             Training(
-                id = "1",
+                id = "5",
                 instructor = "Intensity",
                 title = "Yoga",
                 time = "20 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/ec15/4c56/dc027cb840412009a1fc07e6b0db7b3c?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RhBckHpwc87MEkauHMGudGzfyMRKnJ~cGdkYpr~2QCcJhhE8z4DU-PzFszbqLyGZ~pSsrjkFi-u7kvU1ahTTdP0fmLas7Uqr0T-~XxnjFJQwCkSzaO0KdfaBbbum3jKSKpB-aBqPwCDTHRAGpIxZUuZC~m1bj0RBrbKhIJnFiw5a9Er5angEjtK1cJia0HYn4sP25HYjzJyxt3tKesC0Df4cn2~QaUb-ZCoPQiTuXZO-LJQgIAXjYqVgiUuCoZnZw~6n0ckX1V01zp8~g7GfaRv1JPMp1mf0SGTLfkDXkn3Mos4kUdhwEIGonuMF~5RP1t9xPqJnXGisstwBxiZqHA__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/43c5fefe-1ee3-408f-8277-d5cde97e900c"
             ),
             Training(
-                id = "1",
+                id = "6",
                 instructor = "Intensity",
                 title = "Wind down",
                 time = "16 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/9e9e/d62b/548d491bf82b615ac52bb7b20d5370e4?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dJze3SwfE-HrHmeHNtvBinGnwUPxkggi8VJXlOEn3MXWo0DI4SCZhSRkqiCpSvddAN9AdmEQefxW4vmXOAyZ5O7qAzEa6a~jTkWjv8VzLYIGxlOsEJBMeHYTcDi1btqIbBlFw174C3Alg-5qZUWHzMevwGc9G5HXSIRdGFGBRvOTNuOornVdDJyZLUnXnYOXLOw6pggp7kvlvdgqEKEU2AIRzFO-fTuogjQPM6sbwIkbLBoSQl~jiJJ-RxSC05cE3gMop~5GPdkqTqlPErii~OGwVUKdaMl2KvRwHxbaGG4v9ANy9gzfB2ySMLA6AC5c93XUMDaQb0PcjQGe9GMMlg__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/8f59bc45-0b1e-4948-a7e9-e432fa44a4b6"
             ),
             Training(
-                id = "1",
+                id = "7",
                 instructor = "Intensity",
                 title = "Interval 5 day split",
                 time = "16 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/aad6/dfa7/e5a9a9dd732084d30328dceec998666f?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Sr8NN2cvX3Bc~OmscqwR6VnQhe0Fri9~rM-D~i39wva-lyN6xG1ai7iNXYYa5Kn~uuDhyZ-0BvYVIM~Z2GciW~YMsZzPKyvfnMk92MZ3aVc1ik2fJmOG2SknBSxBuBO0lNRS0HNq-Zx~qe7JFfHC0gadAzzvCH4bB7sI01~HYYQzRjb9EYJdzkd9GkLXD9PaN0iN7in6QRDHSZdgrhT22J96TC3wxRH2mpfFsm3LYA0iSvdZgt6Zj11xrrLlfIvnGVST-SqYnpiv5ixoCHoS18N6Q0KALn7IBH3xk8MSWRnpdfwfjE-CtITEKfOc3YKOCkciHbuhasbdEYyNMHGGcg__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/2c2be937-c0c5-48c9-992b-d2315d3a0752"
             ),
             Training(
-                id = "1",
+                id = "8",
                 instructor = "Intensity",
                 title = "Working in the gym",
                 time = "20 Min",
-                imageUrl = "https://s3-alpha-sig.figma.com/img/e8c5/e762/261fdaee84066db90f2dcdea8f4b6272?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=XpTP2A-yxY8hT91ub7tcc8KAhL7YQUAJnkFCbjU4K8Y3eLt4yqaZzbRmJEtOXKnr0LMWlRPxWafCsLpj79Bgx2lkzI9wl3tKpXI0prvUbl~SwdF5wDR-11A~abdY1ugr4AychRuiweXENGU~fGOvT6HERw2XEE5BD4BafAafDC3J0tNNxoVnG9p612zqMtJKdZpJLOci4O6KOjG51BGA9-Zzat32UtUWGyccUnGkWrPtEoUarnCcNjlJ6mFNYyAWB5GvqDLRF7~ngjVrUj48cF9JFB0OTlys3YGLtxqDsXgFyCeBt9BX8d8x0VVfhsXSd4sjl93FVa70hss9lOxHzA__",
+                imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/9ce1d637-fa28-4691-ae34-4a72693ab746"
             )
         )
     }
@@ -617,17 +617,17 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
             Profile(
                 id = "1",
                 name = "Liam",
-                avatar = "https://s3-alpha-sig.figma.com/img/6532/e8f4/1392cf3e62810b5ea04afa65d9b72a51?Expires=1711929600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=R4~LhpixBseeXvgcgkOo87m1tVPmfIsU84BxBo686p-2JdNJc-4niyDJ~4SzLm3f~PKFKtSHVnBoPIFJJEQBBJE3m2UpwdH~-O7FqGIy9lsSdmf82l3vCGPNgX6tLFUkSxD9J4IvwJYd1kYusUhdxVN04M2Zr-O7dT9uUVEvnBrNKSw6taqoGJMDih3Luc8SGfMllrc9uFAM1oKOQJxpkqqzJCj3FpMVzJ5BEuftlcQd1q4PhSp7V9LwPS1n0tcfT02X-NyuBxIWl3wzO8~kpXyqFv83MVqJaGDBugERlGbe5L-vnHhDgybST0SbPSBtAgciKXO4yZpfy9hf5-X57w__"
+                avatar = "https://github.com/TheChance101/tv-samples/assets/45900975/7bd092a0-6428-45d5-91dd-4305950f2d76"
             ),
             Profile(
                 id = "2",
                 name = "Olivia",
-                avatar = "https://s3-alpha-sig.figma.com/img/3f0e/6a39/508338655b58ecb681612b7c83ffe0bc?Expires=1711929600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RQuElmLChyZ8-iqnobcT73flYdOez2iSBeGnKKKB1qd67RF4BONYtKHbZWyvaW~W7qPGCykK~82TOeGhSoKACspW9rHYG4nCqG7bD8GCXOCv4MFks5sna~0D6tpWInNmcFxLpHe7v9mHn1GVfa5jq5TMWVk2GWcHNydtMnVr6f1gSiOthkjQ8z3ALjob6WtJlA9RaDuYebNvJ1oxRis6o9QArvO3dknVaQQLnmB2FtoVv-AiWsQoCTiCy6Jp8WiVKF7SGGS-WRd8qQS9YUKY8FHgcpvoAum5Cn6HCksECIsz5oonVuDAyJSil3v9fyG5VnzzE9~IacQUA~E2ZeSFlg__"
+                avatar = "https://github.com/TheChance101/tv-samples/assets/45900975/06275484-da42-4d49-92ec-18ce0cb470e9"
             ),
             Profile(
                 id = "3",
                 name = "Noah",
-                avatar = "https://s3-alpha-sig.figma.com/img/3c0b/7630/a6c58e76e1e55007c4ef8859cacb4398?Expires=1711929600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AlCz1j9iK0OhpkYbrtd1MGytk-1Q9lp51IiF5bkM6ri9Hilgke9REJCZj3eYESxoQLlJEE9LfYmdCPwKHuL5ttaKNjI9Y7R1U88049F8Quy4BIAHo8hV1ZLVp2CoKk9JP7ydMHwicJSwqAyfKokI3GNN1A~GBOoSPX-skdmLx3VK5nleWjtZl4dyxQ77ffnUHLC4lVW55m0Bj5t~3vh6-ZZ6Veu-aOO~r9I9EA4aIiwCLu0HbIN5mal98MXyO2eRqZpvgRffmLHcJPblCWjUhunugwtIaBXbv8GEFM7y0w5F60VhDumHZkhu-ASESrs-3nDCLnV7268z-ifqCat~6Q__"
+                avatar = "https://github.com/TheChance101/tv-samples/assets/45900975/42321083-bc05-45ca-8f80-dacdc5295c44"
             ),
         )
     }
@@ -642,7 +642,7 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
                     title = "Total-body balance pilates",
                     time = "34 Min",
                     description = "Andrea's signature low-impact, total-body class in just 30 minutes. Hit every muscle group with barre and Pilates moves that leave you feeling strong, refreshed, and energized",
-                    imageUrl = "https://s3-alpha-sig.figma.com/img/4a55/976b/4326c161fb1a8e1619b6b935a7d72898?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FrisEgVcxRsPdV5~7TFJuogCRC1DGQncvd7W3eEWrE3raW3WU-NFGMg9-G3rrUAanAM8doc5Ce842G-vEyVzC~eQyY8Sl2X9RJW199oajHOcVq4QBhjWmJBbSiQiJjEm5sqGgyPSUvpWd2D-5b1d7GeSFvRPAnmR-nfnHTlmtGkc3c1y4awXIyWPvzRAxqEwJN~3lsPxAOA~4c7YM5h9tJbM7GbBru~NOdU1cP5tRF52~~H0xgebbcOU1hst5UHvDph-7zsViDPCOWvAJrAwKLF8Jzd1Ts-1BiHsVqFVROTu6eA4pj9t7u7omBGcc0XplFfJobo7YG8pFKJSwKPOrQ__"
+                    imageUrl = "https://github.com/TheChance101/tv-samples/assets/45900975/25ccc101-fb05-4195-9ea3-432bbc585b45"
                 )
             )
         }
@@ -670,6 +670,6 @@ class JetFitImpl @Inject constructor() : JetFitRepository {
     }
 
     override suspend fun getInstructorImageById(instructorId: String): String {
-        return "https://s3-alpha-sig.figma.com/img/4a55/976b/4326c161fb1a8e1619b6b935a7d72898?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FrisEgVcxRsPdV5~7TFJuogCRC1DGQncvd7W3eEWrE3raW3WU-NFGMg9-G3rrUAanAM8doc5Ce842G-vEyVzC~eQyY8Sl2X9RJW199oajHOcVq4QBhjWmJBbSiQiJjEm5sqGgyPSUvpWd2D-5b1d7GeSFvRPAnmR-nfnHTlmtGkc3c1y4awXIyWPvzRAxqEwJN~3lsPxAOA~4c7YM5h9tJbM7GbBru~NOdU1cP5tRF52~~H0xgebbcOU1hst5UHvDph-7zsViDPCOWvAJrAwKLF8Jzd1Ts-1BiHsVqFVROTu6eA4pj9t7u7omBGcc0XplFfJobo7YG8pFKJSwKPOrQ__"
+        return "https://github.com/TheChance101/tv-samples/assets/45900975/ad94de6b-5e1e-45b0-b62a-0927dde1aa04"
     }
 }
