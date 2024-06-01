@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
+import com.google.jetstream.presentation.utils.ifElse
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
@@ -70,35 +71,35 @@ fun RowScope.VideoPlayerControllerIndicator(
         }
     }
 
+    val handleSeekEventModifier = Modifier.handleDPadKeyEvents(
+        onEnter = {
+            isSelected = !isSelected
+            onSeek(seekProgress)
+        },
+        onLeft = {
+            seekProgress = (seekProgress - 0.1f).coerceAtLeast(0f)
+        },
+        onRight = {
+            seekProgress = (seekProgress + 0.1f).coerceAtMost(1f)
+        }
+    )
+
+    val handleDpadCenterClickModifier = Modifier.handleDPadKeyEvents(
+        onEnter = {
+            seekProgress = progress
+            isSelected = !isSelected
+        }
+    )
+
     Canvas(
         modifier = Modifier
             .weight(1f)
             .height(animatedIndicatorHeight)
             .padding(horizontal = 4.dp)
-            .handleDPadKeyEvents(
-                onEnter = {
-                    if (isSelected) {
-                        onSeek(seekProgress)
-                        focusManager.moveFocus(FocusDirection.Exit)
-                    } else {
-                        seekProgress = progress
-                    }
-                    isSelected = !isSelected
-                },
-                onLeft = {
-                    if (isSelected) {
-                        seekProgress = (seekProgress - 0.1f).coerceAtLeast(0f)
-                    } else {
-                        focusManager.moveFocus(FocusDirection.Left)
-                    }
-                },
-                onRight = {
-                    if (isSelected) {
-                        seekProgress = (seekProgress + 0.1f).coerceAtMost(1f)
-                    } else {
-                        focusManager.moveFocus(FocusDirection.Right)
-                    }
-                }
+            .ifElse(
+                condition = isSelected,
+                ifTrueModifier = handleSeekEventModifier,
+                ifFalseModifier = handleDpadCenterClickModifier
             )
             .focusable(interactionSource = interactionSource),
         onDraw = {
