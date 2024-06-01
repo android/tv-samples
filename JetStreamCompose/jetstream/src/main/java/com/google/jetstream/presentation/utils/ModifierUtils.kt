@@ -60,8 +60,7 @@ fun Modifier.handleDPadKeyEvents(
         }
 
         KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
-            onEnter?.apply {
-                onActionUp(::invoke)
+            onEnter?.invoke().also {
                 return@onPreviewKeyEvent true
             }
         }
