@@ -124,5 +124,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // For baseline profile generation
-    "baselineProfile"(project(mapOf("path" to ":benchmark")))
+    baselineProfile(project(":benchmark"))
 }
