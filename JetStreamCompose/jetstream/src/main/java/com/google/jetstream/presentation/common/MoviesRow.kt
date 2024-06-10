@@ -191,6 +191,7 @@ fun ImmersiveListMoviesRow(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MoviesRowItem(
     index: Int,

@@ -5,10 +5,7 @@
 
 ## Generating baseline profiles
 
-
-To generate the baseline profile for Jetstream app, select the `benchmark` build variant and run the
-`BaselineProfileGenerator` benchmark test on your Android TV device.
-Then copy the resulting baseline profile to [`jetstream/src/main/baseline-prof.txt`](jetstream/src/main/baseline-prof.txt).
+To generate the baseline profile for Jetstream app, run "Generate Baseline Profile" from "**Run**".
 
 > Note: The baseline profile needs to be re-generated for release builds that touch code which changes app startup.
 
