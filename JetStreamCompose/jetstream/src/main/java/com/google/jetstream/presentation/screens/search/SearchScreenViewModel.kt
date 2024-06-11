@@ -47,7 +47,7 @@ class SearchScreenViewModel @Inject constructor(
     val searchState = internalSearchState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = SearchState.Done(MovieList())
+        initialValue = SearchState.Done(emptyList())
     )
 }
 
