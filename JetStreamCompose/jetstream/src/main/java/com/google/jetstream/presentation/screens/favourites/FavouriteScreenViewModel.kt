@@ -46,7 +46,7 @@ class FavouriteScreenViewModel @Inject constructor(
         val filtered = movieList.filterIndexed { index, _ ->
             idList.contains(index)
         }
-        FavouriteScreenUiState.Ready(MovieList(filtered), filterList)
+        FavouriteScreenUiState.Ready(filtered, filterList)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),

@@ -17,7 +17,6 @@
 package com.google.jetstream.data.repositories
 
 import com.google.jetstream.data.entities.MovieCategoryDetails
-import com.google.jetstream.data.entities.MovieCategoryList
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.entities.MovieReviewsAndRatings
@@ -41,27 +40,27 @@ class MovieRepositoryImpl @Inject constructor(
 ) : MovieRepository {
 
     override fun getFeaturedMovies() = flow {
-        val list = MovieList(movieDataSource.getFeaturedMovieList())
+        val list = movieDataSource.getFeaturedMovieList()
         emit(list)
     }
 
     override fun getTrendingMovies(): Flow<MovieList> = flow {
-        val list = MovieList(movieDataSource.getTrendingMovieList())
+        val list = movieDataSource.getTrendingMovieList()
         emit(list)
     }
 
     override fun getTop10Movies(): Flow<MovieList> = flow {
-        val list = MovieList(movieDataSource.getTop10MovieList())
+        val list = movieDataSource.getTop10MovieList()
         emit(list)
     }
 
     override fun getNowPlayingMovies(): Flow<MovieList> = flow {
-        val list = MovieList(movieDataSource.getNowPlayingMovieList())
+        val list = movieDataSource.getNowPlayingMovieList()
         emit(list)
     }
 
     override fun getMovieCategories() = flow {
-        val list = MovieCategoryList(movieCategoryDataSource.getMovieCategoryList())
+        val list = movieCategoryDataSource.getMovieCategoryList()
         emit(list)
     }
 
@@ -74,7 +73,7 @@ class MovieRepositoryImpl @Inject constructor(
         return MovieCategoryDetails(
             id = category.id,
             name = category.name,
-            movies = MovieList(movieList)
+            movies = movieList
         )
     }
 
@@ -103,7 +102,7 @@ class MovieRepositoryImpl @Inject constructor(
             originalLanguage = "English",
             budget = "$15M",
             revenue = "$40M",
-            similarMovies = MovieList(similarMovieList),
+            similarMovies = similarMovieList,
             reviewsAndRatings = listOf(
                 MovieReviewsAndRatings(
                     reviewerName = FreshTomatoes,
@@ -122,39 +121,38 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchMovies(query: String): MovieList {
-        val filtered = movieDataSource.getMovieList().filter {
+        return movieDataSource.getMovieList().filter {
             it.name.contains(other = query, ignoreCase = true)
         }
-        return MovieList(filtered)
     }
 
     override fun getMoviesWithLongThumbnail() = flow {
         val list = movieDataSource.getMovieList(ThumbnailType.Long)
-        emit(MovieList(list))
+        emit(list)
     }
 
     override fun getMovies(): Flow<MovieList> = flow {
         val list = movieDataSource.getMovieList()
-        emit(MovieList(list))
+        emit(list)
     }
 
     override fun getPopularFilmsThisWeek(): Flow<MovieList> = flow {
         val list = movieDataSource.getPopularFilmThisWeek()
-        emit(MovieList(list))
+        emit(list)
     }
 
     override fun getTVShows(): Flow<MovieList> = flow {
         val list = tvDataSource.getTvShowList()
-        emit(MovieList(list))
+        emit(list)
     }
 
     override fun getBingeWatchDramas(): Flow<MovieList> = flow {
         val list = tvDataSource.getBingeWatchDramaList()
-        emit(MovieList(list))
+        emit(list)
     }
 
     override fun getFavouriteMovies(): Flow<MovieList> = flow {
         val list = movieDataSource.getFavoriteMovieList()
-        emit(MovieList(list))
+        emit(list)
     }
 }
