@@ -1,0 +1,21 @@
+name: LeanbackShowcase
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/LeanbackShowcase.yml'
+      - 'LeanbackShowcase/**'
+  pull_request:
+    paths:
+      - '.github/workflows/LeanbackShowcase.yml'
+      - 'LeanbackShowcase/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-sample-without-format-check.yml
+    with:
+      name: LeanbackShowcase
+      path: LeanbackShowcase

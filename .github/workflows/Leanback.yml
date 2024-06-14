@@ -1,0 +1,21 @@
+name: Leanback
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/Leanback.yml'
+      - 'Leanback/**'
+  pull_request:
+    paths:
+      - '.github/workflows/Leanback.yml'
+      - 'Leanback/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-sample-without-format-check.yml
+    with:
+      name: Leanback
+      path: Leanback

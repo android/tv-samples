@@ -1,0 +1,21 @@
+name: ClassicsKotlin
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/ClassicsKotlin.yml'
+      - 'ClassicsKotlin/**'
+  pull_request:
+    paths:
+      - '.github/workflows/ClassicsKotlin.yml'
+      - 'ClassicsKotlin/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-sample-without-format-check.yml
+    with:
+      name: ClassicsKotlin
+      path: ClassicsKotlin
