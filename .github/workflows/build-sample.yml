@@ -43,6 +43,17 @@ jobs:
                 java-version: 17
                 distribution: "zulu"
 
+            - name: Generate cache key
+              run: ./scripts/checksum.sh ${{ inputs.path }} checksum.txt
+        
+            - uses: actions/cache@v4
+              with:
+                path: |
+                  ~/.gradle/caches/modules-*
+                  ~/.gradle/caches/jars-*
+                  ~/.gradle/caches/build-cache-*
+                key: gradle-${{ hashFiles('checksum.txt') }}
+
             - name: Check formatting
               working-directory: ${{ inputs.path }}
               run: ./gradlew --init-script buildscripts/init.gradle.kts spotlessCheck --stacktrace
