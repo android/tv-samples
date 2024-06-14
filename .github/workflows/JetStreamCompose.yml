@@ -11,6 +11,7 @@ on:
     paths:
       - '.github/workflows/JetStreamCompose.yml'
       - 'JetStreamCompose/**'
+  workflow_dispatch:
 
 jobs:
   build:
