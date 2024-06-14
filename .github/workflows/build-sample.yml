@@ -17,9 +17,16 @@ name: Build sample
 on:
     workflow_call:
         inputs:
+          name:
+            required: true
+            type: string
           path:
             required: true
             type: string
+
+concurrency:
+  group: ${{ inputs.name }}-build-${{ github.ref }}
+  cancel-in-progress: true            
 
 jobs:
     build:

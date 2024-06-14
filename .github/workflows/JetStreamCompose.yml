@@ -16,4 +16,5 @@ jobs:
   build:
     uses: ./.github/workflows/build-sample.yml
     with:
+      name: JetStreamCompose
       path: JetStreamCompose
