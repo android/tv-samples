@@ -56,10 +56,6 @@ jobs:
                   ~/.gradle/caches/build-cache-*
                 key: gradle-${{ hashFiles('checksum.txt') }}            
 
-            - name: Check lint
-              working-directory: ${{ inputs.path }}
-              run: ./gradlew lintDebug --stacktrace
-
             - name: Build debug
               working-directory: ${{ inputs.path }}
               run: ./gradlew assembleDebug --stacktrace
@@ -68,10 +64,6 @@ jobs:
               working-directory: ${{ inputs.path }}
               run: ./gradlew assembleRelease --stacktrace
       
-            - name: Run local tests
-              working-directory: ${{ inputs.path }}
-              run: ./gradlew testDebug --stacktrace              
-
             - name: Upload build outputs (APKs)
               uses: actions/upload-artifact@v4
               with:

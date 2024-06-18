@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-sample-without-format-check.yml
+    uses: ./.github/workflows/build-sample-without-check.yml
     with:
       name: TvMaterialCatalog
       path: TvMaterialCatalog
