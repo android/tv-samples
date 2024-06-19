@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Card
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Text
@@ -42,7 +44,7 @@ fun CustomCard(
 ) {
     Column (
         modifier = Modifier
-            .padding(8.dp)
+            .size(width = 196.dp, height = 158.25.dp)
     ){
 
         Card(
@@ -64,7 +66,6 @@ fun CustomCard(
         }
         Text(
             text = title,
-            modifier = Modifier.padding(bottom = 8.dp),
             style = titleTextStyle
         )
         Row(

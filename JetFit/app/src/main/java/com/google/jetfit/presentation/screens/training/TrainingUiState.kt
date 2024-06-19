@@ -1,6 +1,7 @@
 package com.google.jetfit.presentation.screens.training
 
 import com.google.jetfit.R
+import com.google.jetfit.data.entities.Workout
 
 
 data class TrainingUiState(
@@ -8,7 +9,10 @@ data class TrainingUiState(
     val isSortExpended: Boolean = false,
     val filterSideMenuUiState: FilterSideMenuUiState = FilterSideMenuUiState(),
     val instructorList: List<String> = emptyList(),
+    val workouts: List<Workout> = emptyList(),
     val selectedSortItem: Int = 0,
+    val selectedTab: Int = 0,
+    val focusTabIndex: Int = 0,
 ){
     enum class SortItem {
         Newest,Relevance, Oldest
