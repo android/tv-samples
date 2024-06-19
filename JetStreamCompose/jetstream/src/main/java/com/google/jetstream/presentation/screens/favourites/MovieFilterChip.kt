@@ -75,7 +75,8 @@ fun MovieFilterChip(
             AnimatedVisibility(visible = isChecked) {
                 Icon(
                     Icons.Default.Check,
-                    contentDescription = StringConstants.Composable.ContentDescription.FilterSelected,
+                    contentDescription =
+                    StringConstants.Composable.ContentDescription.FilterSelected,
                     modifier = Modifier.size(16.dp)
                 )
             }
@@ -85,7 +86,8 @@ fun MovieFilterChip(
             border = Border(
                 border = BorderStroke(
                     width = 1.dp, color = MaterialTheme.colorScheme.border.copy(alpha = 0.5f)
-                ), shape = JetStreamCardShape
+                ),
+                shape = JetStreamCardShape
             ),
             focusedBorder = ChipFocusedBorder,
         ),
@@ -115,5 +117,6 @@ private val ChipFocusedBorder
         border = BorderStroke(
             width = 1.5.dp,
             color = MaterialTheme.colorScheme.onSurface,
-        ), shape = JetStreamCardShape
+        ),
+        shape = JetStreamCardShape
     )

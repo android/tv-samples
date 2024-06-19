@@ -20,12 +20,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,9 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.foundation.PivotOffsets
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.Border
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.ClassicCard
@@ -57,7 +56,7 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
     val childPadding = rememberChildPadding()
 
     Column(
-        modifier = Modifier.padding(top = childPadding.top)
+        modifier = Modifier.padding(top = childPadding.top),
     ) {
         Text(
             text = stringResource(R.string.cast_and_crew),
@@ -66,16 +65,13 @@ fun CastAndCrewList(castAndCrew: List<MovieCast>) {
             ),
             modifier = Modifier.padding(start = childPadding.start)
         )
-        TvLazyRow(
+        // ToDo: specify the pivot offset
+        LazyRow(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .focusRestorer(),
-            pivotOffsets = PivotOffsets(
-                parentFraction = 0.07f
-            )
+            contentPadding = PaddingValues(start = childPadding.start)
         ) {
-            item { Spacer(modifier = Modifier.padding(start = childPadding.start)) }
-
             items(castAndCrew, key = { it.id }) {
                 CastAndCrewItem(it, modifier = Modifier.width(144.dp))
             }

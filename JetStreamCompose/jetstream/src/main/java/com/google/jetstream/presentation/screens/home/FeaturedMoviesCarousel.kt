@@ -92,13 +92,18 @@ fun FeaturedMoviesCarousel(
 ) {
     val carouselState = rememberSaveable(saver = CarouselSaver) { CarouselState(0) }
     var isCarouselFocused by remember { mutableStateOf(false) }
+    val alpha = if (isCarouselFocused) {
+        1f
+    } else {
+        0f
+    }
 
     Carousel(
         modifier = modifier
             .padding(start = padding.start, end = padding.start, top = padding.top)
             .border(
                 width = JetStreamBorderWidth,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isCarouselFocused) 1f else 0f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
                 shape = ShapeDefaults.Medium,
             )
             .clip(ShapeDefaults.Medium)

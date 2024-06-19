@@ -20,8 +20,8 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
@@ -385,13 +385,13 @@ fun Dialog(
     var alphaTransitionState by remember {
         mutableStateOf(MutableTransitionState(AnimationStage.Intro))
     }
-    val alphaTransition = updateTransition(alphaTransitionState, label = "alphaTransition")
+    val alphaTransition = rememberTransition(alphaTransitionState, label = "alphaTransition")
 
     // Transitions for dialog content scaling.
     var scaleTransitionState by remember {
         mutableStateOf(MutableTransitionState(AnimationStage.Intro))
     }
-    val scaleTransition = updateTransition(scaleTransitionState, label = "scaleTransition")
+    val scaleTransition = rememberTransition(scaleTransitionState, label = "scaleTransition")
 
     if (showDialog || alphaTransitionState.targetState != AnimationStage.Intro ||
         scaleTransitionState.targetState != AnimationStage.Intro
@@ -484,7 +484,7 @@ internal fun DialogFlowRow(
         // Return whether the placeable can be added to the current sequence.
         fun canAddToCurrentSequence(placeable: Placeable) =
             currentSequence.isEmpty() || currentMainAxisSize + mainAxisSpacing.roundToPx() +
-                    placeable.width <= constraints.maxWidth
+                placeable.width <= constraints.maxWidth
 
         // Store current sequence information and start a new sequence.
         fun startNewSequence() {
@@ -531,7 +531,7 @@ internal fun DialogFlowRow(
             sequences.forEachIndexed { i, placeables ->
                 val childrenMainAxisSizes = IntArray(placeables.size) { j ->
                     placeables[j].width +
-                            if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
+                        if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                 }
                 val arrangement = Arrangement.Bottom
                 // Handle vertical direction

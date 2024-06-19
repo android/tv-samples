@@ -71,16 +71,16 @@ object StringConstants {
         object Placeholders {
             const val AboutSectionTitle = "About JetStream"
             const val AboutSectionDescription = "Welcome to Jetstream! We are a new and" +
-                    " exciting streaming platform that offers a vast selection of movies," +
-                    " TV shows, and original content for you to enjoy. Our team is dedicated" +
-                    " to providing an intuitive and seamless streaming experience for all" +
-                    " users. With a simple and intuitive interface, you can easily find and" +
-                    " watch your favourite content in just a few clicks. We are constantly" +
-                    " updating and expanding our library, so there is always something new" +
-                    " to discover. We also offer personalised recommendations based on your" +
-                    " viewing history, so you can easily find new and exciting content to" +
-                    " enjoy. Thank you for choosing Jetstream for all of your entertainment" +
-                    " needs. We hope you have a great time streaming!"
+                " exciting streaming platform that offers a vast selection of movies," +
+                " TV shows, and original content for you to enjoy. Our team is dedicated" +
+                " to providing an intuitive and seamless streaming experience for all" +
+                " users. With a simple and intuitive interface, you can easily find and" +
+                " watch your favourite content in just a few clicks. We are constantly" +
+                " updating and expanding our library, so there is always something new" +
+                " to discover. We also offer personalised recommendations based on your" +
+                " viewing history, so you can easily find new and exciting content to" +
+                " enjoy. Thank you for choosing Jetstream for all of your entertainment" +
+                " needs. We hope you have a great time streaming!"
             const val AboutSectionAppVersionTitle = "Application Version"
             const val LanguageSectionTitle = "Language"
             val LanguageSectionItems = listOf(

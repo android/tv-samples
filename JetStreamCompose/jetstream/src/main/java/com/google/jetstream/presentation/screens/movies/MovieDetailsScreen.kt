@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,14 +37,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.common.Error
+import com.google.jetstream.presentation.common.Loading
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -62,11 +62,11 @@ fun MovieDetailsScreen(
 
     when (val s = uiState) {
         is MovieDetailsScreenUiState.Loading -> {
-            Loading()
+            Loading(modifier = Modifier.fillMaxSize())
         }
 
         is MovieDetailsScreenUiState.Error -> {
-            Error()
+            Error(modifier = Modifier.fillMaxSize())
         }
 
         is MovieDetailsScreenUiState.Done -> {
@@ -83,7 +83,6 @@ fun MovieDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Details(
     movieDetails: MovieDetails,
@@ -95,7 +94,7 @@ private fun Details(
     val childPadding = rememberChildPadding()
 
     BackHandler(onBack = onBackPressed)
-    TvLazyColumn(
+    LazyColumn(
         contentPadding = PaddingValues(bottom = 135.dp),
         modifier = modifier,
     ) {
@@ -118,8 +117,8 @@ private fun Details(
                     .Composable
                     .movieDetailsScreenSimilarTo(movieDetails.name),
                 titleStyle = MaterialTheme.typography.titleMedium,
-                movies = movieDetails.similarMovies,
-                onMovieClick = refreshScreenWithNewMovie
+                movieList = movieDetails.similarMovies,
+                onMovieSelected = refreshScreenWithNewMovie
             )
         }
 
@@ -174,18 +173,6 @@ private fun Details(
             }
         }
     }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Loading(modifier: Modifier = Modifier) {
-    Text(text = "Loading...", modifier = modifier)
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Error(modifier: Modifier = Modifier) {
-    Text(text = "Something went wrong...", modifier = modifier)
 }
 
 private val BottomDividerPadding = PaddingValues(vertical = 48.dp)

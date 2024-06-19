@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Text
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Text
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable

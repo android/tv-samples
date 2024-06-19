@@ -17,44 +17,34 @@
 package com.google.jetstream.presentation.screens.categories
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvGridItemSpan
-import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
-import androidx.tv.material3.Border
-import androidx.tv.material3.CardDefaults
-import androidx.tv.material3.CardLayoutDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Text
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieCategoryDetails
-import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.common.Error
+import com.google.jetstream.presentation.common.Loading
+import com.google.jetstream.presentation.common.MovieCard
+import com.google.jetstream.presentation.common.PosterImage
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
-import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.utils.focusOnInitialVisibility
 
 object CategoryMovieListScreen {
@@ -70,12 +60,14 @@ fun CategoryMovieListScreen(
     val uiState by categoryMovieListScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     when (val s = uiState) {
-        is CategoryMovieListScreenUiState.Loading -> {
-            Loading()
+        CategoryMovieListScreenUiState.Loading -> {
+            Loading(modifier = Modifier.fillMaxSize())
         }
-        is CategoryMovieListScreenUiState.Error -> {
-            Error()
+
+        CategoryMovieListScreenUiState.Error -> {
+            Error(modifier = Modifier.fillMaxSize())
         }
+
         is CategoryMovieListScreenUiState.Done -> {
             val categoryDetails = s.movieCategoryDetails
             CategoryDetails(
@@ -85,10 +77,8 @@ fun CategoryMovieListScreen(
             )
         }
     }
-
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun CategoryDetails(
     categoryDetails: MovieCategoryDetails,
@@ -114,78 +104,30 @@ private fun CategoryDetails(
                 vertical = childPadding.top.times(3.5f)
             )
         )
-        TvLazyVerticalGrid(
-            columns = TvGridCells.Fixed(6)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(6),
+            contentPadding = PaddingValues(bottom = JetStreamBottomListPadding)
         ) {
-            categoryDetails.movies.forEachIndexed { index, movie ->
-                item {
-                    key(movie.id) {
-                        StandardCardLayout(
-                            modifier = Modifier
-                                .aspectRatio(1 / 1.5f)
-                                .padding(8.dp)
-                                .then(
-                                    if (index == 0)
-                                        Modifier.focusOnInitialVisibility(isFirstItemVisible)
-                                    else Modifier
-                                ),
-                            imageCard = {
-                                CardLayoutDefaults.ImageCard(
-                                    shape = CardDefaults.shape(shape = JetStreamCardShape),
-                                    border = CardDefaults.border(
-                                        focusedBorder = Border(
-                                            border = BorderStroke(
-                                                width = JetStreamBorderWidth,
-                                                color = MaterialTheme.colorScheme.onSurface
-                                            ),
-                                            shape = JetStreamCardShape
-                                        ),
-                                        pressedBorder = Border(
-                                            border = BorderStroke(
-                                                width = JetStreamBorderWidth,
-                                                color = MaterialTheme.colorScheme.border
-                                            ),
-                                            shape = JetStreamCardShape
-                                        ),
-                                    ),
-                                    scale = CardDefaults.scale(focusedScale = 1f),
-                                    onClick = { onMovieSelected(movie) },
-                                    interactionSource = it
-                                ) {
-                                    AsyncImage(
-                                        model = ImageRequest.Builder(LocalContext.current)
-                                            .data(movie.posterUri)
-                                            .crossfade(true)
-                                            .build(),
-                                        contentDescription = StringConstants
-                                            .Composable
-                                            .ContentDescription
-                                            .moviePoster(movie.name),
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxSize()
-                                    )
-                                }
-                            },
-                            title = {},
-                        )
-                    }
+            itemsIndexed(
+                categoryDetails.movies,
+                key = { _, movie ->
+                    movie.id
                 }
-            }
-            item(span = { TvGridItemSpan(currentLineSpan = 6) }) {
-                Spacer(modifier = Modifier.padding(bottom = JetStreamBottomListPadding))
+            ) { index, movie ->
+                MovieCard(
+                    onClick = { onMovieSelected(movie) },
+                    modifier = Modifier
+                        .aspectRatio(1 / 1.5f)
+                        .padding(8.dp)
+                        .then(
+                            if (index == 0)
+                                Modifier.focusOnInitialVisibility(isFirstItemVisible)
+                            else Modifier
+                        ),
+                ) {
+                    PosterImage(movie = movie, modifier = Modifier.fillMaxSize())
+                }
             }
         }
     }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Loading(modifier: Modifier = Modifier) {
-    Text(text = "Loading...", modifier = modifier)
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Error(modifier: Modifier = Modifier) {
-    Text(text = "Wops, something went wrong...", modifier = modifier)
 }

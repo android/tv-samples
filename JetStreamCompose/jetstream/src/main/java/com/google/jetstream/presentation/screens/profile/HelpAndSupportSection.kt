@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -53,7 +54,6 @@ fun HelpAndSupportSection() {
     }
 }
 
-
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun HelpAndSupportSectionItem(
@@ -72,7 +72,7 @@ private fun HelpAndSupportSectionItem(
                 )
             } ?: run {
                 Icon(
-                    Icons.Default.ArrowForwardIos,
+                    Icons.AutoMirrored.Filled.ArrowForwardIos,
                     modifier = Modifier.size(ListItemDefaults.IconSizeDense),
                     contentDescription = StringConstants
                         .Composable
