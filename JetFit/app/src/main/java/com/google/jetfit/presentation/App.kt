@@ -108,7 +108,11 @@ fun App(
                     }
                 )
             ) {
-                TrainingScreen()
+                TrainingScreen(
+                    onClickItem = {
+                        navController.navigate(Screens.TrainingEntity())
+                    }
+                )
             }
 
             composable(

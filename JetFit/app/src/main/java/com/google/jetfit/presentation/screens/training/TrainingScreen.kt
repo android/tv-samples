@@ -32,7 +32,8 @@ import com.google.jetfit.presentation.screens.training.composable.SortSideMenu
 
 @Composable
 fun TrainingScreen(
-    viewModel: TrainingViewModel = hiltViewModel()
+    viewModel: TrainingViewModel = hiltViewModel(),
+    onClickItem: (id: String) -> Unit
 ) {
 
     val state by viewModel.state.collectAsState()
@@ -45,6 +46,7 @@ fun TrainingScreen(
         onClickSortBy = viewModel::onSortedClicked,
         onChangeSelectedTab = viewModel::onChangeSelectedTab,
         onChangeFocusTab = viewModel::onChangeFocusTab,
+        onClickItem = onClickItem
     )
 
 }
@@ -63,6 +65,7 @@ private fun TrainingContent(
     onSelectedItem: (currentIndex: Int) -> Unit,
     onChangeSelectedTab: (index: Int) -> Unit,
     onChangeFocusTab: (index: Int) -> Unit,
+    onClickItem : (id:String) -> Unit
 ) {
     SideMenu(onDismissSideMenu = onDismissSideMenu, isSideMenuExpended = state.isFilterExpended) {
         FilterSideMenu(
@@ -128,7 +131,7 @@ private fun TrainingContent(
                         title = training.name,
                         timeText = training.duration,
                         typeText = training.intensity.level,
-                        onClick = { },
+                        onClick = { onClickItem(training.id) },
                         titleTextStyle = MaterialTheme.typography.titleMedium,
                         timeTextStyle = MaterialTheme.typography.labelMedium,
                         typeTextStyle = MaterialTheme.typography.labelMedium,

@@ -31,7 +31,7 @@ import coil.compose.AsyncImage
 @Composable
 fun CustomCard(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit ,
     imageUrl: String,
     title: String,
     timeText: String,
@@ -48,7 +48,7 @@ fun CustomCard(
     ){
 
         Card(
-            onClick = { onClick() },
+            onClick = onClick ,
             modifier = modifier
                 .aspectRatio(cardAspectRatio)
                 .background(Color.Transparent, RoundedCornerShape(16.dp))
@@ -103,6 +103,7 @@ fun PreviewCustomCard() {
         imageUrl = "https://live.staticflickr.com/3060/3304130387_1f3c41d5ab.jpg",
         timeText = "30 min",
         typeText = "Yoga",
-        title = "Yoga for Beginners"
+        title = "Yoga for Beginners",
+        onClick = {},
     )
 }
