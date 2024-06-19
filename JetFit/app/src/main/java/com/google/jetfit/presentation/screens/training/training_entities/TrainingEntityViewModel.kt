@@ -2,7 +2,10 @@ package com.google.jetfit.presentation.screens.training.training_entities
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.Series.SeriesRepository
+import com.google.jetfit.data.repository.challenges.ChallengesRepository
+import com.google.jetfit.data.repository.routine.RoutineRepository
+import com.google.jetfit.data.repository.workout.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrainingEntityViewModel @Inject constructor(
-    private val repository: JetFitRepository
+    private val workoutRepository: WorkoutRepository,
+    private val challengesRepository: ChallengesRepository,
+    private val seriesRepository: SeriesRepository,
+    private val routineRepository: RoutineRepository
 ) : ViewModel() {
     val id: String = "1"
     private val contentType: TrainingEntityUiState.ContentType =
@@ -38,7 +44,7 @@ class TrainingEntityViewModel @Inject constructor(
 
     private fun getRoutineById() {
         viewModelScope.launch {
-            repository.getRoutineById(id).also { routine ->
+            routineRepository.getRoutineById(id).also { routine ->
                 _state.update {
                     it.copy(
                         subtitle = "${routine.instructorName}  |  ${routine.workoutType.value}",
@@ -63,7 +69,7 @@ class TrainingEntityViewModel @Inject constructor(
 
     private fun getWorkoutById() {
         viewModelScope.launch {
-            repository.getWorkoutById(id).also { workout ->
+            workoutRepository.getWorkoutById(id).also { workout ->
                 _state.update {
                     it.copy(
                         subtitle = "${workout.instructorName}  |  ${workout.workoutType.value}",
@@ -88,7 +94,7 @@ class TrainingEntityViewModel @Inject constructor(
 
     private fun getSeriesById() {
         viewModelScope.launch {
-            repository.getSeriesById(id).also { series ->
+            seriesRepository.getSeriesById(id).also { series ->
                 _state.update {
                     it.copy(
                         subtitle = "${series.instructorName}  |  ${series.intensity.value}",
@@ -121,7 +127,7 @@ class TrainingEntityViewModel @Inject constructor(
 
     private fun getChallengeById() {
         viewModelScope.launch {
-            repository.getChallengeById(id).also { challenge ->
+            challengesRepository.getChallengeById(id).also { challenge ->
                 _state.update {
                     it.copy(
                         subtitle = "${challenge.instructorName}  |  ${challenge.workoutType.value}",

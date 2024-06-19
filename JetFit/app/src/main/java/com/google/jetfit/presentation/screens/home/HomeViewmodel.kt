@@ -2,7 +2,8 @@ package com.google.jetfit.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.sessions.SessionRepository
+import com.google.jetfit.data.repository.training.TrainingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val jetFitRepository: JetFitRepository
+    private val sessionRepository: SessionRepository,
+    private val trainingRepository: TrainingRepository
 ) : ViewModel() {
     private val _state: MutableStateFlow<HomeUiState> by lazy { MutableStateFlow(HomeUiState()) }
     val state = _state.asStateFlow()
@@ -25,9 +27,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    sessions = jetFitRepository.getSessions(),
-                    categories = jetFitRepository.getCategories(),
-                    recommended = jetFitRepository.getTrainingsRecommended()
+                    sessions = sessionRepository.getSessions(),
+                    categories = sessionRepository.getCategories(),
+                    recommended = trainingRepository.getTrainingsRecommended()
                 )
             }
         }

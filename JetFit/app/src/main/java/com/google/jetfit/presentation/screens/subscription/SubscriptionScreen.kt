@@ -1,7 +1,6 @@
 package com.google.jetfit.presentation.screens.subscription
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -38,7 +37,8 @@ import com.google.jetfit.presentation.screens.subscription.composable.Subscripti
 @Composable
 fun SubscriptionScreen(
     viewModel: SubscriptionViewModel = hiltViewModel(),
-    onBackPressed: () -> Unit
+    onSubscribeClick: () -> Unit,
+    onRestorePurchasesClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     val instructorImage by viewModel.instructorImageState.collectAsState()
@@ -48,8 +48,9 @@ fun SubscriptionScreen(
         state = state,
         instructorImage = instructorImage,
         selectedSubscription = selectedSubscription,
-        onBackPressed = onBackPressed,
-        updateSubscriptionOption = viewModel::updateSelectedSubscriptionOption
+        updateSubscriptionOption = viewModel::updateSelectedSubscriptionOption,
+        onSubscribeClick = onSubscribeClick,
+        onRestorePurchasesClick = onRestorePurchasesClick,
     )
 }
 
@@ -59,9 +60,9 @@ private fun SubscriptionContent(
     instructorImage: String,
     selectedSubscription: Subscription,
     updateSubscriptionOption: (Subscription) -> Unit,
-    onBackPressed: () -> Unit
+    onSubscribeClick: () -> Unit,
+    onRestorePurchasesClick: () -> Unit
 ) {
-    BackHandler(onBack = onBackPressed)
 
     when (state) {
         SubscriptionUiState.Error -> Log.d("Tarek", "Error")
@@ -105,10 +106,12 @@ private fun SubscriptionContent(
                         JFFilledButton(
                             modifier = Modifier.width(184.dp),
                             buttonText = stringResource(R.string.subscribe_now),
+                            onClick = { onSubscribeClick() }
                         )
                         JFOutlineButton(
                             modifier = Modifier.width(184.dp),
-                            buttonText = stringResource(R.string.restore_purchases)
+                            buttonText = stringResource(R.string.restore_purchases),
+                            onClick = { onRestorePurchasesClick() }
                         )
                     }
                 }

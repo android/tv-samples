@@ -168,15 +168,16 @@ fun WorkoutDetailsPopup(
                     blurRadius = 40.dp,
                     offset = DpOffset(0.dp, 8.dp)
                 )
-                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                .clip(RoundedCornerShape(16.dp))
         ) {
             AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight(0.5f)
                     .alpha(0.88f),
                 model = workout.image,
                 contentDescription = null,
-                contentScale = ContentScale.Inside
+                contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier

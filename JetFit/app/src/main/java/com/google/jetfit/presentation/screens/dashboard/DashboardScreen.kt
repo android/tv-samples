@@ -17,10 +17,9 @@ import com.google.jetfit.presentation.screens.Screens
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
 import com.google.jetfit.presentation.screens.home.HomeScreen
 import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
-import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
-import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.search.SearchScreen
 import com.google.jetfit.presentation.screens.settings.SettingsScreen
+import com.google.jetfit.presentation.screens.subscription.SubscriptionScreen
 import com.google.jetfit.presentation.screens.training.TrainingScreen
 import com.google.jetfit.presentation.screens.training.training_entities.TrainingEntityScreen
 
@@ -69,12 +68,6 @@ fun DashboardScreen(
                 composable(Screens.Settings()) {
                     SettingsScreen()
                 }
-                composable(Screens.AudioPlayer()) {
-                    AudioPlayerScreen()
-                }
-                composable(Screens.VideoPlayer()) {
-                    VideoPlayerScreen()
-                }
                 composable(Screens.TrainingEntity()){
                     TrainingEntityScreen(
                         onClickStart = {
@@ -90,6 +83,16 @@ fun DashboardScreen(
                         onBackPressed = onBackPressed,
                         onFavouriteClick = {
                             navController.navigate(Screens.Favorite())
+                        }
+                    )
+                }
+                composable(Screens.Subscription()){
+                    SubscriptionScreen(
+                        onSubscribeClick = {
+                            navController.navigate(Screens.ProfileSelector())
+                        },
+                        onRestorePurchasesClick = {
+                            navController.navigate(Screens.ProfileSelector())
                         }
                     )
                 }

@@ -2,7 +2,7 @@ package com.google.jetfit.presentation.screens.more_options
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.training.TrainingRepository
 import com.google.jetfit.data.util.Result
 import com.google.jetfit.data.util.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,11 +13,13 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MoreOptionsViewModel @Inject constructor(private val jetFitRepository: JetFitRepository) :
+class MoreOptionsViewModel @Inject constructor(
+    trainingRepository: TrainingRepository
+) :
     ViewModel() {
 
     val uiState: StateFlow<MoreOptionsUiState> =
-        jetFitRepository.getTrainingById(1)
+        trainingRepository.getTrainingById(1)
             .asResult()
             .map {
                 when (it) {

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.jetfit.data.entities.FavList
 import com.google.jetfit.data.entities.FavWorkout
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.workout.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,14 +17,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    jetFitRepository: JetFitRepository
+    workoutRepository: WorkoutRepository
 ) : ViewModel() {
 
     private val selectedWorkoutItem: MutableStateFlow<FavWorkout?> = MutableStateFlow(null)
     val selectedWorkout = selectedWorkoutItem.asStateFlow()
 
     val uiState: StateFlow<FavoritesScreenUiState> = combine(
-        jetFitRepository.getFavoritesWorkouts()
+        workoutRepository.getFavoritesWorkouts()
     ) { favoritesWorkouts ->
         FavoritesScreenUiState.Ready(favoritesWorkouts.last())
     }.stateIn(

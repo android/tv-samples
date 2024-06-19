@@ -2,7 +2,7 @@ package com.google.jetfit.presentation.screens.player.audio
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.Series.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AudioPlayerViewModel @Inject constructor(
-    private val jetFitRepository: JetFitRepository
+    private val seriesRepository: SeriesRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(AudioPlayerUiState())
     val state get() = _state.asStateFlow()
@@ -25,7 +25,7 @@ class AudioPlayerViewModel @Inject constructor(
     private fun getSongById() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val song = jetFitRepository.getSongById("123456sdasdsa")
+                val song = seriesRepository.getSongById("123456sdasdsa")
                 _state.update {
                     it.copy(
                         isLoading = false,

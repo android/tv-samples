@@ -2,7 +2,7 @@ package com.google.jetfit.presentation.screens.player.video
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.workout.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VideoPlayerViewModel @Inject constructor(
-    private val jetFitRepository: JetFitRepository
+    private val workoutRepository: WorkoutRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(VideoPlayerUiState())
     val state get() = _state.asStateFlow()
@@ -25,7 +25,7 @@ class VideoPlayerViewModel @Inject constructor(
     private fun getWorkoutById() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val workout = jetFitRepository.getWorkoutById("1")
+                val workout = workoutRepository.getWorkoutById("1")
                 _state.update {
                     it.copy(
                         isLoading = false,

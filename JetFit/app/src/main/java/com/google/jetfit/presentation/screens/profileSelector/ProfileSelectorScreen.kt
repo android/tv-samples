@@ -1,6 +1,5 @@
 package com.google.jetfit.presentation.screens.profileSelector
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +47,7 @@ import com.google.jetfit.presentation.utils.shadowBox
 
 @Composable
 fun ProfileSelectorScreen(
-    onBackPressed: () -> Unit,
+    onSignInClick: () -> Unit,
 ) {
     val viewModel: ProfileSelectorViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
@@ -59,11 +58,10 @@ fun ProfileSelectorScreen(
     ProfileSelectorContent(
         state = state,
         profileFocusRequester = profileFocusRequester,
-        onSignInClick = {},
+        onSignInClick = { onSignInClick() },
         onProfileSelectedClick = {
             navController.navigateTo(Screens.Dashboard)
         },
-        onBackPressed = onBackPressed
     )
 }
 
@@ -74,9 +72,7 @@ private fun ProfileSelectorContent(
     profileFocusRequester: FocusRequester,
     onSignInClick: () -> Unit,
     onProfileSelectedClick: (idProfile: String) -> Unit,
-    onBackPressed: () -> Unit,
 ) {
-    BackHandler(onBack = onBackPressed)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -122,7 +118,7 @@ private fun ProfileSelectorContent(
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun ItemProfile(
-    state: ProfileUiState, onClick: (idProfile: String) -> Unit, modifier: Modifier = Modifier
+    state: ProfileUiState, onClick: (idProfile: String) -> Unit, modifier: Modifier = Modifier,
 ) {
     var isItemProfileFocused by remember { mutableStateOf(false) }
 

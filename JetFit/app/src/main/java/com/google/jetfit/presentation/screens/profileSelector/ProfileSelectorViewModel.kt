@@ -3,7 +3,7 @@ package com.google.jetfit.presentation.screens.profileSelector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.jetfit.data.entities.Profile
-import com.google.jetfit.data.repositories.JetFitRepository
+import com.google.jetfit.data.repository.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileSelectorViewModel @Inject constructor(
-    private val jetFitRepository: JetFitRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<ProfileSelectorUiState> by lazy {
@@ -30,7 +30,7 @@ class ProfileSelectorViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     isLoading = false,
-                    profiles = jetFitRepository.getUserProfiles().map {
+                    profiles = userRepository.getUserProfiles().map {
                         it.toProfileUiState()
                     },
                 )
