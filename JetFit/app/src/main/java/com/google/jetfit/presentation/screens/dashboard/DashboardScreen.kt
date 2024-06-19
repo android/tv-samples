@@ -17,6 +17,8 @@ import com.google.jetfit.presentation.screens.Screens
 import com.google.jetfit.presentation.screens.favorites.FavoritesScreen
 import com.google.jetfit.presentation.screens.home.HomeScreen
 import com.google.jetfit.presentation.screens.more_options.MoreOptionsScreen
+import com.google.jetfit.presentation.screens.player.audio.AudioPlayerScreen
+import com.google.jetfit.presentation.screens.player.video.VideoPlayerScreen
 import com.google.jetfit.presentation.screens.search.SearchScreen
 import com.google.jetfit.presentation.screens.settings.SettingsScreen
 import com.google.jetfit.presentation.screens.subscription.SubscriptionScreen
@@ -68,6 +70,12 @@ fun DashboardScreen(
                             navController.navigate(Screens.VideoPlayer())
                         }
                     )
+                }
+                composable(Screens.VideoPlayer()) {
+                    VideoPlayerScreen()
+                }
+                composable(Screens.AudioPlayer()) {
+                    AudioPlayerScreen()
                 }
                 composable(Screens.Settings()) {
                     SettingsScreen()
