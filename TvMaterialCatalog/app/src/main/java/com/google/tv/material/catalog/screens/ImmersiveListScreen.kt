@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -37,13 +38,12 @@ import androidx.tv.foundation.lazy.list.TvLazyRow
 import androidx.tv.foundation.lazy.list.itemsIndexed
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CompactCard
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.tv.material.catalog.R
 import com.google.tv.material.catalog.ifElse
 
-@OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ImmersiveListScreen() {
     var selectedCard by remember { mutableStateOf(immersiveListItems.first()) }
@@ -99,6 +99,7 @@ fun ImmersiveListScreen() {
         TvLazyRow(
             modifier = Modifier
                 .align(Alignment.BottomStart)
+                .fillMaxWidth()
                 .padding(bottom = 20.dp)
                 .focusRestorer { firstChildFr },
             contentPadding = PaddingValues(start = 58.dp),
@@ -171,7 +172,6 @@ private data class ImmersiveListSlide(
     val image: Int = 10,
 )
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 fun Modifier.immersiveListGradient(): Modifier = composed {
     val color = MaterialTheme.colorScheme.surface
 

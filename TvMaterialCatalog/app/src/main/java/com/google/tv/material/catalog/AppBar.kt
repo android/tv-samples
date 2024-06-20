@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -22,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.tv.material3.Button
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -64,7 +64,6 @@ fun AppBar(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun HeadlineContent(
     title: String,
@@ -72,6 +71,7 @@ private fun HeadlineContent(
     isMainIconMagnified: Boolean,
 ) {
     Row(
+        modifier = Modifier.height(64.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -110,7 +110,6 @@ private fun HeadlineContent(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Actions(
     onThemeColorModeClick: () -> Unit,
@@ -129,7 +128,10 @@ private fun Actions(
         )
     )
 
-    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(end = 8.dp)
+    ) {
         actions.forEach {
             Button(onClick = it.onClick) {
                 Icon(
