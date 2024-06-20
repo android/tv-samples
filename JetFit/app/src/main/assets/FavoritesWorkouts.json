@@ -1,0 +1,162 @@
+[
+  {
+    "id": "01",
+    "name": "Morning Energizer",
+    "image": "",
+    "duration": "30 Min",
+    "intensity": 3,
+    "description": "Start your day with an invigorating morning workout to boost your energy levels."
+  },
+  {
+    "id": "02",
+    "name": "Afternoon Power Session",
+    "image": "",
+    "duration": "45 Min",
+    "intensity": 4,
+    "description": "Power through your afternoon with this intense workout session to enhance your strength."
+  },
+  {
+    "id": "03",
+    "name": "Evening Relaxation Flow",
+    "image": "",
+    "duration": "60 Min",
+    "intensity": 2,
+    "description": "Unwind and relax in the evening with a calming workout flow to destress your body and mind."
+  },
+  {
+    "id": "04",
+    "name": "Full Body Challenge",
+    "image": "",
+    "duration": "40 Min",
+    "intensity": 5,
+    "description": "Take on the challenge of a full-body workout to push your limits and build overall strength."
+  },
+  {
+    "id": "05",
+    "name": "Core Strengthening Circuit",
+    "image": "",
+    "duration": "35 Min",
+    "intensity": 4,
+    "description": "Focus on strengthening your core with this circuit-style workout to improve stability and balance."
+  },
+  {
+    "id": "06",
+    "name": "Cardio Blast",
+    "image": "",
+    "duration": "25 Min",
+    "intensity": 4,
+    "description": "Get your heart pumping with a high-intensity cardio workout for improved cardiovascular health."
+  },
+  {
+    "id": "07",
+    "name": "Leg Day Challenge",
+    "image": "",
+    "duration": "50 Min",
+    "intensity": 4,
+    "description": "Tackle this intense leg day workout to strengthen and tone your lower body muscles."
+  },
+  {
+    "id": "08",
+    "name": "Yoga Bliss",
+    "image": "",
+    "duration": "55 Min",
+    "intensity": 2,
+    "description": "Experience tranquility and flexibility with a relaxing yoga session to calm both body and mind."
+  },
+  {
+    "id": "09",
+    "name": "HIIT Fusion",
+    "image": "",
+    "duration": "40 Min",
+    "intensity": 5,
+    "description": "Combine high-intensity interval training with various exercises for a powerful and efficient workout."
+  },
+  {
+    "id": "10",
+    "name": "Strength Sculpt",
+    "image": "",
+    "duration": "45 Min",
+    "intensity": 3,
+    "description": "Sculpt and tone your muscles with this strength-focused workout for a well-defined physique."
+  },
+  {
+    "id": "11",
+    "name": "Pilates Harmony",
+    "image": "",
+    "duration": "35 Min",
+    "intensity": 2,
+    "description": "Improve flexibility, core strength, and balance with a harmonious Pilates session."
+  },
+  {
+    "id": "12",
+    "name": "Circuit Fusion",
+    "image": "",
+    "duration": "50 Min",
+    "intensity": 4,
+    "description": "Engage in a dynamic circuit workout that targets various muscle groups for overall fitness."
+  },
+  {
+    "id": "13",
+    "name": "Meditative Stretch",
+    "image": "",
+    "duration": "30 Min",
+    "intensity": 1,
+    "description": "Combine gentle stretching with mindful meditation for a soothing and rejuvenating experience."
+  },
+  {
+    "id": "14",
+    "name": "Tabata Burn",
+    "image": "",
+    "duration": "20 Min",
+    "intensity": 5,
+    "description": "Maximize calorie burn with this quick and intense Tabata workout to elevate your fitness levels."
+  },
+  {
+    "id": "15",
+    "name": "Agility Challenge",
+    "image": "",
+    "duration": "40 Min",
+    "intensity": 4,
+    "description": "Enhance your agility and coordination with a challenging workout that incorporates dynamic movements."
+  },
+  {
+    "id": "16",
+    "name": "Mindful Movement",
+    "image": "",
+    "duration": "45 Min",
+    "intensity": 2,
+    "description": "Engage in mindful movements that promote awareness, flexibility, and relaxation."
+  },
+  {
+    "id": "17",
+    "name": "Swim Fit",
+    "image": "",
+    "duration": "60 Min",
+    "intensity": 3,
+    "description": "Dive into a full-body workout with swimming exercises to improve endurance and strength."
+  },
+  {
+    "id": "18",
+    "name": "Dynamic Stretching",
+    "image": "",
+    "duration": "25 Min",
+    "intensity": 2,
+    "description": "Increase flexibility and prevent injuries with a dynamic stretching routine before or after your workout."
+  },
+  {
+    "id": "19",
+    "name": "Functional Fitness",
+    "image": "",
+    "duration": "55 Min",
+    "intensity": 4,
+    "description": "Improve everyday movements and enhance overall fitness with a focus on functional exercises."
+  },
+  {
+    "id": "20",
+    "name": "Zumba Party",
+    "image": "",
+    "duration": "40 Min",
+    "intensity": 3,
+    "description": "Join the Zumba party for a fun and energetic dance workout that boosts your mood and burns calories."
+  }
+]
