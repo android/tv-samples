@@ -29,7 +29,7 @@ import androidx.tv.material3.Text
 @Composable
 fun VideoPlayerControllerText(text: String) {
     Text(
-        modifier = Modifier.padding(horizontal = 12.dp),
+        modifier = Modifier.padding(horizontal = 4.dp),
         text = text,
         color = MaterialTheme.colorScheme.onSurface,
         fontWeight = FontWeight.SemiBold
