@@ -50,17 +50,10 @@ fun VideoPlayerOverlay(
     isPlaying: Boolean,
     modifier: Modifier = Modifier,
     state: VideoPlayerState = rememberVideoPlayerState(),
-    focusRequester: FocusRequester = remember { FocusRequester() },
     centerButton: @Composable () -> Unit = {},
     subtitles: @Composable () -> Unit = {},
     controls: @Composable () -> Unit = {}
 ) {
-    LaunchedEffect(state.controlsVisible) {
-        if (state.controlsVisible) {
-            focusRequester.requestFocus()
-        }
-    }
-
     LaunchedEffect(isPlaying) {
         if (!isPlaying) {
             state.showControls(seconds = Int.MAX_VALUE)
