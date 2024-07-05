@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -56,4 +57,6 @@ dependencies {
     implementation(libs.tv.material)
     implementation(libs.coil.compose)
     implementation(libs.navigation.compose)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
 }
