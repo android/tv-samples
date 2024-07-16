@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0"
+agp = "8.5.0"
 coil-compose = "2.5.0"
 kotlin = "1.9.0"
 core-ktx = "1.12.0"
@@ -21,6 +21,8 @@ tv-foundation = { group = "androidx.tv", name = "tv-foundation", version.ref = "
 tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tv-material" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+compose-ui = { group = 'androidx.compose.ui', name = 'ui', version = '1.7.0-beta04' }
+compose-foundation = { group = 'androidx.compose.foundation', name = 'foundation', version = '1.7.0-beta04' }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
