@@ -5,7 +5,6 @@ This repository contains a set of individual Android TV projects to help you get
 
 - AccessibilityDemo: A Java sample showing how to support accessibility on TVs
 - ClassicsKotlin: A modern Android TV app using Kotlin to show classic videos
-- TvMaterialCatalog: A jetpack-compose app built using Kotlin that demonstrates the usages of components from [Compose for TV libraries](https://developer.android.com/jetpack/androidx/releases/tv) in isolation.
 - JetStreamCompose: A jetpack-compose app using Kotlin that demonstrates the usage of components from the [Compose for TV libraries](https://developer.android.com/jetpack/androidx/releases/tv)
 - Leanback: A Java app that demonstrates a basic Android TV app
 - Leanback Showcase: A Java app that demonstrates many different parts of the Leanback SDK and how to customize them
