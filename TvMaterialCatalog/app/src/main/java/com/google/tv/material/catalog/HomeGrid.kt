@@ -17,16 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvGridItemSpan
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
-import androidx.tv.foundation.lazy.grid.itemsIndexed
+import androidx.tv.foundation.lazy.grid.items
 import androidx.tv.material3.Text
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun HomeGrid() {
+    val navHostController = LocalNavController.current
     val focusRequester = remember { FocusRequester() }
-    val itemClick = {
-        focusRequester.saveFocusedChild()
-    }
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -34,7 +32,7 @@ fun HomeGrid() {
         Column(
             Modifier
                 .weight(1f)
-                .padding(start = 54.dp, top = 0.dp, end = 38.dp, bottom = 12.dp)
+                .padding(start = 54.dp, top = 0.dp, end = 38.dp, bottom = 48.dp)
         ) {
             TvLazyVerticalGrid(
                 columns = TvGridCells.Fixed(4),
@@ -50,24 +48,33 @@ fun HomeGrid() {
                     Text(text = "Foundations")
                 }
 
-                itemsIndexed(foundations) { index, item ->
-                    ComponentsGridCard(component = item, onClick = itemClick)
+                items(foundations) { item ->
+                    ComponentsGridCard(component = item, onClick = {
+                        focusRequester.saveFocusedChild()
+                        navHostController.navigate(item.routeValue)
+                    })
                 }
 
                 item(span = { TvGridItemSpan(4) }) {
                     Text(text = "Components")
                 }
 
-                itemsIndexed(components) { index, item ->
-                    ComponentsGridCard(component = item, onClick = itemClick)
+                items(components) { item ->
+                    ComponentsGridCard(component = item, onClick = {
+                        focusRequester.saveFocusedChild()
+                        navHostController.navigate(item.routeValue)
+                    })
                 }
 
                 item(span = { TvGridItemSpan(4) }) {
                     Text(text = "Components (planned)")
                 }
 
-                itemsIndexed(componentsPlanned) { index, item ->
-                    ComponentsGridCard(component = item, onClick = itemClick)
+                items(componentsPlanned) { item ->
+                    ComponentsGridCard(component = item, onClick = {
+                        focusRequester.saveFocusedChild()
+                        navHostController.navigate(item.routeValue)
+                    })
                 }
             }
         }

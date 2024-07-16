@@ -16,19 +16,16 @@ import androidx.tv.material3.Text
 fun ComponentsGridCard(
     component: Component,
     modifier: Modifier = Modifier,
-    onClick: () -> Any = {}
+    onClick: () -> Unit = {}
 ) {
     val image = getHomeGridCardImage(imageArg = component.imageArg)
-    val navHostController = LocalNavController.current
 
     StandardCardContainer(
         modifier = modifier,
         imageCard = {
             Card(
                 onClick = {
-                    onClick().also {
-                        navHostController.navigate(component.routeValue)
-                    }
+                    onClick()
                 },
                 interactionSource = it,
                 colors = CardDefaults.colors(containerColor = Color.Transparent)
