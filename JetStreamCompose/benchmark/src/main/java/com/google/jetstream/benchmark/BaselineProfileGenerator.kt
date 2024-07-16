@@ -69,7 +69,6 @@ class BaselineProfileGenerator {
             waitForIdle()
             repeat(2) { pressDPadRight(); waitForIdle() }
 
-
             // Navigate to Movies tab
             pressDPadUp()
             waitForIdle()
@@ -126,7 +125,6 @@ class BaselineProfileGenerator {
             repeat(2) { pressDPadDown(); waitForIdle() }
             pressDPadRight()
             waitForIdle()
-
 
             // Navigate to Search tab
             repeat(3) { pressDPadUp(); waitForIdle() }
@@ -187,7 +185,6 @@ class BaselineProfileGenerator {
         }
     }
 }
-
 
 private const val JETSTREAM_PACKAGE_NAME = "com.google.jetstream"
 

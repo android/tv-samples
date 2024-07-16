@@ -1,0 +1,21 @@
+name: TvMaterialCatalog
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/TvMaterialCatalog.yml'
+      - 'TvMaterialCatalog/**'
+  pull_request:
+    paths:
+      - '.github/workflows/TvMaterialCatalog.yml'
+      - 'TvMaterialCatalog/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-sample-without-check.yml
+    with:
+      name: TvMaterialCatalog
+      path: TvMaterialCatalog

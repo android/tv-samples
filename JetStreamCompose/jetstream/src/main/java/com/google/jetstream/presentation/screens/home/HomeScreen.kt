@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -33,14 +35,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.PivotOffsets
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.rememberTvLazyListState
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.common.Error
+import com.google.jetstream.presentation.common.Loading
 import com.google.jetstream.presentation.common.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
@@ -69,10 +68,9 @@ fun HomeScreen(
             )
         }
 
-        is HomeScreenUiState.Loading -> Loading()
-        is HomeScreenUiState.Error -> Error()
+        is HomeScreenUiState.Loading -> Loading(modifier = Modifier.fillMaxSize())
+        is HomeScreenUiState.Error -> Error(modifier = Modifier.fillMaxSize())
     }
-
 }
 
 @Composable
@@ -88,16 +86,14 @@ private fun Catalog(
     isTopBarVisible: Boolean = true,
 ) {
 
-    val tvLazyListState = rememberTvLazyListState()
+    val lazyListState = rememberLazyListState()
     val childPadding = rememberChildPadding()
-    val pivotOffset = remember { PivotOffsets() }
-    val pivotOffsetForImmersiveList = remember { PivotOffsets(0f, 0f) }
     var immersiveListHasFocus by remember { mutableStateOf(false) }
 
     val shouldShowTopBar by remember {
         derivedStateOf {
-            tvLazyListState.firstVisibleItemIndex == 0 &&
-                    tvLazyListState.firstVisibleItemScrollOffset < 300
+            lazyListState.firstVisibleItemIndex == 0 &&
+                lazyListState.firstVisibleItemScrollOffset < 300
         }
     }
 
@@ -105,16 +101,16 @@ private fun Catalog(
         onScroll(shouldShowTopBar)
     }
     LaunchedEffect(isTopBarVisible) {
-        if (isTopBarVisible) tvLazyListState.animateScrollToItem(0)
+        if (isTopBarVisible) lazyListState.animateScrollToItem(0)
     }
 
-    TvLazyColumn(
-        modifier = modifier,
-        pivotOffsets = if (immersiveListHasFocus) pivotOffsetForImmersiveList else pivotOffset,
-        state = tvLazyListState,
-        contentPadding = PaddingValues(bottom = 108.dp)
+    LazyColumn(
+        state = lazyListState,
+        contentPadding = PaddingValues(bottom = 108.dp),
         // Setting overscan margin to bottom to ensure the last row's visibility
+        modifier = modifier,
     ) {
+
         item(contentType = "FeaturedMoviesCarousel") {
             FeaturedMoviesCarousel(
                 movies = featuredMovies,
@@ -132,39 +128,27 @@ private fun Catalog(
         item(contentType = "MoviesRow") {
             MoviesRow(
                 modifier = Modifier.padding(top = 16.dp),
-                movies = trendingMovies,
+                movieList = trendingMovies,
                 title = StringConstants.Composable.HomeScreenTrendingTitle,
-                onMovieClick = onMovieClick
+                onMovieSelected = onMovieClick
             )
         }
         item(contentType = "Top10MoviesList") {
             Top10MoviesList(
+                movieList = top10Movies,
+                onMovieClick = onMovieClick,
                 modifier = Modifier.onFocusChanged {
                     immersiveListHasFocus = it.hasFocus
                 },
-                moviesState = top10Movies,
-                onMovieClick = onMovieClick
             )
         }
         item(contentType = "MoviesRow") {
             MoviesRow(
                 modifier = Modifier.padding(top = 16.dp),
-                movies = nowPlayingMovies,
+                movieList = nowPlayingMovies,
                 title = StringConstants.Composable.HomeScreenNowPlayingMoviesTitle,
-                onMovieClick = onMovieClick
+                onMovieSelected = onMovieClick
             )
         }
     }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Loading(modifier: Modifier = Modifier) {
-    Text(text = "Loading...", modifier = modifier)
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun Error(modifier: Modifier = Modifier) {
-    Text(text = "Wops, something went wrong.", modifier = modifier)
 }

@@ -17,7 +17,6 @@
 package com.google.jetstream.presentation.screens.movies
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,11 +35,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.NativeKeyEvent
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -49,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -76,10 +74,11 @@ fun MovieDetails(
         modifier = Modifier
             .fillMaxWidth()
             .height(432.dp)
+            .bringIntoViewRequester(bringIntoViewRequester)
     ) {
         MovieImageWithGradients(
             movieDetails = movieDetails,
-            bringIntoViewRequester = bringIntoViewRequester
+            modifier = Modifier.fillMaxSize()
         )
 
         Column(modifier = Modifier.fillMaxWidth(0.55f)) {
@@ -109,11 +108,10 @@ fun MovieDetails(
                     )
                 }
                 WatchTrailerButton(
-                    modifier = Modifier.onKeyEvent {
-                        if (it.nativeKeyEvent.keyCode == NativeKeyEvent.KEYCODE_DPAD_UP) {
+                    modifier = Modifier.onFocusChanged {
+                        if (it.isFocused) {
                             coroutineScope.launch { bringIntoViewRequester.bringIntoView() }
                         }
-                        false
                     },
                     goToMoviePlayer = goToMoviePlayer
                 )
@@ -122,8 +120,6 @@ fun MovieDetails(
     }
 }
 
-
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun WatchTrailerButton(
     modifier: Modifier = Modifier,
@@ -178,7 +174,6 @@ private fun DirectorScreenplayMusicRow(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieDescription(description: String) {
     Text(
@@ -192,7 +187,6 @@ private fun MovieDescription(description: String) {
     )
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieLargeTitle(movieTitle: String) {
     Text(
@@ -204,11 +198,11 @@ private fun MovieLargeTitle(movieTitle: String) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 private fun MovieImageWithGradients(
     movieDetails: MovieDetails,
-    bringIntoViewRequester: BringIntoViewRequester
+    modifier: Modifier = Modifier,
+    gradientColor: Color = MaterialTheme.colorScheme.surface,
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current).data(movieDetails.posterUri)
@@ -217,53 +211,29 @@ private fun MovieImageWithGradients(
             .Composable
             .ContentDescription
             .moviePoster(movieDetails.name),
-        modifier = Modifier
-            .fillMaxSize()
-            .bringIntoViewRequester(bringIntoViewRequester),
-        contentScale = ContentScale.Crop
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
+        contentScale = ContentScale.Crop,
+        modifier = modifier.drawWithContent {
+            drawContent()
+            drawRect(
                 Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Transparent,
-                        MaterialTheme.colorScheme.surface
-                    ),
+                    colors = listOf(Color.Transparent, gradientColor),
                     startY = 600f
                 )
             )
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
+            drawRect(
                 Brush.horizontalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        Color.Transparent
-                    ),
+                    colors = listOf(gradientColor, Color.Transparent),
                     endX = 1000f,
                     startX = 300f
                 )
             )
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
+            drawRect(
                 Brush.linearGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        Color.Transparent
-                    ),
+                    colors = listOf(gradientColor, Color.Transparent),
                     start = Offset(x = 500f, y = 500f),
                     end = Offset(x = 1000f, y = 0f)
                 )
             )
+        }
     )
 }

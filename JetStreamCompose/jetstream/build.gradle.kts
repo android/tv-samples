@@ -19,12 +19,18 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 kotlin {
     jvmToolchain(17)
+}
+
+composeCompiler {
+    enableStrongSkippingMode = true
 }
 
 android {
@@ -47,31 +53,19 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
-        create("benchmark") {
-            initWith(getByName("release"))
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-benchmark-rules.pro"
-            )
-            isDebuggable = false
-        }
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -90,11 +84,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.base)
     implementation(libs.androidx.compose.ui.tooling.preview)
 
+    // Compose foundation library to replace tv-foundation
+    implementation(libs.androidx.compose.foundation.base)
+
     // extra material icons
     implementation(libs.androidx.material.icons.extended)
 
-    // TV Compose
-    implementation(libs.androidx.tv.foundation)
+    // Material components optimized for TV apps
     implementation(libs.androidx.tv.material)
 
     // ViewModel in Compose
@@ -126,4 +122,7 @@ dependencies {
 
     // Compose Previews
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // For baseline profile generation
+    baselineProfile(project(":benchmark"))
 }

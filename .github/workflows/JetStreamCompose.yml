@@ -1,0 +1,21 @@
+name: JetStreamCompose
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/JetStreamCompose.yml'
+      - 'JetStreamCompose/**'
+  pull_request:
+    paths:
+      - '.github/workflows/JetStreamCompose.yml'
+      - 'JetStreamCompose/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-sample.yml
+    with:
+      name: JetStreamCompose
+      path: JetStreamCompose

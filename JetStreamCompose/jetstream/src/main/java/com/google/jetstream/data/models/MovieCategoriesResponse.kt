@@ -18,7 +18,6 @@ package com.google.jetstream.data.models
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class MovieCategoriesResponseItem(
     val id: String,

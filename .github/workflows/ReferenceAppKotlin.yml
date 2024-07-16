@@ -1,0 +1,21 @@
+name: ReferenceAppKotlin
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/ReferenceAppKotlin.yml'
+      - 'ReferenceAppKotlin/**'
+  pull_request:
+    paths:
+      - '.github/workflows/ReferenceAppKotlin.yml'
+      - 'ReferenceAppKotlin/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-sample-without-check.yml
+    with:
+      name: ReferenceAppKotlin
+      path: ReferenceAppKotlin

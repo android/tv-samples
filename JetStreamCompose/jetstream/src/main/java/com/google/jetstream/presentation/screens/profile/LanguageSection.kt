@@ -17,14 +17,13 @@
 package com.google.jetstream.presentation.screens.profile
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
@@ -35,14 +34,13 @@ import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun LanguageSection(
     selectedIndex: Int,
     onSelectedIndexChange: (currentIndex: Int) -> Unit
 ) {
     with(StringConstants.Composable.Placeholders) {
-        TvLazyColumn(modifier = Modifier.padding(horizontal = 72.dp)) {
+        LazyColumn(modifier = Modifier.padding(horizontal = 72.dp)) {
             item {
                 Text(
                     text = LanguageSectionTitle,
@@ -59,7 +57,8 @@ fun LanguageSection(
                             Icon(
                                 Icons.Default.Check,
                                 contentDescription = stringResource(
-                                    id = R.string.language_section_listItem_icon_content_description,
+                                    id =
+                                    R.string.language_section_listItem_icon_content_description,
                                     LanguageSectionItems[index]
                                 )
                             )

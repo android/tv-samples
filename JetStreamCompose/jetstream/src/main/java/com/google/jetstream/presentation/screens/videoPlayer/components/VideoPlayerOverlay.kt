@@ -78,8 +78,10 @@ fun VideoPlayerOverlay(
         }
 
         Column {
-            Box(Modifier.weight(1f),
-                contentAlignment = Alignment.BottomCenter) {
+            Box(
+                Modifier.weight(1f),
+                contentAlignment = Alignment.BottomCenter
+            ) {
                 subtitles()
             }
 
