@@ -4,10 +4,6 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
 android {
     namespace = "com.google.tv.material.catalog"
     compileSdk = 34
