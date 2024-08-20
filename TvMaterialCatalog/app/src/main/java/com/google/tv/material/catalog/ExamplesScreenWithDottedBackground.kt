@@ -70,6 +70,9 @@ fun ExamplesScreenWithDottedBackground(
                     ListItem(
                         selected = activeAction == action,
                         onClick = { },
+                        headlineContent = {
+                            Text(text = action.title)
+                        },
                         modifier = Modifier
                             .ifElse(index == 0, Modifier.focusRequester(firstItemFr))
                             .onFocusChanged {
@@ -77,9 +80,7 @@ fun ExamplesScreenWithDottedBackground(
                                     activeAction = action
                                 }
                             }
-                    ) {
-                        Text(text = action.title)
-                    }
+                    )
                 }
             }
         }
