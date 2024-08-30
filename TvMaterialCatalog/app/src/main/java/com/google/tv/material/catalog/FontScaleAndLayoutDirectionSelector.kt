@@ -1,5 +1,6 @@
 package com.google.tv.material.catalog
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,10 @@ fun FontScaleAndLayoutDirectionSelector(
         if (isExpanded) {
             focusRequester.requestFocus()
         }
+    }
+
+    BackHandler(enabled = isExpanded) {
+        onClose()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
