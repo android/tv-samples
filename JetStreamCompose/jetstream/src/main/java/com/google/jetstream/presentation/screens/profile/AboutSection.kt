@@ -83,5 +83,5 @@ fun AboutSection() {
 private fun Context.getVersionNumber(): String {
     val packageName = packageName
     val metaData = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
-    return metaData.versionName
+    return metaData.versionName!!
 }
