@@ -57,7 +57,6 @@ fun RowScope.VideoPlayerControllerIndicator(
         targetValue = 4.dp.times((if (isFocused) 2.5f else 1f))
     )
     var seekProgress by remember { mutableStateOf(0f) }
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(isSelected) {
         if (isSelected) {
