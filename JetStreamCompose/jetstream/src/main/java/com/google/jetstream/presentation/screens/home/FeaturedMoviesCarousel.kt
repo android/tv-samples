@@ -80,9 +80,7 @@ val CarouselSaver = Saver<CarouselState, Int>(
     restore = { CarouselState(it) }
 )
 
-@OptIn(
-    ExperimentalTvMaterial3Api::class
-)
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun FeaturedMoviesCarousel(
     movies: List<Movie>,
@@ -171,7 +169,6 @@ private fun BoxScope.CarouselIndicator(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun CarouselItemForeground(
     movie: Movie,
@@ -248,7 +245,6 @@ private fun CarouselItemBackground(movie: Movie, modifier: Modifier = Modifier) 
     )
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun WatchNowButton() {
     Button(

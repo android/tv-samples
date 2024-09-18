@@ -54,7 +54,6 @@ fun HelpAndSupportSection() {
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun HelpAndSupportSectionItem(
     title: String,

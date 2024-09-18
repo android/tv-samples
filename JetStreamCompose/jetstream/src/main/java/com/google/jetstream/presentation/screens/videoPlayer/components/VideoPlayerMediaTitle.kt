@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
@@ -41,7 +40,6 @@ import com.google.jetstream.presentation.theme.JetStreamTheme
 
 enum class VideoPlayerMediaTitleType { AD, LIVE, DEFAULT }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun VideoPlayerMediaTitle(
     title: String,
@@ -100,7 +98,6 @@ fun VideoPlayerMediaTitle(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(name = "TV Series", device = "id:tv_4k")
 @Composable
 private fun VideoPlayerMediaTitlePreviewSeries() {
@@ -116,7 +113,6 @@ private fun VideoPlayerMediaTitlePreviewSeries() {
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(name = "Live", device = "id:tv_4k")
 @Composable
 private fun VideoPlayerMediaTitlePreviewLive() {
@@ -132,7 +128,6 @@ private fun VideoPlayerMediaTitlePreviewLive() {
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(name = "Ads", device = "id:tv_4k")
 @Composable
 private fun VideoPlayerMediaTitlePreviewAd() {
