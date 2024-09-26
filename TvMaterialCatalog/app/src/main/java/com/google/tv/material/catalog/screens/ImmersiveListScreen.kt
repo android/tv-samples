@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,20 +34,21 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.itemsIndexed
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CompactCard
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.google.tv.material.catalog.PositionFocusedItemInLazyLayout
 import com.google.tv.material.catalog.R
 import com.google.tv.material.catalog.ifElse
 
-@OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ImmersiveListScreen() {
     var selectedCard by remember { mutableStateOf(immersiveListItems.first()) }
@@ -94,39 +99,52 @@ fun ImmersiveListScreen() {
             }
         }
 
+        val density = LocalDensity.current
+        var fullWidth by remember { mutableFloatStateOf(1f) }
         val firstChildFr = remember { FocusRequester() }
 
-        TvLazyRow(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(bottom = 20.dp)
-                .focusRestorer { firstChildFr },
-            contentPadding = PaddingValues(start = 58.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
+        PositionFocusedItemInLazyLayout(
+            parentFraction = 58f / fullWidth,
+            childFraction = 0f
         ) {
-            itemsIndexed(immersiveListItems) { index, card ->
-                CompactCard(
-                    modifier = Modifier
-                        .width(196.dp)
-                        .aspectRatio(16f / 9)
-                        .ifElse(index == 0, Modifier.focusRequester(firstChildFr))
-                        .onFocusChanged {
-                            if (it.isFocused) {
-                                selectedCard = card
-                            }
-                        },
-                    onClick = {},
-                    image = {
-                        Image(
-                            painter = painterResource(id = card.image),
-                            contentDescription = "Image",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.FillBounds
-                        )
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomStart)
+                    .padding(bottom = 20.dp)
+                    .focusRestorer { firstChildFr }
+                    .onPlaced {
+                        with(density) {
+                            fullWidth = it.size.width.toDp().value
+                        }
                     },
-                    title = {},
-                    colors = CardDefaults.colors(containerColor = Color.Transparent)
-                )
+                contentPadding = PaddingValues(start = 58.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                itemsIndexed(immersiveListItems) { index, card ->
+                    CompactCard(
+                        modifier = Modifier
+                            .width(196.dp)
+                            .aspectRatio(16f / 9)
+                            .ifElse(index == 0, Modifier.focusRequester(firstChildFr))
+                            .onFocusChanged {
+                                if (it.isFocused) {
+                                    selectedCard = card
+                                }
+                            },
+                        onClick = {},
+                        image = {
+                            Image(
+                                painter = painterResource(id = card.image),
+                                contentDescription = "Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
+                            )
+                        },
+                        title = {},
+                        colors = CardDefaults.colors(containerColor = Color.Transparent)
+                    )
+                }
             }
         }
     }
@@ -138,6 +156,30 @@ private val description = "Lorem ipsum dolor sit amet, consectetur adipiscing el
         " ut aliquip ex ea commodo consequat. "
 
 private val immersiveListItems = listOf(
+    ImmersiveListSlide(
+        title = "Shadow Hunter",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_1,
+    ),
+    ImmersiveListSlide(
+        title = "Super Puppy",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_2,
+    ),
+    ImmersiveListSlide(
+        title = "Man with a cape",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_3,
+    ),
+    ImmersiveListSlide(
+        title = "Power Sisters",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_4,
+    ),
     ImmersiveListSlide(
         title = "Shadow Hunter",
         subtitle = "Secondary · text",

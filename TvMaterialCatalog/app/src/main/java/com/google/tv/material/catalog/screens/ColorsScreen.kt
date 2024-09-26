@@ -18,7 +18,7 @@ import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.Border
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.NonInteractiveSurfaceDefaults
+import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 
@@ -26,7 +26,9 @@ import androidx.tv.material3.Text
 @Composable
 fun ColorsScreen() {
     Row(
-        Modifier.fillMaxSize().padding(start = 58.dp, end = 48.dp, top = 8.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(start = 58.dp, end = 48.dp, top = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         TvLazyVerticalGrid(
@@ -141,7 +143,7 @@ private fun ColorBg(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
-        colors = NonInteractiveSurfaceDefaults.colors(
+        colors = SurfaceDefaults.colors(
             containerColor = color
         ),
         border = Border(

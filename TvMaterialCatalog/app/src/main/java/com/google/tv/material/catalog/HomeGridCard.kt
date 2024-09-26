@@ -7,10 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
-import androidx.tv.material3.CardLayoutDefaults
+import androidx.tv.material3.CardContainerDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.StandardCardLayout
+import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -22,10 +23,10 @@ fun ComponentsGridCard(
     val image = getHomeGridCardImage(imageArg = component.imageArg)
     val navHostController = LocalNavController.current
 
-    StandardCardLayout(
+    StandardCardContainer(
         modifier = modifier,
         imageCard = {
-            CardLayoutDefaults.ImageCard(
+            Card(
                 onClick = { navHostController.navigate(component.routeValue) },
                 interactionSource = it,
                 colors = CardDefaults.colors(containerColor = Color.Transparent)
@@ -51,10 +52,10 @@ fun FoundationsGridCard(
     val image = getHomeGridCardImage(imageArg = foundation.imageArg)
     val navHostController = LocalNavController.current
 
-    StandardCardLayout(
+    StandardCardContainer(
         modifier = modifier,
         imageCard = {
-            CardLayoutDefaults.ImageCard(
+            Card(
                 onClick = { navHostController.navigate(foundation.routeValue) },
                 interactionSource = it,
                 colors = CardDefaults.colors(containerColor = Color.Transparent)

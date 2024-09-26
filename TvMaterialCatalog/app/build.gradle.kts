@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.foundation)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(libs.tv.foundation)
