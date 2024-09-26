@@ -18,12 +18,10 @@ package com.google.jetstream.presentation.theme // ktlint-disable filename
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.darkColorScheme
 import com.google.jetstream.R
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 private val darkColorScheme @Composable get() = darkColorScheme(
     primary = colorResource(R.color.primary),
     onPrimary = colorResource(R.color.onPrimary),
@@ -50,7 +48,6 @@ private val darkColorScheme @Composable get() = darkColorScheme(
     border = colorResource(R.color.border),
 )
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun JetStreamTheme(
     content: @Composable () -> Unit

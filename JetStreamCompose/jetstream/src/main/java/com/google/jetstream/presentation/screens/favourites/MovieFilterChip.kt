@@ -108,10 +108,8 @@ fun MovieFilterChip(
 
 private val ChipColor @Composable get() = Color.White.copy(alpha = 0.1f)
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 private val ChipContentColor @Composable get() = MaterialTheme.colorScheme.inverseSurface
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 private val ChipFocusedBorder
     @Composable get() = Border(
         border = BorderStroke(

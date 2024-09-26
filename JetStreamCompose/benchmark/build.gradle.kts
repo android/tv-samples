@@ -28,17 +28,13 @@ kotlin {
     jvmToolchain(17)
 }
 
-composeCompiler {
-    enableStrongSkippingMode = true
-}
-
 android {
     namespace = "com.google.jetstream.benchmark"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
@@ -67,8 +63,6 @@ baselineProfile {
 
 
 dependencies {
-    implementation(libs.androidx.compose.runtime.base)
-
     implementation(libs.androidx.junit)
     implementation(libs.androidx.uiautomator)
 
