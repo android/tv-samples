@@ -27,6 +27,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -56,4 +57,6 @@ dependencies {
     implementation(libs.tv.material)
     implementation(libs.coil.compose)
     implementation(libs.navigation.compose)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
 }

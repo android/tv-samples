@@ -1,5 +1,6 @@
 package com.google.tv.material.catalog
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,16 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.foundation.PivotOffsets
 import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.NonInteractiveSurfaceDefaults
 import androidx.tv.material3.RadioButton
 import androidx.tv.material3.Surface
+import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Text
 
-@OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ThemeAndColorModeSelector(
     isExpanded: Boolean,
@@ -51,6 +51,10 @@ fun ThemeAndColorModeSelector(
         if (isExpanded) {
             focusRequester.requestFocus()
         }
+    }
+
+    BackHandler(enabled = isExpanded) {
+        onClose()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -68,7 +72,7 @@ fun ThemeAndColorModeSelector(
                         .width(300.dp)
                         .padding(12.dp)
                         .align(Alignment.End),
-                    colors = NonInteractiveSurfaceDefaults
+                    colors = SurfaceDefaults
                         .colors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     TvLazyColumn(
@@ -120,10 +124,10 @@ fun ThemeAndColorModeSelector(
                                             },
                                             trailingContent = {
                                                 RadioButton(selected = isSelected, onClick = { })
-                                            }
-                                        ) {
-                                            Text(text = it.title)
-                                        }
+                                            },
+                                            headlineContent = {
+                                                Text(text = it.title)
+                                            })
                                     }
                                 }
                             }
@@ -162,10 +166,10 @@ fun ThemeAndColorModeSelector(
                                             },
                                             trailingContent = {
                                                 RadioButton(selected = isSelected, onClick = { })
-                                            }
-                                        ) {
-                                            Text(text = it.name)
-                                        }
+                                            },
+                                            headlineContent = {
+                                                Text(text = it.name)
+                                            })
                                     }
                                 }
                             }

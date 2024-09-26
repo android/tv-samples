@@ -219,7 +219,6 @@ fun Modifier.carouselGradient(): Modifier = composed {
         )
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun BottomCards(modifier: Modifier) {
     TvLazyRow(
