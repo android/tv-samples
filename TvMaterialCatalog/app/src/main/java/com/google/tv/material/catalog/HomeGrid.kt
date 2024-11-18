@@ -32,7 +32,7 @@ fun HomeGrid() {
         Column(
             Modifier
                 .weight(1f)
-                .padding(start = 54.dp, top = 0.dp, end = 38.dp, bottom = 48.dp)
+                .padding(start = 54.dp, top = 0.dp, end = 38.dp, bottom = 0.dp)
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
