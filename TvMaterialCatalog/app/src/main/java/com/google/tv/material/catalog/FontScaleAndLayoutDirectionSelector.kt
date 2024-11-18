@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,8 +27,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.foundation.PivotOffsets
-import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.MaterialTheme
@@ -71,7 +70,7 @@ fun FontScaleAndLayoutDirectionSelector(
                     colors = SurfaceDefaults
                         .colors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
-                    TvLazyColumn(
+                    LazyColumn(
                         modifier = Modifier
                             .padding(12.dp)
                             .focusRequester(focusRequester)
@@ -80,8 +79,7 @@ fun FontScaleAndLayoutDirectionSelector(
                                     onClose()
                                     FocusRequester.Default
                                 }
-                            },
-                        pivotOffsets = PivotOffsets(parentFraction = 0.2f)
+                            }
                     ) {
                         item {
                             Text(
@@ -120,7 +118,9 @@ fun FontScaleAndLayoutDirectionSelector(
                                                 )
                                             },
                                             trailingContent = {
-                                                RadioButton(selected = isSelected, onClick = { })
+                                                RadioButton(
+                                                    selected = isSelected,
+                                                    onClick = { })
                                             },
                                             headlineContent = {
                                                 Text(text = it.title)
@@ -149,7 +149,8 @@ fun FontScaleAndLayoutDirectionSelector(
                                     Modifier.selectableGroup()
                                 ) {
                                     fontScales.forEach {
-                                        val isSelected = LocalDensity.current.fontScale == it.scale
+                                        val isSelected =
+                                            LocalDensity.current.fontScale == it.scale
                                         ListItem(
                                             selected = isSelected,
                                             onClick = { onFontScaleChange(it.scale) },
@@ -161,7 +162,9 @@ fun FontScaleAndLayoutDirectionSelector(
                                                 )
                                             },
                                             trailingContent = {
-                                                RadioButton(selected = isSelected, onClick = { })
+                                                RadioButton(
+                                                    selected = isSelected,
+                                                    onClick = { })
                                             },
                                             headlineContent = {
                                                 Text(text = it.title)
