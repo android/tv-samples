@@ -25,6 +25,7 @@ tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tv-m
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
+foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
