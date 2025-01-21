@@ -10,6 +10,7 @@ tv-foundation = "1.0.0-alpha11"
 tv-material = "1.0.0"
 lifecycle-runtime-ktx = "2.8.7"
 activity-compose = "1.9.3"
+foundation = "1.7.0-beta07"
 ui = "1.7.0-beta07"
 
 [libraries]
