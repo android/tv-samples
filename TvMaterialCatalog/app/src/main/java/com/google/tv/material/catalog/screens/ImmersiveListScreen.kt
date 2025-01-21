@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.CompactCard
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.tv.material.catalog.PositionFocusedItemInLazyLayout
@@ -109,8 +108,8 @@ fun ImmersiveListScreen() {
         ) {
             LazyRow(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .align(Alignment.BottomStart)
+                    .fillMaxWidth()
                     .padding(bottom = 20.dp)
                     .focusRestorer { firstChildFr }
                     .onPlaced {
@@ -124,7 +123,7 @@ fun ImmersiveListScreen() {
                 itemsIndexed(immersiveListItems) { index, card ->
                     CompactCard(
                         modifier = Modifier
-                            .width(196.dp)
+                            .width(280.dp)
                             .aspectRatio(16f / 9)
                             .ifElse(index == 0, Modifier.focusRequester(firstChildFr))
                             .onFocusChanged {
@@ -213,7 +212,6 @@ private data class ImmersiveListSlide(
     val image: Int = 10,
 )
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 fun Modifier.immersiveListGradient(): Modifier = composed {
     val color = MaterialTheme.colorScheme.surface
 

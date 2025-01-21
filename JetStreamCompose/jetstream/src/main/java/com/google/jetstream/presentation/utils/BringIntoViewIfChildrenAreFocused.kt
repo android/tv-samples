@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.toSize
 
-@Suppress("IllegalExperimentalApiUsage") // TODO (b/233188423): Address before moving to beta
 @OptIn(ExperimentalFoundationApi::class)
 // ToDo: Migrate to Modifier.Node and stop using composed function.
 internal fun Modifier.bringIntoViewIfChildrenAreFocused(

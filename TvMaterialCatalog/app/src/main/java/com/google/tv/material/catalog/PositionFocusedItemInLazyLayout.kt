@@ -14,7 +14,7 @@ fun PositionFocusedItemInLazyLayout(
     childFraction: Float = 0f,
     content: @Composable () -> Unit,
 ) {
-    // a bring into view spec that pivots around the center of the scrollable container
+    // This bring-into-view spec pivots around the center of the scrollable container
     val bringIntoViewSpec = remember(parentFraction, childFraction) {
         object : BringIntoViewSpec {
             override fun calculateScrollDistance(

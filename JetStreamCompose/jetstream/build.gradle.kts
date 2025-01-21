@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -29,19 +27,15 @@ kotlin {
     jvmToolchain(17)
 }
 
-composeCompiler {
-    enableStrongSkippingMode = true
-}
-
 android {
     namespace = "com.google.jetstream"
     // Needed for latest androidx snapshot build
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.google.jetstream"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -79,13 +73,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-
-    // Compose UI libs (Using snapshot build for focus restoring APIs)
-    implementation(libs.androidx.compose.ui.base)
     implementation(libs.androidx.compose.ui.tooling.preview)
-
-    // Compose foundation library to replace tv-foundation
-    implementation(libs.androidx.compose.foundation.base)
 
     // extra material icons
     implementation(libs.androidx.material.icons.extended)

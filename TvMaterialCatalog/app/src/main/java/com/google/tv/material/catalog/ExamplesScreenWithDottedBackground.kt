@@ -30,7 +30,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -38,7 +37,7 @@ import androidx.tv.material3.surfaceColorAtElevation
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalTvMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ExamplesScreenWithDottedBackground(
     actions: List<ExampleAction>
@@ -70,16 +69,16 @@ fun ExamplesScreenWithDottedBackground(
                     ListItem(
                         selected = activeAction == action,
                         onClick = { },
-                        headlineContent = {
-                            Text(text = action.title)
-                        },
                         modifier = Modifier
                             .ifElse(index == 0, Modifier.focusRequester(firstItemFr))
                             .onFocusChanged {
                                 if (it.isFocused) {
                                     activeAction = action
                                 }
-                            }
+                            },
+                        headlineContent = {
+                            Text(text = action.title)
+                        }
                     )
                 }
             }

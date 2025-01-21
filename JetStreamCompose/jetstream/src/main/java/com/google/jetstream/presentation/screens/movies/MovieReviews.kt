@@ -37,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
 import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
@@ -49,7 +48,6 @@ import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MovieReviews(
     modifier: Modifier = Modifier,
@@ -80,7 +78,6 @@ fun MovieReviews(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 private fun Review(
     reviewAndRating: MovieReviewsAndRatings,

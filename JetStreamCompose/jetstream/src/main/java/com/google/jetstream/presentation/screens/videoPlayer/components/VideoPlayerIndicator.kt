@@ -31,19 +31,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
 import com.google.jetstream.presentation.utils.ifElse
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 fun RowScope.VideoPlayerControllerIndicator(
     progress: Float,
@@ -61,7 +56,6 @@ fun RowScope.VideoPlayerControllerIndicator(
         targetValue = 4.dp.times((if (isFocused) 2.5f else 1f))
     )
     var seekProgress by remember { mutableStateOf(0f) }
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(isSelected) {
         if (isSelected) {
