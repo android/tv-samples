@@ -117,7 +117,7 @@ fun ImmersiveListScreen() {
                             fullWidth = it.size.width.toDp().value
                         }
                     },
-                contentPadding = PaddingValues(start = 58.dp, end = 46.dp),
+                contentPadding = PaddingValues(start = 58.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 itemsIndexed(immersiveListItems) { index, card ->
@@ -155,6 +155,30 @@ private val description = "Lorem ipsum dolor sit amet, consectetur adipiscing el
         " ut aliquip ex ea commodo consequat. "
 
 private val immersiveListItems = listOf(
+    ImmersiveListSlide(
+        title = "Shadow Hunter",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_1,
+    ),
+    ImmersiveListSlide(
+        title = "Super Puppy",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_2,
+    ),
+    ImmersiveListSlide(
+        title = "Man with a cape",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_3,
+    ),
+    ImmersiveListSlide(
+        title = "Power Sisters",
+        subtitle = "Secondary · text",
+        description = description,
+        image = R.drawable.fc_4,
+    ),
     ImmersiveListSlide(
         title = "Shadow Hunter",
         subtitle = "Secondary · text",

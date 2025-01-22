@@ -32,7 +32,7 @@ fun CardsScreen() {
                     modifier = Modifier.width(180.dp),
                     imageCard = {
                         Card(
-                            onClick = {},
+                            onClick = { },
                             interactionSource = it,
                             colors = CardDefaults.colors(containerColor = Color.Transparent)
                         ) {

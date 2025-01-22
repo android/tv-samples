@@ -116,6 +116,9 @@ fun FontScaleAndLayoutDirectionSelector(
                                             selected = isSelected,
                                             onClick = { onLayoutDirectionChange(it.direction) },
                                             modifier = Modifier.semantics(mergeDescendants = true) { },
+                                            headlineContent = {
+                                                Text(text = it.title)
+                                            },
                                             leadingContent = {
                                                 Icon(
                                                     painter = painterResource(id = it.icon),
@@ -126,10 +129,8 @@ fun FontScaleAndLayoutDirectionSelector(
                                                 RadioButton(
                                                     selected = isSelected,
                                                     onClick = { })
-                                            },
-                                            headlineContent = {
-                                                Text(text = it.title)
-                                            })
+                                            }
+                                        )
                                     }
                                 }
                             }
@@ -160,6 +161,9 @@ fun FontScaleAndLayoutDirectionSelector(
                                             selected = isSelected,
                                             onClick = { onFontScaleChange(it.scale) },
                                             modifier = Modifier.semantics(mergeDescendants = true) { },
+                                            headlineContent = {
+                                                Text(text = it.title)
+                                            },
                                             leadingContent = {
                                                 Icon(
                                                     painter = painterResource(id = R.drawable.ic_font_scale),
@@ -170,10 +174,8 @@ fun FontScaleAndLayoutDirectionSelector(
                                                 RadioButton(
                                                     selected = isSelected,
                                                     onClick = { })
-                                            },
-                                            headlineContent = {
-                                                Text(text = it.title)
-                                            })
+                                            }
+                                        )
                                     }
                                 }
                             }

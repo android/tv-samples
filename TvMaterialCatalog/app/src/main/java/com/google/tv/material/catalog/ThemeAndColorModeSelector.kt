@@ -114,6 +114,9 @@ fun ThemeAndColorModeSelector(
                                             selected = isSelected,
                                             onClick = { onThemeModeChange(it.mode) },
                                             modifier = Modifier.semantics(mergeDescendants = true) { },
+                                            headlineContent = {
+                                                Text(text = it.title)
+                                            },
                                             leadingContent = {
                                                 Icon(
                                                     painter = painterResource(id = it.icon),
@@ -124,10 +127,8 @@ fun ThemeAndColorModeSelector(
                                                 RadioButton(
                                                     selected = isSelected,
                                                     onClick = { })
-                                            },
-                                            headlineContent = {
-                                                Text(text = it.title)
-                                            })
+                                            }
+                                        )
                                     }
                                 }
                             }
@@ -158,6 +159,9 @@ fun ThemeAndColorModeSelector(
                                             selected = isSelected,
                                             onClick = { onSeedColorChange(it) },
                                             modifier = Modifier.semantics(mergeDescendants = true) { },
+                                            headlineContent = {
+                                                Text(text = it.name)
+                                            },
                                             leadingContent = {
                                                 Box(
                                                     modifier = Modifier
@@ -169,10 +173,8 @@ fun ThemeAndColorModeSelector(
                                                 RadioButton(
                                                     selected = isSelected,
                                                     onClick = { })
-                                            },
-                                            headlineContent = {
-                                                Text(text = it.name)
-                                            })
+                                            }
+                                        )
                                     }
                                 }
                             }

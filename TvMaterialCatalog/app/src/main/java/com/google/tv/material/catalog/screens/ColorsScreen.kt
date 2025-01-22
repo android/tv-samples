@@ -24,7 +24,9 @@ import androidx.tv.material3.Text
 @Composable
 fun ColorsScreen() {
     Row(
-        Modifier.fillMaxSize().padding(start = 58.dp, end = 48.dp, top = 8.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(start = 58.dp, end = 48.dp, top = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         LazyVerticalGrid(
