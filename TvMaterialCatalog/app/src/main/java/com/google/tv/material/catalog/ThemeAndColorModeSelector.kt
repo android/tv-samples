@@ -116,7 +116,7 @@ fun ThemeAndColorModeSelector(
                                             modifier = Modifier.semantics(mergeDescendants = true) { },
                                             headlineContent = {
                                                 Text(text = it.title)
-                                            }
+                                            },
                                             leadingContent = {
                                                 Icon(
                                                     painter = painterResource(id = it.icon),
