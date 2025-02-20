@@ -10,12 +10,12 @@ kotlin {
 
 android {
     namespace = "com.google.tv.material.catalog"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.google.tv.material.catalog"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         vectorDrawables {
@@ -27,6 +27,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -50,6 +51,8 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.foundation)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(libs.tv.foundation)
