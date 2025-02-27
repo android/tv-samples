@@ -70,6 +70,9 @@ dependencies {
     // Use 1.2.0-alpha03 or above versions for benchmarking TV apps
     implementation(libs.androidx.benchmark.macro.junit4)
     implementation(libs.androidx.rules)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime)
 }
 
 androidComponents {
