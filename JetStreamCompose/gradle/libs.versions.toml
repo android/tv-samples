@@ -1,24 +1,24 @@
 [versions]
-activity-compose = "1.10.0"
-android-gradle-plugin = "8.7.3"
-android-test-plugin = "8.7.3"
+activity-compose = "1.10.1"
+android-gradle-plugin = "8.8.2"
+android-test-plugin = "8.8.2"
 androidx-baselineprofile = "1.3.3"
 benchmark-macro-junit4 = "1.3.3"
 coil-compose = "2.7.0"
-compose-bom = "2025.01.00"
+compose-bom = "2025.02.00"
 tv-material = "1.0.0"
 core-ktx = "1.15.0"
 core-splashscreen = "1.0.1"
 hilt-navigation-compose = "1.2.0"
-hilt-android = "2.52"
+hilt-android = "2.54"
 junit = "1.2.1"
 kotlin-android = "2.1.0"
-kotlinx-serialization = "1.6.3"
-ksp = "2.0.20-1.0.24"
+kotlinx-serialization = "1.8.0"
+ksp = "2.1.0-1.0.29"
 lifecycle-runtime-ktx = "2.8.7"
-media3-ui = "1.5.1"
-media3-exoplayer = "1.5.1"
-navigation-compose = "2.8.5"
+media3-ui = "1.6.0-beta01"
+media3-exoplayer = "1.6.0-beta01"
+navigation-compose = "2.8.8"
 profileinstaller = "1.4.1"
 uiautomator = "2.3.0"
 rules = "1.6.1"
@@ -37,7 +37,7 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
-androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3-ui" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui-compose", version.ref = "media3-ui" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3-exoplayer" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
