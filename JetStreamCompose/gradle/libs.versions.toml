@@ -16,8 +16,7 @@ kotlin-android = "2.1.0"
 kotlinx-serialization = "1.8.0"
 ksp = "2.1.0-1.0.29"
 lifecycle-runtime-ktx = "2.8.7"
-media3-ui = "1.6.0-beta01"
-media3-exoplayer = "1.6.0-beta01"
+media3 = "1.6.0-beta01"
 navigation-compose = "2.8.8"
 profileinstaller = "1.4.1"
 uiautomator = "2.3.0"
@@ -38,8 +37,8 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
-androidx-media3-ui = { module = "androidx.media3:media3-ui-compose", version.ref = "media3-ui" }
-androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3-exoplayer" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui-compose", version.ref = "media3" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
 androidx-tv-material = { module = "androidx.tv:tv-material", version.ref = "tv-material" }

@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -43,7 +44,7 @@ import com.google.jetstream.presentation.utils.ifElse
 fun RowScope.VideoPlayerControllerIndicator(
     progress: Float,
     onSeek: (seekProgress: Float) -> Unit,
-    state: VideoPlayerState
+    onShowControls: () -> Unit = {},
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var isSelected by remember { mutableStateOf(false) }
@@ -55,14 +56,10 @@ fun RowScope.VideoPlayerControllerIndicator(
     val animatedIndicatorHeight by animateDpAsState(
         targetValue = 4.dp.times((if (isFocused) 2.5f else 1f))
     )
-    var seekProgress by remember { mutableStateOf(0f) }
+    var seekProgress by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(isSelected) {
-        if (isSelected) {
-            state.showControls(seconds = Int.MAX_VALUE)
-        } else {
-            state.showControls()
-        }
+        onShowControls()
     }
 
     val handleSeekEventModifier = Modifier.handleDPadKeyEvents(

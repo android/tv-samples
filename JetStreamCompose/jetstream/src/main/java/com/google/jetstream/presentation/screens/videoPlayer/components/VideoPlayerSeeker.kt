@@ -31,12 +31,12 @@ import kotlin.time.Duration
 @Composable
 fun VideoPlayerSeeker(
     focusRequester: FocusRequester,
-    state: VideoPlayerState,
     isPlaying: Boolean,
-    onPlayPauseToggle: (Boolean) -> Unit,
-    onSeek: (Float) -> Unit,
     contentProgress: Duration,
-    contentDuration: Duration
+    contentDuration: Duration,
+    onPlayPauseToggle: () -> Unit,
+    onSeek: (Float) -> Unit,
+    onShowControls: () -> Unit = {},
 ) {
     val contentProgressString =
         contentProgress.toComponents { h, m, s, _ ->
@@ -61,8 +61,7 @@ fun VideoPlayerSeeker(
         VideoPlayerControlsIcon(
             modifier = Modifier.focusRequester(focusRequester),
             icon = if (!isPlaying) Icons.Default.PlayArrow else Icons.Default.Pause,
-            onClick = { onPlayPauseToggle(!isPlaying) },
-            state = state,
+            onClick = onPlayPauseToggle,
             isPlaying = isPlaying,
             contentDescription = StringConstants
                 .Composable
@@ -72,7 +71,7 @@ fun VideoPlayerSeeker(
         VideoPlayerControllerIndicator(
             progress = (contentProgress / contentDuration).toFloat(),
             onSeek = onSeek,
-            state = state
+            onShowControls = onShowControls
         )
         VideoPlayerControllerText(text = contentDurationString)
     }
