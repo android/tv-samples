@@ -37,11 +37,11 @@ import androidx.tv.material3.Surface
 
 @Composable
 fun VideoPlayerControlsIcon(
-    modifier: Modifier = Modifier,
-    state: VideoPlayerState,
     isPlaying: Boolean,
     icon: ImageVector,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
+    onShowControls: () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -49,7 +49,7 @@ fun VideoPlayerControlsIcon(
 
     LaunchedEffect(isFocused && isPlaying) {
         if (isFocused && isPlaying) {
-            state.showControls()
+            onShowControls()
         }
     }
 

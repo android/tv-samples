@@ -49,31 +49,28 @@ import com.google.jetstream.presentation.theme.JetStreamTheme
 fun VideoPlayerOverlay(
     isPlaying: Boolean,
     modifier: Modifier = Modifier,
-    state: VideoPlayerState = rememberVideoPlayerState(),
+    isControlsVisible: Boolean = true,
     focusRequester: FocusRequester = remember { FocusRequester() },
+    showControls: () -> Unit = {},
     centerButton: @Composable () -> Unit = {},
     subtitles: @Composable () -> Unit = {},
     controls: @Composable () -> Unit = {}
 ) {
-    LaunchedEffect(state.controlsVisible) {
-        if (state.controlsVisible) {
+    LaunchedEffect(isControlsVisible) {
+        if (isControlsVisible) {
             focusRequester.requestFocus()
         }
     }
 
     LaunchedEffect(isPlaying) {
-        if (!isPlaying) {
-            state.showControls(seconds = Int.MAX_VALUE)
-        } else {
-            state.showControls()
-        }
+        showControls()
     }
 
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AnimatedVisibility(state.controlsVisible, Modifier, fadeIn(), fadeOut()) {
+        AnimatedVisibility(isControlsVisible, Modifier, fadeIn(), fadeOut()) {
             CinematicBackground(Modifier.fillMaxSize())
         }
 
@@ -86,7 +83,7 @@ fun VideoPlayerOverlay(
             }
 
             AnimatedVisibility(
-                state.controlsVisible,
+                isControlsVisible,
                 Modifier,
                 slideInVertically { it },
                 slideOutVertically { it }
