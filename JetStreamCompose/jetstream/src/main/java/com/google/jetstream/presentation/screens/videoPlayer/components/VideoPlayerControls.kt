@@ -16,12 +16,15 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesomeMotion
 import androidx.compose.material.icons.filled.ClosedCaption
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,10 +40,16 @@ fun VideoPlayerControls(
     contentCurrentPosition: Long,
     contentDuration: Long,
     isPlaying: Boolean,
+    hasNextMovie: Boolean,
+    hasPreviousMovie: Boolean,
+    repeatMode: Int,
     focusRequester: FocusRequester,
     onPlayPauseToggle: () -> Unit = {},
     onSeek: (Float) -> Unit = {},
-    onShowControls: () -> Unit = {}
+    onShowControls: () -> Unit = {},
+    onPreviousMovie: () -> Unit = {},
+    onNextMovie: () -> Unit = {},
+    onRepeat: () -> Unit = {}
 ) {
     VideoPlayerMainFrame(
         mediaTitle = {
@@ -54,8 +63,38 @@ fun VideoPlayerControls(
         mediaActions = {
             Row(
                 modifier = Modifier.padding(bottom = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                VideoPlayerControlsIcon(
+                    icon = Icons.Default.SkipPrevious,
+                    isPlaying = isPlaying,
+                    contentDescription =
+                    StringConstants.Composable.VideoPlayerControlSkipPreviousButton,
+                    onShowControls = onShowControls,
+                    onClick = onPreviousMovie
+                )
+                VideoPlayerControlsIcon(
+                    icon = Icons.Default.SkipNext,
+                    isPlaying = isPlaying,
+                    contentDescription =
+                    StringConstants.Composable.VideoPlayerControlSkipNextButton,
+                    onShowControls = onShowControls,
+                    onClick = onNextMovie
+                )
+                RepeatIcon(
+                    isPlaying = isPlaying,
+                    repeatMode = repeatMode,
+                    onShowControls = onShowControls,
+                    onClick = onRepeat,
+                )
+                VideoPlayerControlsIcon(
+                    icon = Icons.Default.SkipPrevious,
+                    isPlaying = isPlaying,
+                    contentDescription =
+                    StringConstants.Composable.VideoPlayerControlClosedCaptionsButton,
+                    onShowControls = onShowControls
+                )
                 VideoPlayerControlsIcon(
                     icon = Icons.Default.AutoAwesomeMotion,
                     isPlaying = isPlaying,
@@ -64,7 +103,6 @@ fun VideoPlayerControls(
                     onShowControls = onShowControls
                 )
                 VideoPlayerControlsIcon(
-                    modifier = Modifier.padding(start = 12.dp),
                     icon = Icons.Default.ClosedCaption,
                     isPlaying = isPlaying,
                     contentDescription =
@@ -72,7 +110,6 @@ fun VideoPlayerControls(
                     onShowControls = onShowControls
                 )
                 VideoPlayerControlsIcon(
-                    modifier = Modifier.padding(start = 12.dp),
                     icon = Icons.Default.Settings,
                     isPlaying = isPlaying,
                     contentDescription =

@@ -41,6 +41,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.PlayerSurface
 import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import androidx.media3.ui.compose.modifiers.resizeWithContentScale
+import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.presentation.common.Error
 import com.google.jetstream.presentation.common.Loading
@@ -104,24 +105,10 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
     )
 
     LaunchedEffect(exoPlayer, movieDetails) {
-        exoPlayer.setMediaItem(
-            MediaItem.Builder()
-                .setUri(movieDetails.videoUri)
-                .setSubtitleConfigurations(
-                    if (movieDetails.subtitleUri == null) {
-                        emptyList()
-                    } else {
-                        listOf(
-                            MediaItem.SubtitleConfiguration
-                                .Builder(Uri.parse(movieDetails.subtitleUri))
-                                .setMimeType("application/vtt")
-                                .setLanguage("en")
-                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
-                                .build()
-                        )
-                    }
-                ).build()
-        )
+        exoPlayer.addMediaItem(movieDetails.intoMediaItem())
+        movieDetails.similarMovies.forEach {
+            exoPlayer.addMediaItem(it.intoMediaItem())
+        }
         exoPlayer.prepare()
     }
 
@@ -172,10 +159,16 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
                     contentCurrentPosition = contentCurrentPosition,
                     contentDuration = exoPlayer.duration,
                     isPlaying = videoPlayerState.isPlaying,
+                    hasNextMovie = videoPlayerState.hasNextMovie,
+                    hasPreviousMovie = videoPlayerState.hasPreviousMovie,
+                    repeatMode = videoPlayerState.repeatMode,
                     focusRequester = focusRequester,
                     onShowControls = videoPlayerState::showControls,
                     onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
-                    onPlayPauseToggle = videoPlayerState::togglePlayPause
+                    onPlayPauseToggle = videoPlayerState::togglePlayPause,
+                    onNextMovie = videoPlayerState::nextMovie,
+                    onPreviousMovie = videoPlayerState::previousMovie,
+                    onRepeat = videoPlayerState::toggleRepeat,
                 )
             }
         )
@@ -206,3 +199,42 @@ private fun Modifier.dPadEvents(
         videoPlayerState.showControls()
     }
 )
+
+private fun MovieDetails.intoMediaItem(): MediaItem {
+    return MediaItem.Builder()
+        .setUri(videoUri)
+        .setSubtitleConfigurations(
+            if (subtitleUri == null) {
+                emptyList()
+            } else {
+                listOf(
+                    MediaItem.SubtitleConfiguration
+                        .Builder(Uri.parse(subtitleUri))
+                        .setMimeType("application/vtt")
+                        .setLanguage("en")
+                        .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                        .build()
+                )
+            }
+        ).build()
+}
+
+private fun Movie.intoMediaItem(): MediaItem {
+    return MediaItem.Builder()
+        .setUri(videoUri)
+        .setSubtitleConfigurations(
+            if (subtitleUri == null) {
+                emptyList()
+            } else {
+                listOf(
+                    MediaItem.SubtitleConfiguration
+                        .Builder(Uri.parse(subtitleUri))
+                        .setMimeType("application/vtt")
+                        .setLanguage("en")
+                        .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                        .build()
+                )
+            }
+        )
+        .build()
+}

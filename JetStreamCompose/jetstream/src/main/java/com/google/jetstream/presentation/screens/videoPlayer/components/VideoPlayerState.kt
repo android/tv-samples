@@ -25,8 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.compose.state.NextButtonState
 import androidx.media3.ui.compose.state.PlayPauseButtonState
+import androidx.media3.ui.compose.state.PreviousButtonState
+import androidx.media3.ui.compose.state.RepeatButtonState
+import androidx.media3.ui.compose.state.rememberNextButtonState
 import androidx.media3.ui.compose.state.rememberPlayPauseButtonState
+import androidx.media3.ui.compose.state.rememberPreviousButtonState
+import androidx.media3.ui.compose.state.rememberRepeatButtonState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
@@ -37,7 +43,10 @@ import kotlinx.coroutines.flow.debounce
 class VideoPlayerState(
     @IntRange(from = 0)
     private val hideSeconds: Int,
-    val playPauseButtonState: PlayPauseButtonState,
+    private val playPauseButtonState: PlayPauseButtonState,
+    private val previousButtonState: PreviousButtonState,
+    private val nextButtonState: NextButtonState,
+    private val repeatButtonState: RepeatButtonState,
 ) {
     var isControlsVisible by mutableStateOf(true)
         private set
@@ -45,8 +54,29 @@ class VideoPlayerState(
     val isPlaying
         get() = !playPauseButtonState.showPlay
 
+    val hasNextMovie
+        get() = nextButtonState.isEnabled
+
+    val hasPreviousMovie
+        get() = previousButtonState.isEnabled
+
+    val repeatMode
+        get() = repeatButtonState.repeatModeState
+
     fun togglePlayPause() {
         playPauseButtonState.onClick()
+    }
+
+    fun nextMovie() {
+        nextButtonState.onClick()
+    }
+
+    fun previousMovie() {
+        previousButtonState.onClick()
+    }
+
+    fun toggleRepeat() {
+        repeatButtonState.onClick()
     }
 
     fun showControls() {
@@ -85,10 +115,16 @@ fun rememberVideoPlayerState(
     @IntRange(from = 0) hideSeconds: Int = 2
 ): VideoPlayerState {
     val playPauseButtonState = rememberPlayPauseButtonState(exoPlayer)
+    val nextButtonState = rememberNextButtonState(exoPlayer)
+    val previousButtonState = rememberPreviousButtonState(exoPlayer)
+    val repeatButtonState = rememberRepeatButtonState(exoPlayer)
     return remember(playPauseButtonState) {
         VideoPlayerState(
             hideSeconds = hideSeconds,
-            playPauseButtonState = playPauseButtonState
+            playPauseButtonState = playPauseButtonState,
+            nextButtonState = nextButtonState,
+            previousButtonState = previousButtonState,
+            repeatButtonState = repeatButtonState
         )
     }
         .also { LaunchedEffect(it) { it.observe() } }
