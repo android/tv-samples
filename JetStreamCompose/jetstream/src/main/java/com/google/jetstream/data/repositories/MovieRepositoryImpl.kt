@@ -116,7 +116,7 @@ class MovieRepositoryImpl @Inject constructor(
                     reviewCount = DefaultCount,
                     reviewRating = DefaultRating
                 ),
-            )
+            ),
         )
     }
 
