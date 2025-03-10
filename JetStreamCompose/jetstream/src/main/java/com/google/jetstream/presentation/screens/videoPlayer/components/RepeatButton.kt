@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer.components
 
+import androidx.annotation.OptIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.RepeatOne
@@ -25,18 +26,22 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.compose.state.RepeatButtonState
+import androidx.media3.ui.compose.state.rememberRepeatButtonState
 import androidx.tv.material3.LocalContentColor
 import com.google.jetstream.data.util.StringConstants
 
+@OptIn(UnstableApi::class)
 @Composable
-fun RepeatIcon(
-    isPlaying: Boolean,
-    onShowControls: () -> Unit,
+fun RepeatButton(
+    player: Player,
     modifier: Modifier = Modifier,
-    repeatMode: Int = Player.REPEAT_MODE_OFF,
+    state: RepeatButtonState = rememberRepeatButtonState(player),
     contentDescription: String? = StringConstants.Composable.VideoPlayerControlRepeatButton,
-    onClick: () -> Unit = {}
+    onShowControls: () -> Unit,
 ) {
+    val repeatMode = state.repeatModeState
     val isRepeating = repeatMode != Player.REPEAT_MODE_OFF
     val color = LocalContentColor.current
 
@@ -45,10 +50,10 @@ fun RepeatIcon(
             Player.REPEAT_MODE_ONE -> Icons.Default.RepeatOne
             else -> Icons.Default.Repeat
         },
-        isPlaying = isPlaying,
+        isPlaying = player.isPlaying,
         contentDescription = contentDescription,
         onShowControls = onShowControls,
-        onClick = onClick,
+        onClick = state::onClick,
         modifier = modifier.drawBehind {
             if (isRepeating) {
                 val radius = 2.dp.toPx()

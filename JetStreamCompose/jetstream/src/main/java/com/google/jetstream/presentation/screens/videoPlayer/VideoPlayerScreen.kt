@@ -97,10 +97,10 @@ fun VideoPlayerScreen(
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Unit) {
-    val exoPlayer = rememberPlayer(LocalContext.current)
+    val context = LocalContext.current
+    val exoPlayer = rememberPlayer(context)
 
     val videoPlayerState = rememberVideoPlayerState(
-        exoPlayer = exoPlayer,
         hideSeconds = 4,
     )
 
@@ -148,27 +148,18 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
         VideoPlayerOverlay(
             modifier = Modifier.align(Alignment.BottomCenter),
             focusRequester = focusRequester,
-            isPlaying = videoPlayerState.isPlaying,
+            isPlaying = exoPlayer.isPlaying,
             isControlsVisible = videoPlayerState.isControlsVisible,
             centerButton = { VideoPlayerPulse(pulseState) },
             subtitles = { /* TODO Implement subtitles */ },
             showControls = videoPlayerState::showControls,
             controls = {
                 VideoPlayerControls(
+                    player = exoPlayer,
                     movieDetails = movieDetails,
                     contentCurrentPosition = contentCurrentPosition,
-                    contentDuration = exoPlayer.duration,
-                    isPlaying = videoPlayerState.isPlaying,
-                    hasNextMovie = videoPlayerState.hasNextMovie,
-                    hasPreviousMovie = videoPlayerState.hasPreviousMovie,
-                    repeatMode = videoPlayerState.repeatMode,
                     focusRequester = focusRequester,
-                    onShowControls = videoPlayerState::showControls,
-                    onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
-                    onPlayPauseToggle = videoPlayerState::togglePlayPause,
-                    onNextMovie = videoPlayerState::nextMovie,
-                    onPreviousMovie = videoPlayerState::previousMovie,
-                    onRepeat = videoPlayerState::toggleRepeat,
+                    onShowControls = { videoPlayerState.showControls(exoPlayer.isPlaying) },
                 )
             }
         )

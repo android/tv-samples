@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer.components
 
+import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
@@ -25,19 +26,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.compose.state.PlayPauseButtonState
+import androidx.media3.ui.compose.state.rememberPlayPauseButtonState
 import com.google.jetstream.data.util.StringConstants
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(UnstableApi::class)
 @Composable
 fun VideoPlayerSeeker(
+    player: Player,
     focusRequester: FocusRequester,
-    isPlaying: Boolean,
     contentProgress: Duration,
-    contentDuration: Duration,
-    onPlayPauseToggle: () -> Unit,
-    onSeek: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    state: PlayPauseButtonState = rememberPlayPauseButtonState(player),
+    onSeek: (Float) -> Unit = {
+        player.seekTo(player.duration.times(it).toLong())
+    },
     onShowControls: () -> Unit = {},
 ) {
+    val contentDuration = player.contentDuration.milliseconds
     val contentProgressString =
         contentProgress.toComponents { h, m, s, _ ->
             if (h > 0) {
@@ -56,13 +66,14 @@ fun VideoPlayerSeeker(
         }
 
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         VideoPlayerControlsIcon(
             modifier = Modifier.focusRequester(focusRequester),
-            icon = if (!isPlaying) Icons.Default.PlayArrow else Icons.Default.Pause,
-            onClick = onPlayPauseToggle,
-            isPlaying = isPlaying,
+            icon = if (state.showPlay) Icons.Default.PlayArrow else Icons.Default.Pause,
+            onClick = state::onClick,
+            isPlaying = player.isPlaying,
             contentDescription = StringConstants
                 .Composable
                 .VideoPlayerControlPlayPauseButton
