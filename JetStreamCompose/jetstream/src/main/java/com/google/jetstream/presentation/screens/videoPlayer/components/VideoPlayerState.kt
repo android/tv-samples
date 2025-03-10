@@ -59,7 +59,6 @@ class VideoPlayerState(
             .debounce { it.toLong() * 1000 }
             .collect { isControlsVisible = false }
     }
-
 }
 
 /**

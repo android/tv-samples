@@ -26,10 +26,10 @@ import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultCoun
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.DefaultRating
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.FreshTomatoes
 import com.google.jetstream.data.util.StringConstants.Movie.Reviewer.ReviewerName
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Singleton
 class MovieRepositoryImpl @Inject constructor(

@@ -24,9 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -56,7 +54,6 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.remember
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlinx.coroutines.delay
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -112,16 +109,6 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
         exoPlayer.prepare()
     }
 
-    var contentCurrentPosition by remember { mutableLongStateOf(0L) }
-
-    // TODO: Update in a more thoughtful manner
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(300)
-            contentCurrentPosition = exoPlayer.currentPosition
-        }
-    }
-
     BackHandler(onBack = onBackPressed)
 
     val pulseState = rememberVideoPlayerPulseState()
@@ -157,7 +144,6 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
                 VideoPlayerControls(
                     player = exoPlayer,
                     movieDetails = movieDetails,
-                    contentCurrentPosition = contentCurrentPosition,
                     focusRequester = focusRequester,
                     onShowControls = { videoPlayerState.showControls(exoPlayer.isPlaying) },
                 )
