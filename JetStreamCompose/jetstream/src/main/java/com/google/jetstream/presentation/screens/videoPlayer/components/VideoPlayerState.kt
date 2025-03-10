@@ -24,9 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.compose.state.PlayPauseButtonState
-import androidx.media3.ui.compose.state.rememberPlayPauseButtonState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
@@ -37,19 +34,11 @@ import kotlinx.coroutines.flow.debounce
 class VideoPlayerState(
     @IntRange(from = 0)
     private val hideSeconds: Int,
-    val playPauseButtonState: PlayPauseButtonState,
 ) {
     var isControlsVisible by mutableStateOf(true)
         private set
 
-    val isPlaying
-        get() = !playPauseButtonState.showPlay
-
-    fun togglePlayPause() {
-        playPauseButtonState.onClick()
-    }
-
-    fun showControls() {
+    fun showControls(isPlaying: Boolean = true) {
         if (isPlaying) {
             updateControlVisibility()
         } else {
@@ -81,14 +70,11 @@ class VideoPlayerState(
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 fun rememberVideoPlayerState(
-    exoPlayer: ExoPlayer,
     @IntRange(from = 0) hideSeconds: Int = 2
 ): VideoPlayerState {
-    val playPauseButtonState = rememberPlayPauseButtonState(exoPlayer)
-    return remember(playPauseButtonState) {
+    return remember {
         VideoPlayerState(
             hideSeconds = hideSeconds,
-            playPauseButtonState = playPauseButtonState
         )
     }
         .also { LaunchedEffect(it) { it.observe() } }

@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -27,21 +28,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.Player
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun VideoPlayerControls(
+    player: Player,
     movieDetails: MovieDetails,
-    contentCurrentPosition: Long,
-    contentDuration: Long,
-    isPlaying: Boolean,
     focusRequester: FocusRequester,
-    onPlayPauseToggle: () -> Unit = {},
-    onSeek: (Float) -> Unit = {},
-    onShowControls: () -> Unit = {}
+    onShowControls: () -> Unit = {},
 ) {
+    val isPlaying = player.isPlaying
+
     VideoPlayerMainFrame(
         mediaTitle = {
             VideoPlayerMediaTitle(
@@ -54,8 +53,21 @@ fun VideoPlayerControls(
         mediaActions = {
             Row(
                 modifier = Modifier.padding(bottom = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                PreviousButton(
+                    player = player,
+                    onShowControls = onShowControls
+                )
+                NextButton(
+                    player = player,
+                    onShowControls = onShowControls
+                )
+                RepeatButton(
+                    player = player,
+                    onShowControls = onShowControls,
+                )
                 VideoPlayerControlsIcon(
                     icon = Icons.Default.AutoAwesomeMotion,
                     isPlaying = isPlaying,
@@ -64,7 +76,6 @@ fun VideoPlayerControls(
                     onShowControls = onShowControls
                 )
                 VideoPlayerControlsIcon(
-                    modifier = Modifier.padding(start = 12.dp),
                     icon = Icons.Default.ClosedCaption,
                     isPlaying = isPlaying,
                     contentDescription =
@@ -72,7 +83,6 @@ fun VideoPlayerControls(
                     onShowControls = onShowControls
                 )
                 VideoPlayerControlsIcon(
-                    modifier = Modifier.padding(start = 12.dp),
                     icon = Icons.Default.Settings,
                     isPlaying = isPlaying,
                     contentDescription =
@@ -83,13 +93,9 @@ fun VideoPlayerControls(
         },
         seeker = {
             VideoPlayerSeeker(
+                player = player,
                 focusRequester = focusRequester,
-                isPlaying = isPlaying,
-                onPlayPauseToggle = onPlayPauseToggle,
-                onSeek = onSeek,
                 onShowControls = onShowControls,
-                contentProgress = contentCurrentPosition.milliseconds,
-                contentDuration = contentDuration.milliseconds,
             )
         },
         more = null

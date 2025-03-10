@@ -51,7 +51,7 @@ class VideoPlayerScreenViewModel @Inject constructor(
 
 @Immutable
 sealed class VideoPlayerScreenUiState {
-    object Loading : VideoPlayerScreenUiState()
-    object Error : VideoPlayerScreenUiState()
+    data object Loading : VideoPlayerScreenUiState()
+    data object Error : VideoPlayerScreenUiState()
     data class Done(val movieDetails: MovieDetails) : VideoPlayerScreenUiState()
 }

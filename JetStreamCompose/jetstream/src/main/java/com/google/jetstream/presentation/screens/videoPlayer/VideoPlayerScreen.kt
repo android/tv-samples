@@ -24,9 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -41,6 +39,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.PlayerSurface
 import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import androidx.media3.ui.compose.modifiers.resizeWithContentScale
+import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.presentation.common.Error
 import com.google.jetstream.presentation.common.Loading
@@ -55,7 +54,6 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.remember
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlinx.coroutines.delay
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -96,43 +94,19 @@ fun VideoPlayerScreen(
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Unit) {
-    val exoPlayer = rememberPlayer(LocalContext.current)
+    val context = LocalContext.current
+    val exoPlayer = rememberPlayer(context)
 
     val videoPlayerState = rememberVideoPlayerState(
-        exoPlayer = exoPlayer,
         hideSeconds = 4,
     )
 
     LaunchedEffect(exoPlayer, movieDetails) {
-        exoPlayer.setMediaItem(
-            MediaItem.Builder()
-                .setUri(movieDetails.videoUri)
-                .setSubtitleConfigurations(
-                    if (movieDetails.subtitleUri == null) {
-                        emptyList()
-                    } else {
-                        listOf(
-                            MediaItem.SubtitleConfiguration
-                                .Builder(Uri.parse(movieDetails.subtitleUri))
-                                .setMimeType("application/vtt")
-                                .setLanguage("en")
-                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
-                                .build()
-                        )
-                    }
-                ).build()
-        )
-        exoPlayer.prepare()
-    }
-
-    var contentCurrentPosition by remember { mutableLongStateOf(0L) }
-
-    // TODO: Update in a more thoughtful manner
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(300)
-            contentCurrentPosition = exoPlayer.currentPosition
+        exoPlayer.addMediaItem(movieDetails.intoMediaItem())
+        movieDetails.similarMovies.forEach {
+            exoPlayer.addMediaItem(it.intoMediaItem())
         }
+        exoPlayer.prepare()
     }
 
     BackHandler(onBack = onBackPressed)
@@ -161,21 +135,17 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
         VideoPlayerOverlay(
             modifier = Modifier.align(Alignment.BottomCenter),
             focusRequester = focusRequester,
-            isPlaying = videoPlayerState.isPlaying,
+            isPlaying = exoPlayer.isPlaying,
             isControlsVisible = videoPlayerState.isControlsVisible,
             centerButton = { VideoPlayerPulse(pulseState) },
             subtitles = { /* TODO Implement subtitles */ },
             showControls = videoPlayerState::showControls,
             controls = {
                 VideoPlayerControls(
+                    player = exoPlayer,
                     movieDetails = movieDetails,
-                    contentCurrentPosition = contentCurrentPosition,
-                    contentDuration = exoPlayer.duration,
-                    isPlaying = videoPlayerState.isPlaying,
                     focusRequester = focusRequester,
-                    onShowControls = videoPlayerState::showControls,
-                    onSeek = { exoPlayer.seekTo(exoPlayer.duration.times(it).toLong()) },
-                    onPlayPauseToggle = videoPlayerState::togglePlayPause
+                    onShowControls = { videoPlayerState.showControls(exoPlayer.isPlaying) },
                 )
             }
         )
@@ -206,3 +176,42 @@ private fun Modifier.dPadEvents(
         videoPlayerState.showControls()
     }
 )
+
+private fun MovieDetails.intoMediaItem(): MediaItem {
+    return MediaItem.Builder()
+        .setUri(videoUri)
+        .setSubtitleConfigurations(
+            if (subtitleUri == null) {
+                emptyList()
+            } else {
+                listOf(
+                    MediaItem.SubtitleConfiguration
+                        .Builder(Uri.parse(subtitleUri))
+                        .setMimeType("application/vtt")
+                        .setLanguage("en")
+                        .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                        .build()
+                )
+            }
+        ).build()
+}
+
+private fun Movie.intoMediaItem(): MediaItem {
+    return MediaItem.Builder()
+        .setUri(videoUri)
+        .setSubtitleConfigurations(
+            if (subtitleUri == null) {
+                emptyList()
+            } else {
+                listOf(
+                    MediaItem.SubtitleConfiguration
+                        .Builder(Uri.parse(subtitleUri))
+                        .setMimeType("application/vtt")
+                        .setLanguage("en")
+                        .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                        .build()
+                )
+            }
+        )
+        .build()
+}
