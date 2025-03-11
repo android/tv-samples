@@ -80,7 +80,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieDetails(movieId: String): MovieDetails {
         val movieList = movieDataSource.getMovieList()
         val movie = movieList.find { it.id == movieId } ?: movieList.first()
-        val similarMovieList = movieList.shuffled().subList(0, 2)
+        val similarMovieList = movieList.subList(1, 4)
         val castList = movieCastDataSource.getMovieCastList()
 
         return MovieDetails(
@@ -116,7 +116,7 @@ class MovieRepositoryImpl @Inject constructor(
                     reviewCount = DefaultCount,
                     reviewRating = DefaultRating
                 ),
-            )
+            ),
         )
     }
 
