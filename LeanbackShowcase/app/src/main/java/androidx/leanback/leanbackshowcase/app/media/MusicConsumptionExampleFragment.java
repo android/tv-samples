@@ -162,11 +162,11 @@ public class MusicConsumptionExampleFragment extends PlaybackFragment implements
             } else {
                 Context context = vh.getMediaItemNumberView().getContext();
                 vh.getMediaItemNumberView().setTextAppearance(context,
-                        R.style.TextAppearance_Leanback_PlaybackMediaItemNumber);
+                        androidx.leanback.R.style.TextAppearance_Leanback_PlaybackMediaItemNumber);
                 vh.getMediaItemNameView().setTextAppearance(context,
-                        R.style.TextAppearance_Leanback_PlaybackMediaItemName);
+                        androidx.leanback.R.style.TextAppearance_Leanback_PlaybackMediaItemName);
                 vh.getMediaItemDurationView().setTextAppearance(context,
-                        R.style.TextAppearance_Leanback_PlaybackMediaItemDuration);
+                        androidx.leanback.R.style.TextAppearance_Leanback_PlaybackMediaItemDuration);
             }
         }
     }

@@ -100,7 +100,7 @@ public class PublishChannelFragment extends GuidedStepFragment {
      */
     @Override
     public int onProvideTheme() {
-        return R.style.Theme_Leanback_GuidedStep;
+        return androidx.leanback.preference.R.style.Theme_Leanback_GuidedStep;
     }
 
     /**
