@@ -30,7 +30,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlin.coroutines.cancellation.CancellationException
 
 
 /**
@@ -56,16 +58,19 @@ class VideoPlayerScreenViewModel
             if (id == null) {
                 VideoPlayerScreenUiState.Error
             } else {
-
                 try {
                     val details = repository.getMovieDetails(id)
-                    playerManager.load(details)
                     VideoPlayerScreenUiState.Done(details)
-                } catch (e: kotlinx.coroutines.CancellationException) {
+                } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
                     VideoPlayerScreenUiState.Error
                 }
+            }
+        }
+        .onEach { state ->
+            if (state is VideoPlayerScreenUiState.Done) {
+                playerManager.load(state.movieDetails)
             }
         }
         .stateIn(
@@ -73,6 +78,7 @@ class VideoPlayerScreenViewModel
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = VideoPlayerScreenUiState.Loading
         )
+
 
     val player: ExoPlayer get() = playerManager.player
 
