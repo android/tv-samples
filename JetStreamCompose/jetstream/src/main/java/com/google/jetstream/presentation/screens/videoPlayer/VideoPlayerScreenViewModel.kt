@@ -56,10 +56,13 @@ class VideoPlayerScreenViewModel
             if (id == null) {
                 VideoPlayerScreenUiState.Error
             } else {
+
                 try {
                     val details = repository.getMovieDetails(id)
                     playerManager.load(details)
                     VideoPlayerScreenUiState.Done(details)
+                } catch (e: kotlinx.coroutines.CancellationException) {
+                    throw e
                 } catch (e: Exception) {
                     VideoPlayerScreenUiState.Error
                 }
