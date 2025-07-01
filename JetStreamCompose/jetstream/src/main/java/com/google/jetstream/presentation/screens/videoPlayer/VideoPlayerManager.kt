@@ -24,8 +24,8 @@ class VideoPlayerManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     private var _exoPlayer: ExoPlayer? = ExoPlayer.Builder(context)
-        .setSeekForwardIncrementMs(10)
-        .setSeekBackIncrementMs(10)
+        .setSeekForwardIncrementMs(10000)
+        .setSeekBackIncrementMs(10000)
         .setMediaSourceFactory(
             ProgressiveMediaSource.Factory(DefaultDataSource.Factory(context))
         )
