@@ -18,7 +18,8 @@ import javax.inject.Inject
  * A manager for the video player.
  * This class is responsible for managing the video playback using the ExoPlayer library.
  *
- * @param VideoPlayerManager  Creates an Instance of the player and it available across app for Re-use.
+ * @param VideoPlayerManager  Creates an Instance of the player and it available across app for Re-use
+ * @property release Releases the player to prevent memory leaks
  */
 class VideoPlayerManager @Inject constructor(
     @ApplicationContext private val context: Context
