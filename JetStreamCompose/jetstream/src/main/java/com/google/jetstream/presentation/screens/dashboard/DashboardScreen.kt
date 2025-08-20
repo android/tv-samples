@@ -180,9 +180,13 @@ fun DashboardScreen(
                 ),
             selectedTabIndex = currentTopBarSelectedTabIndex,
         ) { screen ->
-            navController.navigate(screen()) {
-                if (screen == TopBarTabs[0]) popUpTo(TopBarTabs[0].invoke())
-                launchSingleTop = true
+            val targetRoute = screen()
+            val currentRoute = navController.currentBackStackEntry?.destination?.route
+            if (currentRoute != targetRoute) {
+                navController.navigate(targetRoute) {
+                    if (screen == TopBarTabs[0]) popUpTo(TopBarTabs[0].invoke())
+                    launchSingleTop = true
+                }
             }
         }
 
