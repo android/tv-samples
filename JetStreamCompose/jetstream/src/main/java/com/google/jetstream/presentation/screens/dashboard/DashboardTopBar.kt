@@ -98,7 +98,9 @@ fun DashboardTopBar(
                     },
                 selected = selectedTabIndex == PROFILE_SCREEN_INDEX,
                 onClick = {
-                    onScreenSelection(Screens.Profile)
+                    if (selectedTabIndex != PROFILE_SCREEN_INDEX) {
+                        onScreenSelection(Screens.Profile)
+                    }
                 }
             )
             Row(
@@ -131,7 +133,11 @@ fun DashboardTopBar(
                                     .height(32.dp)
                                     .focusRequester(focusRequesters[index + 1]),
                                 selected = index == selectedTabIndex,
-                                onFocus = { onScreenSelection(screen) },
+                                onFocus = {
+                                    if (index != selectedTabIndex) {
+                                        onScreenSelection(screen)
+                                    }
+                                },
                                 onClick = { focusManager.moveFocus(FocusDirection.Down) },
                             ) {
                                 if (screen.tabIcon != null) {
