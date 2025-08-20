@@ -181,8 +181,7 @@ fun DashboardScreen(
             selectedTabIndex = currentTopBarSelectedTabIndex,
         ) { screen ->
             val targetRoute = screen()
-            val currentRoute = navController.currentBackStackEntry?.destination?.route
-            if (currentRoute != targetRoute) {
+            if (currentDestination != targetRoute) {
                 navController.navigate(targetRoute) {
                     if (screen == TopBarTabs[0]) popUpTo(TopBarTabs[0].invoke())
                     launchSingleTop = true
