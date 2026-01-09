@@ -27,7 +27,7 @@ import android.util.Log;
 
 public class VideoConsumptionExampleWithExoPlayerFragment extends VideoFragment {
 
-    private static final String URL = "https://storage.googleapis.com/android-tv/Sample videos/"
+    private static final String URL = "https://storage.googleapis.com/androiddevelopers/samples_assets/android-tv/Sample videos/"
             + "April Fool's 2013/Explore Treasure Mode with Google Maps.mp4";
     public static final String TAG = "VideoConsumptionWithExoPlayer";
     private VideoMediaPlayerGlue<ExoPlayerAdapter> mMediaPlayerGlue;

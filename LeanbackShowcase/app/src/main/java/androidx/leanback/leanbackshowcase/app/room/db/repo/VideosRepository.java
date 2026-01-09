@@ -166,7 +166,7 @@ public class VideosRepository {
         // insert contents into database
         try {
             String url =
-                    "https://storage.googleapis.com/android-tv/";
+                    "https://storage.googleapis.com/androiddevelopers/samples_assets/android-tv/";
             initializeDb(mDb, url);
         } catch (IOException e) {
             e.printStackTrace();
@@ -270,7 +270,7 @@ public class VideosRepository {
             each.setVideoUrl(each.getVideoUrls().get(0));
             each.setRented(false);
             each.setStatus("");
-            each.setTrailerVideoUrl("https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Say%20more%20with%20Hangouts.mp4");
+            each.setTrailerVideoUrl("https://storage.googleapis.com/androiddevelopers/samples_assets/android-tv/Sample%20videos/Google%2B/Google%2B_%20Say%20more%20with%20Hangouts.mp4");
         }
     }
 }

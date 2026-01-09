@@ -102,7 +102,7 @@ public class VideoDbUnitTest {
 
     @Test
     public void getVideosFromServer() throws IOException, JSONException {
-        String serverUrl = "https://storage.googleapis.com/android-tv/android_tv_videos_new.json";
+        String serverUrl = "https://storage.googleapis.com/androiddevelopers/samples_assets/android-tv/android_tv_videos_new.json";
         VideoDbBuilder videoDbBuilder = new VideoDbBuilder();
         List<ContentValues> contentValuesList = videoDbBuilder.fetch(serverUrl);
         Assert.assertTrue(contentValuesList.size() > 0);
