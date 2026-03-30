@@ -18,6 +18,7 @@ package com.google.jetstream.presentation.screens.videoPlayer
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.annotation.OptIn
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,10 +51,10 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulse.Type.FORWARD
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerState
-import com.google.jetstream.presentation.screens.videoPlayer.components.rememberPlayer
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
+import androidx.core.net.toUri
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -63,40 +64,37 @@ object VideoPlayerScreen {
  * [Work in progress] A composable screen for playing a video.
  *
  * @param onBackPressed The callback to invoke when the user presses the back button.
- * @param videoPlayerScreenViewModel The view model for the video player screen.
+ * @param VideoPlayerScreenViewModel The view model for the video player screen.
  */
+@OptIn(UnstableApi::class)
 @Composable
 fun VideoPlayerScreen(
     onBackPressed: () -> Unit,
-    videoPlayerScreenViewModel: VideoPlayerScreenViewModel = hiltViewModel()
+    viewModel: VideoPlayerScreenViewModel = hiltViewModel()
 ) {
-    val uiState by videoPlayerScreenViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // TODO: Handle Loading & Error states
-    when (val s = uiState) {
-        is VideoPlayerScreenUiState.Loading -> {
-            Loading(modifier = Modifier.fillMaxSize())
-        }
-
-        is VideoPlayerScreenUiState.Error -> {
-            Error(modifier = Modifier.fillMaxSize())
-        }
-
+    when (val state = uiState) {
+        is VideoPlayerScreenUiState.Loading -> Loading(modifier = Modifier.fillMaxSize())
+        is VideoPlayerScreenUiState.Error -> Error(modifier = Modifier.fillMaxSize())
         is VideoPlayerScreenUiState.Done -> {
             VideoPlayerScreenContent(
-                movieDetails = s.movieDetails,
+                movieDetails = state.movieDetails,
+                exoPlayer = viewModel.player,
                 onBackPressed = onBackPressed
             )
         }
     }
 }
 
-@androidx.annotation.OptIn(UnstableApi::class)
-@Composable
-fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Unit) {
-    val context = LocalContext.current
-    val exoPlayer = rememberPlayer(context)
 
+@OptIn(UnstableApi::class)
+@Composable
+fun VideoPlayerScreenContent(
+    movieDetails: MovieDetails,
+    onBackPressed: () -> Unit,
+    exoPlayer: ExoPlayer
+) {
     val videoPlayerState = rememberVideoPlayerState(
         hideSeconds = 4,
     )
@@ -177,7 +175,7 @@ private fun Modifier.dPadEvents(
     }
 )
 
-private fun MovieDetails.intoMediaItem(): MediaItem {
+fun MovieDetails.intoMediaItem(): MediaItem {
     return MediaItem.Builder()
         .setUri(videoUri)
         .setSubtitleConfigurations(
@@ -186,7 +184,7 @@ private fun MovieDetails.intoMediaItem(): MediaItem {
             } else {
                 listOf(
                     MediaItem.SubtitleConfiguration
-                        .Builder(Uri.parse(subtitleUri))
+                        .Builder(subtitleUri.toUri())
                         .setMimeType("application/vtt")
                         .setLanguage("en")
                         .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
@@ -196,7 +194,7 @@ private fun MovieDetails.intoMediaItem(): MediaItem {
         ).build()
 }
 
-private fun Movie.intoMediaItem(): MediaItem {
+fun Movie.intoMediaItem(): MediaItem {
     return MediaItem.Builder()
         .setUri(videoUri)
         .setSubtitleConfigurations(
@@ -205,7 +203,7 @@ private fun Movie.intoMediaItem(): MediaItem {
             } else {
                 listOf(
                     MediaItem.SubtitleConfiguration
-                        .Builder(Uri.parse(subtitleUri))
+                        .Builder(subtitleUri.toUri())
                         .setMimeType("application/vtt")
                         .setLanguage("en")
                         .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
