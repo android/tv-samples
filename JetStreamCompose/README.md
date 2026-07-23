@@ -24,11 +24,11 @@ real-world architecture.
 * Showcases
   * TabRow
   * Carousel
-  * TvLazyRow
+  * LazyRow
   * ImmersiveList
-  * TvLazyColumn
+  * LazyColumn
   * Tv Material Surface
-  * TvVerticalGrid
+  * VerticalGrid
   * Tv Material Cards
   * Buttons
   * Icon
