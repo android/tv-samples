@@ -131,7 +131,7 @@ public class VideoCardPresenter extends Presenter {
         int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
 
         view.setBackgroundColor(color);
-        view.findViewById(R.id.info_field).setBackgroundColor(color);
+        view.findViewById(androidx.leanback.R.id.info_field).setBackgroundColor(color);
     }
 
     /**

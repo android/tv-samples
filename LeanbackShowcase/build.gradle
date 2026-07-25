@@ -16,38 +16,10 @@
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.1'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
 }
 
-allprojects {
-    repositories {
-        jcenter()
-        google()
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-ext {
-    buildToolsVersion = "30.0.2"
-    supportLibVersion = "1.0.0"
-    daggerVersion = "2.21"
-    materialVersion="1.0.0"
-    testVersion = "1.2.0"
-    espressoVersion = "3.1.0"
-    archLifecycleVersion = "2.0.0"
-    archRoomVersion = "2.0.0-rc01"
-}
 

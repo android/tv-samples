@@ -21,32 +21,35 @@ import android.os.Handler;
 import androidx.leanback.media.PlaybackGlueHost;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.media.SurfaceHolderGlueHost;
-import androidx.leanback.leanbackshowcase.R;
 import android.view.SurfaceHolder;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.common.Tracks;
+import androidx.media3.common.VideoSize;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.exoplayer.ExoPlaybackException;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.common.MediaItem;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.common.Timeline;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+
+import java.util.Objects;
 
 /**
- * This implementation extends the {@link PlayerAdapter} with a {@link SimpleExoPlayer}.
+ * This implementation extends the {@link PlayerAdapter} with a {@link ExoPlayer}.
  */
-public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventListener{
+@UnstableApi
+public class ExoPlayerAdapter extends PlayerAdapter implements Player.Listener {
 
     Context mContext;
-    final SimpleExoPlayer mPlayer;
+    final ExoPlayer mPlayer;
     SurfaceHolderGlueHost mSurfaceHolderGlueHost;
     final Runnable mRunnable = new Runnable() {
         @Override
@@ -61,16 +64,20 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     Uri mMediaSourceUri = null;
     boolean mHasDisplay;
     boolean mBufferingStart;
-    @C.StreamType int mAudioStreamType;
+
+    private AudioAttributes mAudioAttributes = new AudioAttributes.Builder()
+            .setUsage(C.USAGE_MEDIA)
+            .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+            .build();
 
     /**
      * Constructor.
      */
     public ExoPlayerAdapter(Context context) {
         mContext = context;
-        mPlayer = ExoPlayerFactory.newSimpleInstance(mContext,
-                new DefaultTrackSelector(),
-                new DefaultLoadControl());
+        mPlayer = new ExoPlayer.Builder(context)
+                .setTrackSelector(new DefaultTrackSelector(context))
+                .build();
         mPlayer.addListener(this);
     }
 
@@ -112,7 +119,7 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     }
 
     /**
-     * Release internal {@link SimpleExoPlayer}. Should not use the object after call release().
+     * Release internal {@link ExoPlayer}. Should not use the object after call release().
      */
     public void release() {
         changeToUninitialized();
@@ -131,7 +138,7 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     }
 
     /**
-     * @see SimpleExoPlayer#setVideoSurfaceHolder(SurfaceHolder)
+     * @see ExoPlayer#setVideoSurfaceHolder(SurfaceHolder)
      */
     void setDisplay(SurfaceHolder surfaceHolder) {
         boolean hadDisplay = mHasDisplay;
@@ -167,7 +174,7 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
 
     @Override
     public boolean isPlaying() {
-        boolean exoPlayerIsPlaying = mPlayer.getPlaybackState() == ExoPlayer.STATE_READY
+        boolean exoPlayerIsPlaying = mPlayer.getPlaybackState() == Player.STATE_READY
                 && mPlayer.getPlayWhenReady();
         return mInitialized && exoPlayerIsPlaying;
     }
@@ -181,7 +188,6 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     public long getCurrentPosition() {
         return mInitialized ? mPlayer.getCurrentPosition() : -1;
     }
-
 
     @Override
     public void play() {
@@ -224,10 +230,10 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
      *
      * @return Returns <code>true</code> if uri represents a new media; <code>false</code>
      * otherwise.
-     * @see ExoPlayer#prepare(MediaSource)
+     * @see ExoPlayer#setMediaItem(MediaItem)
      */
     public boolean setDataSource(Uri uri) {
-        if (mMediaSourceUri != null ? mMediaSourceUri.equals(uri) : uri == null) {
+        if (Objects.equals(mMediaSourceUri, uri)) {
             return false;
         }
         mMediaSourceUri = uri;
@@ -235,48 +241,45 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
         return true;
     }
 
-    public int getAudioStreamType() {
-        return mAudioStreamType;
-    }
-
-    public void setAudioStreamType(@C.StreamType int audioStreamType) {
-        mAudioStreamType = audioStreamType;
+    public void setAudioAttributes(AudioAttributes audioAttributes) {
+        mAudioAttributes = audioAttributes;
+        if (mPlayer != null) {
+            mPlayer.setAudioAttributes(audioAttributes, /* handleAudioFocus= */ false);
+        }
     }
 
     /**
-     * Set {@link MediaSource} for {@link SimpleExoPlayer}. An app may override this method in order
+     * Set {@link MediaSource} for {@link ExoPlayer}. An app may override this method in order
      * to use different {@link MediaSource}.
      * @param uri The url of media source
      * @return MediaSource for the player
      */
     public MediaSource onCreateMediaSource(Uri uri) {
         String userAgent = Util.getUserAgent(mContext, "ExoPlayerAdapter");
-        return new ExtractorMediaSource(uri,
-                new DefaultDataSourceFactory(mContext, userAgent),
-                new DefaultExtractorsFactory(),
-                null,
-                null);
+        return new ProgressiveMediaSource.Factory(
+                new DefaultDataSource.Factory(mContext))
+                .createMediaSource(MediaItem.fromUri(uri));
     }
 
     private void prepareMediaForPlaying() {
         reset();
         if (mMediaSourceUri != null) {
             MediaSource mediaSource = onCreateMediaSource(mMediaSourceUri);
-            mPlayer.prepare(mediaSource);
+            mPlayer.setMediaSource(mediaSource);
+            mPlayer.prepare();
         } else {
             return;
         }
 
-        mPlayer.setAudioStreamType(mAudioStreamType);
-        mPlayer.setVideoListener(new SimpleExoPlayer.VideoListener() {
-            @Override
-            public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
-                    float pixelWidthHeightRatio) {
-                getCallback().onVideoSizeChanged(ExoPlayerAdapter.this, width, height);
-            }
+        mPlayer.setAudioAttributes(mAudioAttributes, /* handleAudioFocus= */ false);
 
+        mPlayer.addListener(new Player.Listener() {
             @Override
-            public void onRenderedFirstFrame() {
+            public void onVideoSizeChanged(VideoSize videoSize) {
+                getCallback().onVideoSizeChanged(
+                        ExoPlayerAdapter.this,
+                        videoSize.width,
+                        videoSize.height);
             }
         });
         notifyBufferingStartEnd();
@@ -315,16 +318,16 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     // ExoPlayer Event Listeners
 
     @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+    public void onPlaybackStateChanged(int playbackState) {
         mBufferingStart = false;
-        if (playbackState == ExoPlayer.STATE_READY && !mInitialized) {
+        if (playbackState == Player.STATE_READY && !mInitialized) {
             mInitialized = true;
             if (mSurfaceHolderGlueHost == null || mHasDisplay) {
                 getCallback().onPreparedStateChanged(ExoPlayerAdapter.this);
             }
-        } else if (playbackState == ExoPlayer.STATE_BUFFERING) {
+        } else if (playbackState == Player.STATE_BUFFERING) {
             mBufferingStart = true;
-        } else if (playbackState == ExoPlayer.STATE_ENDED) {
+        } else if (playbackState == Player.STATE_ENDED) {
             getCallback().onPlayStateChanged(ExoPlayerAdapter.this);
             getCallback().onPlayCompleted(ExoPlayerAdapter.this);
         }
@@ -332,26 +335,28 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException error) {
-        getCallback().onError(ExoPlayerAdapter.this, error.type,
-                mContext.getString(R.string.lb_media_player_error,
-                        error.type,
-                        error.rendererIndex));
+    public void onPlayerError(PlaybackException error) {
+        int rendererIndex = -1; // Default value if not available
+
+        if (error instanceof ExoPlaybackException exoError) {
+            rendererIndex = exoError.rendererIndex;
+        }
+        getCallback().onError(ExoPlayerAdapter.this, error.errorCode,
+                mContext.getString(androidx.leanback.R.string.lb_media_player_error,
+                        error.errorCode,
+                        rendererIndex));
     }
 
     @Override
-    public void onLoadingChanged(boolean isLoading) {
+    public void onTimelineChanged(Timeline timeline, int reason) {
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTracksChanged(Tracks tracks) {
     }
 
     @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
+    public void onPositionDiscontinuity(Player.PositionInfo oldPosition,
+                                        Player.PositionInfo newPosition, int reason) {
     }
 }

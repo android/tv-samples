@@ -372,7 +372,7 @@ public class MusicPlaybackService extends Service {
         }
         Intent nowPlayIntent = new Intent(getApplicationContext(), MusicExampleActivity.class);
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, nowPlayIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         mMediaSession.setSessionActivity(pi);
     }
 
@@ -496,7 +496,7 @@ public class MusicPlaybackService extends Service {
         Intent notificationIntent = new Intent(this, MusicExampleActivity.class);
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         if (shouldCreateNowPlayingChannel()) {
             createNowPlayingChannel();
@@ -537,6 +537,12 @@ public class MusicPlaybackService extends Service {
             mNotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return mNotificationManager;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        stopSelf();
+        return super.onUnbind(intent);
     }
 
     @Override

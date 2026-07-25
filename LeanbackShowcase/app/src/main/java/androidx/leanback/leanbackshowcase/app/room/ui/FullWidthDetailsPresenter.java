@@ -39,11 +39,11 @@ public class FullWidthDetailsPresenter extends FullWidthDetailsOverviewRowPresen
     RowPresenter.ViewHolder viewHolder = super.createRowViewHolder(parent);
 
     View actionsView = viewHolder.view.
-        findViewById(R.id.details_overview_actions_background);
+        findViewById(androidx.leanback.R.id.details_overview_actions_background);
     actionsView.setBackgroundColor(SampleApplication.getInstance().
         getColor(R.color.detail_view_actionbar_background));
 
-    View detailsView = viewHolder.view.findViewById(R.id.details_frame);
+    View detailsView = viewHolder.view.findViewById(androidx.leanback.R.id.details_frame);
     detailsView.setBackgroundColor(
         SampleApplication.getInstance().getResources().getColor(R.color.detail_view_background));
     return viewHolder;

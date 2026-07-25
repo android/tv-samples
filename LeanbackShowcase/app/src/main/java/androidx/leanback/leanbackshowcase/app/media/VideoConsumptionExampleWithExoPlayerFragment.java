@@ -61,7 +61,6 @@ public class VideoConsumptionExampleWithExoPlayerFragment extends VideoFragment 
         super.onCreate(savedInstanceState);
 
         ExoPlayerAdapter playerAdapter = new ExoPlayerAdapter(getActivity());
-        playerAdapter.setAudioStreamType(AudioManager.USE_DEFAULT_STREAM_TYPE);
         mMediaPlayerGlue = new VideoMediaPlayerGlue(getActivity(), playerAdapter);
         mMediaPlayerGlue.setHost(mHost);
         AudioManager audioManager = (AudioManager) getActivity()

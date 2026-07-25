@@ -17,14 +17,13 @@
 package androidx.leanback.leanbackshowcase.app.room.viewmodel;
 
 import android.app.Application;
-import androidx.arch.core.util.Function;
+import androidx.leanback.leanbackshowcase.app.room.db.entity.CategoryEntity;
+import androidx.leanback.leanbackshowcase.app.room.db.entity.VideoEntity;
+import androidx.leanback.leanbackshowcase.app.room.db.repo.VideosRepository;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import androidx.leanback.leanbackshowcase.app.room.db.repo.VideosRepository;
-import androidx.leanback.leanbackshowcase.app.room.db.entity.CategoryEntity;
-import androidx.leanback.leanbackshowcase.app.room.db.entity.VideoEntity;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -51,33 +50,18 @@ public class VideosViewModel extends AndroidViewModel {
 
         mAllCategories = mRepository.getAllCategories();
 
-        mSearchResults = Transformations.switchMap(
-                mQuery, new Function<String, LiveData<List<VideoEntity>>>() {
-                    @Override
-                    public LiveData<List<VideoEntity>> apply(final String queryMessage) {
-                        return mRepository.getSearchResult(queryMessage);
-                    }
-                });
+        mSearchResults = Transformations.switchMap(mQuery, mRepository::getSearchResult);
 
-
-        mVideoById = Transformations.switchMap(
-                mVideoId, new Function<Long, LiveData<VideoEntity>>() {
-                    @Override
-                    public LiveData<VideoEntity> apply(final Long videoId) {
-                        return mRepository.getVideoById(videoId);
-                    }
-                });
+        mVideoById = Transformations.switchMap(mVideoId, mRepository::getVideoById);
 
         /**
          * Using switch map function to react to the change of observed variable, the benefits of
          * this mapping method is we don't have to re-create the live data every time.
          */
-        mAllVideosByCategory = Transformations.switchMap(mVideoCategory, new Function<String, LiveData<List<VideoEntity>>>() {
-            @Override
-            public LiveData<List<VideoEntity>> apply(String category) {
-                return mRepository.getVideosInSameCategoryLiveData(category);
-            }
-        });
+        mAllVideosByCategory = Transformations.switchMap(
+                mVideoCategory,
+                mRepository::getVideosInSameCategoryLiveData
+        );
     }
 
     public LiveData<List<VideoEntity>> getSearchResult() {

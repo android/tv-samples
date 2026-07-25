@@ -33,8 +33,8 @@ public class SingleLineCardPresenter extends ImageCardViewPresenter {
 
     @Override public void onBindViewHolder(Card card, ImageCardView cardView) {
         super.onBindViewHolder(card, cardView);
-        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(R.styleable.lbImageCardView);
-        android.util.Log.d("SHAAN", "lbImageCardViewType ="+typedArray.getInt(R.styleable.lbImageCardView_lbImageCardViewType, -1));
+        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(androidx.leanback.R.styleable.lbImageCardView);
+        android.util.Log.d("SHAAN", "lbImageCardViewType ="+typedArray.getInt(androidx.leanback.R.styleable.lbImageCardView_lbImageCardViewType, -1));
         cardView.setInfoAreaBackgroundColor(card.getFooterColor());
     }
 
