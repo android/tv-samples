@@ -101,7 +101,7 @@ public class VideoProvider extends ContentProvider {
     }
 
     private Cursor getSuggestions(String query) {
-        query = query.toLowerCase();
+        query = query.toLowerCase(java.util.Locale.ROOT);
         return sVideosContainingQueryBuilder.query(
                 mOpenHelper.getReadableDatabase(),
                 sVideosContainingQueryColumns,

@@ -26,7 +26,7 @@
     <string name="action_cicked">Action clicked. Implement your own handler.</string>
     <string name="grid_example_title">Image Grid Example</string>
     <string name="video_grid_example_title">Video Grid Example</string>
-    <string name="videos_url">https://storage.googleapis.com/android-tv/android_tv_videos_new.json</string>
+    <string name="videos_url">https://storage.googleapis.com/androiddevelopers/samples_assets/android-tv/android_tv_videos_new.json</string>
     <string name="action_play">JINGJIANG CHANGE PLAY Play </string>
     <string name="action_play_not_ready">The video is still being downloaded. Please wait and try
             later.</string>
@@ -101,7 +101,7 @@
 
     <string name="download">Downloading Fragment</string>
     <string name="download_description">Demonstrate how to download stuff from a fragment directly</string>
-    <string name="download_url">https://storage.googleapis.com/android-tv/android_tv_videos_new.json</string>
+    <string name="download_url">https://storage.googleapis.com/androiddevelopers/samples_assets/android-tv/android_tv_videos_new.json</string>
     <string name="related_movies">Related Movies</string>
     <string name="download_video">Download Video</string>
     <string name="remove_video">Remove Video</string>

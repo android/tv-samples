@@ -38,15 +38,15 @@ class FakeVideoRepository(override val application: Application) : VideoReposito
 
         /*  ktlint-disable max-line-length */
         private const val TEST_VIDEO_URI =
-            "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
 
         /*  ktlint-disable max-line-length */
         private const val TEST_VIDEO_PLACEHOLDER_URI =
-            "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101.mp4"
 
         /*  ktlint-disable max-line-length */
         private const val TEST_VIDEO_THUMBNAIL_URI =
-            "https://storage.googleapis.com/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-thumbnail.png"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/atv-reference-app-videos/movies-tech/seomb-seo-mythbusting-101-thumbnail.png"
 
         // Adjust the playback position and duration with the time you want to test
         // Add approximate duration and playback position.

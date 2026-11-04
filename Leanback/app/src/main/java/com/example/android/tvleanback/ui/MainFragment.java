@@ -59,7 +59,6 @@ import com.example.android.tvleanback.model.VideoCursorMapper;
 import com.example.android.tvleanback.presenter.CardPresenter;
 import com.example.android.tvleanback.presenter.GridItemPresenter;
 import com.example.android.tvleanback.presenter.IconHeaderItemPresenter;
-import com.example.android.tvleanback.recommendation.UpdateRecommendationsService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,7 +113,6 @@ public class MainFragment extends BrowseSupportFragment
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        updateRecommendations();
     }
 
     @Override
@@ -201,10 +199,7 @@ public class MainFragment extends BrowseSupportFragment
         mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY);
     }
 
-    private void updateRecommendations() {
-        Intent recommendationIntent = new Intent(getActivity(), UpdateRecommendationsService.class);
-        getActivity().startService(recommendationIntent);
-    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

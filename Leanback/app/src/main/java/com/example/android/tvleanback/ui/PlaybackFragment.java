@@ -50,20 +50,10 @@ import com.example.android.tvleanback.model.Video;
 import com.example.android.tvleanback.model.VideoCursorMapper;
 import com.example.android.tvleanback.player.VideoPlayerGlue;
 import com.example.android.tvleanback.presenter.CardPresenter;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.Util;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.leanback.LeanbackPlayerAdapter;
 
 import static com.example.android.tvleanback.ui.PlaybackFragment.VideoLoaderCallbacks.RELATED_VIDEOS_LOADER;
 
@@ -77,8 +67,7 @@ public class PlaybackFragment extends VideoSupportFragment {
 
     private VideoPlayerGlue mPlayerGlue;
     private LeanbackPlayerAdapter mPlayerAdapter;
-    private SimpleExoPlayer mPlayer;
-    private TrackSelector mTrackSelector;
+    private ExoPlayer mPlayer;
     private PlaylistActionListener mPlaylistActionListener;
 
     private Video mVideo;
@@ -90,7 +79,7 @@ public class PlaybackFragment extends VideoSupportFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mVideo = getActivity().getIntent().getParcelableExtra(VideoDetailsActivity.VIDEO);
+        mVideo = requireActivity().getIntent().getParcelableExtra(VideoDetailsActivity.VIDEO);
         mPlaylist = new Playlist();
 
         mVideoLoaderCallbacks = new VideoLoaderCallbacks(mPlaylist);
@@ -143,15 +132,10 @@ public class PlaybackFragment extends VideoSupportFragment {
     }
 
     private void initializePlayer() {
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
-        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
+        mPlayer = new ExoPlayer.Builder(requireContext()).build();
+        mPlayerAdapter = new LeanbackPlayerAdapter(requireContext(), mPlayer, UPDATE_DELAY);
         mPlaylistActionListener = new PlaylistActionListener(mPlaylist);
-        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
+        mPlayerGlue = new VideoPlayerGlue(requireContext(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.playWhenPrepared();
 
@@ -165,8 +149,10 @@ public class PlaybackFragment extends VideoSupportFragment {
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
-            mTrackSelector = null;
-            mPlayerGlue = null;
+            if (mPlayerGlue != null) {
+                mPlayerGlue.setHost(null);
+                mPlayerGlue = null;
+            }
             mPlayerAdapter = null;
             mPlaylistActionListener = null;
         }
@@ -180,16 +166,8 @@ public class PlaybackFragment extends VideoSupportFragment {
     }
 
     private void prepareMediaForPlaying(Uri mediaSourceUri) {
-        String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-        MediaSource mediaSource =
-                new ExtractorMediaSource(
-                        mediaSourceUri,
-                        new DefaultDataSourceFactory(getActivity(), userAgent),
-                        new DefaultExtractorsFactory(),
-                        null,
-                        null);
-
-        mPlayer.prepare(mediaSource);
+        mPlayer.setMediaItem(MediaItem.fromUri(mediaSourceUri));
+        mPlayer.prepare();
     }
 
     private ArrayObjectAdapter initializeRelatedVideosRow() {
@@ -257,16 +235,16 @@ public class PlaybackFragment extends VideoSupportFragment {
             if (item instanceof Video) {
                 Video video = (Video) item;
 
-                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
+                Intent intent = new Intent(requireContext(), VideoDetailsActivity.class);
                 intent.putExtra(VideoDetailsActivity.VIDEO, video);
 
                 Bundle bundle =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        getActivity(),
+                                        requireActivity(),
                                         ((ImageCardView) itemViewHolder.view).getMainImageView(),
                                         VideoDetailsActivity.SHARED_ELEMENT_NAME)
                                 .toBundle();
-                getActivity().startActivity(intent, bundle);
+                startActivity(intent, bundle);
             }
         }
     }
@@ -290,7 +268,7 @@ public class PlaybackFragment extends VideoSupportFragment {
             // When loading related videos or videos for the playlist, query by category.
             String category = args.getString(VideoContract.VideoEntry.COLUMN_CATEGORY);
             return new CursorLoader(
-                    getActivity(),
+                    requireContext(),
                     VideoContract.VideoEntry.CONTENT_URI,
                     null,
                     VideoContract.VideoEntry.COLUMN_CATEGORY + " = ?",

@@ -14,8 +14,7 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.android.tvleanback">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <permission
         android:name="${applicationId}.ACCESS_VIDEO_DATA"
@@ -23,7 +22,6 @@
 
     <uses-permission android:name="${applicationId}.ACCESS_VIDEO_DATA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature
@@ -46,6 +44,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".ui.MainActivity"
+            android:exported="true"
             android:icon="@drawable/videos_by_google_banner"
             android:label="@string/app_name"
             android:logo="@drawable/videos_by_google_banner"
@@ -58,7 +57,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mobile.MobileWelcomeActivity">
+        <activity
+            android:name=".mobile.MobileWelcomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -110,21 +111,9 @@
                 android:readPermission="android.permission.GLOBAL_SEARCH" />
         </provider>
 
-        <receiver
-            android:name=".recommendation.RecommendationReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <service
             android:name=".data.FetchVideoService"
             android:exported="false" />
-        <service
-            android:name=".recommendation.UpdateRecommendationsService"
-            android:enabled="true" />
 
         <activity android:name=".ui.OnboardingActivity"
             android:enabled="true"

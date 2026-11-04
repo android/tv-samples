@@ -78,7 +78,27 @@ Need more information about getting started with Android TV? Check the [official
 
 ## Screenshots
 
-[![Screenshot](screenshots/atv-leanback-all.png)](https://raw.githubusercontent.com/googlesamples/androidtv-Leanback/master/screenshots/atv-leanback-all.png)
+| Browse Fragment | Row Fragment | Details Fragment |
+|:---:|:---:|:---:|
+| ![Browse Fragment](screenshots/browse.png) | ![Row Fragment](screenshots/row.png) | ![Details Fragment](screenshots/details.png) |
+
+| Row Fragment in Details | Vertical Grid Fragment | Card Views |
+|:---:|:---:|:---:|
+| ![Row Fragment in Details](screenshots/details_row.png) | ![Vertical Grid Fragment](screenshots/vertical_grid.png) | ![Card Views](screenshots/row.png) |
+
+| Search Fragment | Guided Step Fragment | Error Fragment |
+|:---:|:---:|:---:|
+| ![Search Fragment](screenshots/search.png) | ![Guided Step Fragment](screenshots/guided_step.png) | ![Error Fragment](screenshots/error.png) |
+
+| Onboarding Fragment | Settings Fragment | |
+|:---:|:---:|:---:|
+| ![Onboarding Fragment](screenshots/onboarding.png) | ![Settings Fragment](screenshots/settings.png) | |
+
+### Generating Screenshots
+To automatically navigate through the sample application and regenerate all 10 screenshot assets from a connected Android TV emulator or device, execute the included script:
+```sh
+./screenshots/capture_screenshots.sh [-s <serial>]
+```
 
 ## Support
 

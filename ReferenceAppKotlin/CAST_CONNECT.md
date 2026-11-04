@@ -59,7 +59,7 @@ either of these two approaches:
 1. In the class [VideoBrowserFragment](https://github.com/googlecast/CastVideos-android/blob/master/src/com/google/sample/cast/refplayer/browser/VideoBrowserFragment.java),
 update the instance variable “CATALOG_URL” to point to a URL that returns a JSON
 string in the same format as the one present at
-[https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/f.json](https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/f.json)
+[https://storage.googleapis.com/androiddevelopers/samples_assets/gtv-videos-bucket/CastVideos/f.json](https://storage.googleapis.com/androiddevelopers/samples_assets/gtv-videos-bucket/CastVideos/f.json)
 so that it can be converted to the appropriate MediaInfo objects that are used to play the video in the player
 locally and to send them to be casted to the receiver. This would require minimum change to the code of
 the sender application, however, it must be ensured that the JSON returned by the URL is of the right

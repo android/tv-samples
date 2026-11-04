@@ -357,7 +357,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment
     }
 
     private void setupMovieListRow() {
-        String subcategories[] = {getString(R.string.related_movies)};
+        String[] subcategories = {getString(R.string.related_movies)};
 
         // Generating related video list.
         String category = mSelectedVideo.category;

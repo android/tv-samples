@@ -80,6 +80,11 @@ public final class Video implements Parcelable {
         return m instanceof Video && id == ((Video) m).id;
     }
 
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
+
     public int describeContents() {
         return 0;
     }
