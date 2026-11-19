@@ -16,38 +16,78 @@
 
 package com.google.jetstream.presentation.screens.videoPlayer
 
+import androidx.annotation.OptIn
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.repositories.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlin.coroutines.cancellation.CancellationException
 
+
+/**
+ * A [VideoPlayerScreenViewModel] for the [VideoPlayerScreen]
+ */
+@UnstableApi
 @HiltViewModel
-class VideoPlayerScreenViewModel @Inject constructor(
+@OptIn(UnstableApi::class)
+class VideoPlayerScreenViewModel
+@Inject constructor(
     savedStateHandle: SavedStateHandle,
-    repository: MovieRepository,
+    private val repository: MovieRepository,
+    private val playerManager: VideoPlayerManager
 ) : ViewModel() {
-    val uiState = savedStateHandle
-        .getStateFlow<String?>(VideoPlayerScreen.MovieIdBundleKey, null)
+
+    private val movieIdFlow = savedStateHandle.getStateFlow<String?>(
+        VideoPlayerScreen.MovieIdBundleKey,
+        null
+    )
+
+    val uiState: StateFlow<VideoPlayerScreenUiState> = movieIdFlow
         .map { id ->
             if (id == null) {
                 VideoPlayerScreenUiState.Error
             } else {
-                val details = repository.getMovieDetails(movieId = id)
-                VideoPlayerScreenUiState.Done(movieDetails = details)
+                try {
+                    val details = repository.getMovieDetails(id)
+                    VideoPlayerScreenUiState.Done(details)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    VideoPlayerScreenUiState.Error
+                }
             }
-        }.stateIn(
+        }
+        .onEach { state ->
+            if (state is VideoPlayerScreenUiState.Done) {
+                playerManager.load(state.movieDetails)
+            }
+        }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = VideoPlayerScreenUiState.Loading
         )
+
+
+    val player: ExoPlayer get() = playerManager.player
+
+    override fun onCleared() {
+        super.onCleared()
+        playerManager.release()
+    }
 }
+
 
 @Immutable
 sealed class VideoPlayerScreenUiState {
